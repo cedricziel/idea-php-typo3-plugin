@@ -1,0 +1,40 @@
+<idea-plugin version="2">
+  <id>com.cedricziel.idea.typo3</id>
+  <name>TYPO3</name>
+  <version>0.1</version>
+  <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
+
+  <description><![CDATA[
+      TYPO3 CMS Plugin for IntelliJ IDEA products.
+      <strong>EXPERIMENTAL</strong>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Added TypeProvider for GeneralUtility::makeInstance<br>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+  <depends>com.jetbrains.php</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider" />
+  </extensions>
+
+  <extensions defaultExtensionNs="com.jetbrains.php">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
