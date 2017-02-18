@@ -65,3 +65,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+/idea
+/build
+/build_test
+/plugins/typo3-plugin
