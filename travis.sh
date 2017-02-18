@@ -38,8 +38,7 @@ function download {
 
 if [ -d ./idea  ]; then
   rm -rf idea
-  mkdir idea
-  echo "created idea dir"  
+  echo "created idea dir"
 fi
 
 # Download main idea folder

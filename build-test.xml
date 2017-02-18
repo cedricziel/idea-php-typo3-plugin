@@ -1,4 +1,4 @@
-<project name="Symfony2 Idea Plugin" default="test" basedir=".">
+<project name="TYPO3 Idea Plugin" default="test" basedir=".">
 
     <property file="build.properties" />
 
@@ -140,7 +140,7 @@
         <tstamp/>
         <mkdir dir="${build}"/>
         <mkdir dir="${test.build}"/>
-        <mkdir dir="${plugins}/symfony-plugin"/>
+        <mkdir dir="${plugins}/typo3-plugin"/>
         <echo message="Using IDEA build from: ${idea.build}"/>
         <echo message="Using JAVA_HOME: ${java.home}"/>
     </target>
@@ -155,7 +155,10 @@
             </javac2>
 
             <copy_resources dest="${build}" src="${src}"/>
-            <make_plugin dest="${plugins}/symfony-plugin"/>
+            <make_plugin dest="${plugins}/typo3-plugin"/>
+            <copy todir="${build}/META-INF">
+                <fileset dir="META-INF"/>
+            </copy>
         </sequential>
     </target>
 
@@ -187,7 +190,7 @@
             <jvmarg value="-Didea.home.path=${idea.build}"/>
             <jvmarg value="-Xbootclasspath/a:${idea.build}/lib/boot.jar"/>
             <jvmarg value="-Dfile.encoding=UTF-8"/>
-            <jvmarg value="-Didea.load.plugins.id=com.jetbrains.php,com.jetbrains.twig,com.intellij.modules.platformorg.jetbrains.plugins.yaml,com.jetbrains.plugins.webDeployment,de.espend.idea.php.annotation,de.espend.idea.php.toolbox,fr.adrienbrault.idea.symfony2plugin"/>
+            <jvmarg value="-Didea.load.plugins.id=com.jetbrains.php,com.jetbrains.twig,com.intellij.modules.platformorg.jetbrains.plugins.yaml,com.jetbrains.plugins.webDeployment,de.espend.idea.php.annotation,de.espend.idea.php.toolbox,com.cedricziel.idea.typo3"/>
             <jvmarg value="-ea"/>
             <jvmarg value="-Didea.plugins.path=${plugins}"/>
             <jvmarg line="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=43251"/>
@@ -212,10 +215,16 @@
         <fail message="Failures found"/>
     </target>
 
+    <target name="jar" description="build the plugin jar" depends="compile">
+        <jar destfile="idea-php-typo3-plugin.jar" >
+            <fileset dir="${build}"/>
+        </jar>
+    </target>
+
     <target name="clean" description="clean up">
         <delete dir="${build}" />
         <delete dir="${test.build}" />
-        <delete dir="${plugins}/symfony-plugin" />
+        <delete dir="${plugins}/typo3-plugin" />
     </target>
 
 </project>
