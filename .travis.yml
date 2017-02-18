@@ -9,6 +9,7 @@ cache:
     - .cache
 before_script:
  - chmod +x travis.sh
+ - mkdir lib
 
 env:
   - PHPSTORM_ENV=2016.3.1
