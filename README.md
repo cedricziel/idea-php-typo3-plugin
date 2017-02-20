@@ -1,5 +1,7 @@
 # TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm
 
+[TYPO CMS Plugin in Jetbrains plugin repository](https://plugins.jetbrains.com/idea/plugin/9496-typo3-cms-plugin)
+
 ## Installation
 
 On PhpStorm or IntelliJ:
