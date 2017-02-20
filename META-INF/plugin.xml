@@ -50,7 +50,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider" />
+    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider" />
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider" />
+
+    <!-- indexes -->
+    <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ServiceIndex"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.jetbrains.php">
