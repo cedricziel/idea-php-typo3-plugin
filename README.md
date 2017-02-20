@@ -3,6 +3,7 @@
 ## Features
 
 * TypeProvider for `GeneralUtility::makeInstance`
+* TypeProvider for `ObjectManager::get`
 
 # License
 
