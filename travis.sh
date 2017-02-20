@@ -12,7 +12,7 @@ fi
 travisCache=".cache"
 
 if [ ! -d ${travisCache} ]; then
-    echo "Create cache" ${travisCache} 
+    echo "Create cache" ${travisCache}
     mkdir ${travisCache}
 fi
 
@@ -21,17 +21,17 @@ function download {
   url=$1
   basename=${url##*[/|\\]}
   cachefile=${travisCache}/${basename}
-  
+
   if [ ! -f ${cachefile} ]; then
       wget $url -P ${travisCache};
     else
       echo "Cached file `ls -sh $cachefile` - `date -r $cachefile +'%Y-%m-%d %H:%M:%S'`"
-  fi  
+  fi
 
   if [ ! -f ${cachefile} ]; then
     echo "Failed to download: $url"
     exit 1
-  fi  
+  fi
 }
 
 # Unzip IDEA
@@ -42,17 +42,17 @@ if [ -d ./idea  ]; then
 fi
 
 # Download main idea folder
-download "http://download.jetbrains.com/idea/ideaIU-${ideaVersion}.tar.gz"
+download "https://download.jetbrains.com/idea/ideaIU-${ideaVersion}.tar.gz"
 tar zxf ${travisCache}/ideaIU-${ideaVersion}.tar.gz -C .
 
 # Move the versioned IDEA folder to a known location
 ideaPath=$(find . -name 'idea-IU*' | head -n 1)
 mv ${ideaPath} ./idea
-  
+
 if [ -d ./plugins ]; then
   rm -rf plugins
   mkdir plugins
-  echo "created plugin dir"  
+  echo "created plugin dir"
 fi
 
 if [ "$PHPSTORM_ENV" == "2016.3.1" ]; then
