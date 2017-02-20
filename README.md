@@ -7,7 +7,7 @@ On PhpStorm or IntelliJ:
 * open "File" -> "Settings"
 * select "Plugins"
 * select "Browse Plugins"
-* search "TYPO3"
+* search "TYPO3 CMS Plugin"
 * choose the plugin in the left pane, click the install button in 
   the right pane
 * hit apply, close the window
