@@ -1,13 +1,17 @@
 <idea-plugin version="2">
   <id>com.cedricziel.idea.typo3</id>
   <name>TYPO3 CMS Plugin</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
   <description><![CDATA[
 <h1>TYPO3 CMS Plugin</h1>
 
+<a href="https://github.com/cedricziel/idea-php-typo3-plugin">GitHub Repository</a>
+<br/>
+
 <strong>beta quality</strong>
+<br/>
 
 <h2>Features:</h2>
 
@@ -21,6 +25,7 @@
 
 <ul>
   <li>infer return type of GeneralUtility::makeInstance() calls without meta file</li>
+  <li>infer return type of GeneralUtility::makeInstanceService() calls without meta file</li>
   <li>infer return type of ObjectManager::get() calls without meta file</li>
 </ul>
 
@@ -38,7 +43,23 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
   <change-notes><![CDATA[
-      Added TypeProvider for GeneralUtility::makeInstance<br>
+
+<h2>0.1.2</h2>
+<ul>
+    <li>Added TypeProvider for GeneralUtility::makeInstanceService</li>
+</ul>
+
+<h2>0.1.1</h2>
+<ul>
+    <li>Added TypeProvider for ObjectManager::get</li>
+</ul>
+
+<h2>0.1.0</h2>
+<ul>
+    <li>Added TypeProvider for GeneralUtility::makeInstance</li>
+</ul>
+
+<br/>
     ]]>
   </change-notes>
 
