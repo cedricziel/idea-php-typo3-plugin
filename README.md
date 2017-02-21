@@ -19,6 +19,7 @@ On PhpStorm or IntelliJ:
 ## Features
 
 * TypeProvider for `GeneralUtility::makeInstance`
+* TypeProvider for `GeneralUtility::makeInstanceService`
 * TypeProvider for `ObjectManager::get`
 
 ## Credits

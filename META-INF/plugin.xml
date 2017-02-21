@@ -1,13 +1,17 @@
 <idea-plugin version="2">
   <id>com.cedricziel.idea.typo3</id>
   <name>TYPO3 CMS Plugin</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
   <description><![CDATA[
 <h1>TYPO3 CMS Plugin</h1>
 
+<a href="https://github.com/cedricziel/idea-php-typo3-plugin">GitHub Repository</a>
+<br/>
+
 <strong>beta quality</strong>
+<br/>
 
 <h2>Features:</h2>
 
@@ -21,6 +25,7 @@
 
 <ul>
   <li>infer return type of GeneralUtility::makeInstance() calls without meta file</li>
+  <li>infer return type of GeneralUtility::makeInstanceService() calls without meta file</li>
   <li>infer return type of ObjectManager::get() calls without meta file</li>
 </ul>
 
@@ -38,19 +43,40 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
   <change-notes><![CDATA[
-      Added TypeProvider for GeneralUtility::makeInstance<br>
+
+<h2>0.1.2</h2>
+<ul>
+    <li>Added TypeProvider for GeneralUtility::makeInstanceService</li>
+</ul>
+
+<h2>0.1.1</h2>
+<ul>
+    <li>Added TypeProvider for ObjectManager::get</li>
+</ul>
+
+<h2>0.1.0</h2>
+<ul>
+    <li>Added TypeProvider for GeneralUtility::makeInstance</li>
+</ul>
+
+<br/>
     ]]>
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
 
+  <depends>com.intellij.modules.platform</depends>
   <depends>com.jetbrains.php</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider" />
+    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider" />
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider" />
+
+    <!-- indexes -->
+    <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.jetbrains.php">
@@ -61,4 +87,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <!-- Add your actions here -->
   </actions>
 
+  <project-components>
+    <component>
+      <implementation-class>com.cedricziel.idea.typo3.TYPO3CMSProjectComponent</implementation-class>
+    </component>
+  </project-components>
 </idea-plugin>
