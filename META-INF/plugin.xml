@@ -68,7 +68,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
   <project-components>
     <component>
-      <implementation-class>TYPO3CMSProjectComponent</implementation-class>
+      <implementation-class>com.cedricziel.idea.typo3.TYPO3CMSProjectComponent</implementation-class>
     </component>
   </project-components>
 </idea-plugin>

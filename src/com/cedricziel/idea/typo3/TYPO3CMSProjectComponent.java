@@ -1,3 +1,5 @@
+package com.cedricziel.idea.typo3;
+
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -24,7 +26,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
     @Override
     @NotNull
     public String getComponentName() {
-        return "TYPO3CMSProjectComponent";
+        return "com.cedricziel.idea.typo3.TYPO3CMSProjectComponent";
     }
 
     @Override
