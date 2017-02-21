@@ -120,4 +120,43 @@ public class TYPO3ServiceDefinition implements Serializable {
     public void setSignature(String signature) {
         this.signature = signature;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TYPO3ServiceDefinition that = (TYPO3ServiceDefinition) o;
+
+        if (!id.equals(that.id)) return false;
+        if (extensionName != null ? !extensionName.equals(that.extensionName) : that.extensionName != null)
+            return false;
+        if (className != null ? !className.equals(that.className) : that.className != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (subType != null ? !subType.equals(that.subType) : that.subType != null) return false;
+        if (available != null ? !available.equals(that.available) : that.available != null) return false;
+        if (priority != null ? !priority.equals(that.priority) : that.priority != null) return false;
+        if (quality != null ? !quality.equals(that.quality) : that.quality != null) return false;
+        if (os != null ? !os.equals(that.os) : that.os != null) return false;
+        if (exec != null ? !exec.equals(that.exec) : that.exec != null) return false;
+        return signature != null ? signature.equals(that.signature) : that.signature == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (extensionName != null ? extensionName.hashCode() : 0);
+        result = 31 * result + (className != null ? className.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (subType != null ? subType.hashCode() : 0);
+        result = 31 * result + (available != null ? available.hashCode() : 0);
+        result = 31 * result + (priority != null ? priority.hashCode() : 0);
+        result = 31 * result + (quality != null ? quality.hashCode() : 0);
+        result = 31 * result + (os != null ? os.hashCode() : 0);
+        result = 31 * result + (exec != null ? exec.hashCode() : 0);
+        result = 31 * result + (signature != null ? signature.hashCode() : 0);
+        return result;
+    }
 }

@@ -45,6 +45,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
 
+  <depends>com.intellij.modules.platform</depends>
   <depends>com.jetbrains.php</depends>
 
   <extensions defaultExtensionNs="com.intellij">
@@ -54,7 +55,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider" />
 
     <!-- indexes -->
-    <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ServiceIndex"/>
+    <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.jetbrains.php">
@@ -65,4 +66,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <!-- Add your actions here -->
   </actions>
 
+  <project-components>
+    <component>
+      <implementation-class>TYPO3CMSProjectComponent</implementation-class>
+    </component>
+  </project-components>
 </idea-plugin>

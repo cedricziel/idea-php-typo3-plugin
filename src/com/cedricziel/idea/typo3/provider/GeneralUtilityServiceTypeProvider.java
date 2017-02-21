@@ -1,26 +1,21 @@
 package com.cedricziel.idea.typo3.provider;
 
+import com.cedricziel.idea.typo3.container.CoreServiceParser;
 import com.cedricziel.idea.typo3.domain.TYPO3ServiceDefinition;
-import com.cedricziel.idea.typo3.index.ServiceIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FileBasedIndexImpl;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
-import com.jetbrains.php.lang.psi.elements.PhpReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * TypeProvider for `GeneralUtility::makeInstanceService`
@@ -52,7 +47,9 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
 
         if (firstParam instanceof StringLiteralExpression) {
             StringLiteralExpression ref = (StringLiteralExpression) firstParam;
-            return methodReference.getSignature() + "%" + ref.getContents();
+            String serviceId = ref.getContents();
+
+            return methodReference.getSignature() + "%" + serviceId;
         }
 
         return null;
@@ -63,18 +60,20 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
 
         String serviceName = expression.split("%")[1];
 
-        FileBasedIndex index = FileBasedIndexImpl.getInstance();
-        List<List<TYPO3ServiceDefinition>> values = index.getValues(ServiceIndex.KEY, serviceName, GlobalSearchScope.allScope(project));
-        PhpIndex phpIndex = PhpIndex.getInstance(project);
-
         Collection<PhpNamedElement> phpNamedElementCollections = new ArrayList<>();
+        PhpIndex phpIndex = PhpIndex.getInstance(project);
+        CoreServiceParser serviceParser = new CoreServiceParser();
+        serviceParser.collect(project);
 
-        for (List<TYPO3ServiceDefinition> serviceDefinitions : values) {
-            serviceDefinitions.forEach(el -> {
-                Collection<? extends PhpNamedElement> bySignature = phpIndex.getBySignature(el.getSignature());
-                bySignature.forEach(phpNamedElementCollections::add);
-            });
+        List<TYPO3ServiceDefinition> resolvedServices = serviceParser.resolve(project, serviceName);
+        if (resolvedServices == null || resolvedServices.isEmpty()) {
+            return phpNamedElementCollections;
         }
+
+        resolvedServices.forEach(serviceDefinition -> {
+            Collection<PhpClass> classesByFQN = phpIndex.getClassesByFQN(serviceDefinition.getClassName());
+            phpNamedElementCollections.addAll(classesByFQN);
+        });
 
         return phpNamedElementCollections;
     }
