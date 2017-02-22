@@ -47,6 +47,8 @@
 <ul>
   <li>completion for backend route names on BackendUtility::getAjaxUrl()</li>
   <li>completion for backend route names on UriBuilder::buildUriFromRoute()</li>
+  <li>annotations for both valid and invalid route references</li>
+  <li>line marker to allow quick navigation to the route definition</li>
 </ul>
 
 <h2>Credits</h2>
@@ -106,6 +108,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
     <!-- completion -->
     <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
+
+    <!-- annotation -->
+    <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
+
+    <!-- marker -->
+    <codeInsight.lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.jetbrains.php">

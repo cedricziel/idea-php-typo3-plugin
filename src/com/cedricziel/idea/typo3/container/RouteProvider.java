@@ -56,12 +56,28 @@ public class RouteProvider {
         collectRoutes(project);
     }
 
-    public Boolean has(Project project, String routeName) {
-        return null;
+    public Boolean has(String routeName) {
+        return routes.containsKey(routeName) || ajaxRoutes.containsKey(routeName);
+    }
+
+    public Boolean has(String routeName, String type) {
+        if (type.equals(ROUTE_TYPE_BACKEND)) {
+            return routes.containsKey(routeName);
+        } else {
+            return ajaxRoutes.containsKey(routeName);
+        }
     }
 
     public List<TYPO3RouteDefinition> resolve(String routeName) {
-        return null;
+        List<TYPO3RouteDefinition> list = new ArrayList<>();
+        if(ajaxRoutes.containsKey(routeName)) {
+            ajaxRoutes.get(routeName).forEach(list::add);
+        }
+        if(routes.containsKey(routeName)) {
+            routes.get(routeName).forEach(list::add);
+        }
+
+        return list;
     }
 
     public List<TYPO3RouteDefinition> all() {
