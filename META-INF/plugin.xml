@@ -15,6 +15,8 @@
 
 <h2>Features:</h2>
 
+<br/>
+
 <h3>Service Locator & Extbase Dependency Injection Container</h3>
 
 <p>
@@ -31,8 +33,14 @@
 
 <h3>Routing</h3>
 
+<br/>
+
+<h4>Backend</h4>
+
+<br/>
+
 <p>
-  <strong>Backend:</strong> The plugin parses the available route names in the core and extensions. More precisely
+  The plugin parses the available route names in the core and extensions. More precisely
   it parses the `Configuration/Backend/(Ajax)Routes.php` files.
 </p>
 
