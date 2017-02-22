@@ -1,11 +1,9 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
+import com.cedricziel.idea.typo3.container.RouteProvider;
 import com.cedricziel.idea.typo3.domain.TYPO3RouteDefinition;
-import com.cedricziel.idea.typo3.domain.TYPO3ServiceDefinition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.jetbrains.php.lang.parser.PhpElementTypes;
-import com.jetbrains.php.lang.patterns.PhpPatterns;
 import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
@@ -20,12 +18,14 @@ import java.util.Map;
  */
 public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
 
+    private final String type;
     private Map<String, List<TYPO3RouteDefinition>> routes;
     private Map<String, List<TYPO3RouteDefinition>> ajaxRoutes;
 
-    public RouteDefinitionParserVisitor(Map<String, List<TYPO3RouteDefinition>> routes, Map<String, List<TYPO3RouteDefinition>> ajaxRoutes) {
+    public RouteDefinitionParserVisitor(Map<String, List<TYPO3RouteDefinition>> routes, Map<String, List<TYPO3RouteDefinition>> ajaxRoutes, String type) {
         this.routes = routes;
         this.ajaxRoutes = ajaxRoutes;
+        this.type = type;
     }
 
     @Override
@@ -54,6 +54,13 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
      */
     private void visitRouteCreation(ArrayCreationExpression element) {
 
+        Map<String, List<TYPO3RouteDefinition>> routeSet;
+        if (type.equals(RouteProvider.ROUTE_TYPE_BACKEND)) {
+            routeSet = this.routes;
+        } else {
+            routeSet = this.ajaxRoutes;
+        }
+
         TYPO3RouteDefinition routeDefinition = new TYPO3RouteDefinition();
 
         for (ArrayHashElement arrayHashElement : element.getHashElements()) {
@@ -70,6 +77,7 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
                     ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
 
                     routeDefinition.setName(key);
+                    routeDefinition.setType(type);
 
                     for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
                         String propertyName = ((StringLiteralExpression) routePropertyHashElement.getKey()).getContents();
@@ -81,102 +89,11 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
                         }
                     }
 
-                    if (!routes.containsKey(key)) {
-                        routes.put(key, new ArrayList<>());
+                    if (!routeSet.containsKey(key)) {
+                        routeSet.put(key, new ArrayList<>());
                     }
 
-                    routes.get(key).add(routeDefinition);
-                }
-            }
-        }
-        /*
-        MethodReference methodReference = (MethodReference) element;
-        // A service definition should contain at least 4 arguments
-        if (methodReference.getParameters().length < 4) {
-            return;
-        }
-
-        PsiElement extensionNameParam = methodReference.getParameters()[0]; // Extension name
-        PsiElement serviceNameParam = methodReference.getParameters()[1]; // Service name
-        PsiElement classNameParam = methodReference.getParameters()[2]; // Implementing Class (may be short name)
-        PsiElement optionsArrayParam = methodReference.getParameters()[3]; // Array parameters
-
-        String serviceId;
-        if (serviceNameParam instanceof StringLiteralExpression) {
-            StringLiteralExpression name = (StringLiteralExpression) serviceNameParam;
-            serviceId = name.getContents();
-        } else {
-            serviceId = serviceNameParam.getText();
-        }
-        ArrayList<TYPO3ServiceDefinition> serviceMap;
-        if (!routes.containsKey(serviceId)) {
-            serviceMap = new ArrayList<>();
-            routes.put(serviceId, serviceMap);
-        }
-
-        serviceMap = routes.get(serviceId);
-
-        TYPO3ServiceDefinition serviceDefinition = new TYPO3ServiceDefinition(serviceId);
-        serviceDefinition.setExtensionName(extensionNameParam.getText());
-        if (classNameParam instanceof ClassConstantReference) {
-            PhpExpression classReference = ((ClassConstantReference) classNameParam).getClassReference();
-            if (classReference instanceof PhpReference) {
-                serviceDefinition.setClass(((PhpReference) classReference).getFQN());
-
-                PhpReference ref = (PhpReference) classReference;
-                serviceDefinition.setSignature(ref.getSignature());
-            }
-
-            if (optionsArrayParam instanceof ArrayCreationExpression) {
-                ArrayCreationExpression arrayExpression = (ArrayCreationExpression) optionsArrayParam;
-                mapOptionsArrayParam(serviceDefinition, arrayExpression.getHashElements());
-            }
-
-            serviceMap.add(serviceDefinition);
-        }
-
-        routes.put(serviceId, serviceMap);
-        */
-    }
-
-    private void mapOptionsArrayParam(TYPO3ServiceDefinition serviceDefinition, Iterable<ArrayHashElement> optionsArray) {
-        for (ArrayHashElement element : optionsArray) {
-            if (null == element.getKey() || !(element.getKey() instanceof StringLiteralExpression)) {
-                continue;
-            }
-
-            String key = ((StringLiteralExpression) element.getKey()).getContents();
-            // Assign string properties of the service definition options
-            if (null != element.getValue() && element.getValue() instanceof StringLiteralExpression) {
-                String value = ((StringLiteralExpression) element.getValue()).getContents();
-                switch (key) {
-                    case "os":
-                        serviceDefinition.setOs(value);
-                        break;
-                    case "title":
-                        serviceDefinition.setTitle(value);
-                        break;
-                    case "description":
-                        serviceDefinition.setDescription(value);
-                        break;
-                    case "subtype":
-                        serviceDefinition.setSubType(value);
-                        break;
-                    case "exec":
-                        serviceDefinition.setExec(value);
-                        break;
-                }
-            }
-
-            // Assign numbers
-            if (null != element.getValue() && PhpPatterns.psiElement(PhpElementTypes.NUMBER).accepts(element.getValue())) {
-                switch (key) {
-                    case "priority":
-                        serviceDefinition.setPriority(new Integer(element.getValue().getText()));
-                        break;
-                    case "quality":
-                        serviceDefinition.setQuality(new Integer(element.getValue().getText()));
-                        break;
+                    routeSet.get(key).add(routeDefinition);
                 }
             }
         }

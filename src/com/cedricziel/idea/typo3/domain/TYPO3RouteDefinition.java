@@ -5,6 +5,7 @@ public class TYPO3RouteDefinition {
     private String path;
     private String access;
     private String target;
+    private String type;
 
     public String getName() {
         return name;
@@ -36,5 +37,13 @@ public class TYPO3RouteDefinition {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 }
