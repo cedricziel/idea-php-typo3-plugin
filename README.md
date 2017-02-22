@@ -24,6 +24,7 @@ On PhpStorm or IntelliJ:
 * CompletionContributor for `UriBuilder::buildUriFromRoute` and `BackendUtility::getAjaxUrl`
 * Annotator for both valid and invalid route references to make them distinguishable from normal strings
 * LineMarkerProvider to allow quick navigation to the route definition
+* Inspection: Extbase `@inject` property injection
 
 ## Credits
 
