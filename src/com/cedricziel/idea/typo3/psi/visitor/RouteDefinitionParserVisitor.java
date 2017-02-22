@@ -78,6 +78,7 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
 
                     routeDefinition.setName(key);
                     routeDefinition.setType(type);
+                    routeDefinition.setElement(valueMap);
 
                     for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
                         String propertyName = ((StringLiteralExpression) routePropertyHashElement.getKey()).getContents();
