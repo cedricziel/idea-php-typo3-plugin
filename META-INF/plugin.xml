@@ -77,6 +77,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
     <!-- indexes -->
     <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
+
+    <!-- completion -->
+    <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.jetbrains.php">
