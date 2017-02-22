@@ -22,6 +22,8 @@ On PhpStorm or IntelliJ:
 * TypeProvider for `GeneralUtility::makeInstanceService`
 * TypeProvider for `ObjectManager::get`
 * CompletionContributor for `UriBuilder::buildUriFromRoute` and `BackendUtility::getAjaxUrl`
+* Annotator for both valid and invalid route references to make them distinguishable from normal strings
+* LineMarkerProvider to allow quick navigation to the route definition
 
 ## Credits
 

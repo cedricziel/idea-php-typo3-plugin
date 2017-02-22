@@ -47,6 +47,8 @@
 <ul>
   <li>completion for backend route names on BackendUtility::getAjaxUrl()</li>
   <li>completion for backend route names on UriBuilder::buildUriFromRoute()</li>
+  <li>annotations for both valid and invalid route references</li>
+  <li>line marker to allow quick navigation to the route definition</li>
 </ul>
 
 <h2>Credits</h2>
