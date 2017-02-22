@@ -21,6 +21,7 @@ On PhpStorm or IntelliJ:
 * TypeProvider for `GeneralUtility::makeInstance`
 * TypeProvider for `GeneralUtility::makeInstanceService`
 * TypeProvider for `ObjectManager::get`
+* CompletionContributor for `UriBuilder::buildUriFromRoute` and `BackendUtility::getAjaxUrl`
 
 ## Credits
 
