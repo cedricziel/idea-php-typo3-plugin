@@ -66,4 +66,11 @@ public class RouteProvider {
 
         return list;
     }
+
+    public List<TYPO3RouteDefinition> ajax() {
+        List<TYPO3RouteDefinition> list = new ArrayList<>();
+        ajaxRoutes.values().forEach(ajaxRouteDefs -> ajaxRouteDefs.forEach(list::add));
+
+        return list;
+    }
 }
