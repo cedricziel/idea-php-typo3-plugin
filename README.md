@@ -36,6 +36,7 @@ It is a great inspiration for possible solutions and parts of the code.
 
 Icons used in this project are provided by:
 
+* Göran Bodenschatz (@coding46)
 * [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) (MIT Licensed)
 
 # License
