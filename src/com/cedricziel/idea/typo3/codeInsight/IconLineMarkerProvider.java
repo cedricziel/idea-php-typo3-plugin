@@ -91,7 +91,7 @@ public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
         VirtualFile virtualFile = iconForLine.getVirtualFile();
         if (virtualFile == null || virtualFile.getExtension().equalsIgnoreCase("svg")) {
             builder = NavigationGutterIconBuilder
-                    .create(TYPO3CMSIcons.ROUTE_ICON)
+                    .create(TYPO3CMSIcons.ICON_NOT_RESOLVED)
                     .setTarget(iconForLine.getElement())
                     .setTooltipText("Navigate to icon definition");
         } else {
