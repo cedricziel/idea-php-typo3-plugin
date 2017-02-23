@@ -1,5 +1,7 @@
 package com.cedricziel.idea.typo3;
 
+import com.cedricziel.idea.typo3.container.IconProvider;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -32,6 +34,11 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
     @Override
     public void projectOpened() {
         // called when project is opened
+
+        Project ref = this.project;
+        ApplicationManager.getApplication().executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
+            IconProvider.getInstance(ref);
+        }));
     }
 
     @Override

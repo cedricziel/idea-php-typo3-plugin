@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.container;
 import com.cedricziel.idea.typo3.domain.TYPO3RouteDefinition;
 import com.cedricziel.idea.typo3.psi.visitor.RouteDefinitionParserVisitor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
