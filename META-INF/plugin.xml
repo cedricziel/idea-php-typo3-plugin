@@ -129,13 +129,16 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
 
     <!-- completion -->
+    <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
     <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
 
     <!-- annotation -->
+    <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
     <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
 
     <!-- marker -->
     <codeInsight.lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
 
     <!-- inspections -->
     <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionProvider"/>
