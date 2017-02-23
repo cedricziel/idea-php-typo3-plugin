@@ -94,4 +94,12 @@ public class IconProvider {
 
         return instance;
     }
+
+    public boolean has(String value) {
+        return icons.containsKey(value);
+    }
+
+    public List<TYPO3IconDefinition> get(String value) {
+        return icons.get(value);
+    }
 }
