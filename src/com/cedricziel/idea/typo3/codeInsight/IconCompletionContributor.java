@@ -59,7 +59,7 @@ public class IconCompletionContributor extends CompletionContributor {
                 // Silent error
                 lookupElement = LookupElementBuilder
                         .create(iconDefinition.getName())
-                        .withIcon(TYPO3CMSIcons.ROUTE_ICON);
+                        .withIcon(TYPO3CMSIcons.ICON_NOT_RESOLVED);
             }
 
             if (iconDefinition.getFilename() != null) {
