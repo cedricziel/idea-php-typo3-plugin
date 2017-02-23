@@ -129,6 +129,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
 
     <!-- completion -->
+    <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
     <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
 
     <!-- annotation -->

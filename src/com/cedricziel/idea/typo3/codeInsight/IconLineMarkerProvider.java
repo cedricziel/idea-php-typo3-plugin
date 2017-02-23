@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static com.cedricziel.idea.typo3.util.IconUtil.createIconFromFile;
+
 public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
@@ -82,35 +84,6 @@ public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
         TYPO3IconDefinition iconForLine = elementMap.get(element);
         markLineForIcon(element, result, iconForLine);
-    }
-
-    private Icon createIconFromFile(VirtualFile virtualFile) throws IOException {
-        Image image = ImageIO.read(virtualFile.getInputStream());
-        Icon icon = IconLoader.getIcon(image);
-
-        if (UIUtil.isRetina()) {
-            icon = scaleImage((ImageIcon) icon, 16, 16);
-        } else {
-            icon = scaleImage((ImageIcon) icon, 32, 32);
-        }
-        return icon;
-    }
-
-    private ImageIcon scaleImage(ImageIcon icon, int w, int h) {
-        int nw = icon.getIconWidth();
-        int nh = icon.getIconHeight();
-
-        if (icon.getIconWidth() > w) {
-            nw = w;
-            nh = (nw * icon.getIconHeight()) / icon.getIconWidth();
-        }
-
-        if (nh > h) {
-            nh = h;
-            nw = (icon.getIconWidth() * nh) / icon.getIconHeight();
-        }
-
-        return new ImageIcon(icon.getImage().getScaledInstance(nw, nh, Image.SCALE_DEFAULT));
     }
 
     private void markLineForIcon(PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result, TYPO3IconDefinition iconForLine) {

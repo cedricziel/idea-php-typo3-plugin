@@ -35,6 +35,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
             if (child instanceof StringLiteralExpression) {
                 TYPO3IconDefinition iconDefinition = new TYPO3IconDefinition();
                 String key = ((StringLiteralExpression) child).getContents();
+                iconDefinition.setName(key);
                 iconDefinition.setElement(child);
 
                 PhpPsiElement valueMap = hashElement.getValue();

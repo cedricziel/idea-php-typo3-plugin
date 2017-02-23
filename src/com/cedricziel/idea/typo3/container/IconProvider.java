@@ -9,10 +9,7 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IconProvider {
 
@@ -101,5 +98,16 @@ public class IconProvider {
 
     public List<TYPO3IconDefinition> get(String value) {
         return icons.get(value);
+    }
+
+    public List<TYPO3IconDefinition> all() {
+        if (icons == null) {
+            return new ArrayList<>();
+        }
+
+        List<TYPO3IconDefinition> list = new ArrayList<>();
+        icons.forEach((icon, definitions) -> list.addAll(definitions));
+
+        return list;
     }
 }
