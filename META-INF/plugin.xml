@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.cedricziel.idea.typo3</id>
   <name>TYPO3 CMS Plugin</name>
-  <version>0.1.5</version>
+  <version>0.1.6</version>
   <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
   <description><![CDATA[
@@ -14,6 +14,20 @@
 <br/>
 
 <h2>Features:</h2>
+
+<br/>
+
+<h3>Autocompletion enhancements</h3>
+
+<p>
+  The plugin reads the local project and tries to parse out usage of well-known APIs
+  and provides you with autocompletion on points it knows for example possible parameter names.
+</p>
+
+<ul>
+  <li>Autocompletion for calls to IconFactory::getIcon with available Icons and preview</li>
+  <li>Line marker for Icon-Api usages with jump-to-definition and preview</li>
+</ul>
 
 <br/>
 
@@ -75,6 +89,13 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
   <change-notes><![CDATA[
+
+<h2>0.1.6</h2>
+<ul>
+  <li>New icon for icon type objects</li>
+  <li>Icon name completion for core icons on calls to IconFactory::getIcon</li>
+  <li>Annotators for icon references (with preview and jump-to-definition)</li>
+</ul>
 
 <h2>0.1.5</h2>
 <ul>

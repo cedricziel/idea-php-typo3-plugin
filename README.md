@@ -22,7 +22,9 @@ On PhpStorm or IntelliJ:
 * TypeProvider for `GeneralUtility::makeInstanceService`
 * TypeProvider for `ObjectManager::get`
 * CompletionContributor for `UriBuilder::buildUriFromRoute` and `BackendUtility::getAjaxUrl`
+* CompletionContributor for `IconFactory::getIcon`
 * Annotator for both valid and invalid route references to make them distinguishable from normal strings
+* Annotator for both valid and invalid icon references to core-defined icons
 * LineMarkerProvider to allow quick navigation to the route definition
 * Inspection: Extbase `@inject` property injection
 
