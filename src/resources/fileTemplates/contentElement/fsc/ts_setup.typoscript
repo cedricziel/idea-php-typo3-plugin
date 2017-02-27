@@ -2,15 +2,15 @@ tt_content.{{ elementName }} =< lib.fluidContent
 tt_content.{{ elementName }} {
     templateName = {{ templateName }}
     templateRootPaths {
-        0 = EXT:{{ extensionKey }}/Resources/Private/Templates/
+        0 = EXT:{{ extensionKey }}/Resources/Private/Templates/ContentElements/
         10 = {$styles.templates.templateRootPath}
     }
     partialRootPaths {
-        0 = EXT:{{ extensionKey }}/Resources/Private/Partials/
+        0 = EXT:{{ extensionKey }}/Resources/Private/Partials/ContentElements/
         10 = {$styles.templates.templateRootPath}
     }
     layoutRootPaths {
-        0 = EXT:{{ extensionKey }}/Resources/Private/Layouts/
+        0 = EXT:{{ extensionKey }}/Resources/Private/Layouts/ContentElements/
         10 = {$styles.templates.templateRootPath}
     }
 }
