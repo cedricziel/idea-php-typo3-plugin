@@ -1,10 +1,10 @@
 <idea-plugin version="2">
-  <id>com.cedricziel.idea.typo3</id>
-  <name>TYPO3 CMS Plugin</name>
-  <version>0.1.8</version>
-  <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
+    <id>com.cedricziel.idea.typo3</id>
+    <name>TYPO3 CMS Plugin</name>
+    <version>0.1.8</version>
+    <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
 <h1>TYPO3 CMS Plugin</h1>
 
 <a href="https://github.com/cedricziel/idea-php-typo3-plugin">GitHub Repository</a>
@@ -90,7 +90,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 </ul>
     ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
 
 <h2>0.1.8</h2>
 <ul>
@@ -144,51 +144,63 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
 <br/>
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="145.0"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="145.0"/>
 
-  <depends>com.intellij.modules.platform</depends>
-  <depends>com.jetbrains.php</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.jetbrains.php</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider" />
-    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider" />
-    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider" />
-    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider" />
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
+        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider"/>
+        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
+        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
 
-    <!-- indexes -->
-    <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
+        <!-- indexes -->
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
 
-    <!-- completion -->
-    <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
-    <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
+        <!-- completion -->
+        <completion.contributor language="PHP"
+                                implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
+        <completion.contributor language="PHP"
+                                implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
 
-    <!-- annotation -->
-    <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
-    <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
+        <!-- annotation -->
+        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
+        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
 
-    <!-- marker -->
-    <codeInsight.lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
+        <!-- marker -->
+        <codeInsight.lineMarkerProvider language="PHP"
+                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="PHP"
+                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
 
-    <!-- inspections -->
-    <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionProvider"/>
-  </extensions>
+        <!-- inspections -->
+        <inspectionToolProvider
+                implementation="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionProvider"/>
+    </extensions>
 
-  <extensions defaultExtensionNs="com.jetbrains.php">
-    <!-- Add your extensions here -->
-  </extensions>
+    <extensions defaultExtensionNs="com.jetbrains.php">
+        <!-- Add your extensions here -->
+    </extensions>
 
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
+    <actions>
+        <group id="TYPO3GenerateGroup"
+               text="TYPO3 CMS"
+               popup="false"
+        >
+            <action id="TYPO3CMS.Generation.FSCElement"
+                    class="com.cedricziel.idea.typo3.generation.action.GenerateFscElementAction"/>
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </group>
+    </actions>
 
-  <project-components>
-    <component>
-      <implementation-class>com.cedricziel.idea.typo3.TYPO3CMSProjectComponent</implementation-class>
-    </component>
-  </project-components>
+    <project-components>
+        <component>
+            <implementation-class>com.cedricziel.idea.typo3.TYPO3CMSProjectComponent</implementation-class>
+        </component>
+    </project-components>
 </idea-plugin>
