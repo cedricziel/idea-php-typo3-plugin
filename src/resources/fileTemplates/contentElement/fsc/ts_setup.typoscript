@@ -1,5 +1,5 @@
-tt.content.{{ elementName }} =< lib.fluidContent
-tt.content.{{ elementName }} {
+tt_content.{{ elementName }} =< lib.fluidContent
+tt_content.{{ elementName }} {
     templateName = {{ templateName }}
     templateRootPaths {
         0 = EXT:{{ extensionKey }}/Resources/Private/Templates/
