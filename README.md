@@ -26,7 +26,7 @@ On PhpStorm or IntelliJ:
 * Annotator for both valid and invalid route references to make them distinguishable from normal strings
 * Annotator for both valid and invalid icon references to core-defined icons
 * LineMarkerProvider to allow quick navigation to the route definition
-* Inspection: Extbase `@inject` property injection
+* Inspection: Extbase `@inject` property injection + QuickFix
 
 ## Credits
 
