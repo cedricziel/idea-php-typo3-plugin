@@ -1,0 +1,15 @@
+<html>
+<body>
+Property injection uses reflection to insert dependencies, which is inherently slower than a setter method. <br>
+The alternative to property injection is setter-injection. <br>
+You should much rather use setter-injection: <br>
+
+<pre>
+    protected $myService;
+
+    public function injectMyService(MyService $myService) {
+        $this->myService = $myService;
+    }
+</pre>"
+</body>
+</html>
