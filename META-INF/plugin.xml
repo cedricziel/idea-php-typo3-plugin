@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.cedricziel.idea.typo3</id>
   <name>TYPO3 CMS Plugin</name>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
   <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
   <description><![CDATA[
@@ -89,6 +89,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
   <change-notes><![CDATA[
+
+<h2>0.1.7</h2>
+<ul>
+  <li>QuickFix for Extbase property injection</li>
+</ul>
 
 <h2>0.1.6</h2>
 <ul>
