@@ -191,9 +191,17 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <group id="TYPO3GenerateGroup"
                text="TYPO3 CMS"
                popup="false"
+               icon="TYPO3Icons.TYPO3_ICON"
         >
-            <action id="TYPO3CMS.Generation.FSCElement"
-                    class="com.cedricziel.idea.typo3.generation.action.GenerateFscElementAction"/>
+            <group id="TYPO3GenerateGroup.ContentElement"
+                   text="Content Element"
+                   icon="TYPO3Icons.TYPO3_ICON"
+                   popup="true"
+            >
+                <action id="TYPO3CMS.Generation.FSCElement"
+                        class="com.cedricziel.idea.typo3.generation.action.GenerateFscElementAction"/>
+            </group>
+
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>
     </actions>
