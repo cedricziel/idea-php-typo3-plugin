@@ -150,6 +150,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider" />
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider" />
     <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider" />
+    <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider" />
 
     <!-- indexes -->
     <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
