@@ -12,6 +12,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +24,11 @@ import java.util.Map;
 public class GenerateFscElementAction extends AnAction {
 
     public GenerateFscElementAction() {
-        super("FSC CE", "test", TYPO3CMSIcons.TYPO3_ICON);
+        super(
+                "Fluid Styled Content Element",
+                "Generates a fluid_styled_content element",
+                TYPO3CMSIcons.TYPO3_ICON
+        );
     }
 
     @Override
@@ -41,7 +46,12 @@ public class GenerateFscElementAction extends AnAction {
                 TYPO3CMSIcons.TYPO3_ICON
         );
 
+        // empty elementName also means the dialogue was aborted
         if (StringUtils.isEmpty(elementName)) {
+            return;
+        }
+
+        if (!elementName.matches("\\w*")) {
             Messages.showErrorDialog(
                     "Could not create element. Element name should only contain [a-z0-9_]",
                     "Incorrect Content Element Name"
@@ -91,6 +101,30 @@ public class GenerateFscElementAction extends AnAction {
                 );
 
                 new OpenFileDescriptor(project, templateElement.getContainingFile().getVirtualFile(), 0).navigate(true);
+
+                StringBuilder ceImportSb = new StringBuilder();
+                String ceImport = ceImportSb
+                        .append("<INCLUDE_TYPOSCRIPT: source=\"FILE:EXT:")
+                        .append(extensionDefinition.getExtensionKey())
+                        .append("/Configuration/TypoScript/ContentElement/")
+                        .append(elementName)
+                        .append(".typoscript\">")
+                        .toString();
+
+                VirtualFile mainTsFile = ExtensionFileGenerationUtil.appendOrCreate(
+                        ceImport,
+                        "Configuration/TypoScript",
+                        "setup.txt",
+                        extensionDefinition,
+                        context,
+                        project
+                );
+
+                if (mainTsFile == null) {
+                    return;
+                }
+
+                new OpenFileDescriptor(project, mainTsFile, 0).navigate(true);
             }
         }.execute();
     }
