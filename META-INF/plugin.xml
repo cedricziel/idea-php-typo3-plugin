@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.cedricziel.idea.typo3</id>
   <name>TYPO3 CMS Plugin</name>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
   <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,7 @@
 <br/>
 
 <strong>beta quality</strong>
+
 <br/>
 
 <h2>Features:</h2>
@@ -27,6 +28,7 @@
 <ul>
   <li>Autocompletion for calls to IconFactory::getIcon with available Icons and preview</li>
   <li>Line marker for Icon-Api usages with jump-to-definition and preview</li>
+  <li>TypeProvider for `$GLOBALS['TYPO3_DB']`, `$GLOBALS['TSFE']` and `$GLOBALS['BE_USER']`</li>
 </ul>
 
 <br/>
@@ -89,6 +91,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
   <change-notes><![CDATA[
+
+<h2>0.1.8</h2>
+<ul>
+  <li>Added TypeProvider for $GLOBALS['TYPO3_DB'], $GLOBALS['TSFE'], $GLOBALS['BE_USER']</li>
+</ul>
 
 <h2>0.1.7</h2>
 <ul>
