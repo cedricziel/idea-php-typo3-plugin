@@ -7,17 +7,21 @@ import com.cedricziel.idea.typo3.util.ActionUtil;
 import com.cedricziel.idea.typo3.util.ExtensionFileGenerationUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,13 @@ public class GenerateFscElementAction extends AnAction {
         if (project == null) {
             return;
         }
+
+        ToolWindow toolWindow = anActionEvent.getData(PlatformDataKeys.TOOL_WINDOW);
+        if (toolWindow == null) {
+            return;
+        }
+
+        GenerateFscElementForm form = GenerateFscElementForm.create(toolWindow.getComponent(), project);
 
         String elementName = Messages.showInputDialog(
                 project,
@@ -76,10 +87,17 @@ public class GenerateFscElementAction extends AnAction {
                     return;
                 }
 
+                /*
+                 * Build template context. It will be available in the templates through '{{ marker }}' markers
+                 */
                 Map<String, String> context = new HashMap<>();
                 context.put("elementName", elementName);
                 context.put("extensionKey", extensionDefinition.getExtensionKey());
                 context.put("templateName", StringUtils.capitalize(elementName) + ".html");
+
+                /*
+                 * Generate element main TypoScript
+                 */
                 PsiElement element = ExtensionFileGenerationUtil.fromTemplate(
                         "contentElement/fsc/ts_setup.typoscript",
                         "Configuration/TypoScript/ContentElement",
@@ -88,9 +106,11 @@ public class GenerateFscElementAction extends AnAction {
                         context,
                         project
                 );
-
                 new OpenFileDescriptor(project, element.getContainingFile().getVirtualFile(), 0).navigate(true);
 
+                /*
+                 * Generate element main fluid template
+                 */
                 PsiElement templateElement = ExtensionFileGenerationUtil.fromTemplate(
                         "contentElement/fsc/element.html",
                         "Resources/Private/Templates/ContentElements",
@@ -99,17 +119,16 @@ public class GenerateFscElementAction extends AnAction {
                         context,
                         project
                 );
-
                 new OpenFileDescriptor(project, templateElement.getContainingFile().getVirtualFile(), 0).navigate(true);
 
-                StringBuilder ceImportSb = new StringBuilder();
-                String ceImport = ceImportSb
-                        .append("<INCLUDE_TYPOSCRIPT: source=\"FILE:EXT:")
-                        .append(extensionDefinition.getExtensionKey())
-                        .append("/Configuration/TypoScript/ContentElement/")
-                        .append(elementName)
-                        .append(".typoscript\">")
-                        .toString();
+                /*
+                 * Generate element TypoScript include to main TS template
+                 */
+                String ceImport = "<INCLUDE_TYPOSCRIPT: source=\"FILE:EXT:" +
+                        extensionDefinition.getExtensionKey() +
+                        "/Configuration/TypoScript/ContentElement/" +
+                        elementName +
+                        ".typoscript\">";
 
                 VirtualFile mainTsFile = ExtensionFileGenerationUtil.appendOrCreate(
                         ceImport,
@@ -119,15 +138,15 @@ public class GenerateFscElementAction extends AnAction {
                         context,
                         project
                 );
-
                 if (mainTsFile == null) {
                     return;
                 }
-
                 new OpenFileDescriptor(project, mainTsFile, 0).navigate(true);
 
+                /*
+                 * Generate New content element wizard tsconfig
+                 */
                 String newCeTsconfig = ExtensionFileGenerationUtil.readTemplateToString("contentElement/fsc/newcewizard.tsconfig", context);
-
                 VirtualFile newCeTsConfigFile = ExtensionFileGenerationUtil.appendOrCreate(
                         newCeTsconfig,
                         "Configuration/PageTSconfig",
@@ -136,8 +155,20 @@ public class GenerateFscElementAction extends AnAction {
                         context,
                         project
                 );
-
                 new OpenFileDescriptor(project, newCeTsConfigFile, 0).navigate(true);
+
+                /*
+                 * Generate element TCA overrides
+                 */
+                PsiElement elementTcaOverrides = ExtensionFileGenerationUtil.fromTemplate(
+                        "contentElement/fsc/tca_overrides_ttcontent.php",
+                        "Configuration/TCA/Overrides",
+                        "tt_content_element" + elementName + ".php",
+                        extensionDefinition,
+                        context,
+                        project
+                );
+                new OpenFileDescriptor(project, elementTcaOverrides.getContainingFile().getVirtualFile(), 0).navigate(true);
             }
         }.execute();
     }
