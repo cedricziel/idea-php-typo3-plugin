@@ -36,7 +36,7 @@ public class GenerateFscElementForm extends JDialog {
         iconProvider.all().stream();
 
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for (TYPO3IconDefinition iconDefinition : iconProvider.all().stream().sorted().) {
+        for (TYPO3IconDefinition iconDefinition : iconProvider.all()) {
             model.addElement(iconDefinition.getName());
         }
 
