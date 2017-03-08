@@ -17,6 +17,20 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ExtensionFileGenerationUtil {
+
+    /**
+     * @param templateFile        Name of the generated file
+     * @param context             Template Context variables
+     */
+    public static String readTemplateToString(@NotNull String templateFile, @NotNull Map<String, String> context) {
+        String template = getFileTemplateContent("/resources/fileTemplates/" + templateFile);
+        for (Map.Entry<String, String> entry : context.entrySet()) {
+            template = template.replace("{{ " + entry.getKey() + " }}", entry.getValue());
+        }
+
+        return template;
+    }
+
     /**
      * @param templateFile        Name of the generated file
      * @param destinationPath     Relative path to the target file system entry
@@ -25,10 +39,7 @@ public class ExtensionFileGenerationUtil {
      * @param project             Project in context
      */
     public static PsiElement fromTemplate(@NotNull String templateFile, @NotNull String destinationPath, @NotNull String destinationFileName, @NotNull TYPO3ExtensionDefinition extensionDefinition, @NotNull Map<String, String> context, Project project) {
-        String template = getFileTemplateContent("/resources/fileTemplates/" + templateFile);
-        for (Map.Entry<String, String> entry : context.entrySet()) {
-            template = template.replace("{{ " + entry.getKey() + " }}", entry.getValue());
-        }
+        String template = readTemplateToString(templateFile, context);
 
         VirtualFile targetDirectory = getOrCreateDestinationPath(extensionDefinition.getRootDirectory(), destinationPath);
 
