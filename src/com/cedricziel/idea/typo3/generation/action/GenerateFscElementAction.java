@@ -125,6 +125,19 @@ public class GenerateFscElementAction extends AnAction {
                 }
 
                 new OpenFileDescriptor(project, mainTsFile, 0).navigate(true);
+
+                String newCeTsconfig = ExtensionFileGenerationUtil.readTemplateToString("contentElement/fsc/newcewizard.tsconfig", context);
+
+                VirtualFile newCeTsConfigFile = ExtensionFileGenerationUtil.appendOrCreate(
+                        newCeTsconfig,
+                        "Configuration/PageTSconfig",
+                        "NewContentElementWizard.tsconfig",
+                        extensionDefinition,
+                        context,
+                        project
+                );
+
+                new OpenFileDescriptor(project, newCeTsConfigFile, 0).navigate(true);
             }
         }.execute();
     }

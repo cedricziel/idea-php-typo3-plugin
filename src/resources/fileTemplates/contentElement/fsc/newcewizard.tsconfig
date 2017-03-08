@@ -1,0 +1,13 @@
+mod.wizards.newContentElement.wizardItems.common {
+    elements {
+        {{ elementName }} {
+            iconIdentifier = your-icon-identifier
+            title = {{ elementName }}
+            description =
+            tt_content_defValues {
+                CType = {{ elementName }}
+            }
+        }
+    }
+    show := addToList({{ elementName }})
+}
