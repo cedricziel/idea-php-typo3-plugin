@@ -48,128 +48,20 @@ public class GenerateFscElementAction extends AnAction {
             return;
         }
 
-        GenerateFscElementForm form = GenerateFscElementForm.create(toolWindow.getComponent(), project);
-
-        String elementName = Messages.showInputDialog(
-                project,
-                "Enter element name:",
-                "New Content Element",
-                TYPO3CMSIcons.TYPO3_ICON
-        );
-
-        // empty elementName also means the dialogue was aborted
-        if (StringUtils.isEmpty(elementName)) {
+        PsiDirectory[] psiDirectories = ActionUtil.findDirectoryFromActionEvent(anActionEvent);
+        if (psiDirectories.length == 0) {
             return;
         }
 
-        if (!elementName.matches("\\w*")) {
+        TYPO3ExtensionDefinition extensionDefinition = TYPO3ExtensionUtil.findContainingExtension(psiDirectories);
+        if (extensionDefinition == null) {
             Messages.showErrorDialog(
-                    "Could not create element. Element name should only contain [a-z0-9_]",
-                    "Incorrect Content Element Name"
+                    "Could not extract extension from working directory. Does your extension contain a composer manifest?",
+                    "Error While Trying to Find Extension"
             );
             return;
         }
 
-        new WriteCommandAction(project) {
-            @Override
-            protected void run(@NotNull Result result) throws Throwable {
-                PsiDirectory[] psiDirectories = ActionUtil.findDirectoryFromActionEvent(anActionEvent);
-                if (psiDirectories.length == 0) {
-                    return;
-                }
-
-                TYPO3ExtensionDefinition extensionDefinition = TYPO3ExtensionUtil.findContainingExtension(psiDirectories);
-                if (extensionDefinition == null) {
-                    Messages.showErrorDialog(
-                            "Could not extract extension from working directory. Does your extension contain a composer manifest?",
-                            "Error While Trying to Find Extension"
-                    );
-                    return;
-                }
-
-                /*
-                 * Build template context. It will be available in the templates through '{{ marker }}' markers
-                 */
-                Map<String, String> context = new HashMap<>();
-                context.put("elementName", elementName);
-                context.put("extensionKey", extensionDefinition.getExtensionKey());
-                context.put("templateName", StringUtils.capitalize(elementName) + ".html");
-
-                /*
-                 * Generate element main TypoScript
-                 */
-                PsiElement element = ExtensionFileGenerationUtil.fromTemplate(
-                        "contentElement/fsc/ts_setup.typoscript",
-                        "Configuration/TypoScript/ContentElement",
-                        elementName + ".typoscript",
-                        extensionDefinition,
-                        context,
-                        project
-                );
-                new OpenFileDescriptor(project, element.getContainingFile().getVirtualFile(), 0).navigate(true);
-
-                /*
-                 * Generate element main fluid template
-                 */
-                PsiElement templateElement = ExtensionFileGenerationUtil.fromTemplate(
-                        "contentElement/fsc/element.html",
-                        "Resources/Private/Templates/ContentElements",
-                        context.get("templateName"),
-                        extensionDefinition,
-                        context,
-                        project
-                );
-                new OpenFileDescriptor(project, templateElement.getContainingFile().getVirtualFile(), 0).navigate(true);
-
-                /*
-                 * Generate element TypoScript include to main TS template
-                 */
-                String ceImport = "<INCLUDE_TYPOSCRIPT: source=\"FILE:EXT:" +
-                        extensionDefinition.getExtensionKey() +
-                        "/Configuration/TypoScript/ContentElement/" +
-                        elementName +
-                        ".typoscript\">";
-
-                VirtualFile mainTsFile = ExtensionFileGenerationUtil.appendOrCreate(
-                        ceImport,
-                        "Configuration/TypoScript",
-                        "setup.txt",
-                        extensionDefinition,
-                        context,
-                        project
-                );
-                if (mainTsFile == null) {
-                    return;
-                }
-                new OpenFileDescriptor(project, mainTsFile, 0).navigate(true);
-
-                /*
-                 * Generate New content element wizard tsconfig
-                 */
-                String newCeTsconfig = ExtensionFileGenerationUtil.readTemplateToString("contentElement/fsc/newcewizard.tsconfig", context);
-                VirtualFile newCeTsConfigFile = ExtensionFileGenerationUtil.appendOrCreate(
-                        newCeTsconfig,
-                        "Configuration/PageTSconfig",
-                        "NewContentElementWizard.tsconfig",
-                        extensionDefinition,
-                        context,
-                        project
-                );
-                new OpenFileDescriptor(project, newCeTsConfigFile, 0).navigate(true);
-
-                /*
-                 * Generate element TCA overrides
-                 */
-                PsiElement elementTcaOverrides = ExtensionFileGenerationUtil.fromTemplate(
-                        "contentElement/fsc/tca_overrides_ttcontent.php",
-                        "Configuration/TCA/Overrides",
-                        "tt_content_element" + elementName + ".php",
-                        extensionDefinition,
-                        context,
-                        project
-                );
-                new OpenFileDescriptor(project, elementTcaOverrides.getContainingFile().getVirtualFile(), 0).navigate(true);
-            }
-        }.execute();
+        GenerateFscElementForm.create(toolWindow.getComponent(), project, extensionDefinition);
     }
 }

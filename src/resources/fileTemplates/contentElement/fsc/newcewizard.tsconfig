@@ -1,9 +1,9 @@
 mod.wizards.newContentElement.wizardItems.common {
     elements {
         {{ elementName }} {
-            iconIdentifier = your-icon-identifier
-            title = {{ elementName }}
-            description =
+            iconIdentifier = {{ icon }}
+            title = {{ elementTitle }}
+            description = {{ elementDescription }}
             tt_content_defValues {
                 CType = {{ elementName }}
             }

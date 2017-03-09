@@ -24,7 +24,7 @@ if (!is_array($GLOBALS['TCA']['tt_content']['types']['{{ elementName }}'])) {
     'tt_content',
     'CType',
     [
-        '{{ elementName }}',
+        '{{ elementTitle }}',
         '{{ elementName }}',
         '{{ icon }}'
     ]
