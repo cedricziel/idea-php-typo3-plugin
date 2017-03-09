@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class ExtensionFileGenerationUtil {
@@ -132,5 +133,17 @@ public class ExtensionFileGenerationUtil {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static boolean extensionHasFile(TYPO3ExtensionDefinition extensionDefinition, String filename) {
+
+        List<VirtualFile> childFiles = VfsUtil.collectChildrenRecursively(extensionDefinition.getRootDirectory());
+        for (VirtualFile file : childFiles) {
+            if (file.getPath().contains(filename)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

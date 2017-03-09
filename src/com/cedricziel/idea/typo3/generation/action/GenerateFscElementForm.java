@@ -117,6 +117,23 @@ public class GenerateFscElementForm extends JDialog {
         String formElementTitle = this.elementTitle.getText();
         String formElementDescription = this.elementDescription.getText();
 
+        String successMessage = "New Content Element \"" + formElementName + "\" in extension " + extensionDefinition.getExtensionKey() + " successfully created.";
+        String errorMessageOverridesExist = "The TCA definition file for the element already exists. Unsupported operation.";
+
+        // Exit if element exists. Maybe one day... *sigh*
+        if (ExtensionFileGenerationUtil.extensionHasFile(extensionDefinition, "Configuration/TCA/Overrides/tt_content_element_"+ formElementName + ".php")) {
+            Notification notification = new Notification(
+                    "TYPO3 CMS Plugin",
+                    "TYPO3 CMS",
+                    errorMessageOverridesExist,
+                    NotificationType.ERROR
+            );
+            Notifications.Bus.notify(notification, this.project);
+
+            this.dispose();
+            return;
+        }
+
         /*
          * Build template context. It will be available in the templates through '{{ marker }}' markers
          */
@@ -154,9 +171,9 @@ public class GenerateFscElementForm extends JDialog {
         );
         new OpenFileDescriptor(project, templateElement.getContainingFile().getVirtualFile(), 0).navigate(true);
 
-                /*
-                 * Generate element TypoScript include to main TS template
-                 */
+        /*
+         * Generate element TypoScript include to main TS template
+         */
         String ceImport = "<INCLUDE_TYPOSCRIPT: source=\"FILE:EXT:" +
                 extensionDefinition.getExtensionKey() +
                 "/Configuration/TypoScript/ContentElement/" +
@@ -196,17 +213,34 @@ public class GenerateFscElementForm extends JDialog {
         PsiElement elementTcaOverrides = ExtensionFileGenerationUtil.fromTemplate(
                 "contentElement/fsc/tca_overrides_ttcontent.php",
                 "Configuration/TCA/Overrides",
-                "tt_content_element" + formElementName + ".php",
+                "tt_content_element_" + formElementName + ".php",
                 extensionDefinition,
                 context,
                 project
         );
         new OpenFileDescriptor(project, elementTcaOverrides.getContainingFile().getVirtualFile(), 0).navigate(true);
 
+        if (!ExtensionFileGenerationUtil.extensionHasFile(extensionDefinition, "Configuration/TCA/Overrides/sys_template.php")) {
+            /*
+             * Generate static template imports
+             */
+            PsiElement sysTemplateImport = ExtensionFileGenerationUtil.fromTemplate(
+                    "contentElement/fsc/tca_overrides_systemplate.php",
+                    "Configuration/TCA/Overrides",
+                    "sys_template.php",
+                    extensionDefinition,
+                    context,
+                    project
+            );
+            new OpenFileDescriptor(project, sysTemplateImport.getContainingFile().getVirtualFile(), 0).navigate(true);
+        } else {
+            successMessage += "\nsys_template overrides already exist. Please check that the static template is added.";
+        }
+
         Notification notification = new Notification(
                 "TYPO3 CMS Plugin",
                 "TYPO3 CMS",
-                "New Content Element \"" + formElementName + "\" in extension " + extensionDefinition.getExtensionKey() + " successfully created.",
+                successMessage,
                 NotificationType.INFORMATION
         );
         Notifications.Bus.notify(notification, this.project);
