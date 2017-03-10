@@ -46,7 +46,7 @@ public class IconAnnotator implements Annotator {
             annotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
         } else {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
-            annotationHolder.createErrorAnnotation(range, "Unresolved icon");
+            annotationHolder.createWarningAnnotation(range, "Unresolved icon");
         }
     }
 }
