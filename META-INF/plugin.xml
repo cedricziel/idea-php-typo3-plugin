@@ -177,6 +177,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="PHP"
+                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.extbase.EntityLineMarkerProvider"/>
 
         <!-- inspections -->
         <inspectionToolProvider
