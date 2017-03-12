@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.1.8</version>
+    <version>0.1.9</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,7 @@
   <li>Autocompletion for calls to IconFactory::getIcon with available Icons and preview</li>
   <li>Line marker for Icon-Api usages with jump-to-definition and preview</li>
   <li>TypeProvider for `$GLOBALS['TYPO3_DB']`, `$GLOBALS['TSFE']` and `$GLOBALS['BE_USER']`</li>
+  <li>Line marker for extbase entities</li>
 </ul>
 
 <br/>
@@ -77,6 +78,16 @@
 
 <br/>
 
+<h3>Code generation</h3>
+
+<br/>
+
+<ul>
+  <li>Fluid Styled Content Element (experimental)</li>
+</ul>
+
+<br/>
+
 <h2>Credits</h2>
 <p>Thank you to <a href="https://github.com/Haehnchen">Daniel Espendiller</a> and <a href="https://github.com/adrienbrault">Adrien Brault</a>
 for providing their <a href="https://github.com/Haehnchen/idea-php-symfony2-plugin">Symfony2 Plugin</a> in the first place.
@@ -91,6 +102,13 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+
+<h2>0.1.9</h2>
+<ul>
+  <li>Add generation of Fluid Styled Content elements</li>
+  <li>Change severity of icon not found from error to warning since user icons are not yet supported</li>
+  <li>Add line marker to extbase entities</li>
+</ul>
 
 <h2>0.1.8</h2>
 <ul>

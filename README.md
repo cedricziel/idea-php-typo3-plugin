@@ -28,6 +28,7 @@ On PhpStorm or IntelliJ:
 * Annotator for both valid and invalid icon references to core-defined icons
 * LineMarkerProvider to allow quick navigation to the route definition
 * Inspection: Extbase `@inject` property injection + QuickFix
+* **Experimental:** Generate Fluid Styled Content Element (please report bugs!)
 
 ## Credits
 
