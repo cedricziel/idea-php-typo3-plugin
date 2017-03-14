@@ -49,11 +49,11 @@ public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
         if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getIcon")) {
 
             IconProvider iconProvider = IconProvider.getInstance(element.getProject());
-            if (!iconProvider.has(value)) {
+            if (!iconProvider.has(element.getProject(), value)) {
                 return;
             }
 
-            List<TYPO3IconDefinition> iconsForLine = iconProvider.get(value);
+            List<TYPO3IconDefinition> iconsForLine = iconProvider.get(element.getProject(), value);
             iconsForLine.forEach(iconForLine -> {
                 markLineForIcon(element, result, iconForLine);
             });
@@ -72,7 +72,7 @@ public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
 
         IconProvider iconProvider = IconProvider.getInstance(element.getProject());
-        Map<PsiElement, TYPO3IconDefinition> elementMap = iconProvider.getElementMap();
+        Map<PsiElement, TYPO3IconDefinition> elementMap = iconProvider.getElementMap(element.getProject());
 
         if (!elementMap.containsKey(element)) {
             return;

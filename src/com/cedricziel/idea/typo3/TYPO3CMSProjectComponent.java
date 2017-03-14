@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TYPO3CMSProjectComponent implements ProjectComponent {
 
-    final private static Logger LOG = Logger.getInstance("TYPO3-CMS-Plugin");
+    private static final Logger LOG = Logger.getInstance("TYPO3-CMS-Plugin");
 
     private Project project;
 
@@ -33,8 +33,6 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-        // called when project is opened
-
         Project ref = this.project;
         ApplicationManager.getApplication().executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
             IconProvider.getInstance(ref);
@@ -43,7 +41,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectClosed() {
-        // called when project is being closed
+        IconProvider.destroyInstance(project);
     }
 
     public static Logger getLogger() {
