@@ -179,6 +179,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtbaseControllerStubIndex"/>
 
         <!-- completion -->
         <completion.contributor language="PHP"
