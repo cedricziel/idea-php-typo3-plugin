@@ -36,6 +36,13 @@ public class PhpElementsUtil {
         return null != methodRefName && Arrays.asList(methodName).contains(methodRefName);
     }
 
+    /**
+     * Checks whether subject extends extendedClass.
+     *
+     * @param subject       The class to check
+     * @param extendedClass The class to look for in the inheritance chain
+     * @return Whether the subject extends extendedClass
+     */
     public static boolean extendsClass(PhpClass subject, PhpClass extendedClass) {
 
         List<ClassReference> classReferences = allExtendedClasses(subject)
@@ -46,6 +53,12 @@ public class PhpElementsUtil {
         return classReferences.contains((ClassReference) extendedClass.getReference());
     }
 
+    /**
+     * Retrieves a list of all classes in the inheritance chain.
+     *
+     * @param phpClass The class to investigate
+     * @return List of classes that phpClass inherits from
+     */
     public static List<PhpClass> allExtendedClasses(PhpClass phpClass) {
         List<PhpClass> classReferences = new ArrayList<>();
         PhpIndex index = PhpIndex.getInstance(phpClass.getProject());
