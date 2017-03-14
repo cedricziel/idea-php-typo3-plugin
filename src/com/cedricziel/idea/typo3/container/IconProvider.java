@@ -16,11 +16,28 @@ public class IconProvider {
     public static String ICON_REGISTRY_CLASS = "TYPO3\\CMS\\Core\\Imaging\\IconRegistry";
     private static IconProvider instance;
 
-    private Map<String, List<TYPO3IconDefinition>> icons;
+    private Map<Project, Map<String, List<TYPO3IconDefinition>>> icons = new HashMap<>();
 
-    public IconProvider() {
+    public static synchronized IconProvider getInstance(Project project) {
+        if (instance == null) {
+            instance = new IconProvider();
+        }
+
+        if (!instance.icons.containsKey(project) || instance.icons.get(project) == null) {
+            instance.initialize(project);
+            instance.collect(project);
+        }
+
+        return instance;
+    }
+
+    private void initialize(Project project) {
         // Initialize with a larger capacity since core alone has around 400 definitions
-        this.icons = new HashMap<>(500);
+        this.icons.put(project, new HashMap<>(500));
+    }
+
+    public static void destroyInstance(Project project) {
+        getInstance(project).destroy(project);
     }
 
     public void collect(Project project) {
@@ -37,7 +54,7 @@ public class IconProvider {
                         return true;
                     }
 
-                    getElementMap().forEach((psiElement, typo3IconDefinition) -> {
+                    getElementMap(project).forEach((psiElement, typo3IconDefinition) -> {
                         if (typo3IconDefinition.getSource() == null) {
                             return;
                         }
@@ -63,15 +80,16 @@ public class IconProvider {
             Collection<Field> fields = iconRegistryClass.getFields();
             fields.forEach(field -> {
                 if ("icons".equals(field.getName())) {
-                    field.accept(new CoreIconParserVisitor(icons));
+                    field.accept(new CoreIconParserVisitor(icons.get(project)));
                 }
             });
         });
     }
 
-    public Map<PsiElement, TYPO3IconDefinition> getElementMap() {
-        Map<PsiElement, TYPO3IconDefinition> map = new HashMap<>(icons.size());
-        icons.forEach((key, iconList) -> {
+    public Map<PsiElement, TYPO3IconDefinition> getElementMap(Project project) {
+        Map<String, List<TYPO3IconDefinition>> projectIconMap = icons.get(project);
+        Map<PsiElement, TYPO3IconDefinition> map = new HashMap<>(projectIconMap.size());
+        projectIconMap.forEach((key, iconList) -> {
             if (iconList == null || iconList.isEmpty()) {
                 return;
             }
@@ -82,32 +100,28 @@ public class IconProvider {
         return map;
     }
 
-    public static IconProvider getInstance(Project project) {
-        if (instance == null) {
-            instance = new IconProvider();
-            instance.collect(project);
-            instance.collectImagesForIcons(project);
-        }
-
-        return instance;
+    public boolean has(Project project, String value) {
+        return icons.get(project).containsKey(value);
     }
 
-    public boolean has(String value) {
-        return icons.containsKey(value);
+    public List<TYPO3IconDefinition> get(Project project, String value) {
+        return icons.get(project).get(value);
     }
 
-    public List<TYPO3IconDefinition> get(String value) {
-        return icons.get(value);
-    }
-
-    public List<TYPO3IconDefinition> all() {
-        if (icons == null) {
+    public List<TYPO3IconDefinition> all(Project project) {
+        if (!icons.containsKey(project) || icons.get(project) == null) {
             return new ArrayList<>();
         }
 
         List<TYPO3IconDefinition> list = new ArrayList<>();
-        icons.forEach((icon, definitions) -> list.addAll(definitions));
+        icons.get(project).forEach((icon, definitions) -> list.addAll(definitions));
 
         return list;
+    }
+
+    private void destroy(Project project) {
+        if (this.icons.containsKey(project)) {
+            this.icons.remove(project);
+        }
     }
 }

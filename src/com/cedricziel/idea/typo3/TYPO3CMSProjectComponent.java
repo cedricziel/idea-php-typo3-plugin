@@ -44,6 +44,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
     @Override
     public void projectClosed() {
         // called when project is being closed
+        IconProvider.destroyInstance(project);
     }
 
     public static Logger getLogger() {

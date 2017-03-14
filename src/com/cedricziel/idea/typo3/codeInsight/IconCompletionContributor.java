@@ -42,7 +42,7 @@ public class IconCompletionContributor extends CompletionContributor {
 
     private void completeAvailableIcons(PsiElement element, CompletionResultSet resultSet) {
         IconProvider iconProvider = IconProvider.getInstance(element.getProject());
-        iconProvider.all().forEach(iconDefinition -> {
+        iconProvider.all(element.getProject()).forEach(iconDefinition -> {
             LookupElementBuilder lookupElement;
             try {
                 if (iconDefinition.getVirtualFile() == null) {
@@ -64,7 +64,7 @@ public class IconCompletionContributor extends CompletionContributor {
 
             if (iconDefinition.getFilename() != null) {
                 lookupElement = lookupElement.appendTailText(iconDefinition.getFilename(), true);
-            } else if (iconDefinition.getProvider() != null){
+            } else if (iconDefinition.getProvider() != null) {
                 lookupElement = lookupElement.appendTailText(iconDefinition.getProvider().getText(), true);
             }
 

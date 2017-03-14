@@ -40,7 +40,7 @@ public class IconAnnotator implements Annotator {
     }
 
     private void annotateIcon(PsiElement psiElement, AnnotationHolder annotationHolder, String value, IconProvider iconProvider) {
-        if (iconProvider.has(value)) {
+        if (iconProvider.has(psiElement.getProject(), value)) {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
             Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
             annotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);

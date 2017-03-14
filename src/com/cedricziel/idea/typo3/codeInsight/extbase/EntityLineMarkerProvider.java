@@ -47,15 +47,15 @@ public class EntityLineMarkerProvider extends RelatedItemLineMarkerProvider {
         IconProvider iconProvider = IconProvider.getInstance(element.getProject());
 
         Icon icon = null;
-        if (iconProvider.has("actions-document")) {
+        if (iconProvider.has(element.getProject(), "actions-document")) {
             try {
-                icon = IconUtil.createIconFromFile(iconProvider.get("actions-document").iterator().next().getVirtualFile());
+                icon = IconUtil.createIconFromFile(iconProvider.get(element.getProject(), "actions-document").iterator().next().getVirtualFile());
             } catch (IOException e) {
                 icon = TYPO3CMSIcons.ICON_NOT_RESOLVED;
             }
         }
 
-        if (icon == null){
+        if (icon == null) {
             icon = TYPO3CMSIcons.ICON_NOT_RESOLVED;
         }
 

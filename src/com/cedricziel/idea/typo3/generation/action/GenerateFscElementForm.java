@@ -48,7 +48,7 @@ public class GenerateFscElementForm extends JDialog {
         slugger = new Slugify().withUnderscoreSeparator(true);
 
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for (TYPO3IconDefinition iconDefinition : iconProvider.all()) {
+        for (TYPO3IconDefinition iconDefinition : iconProvider.all(project)) {
             model.addElement(iconDefinition.getName());
         }
 
@@ -121,7 +121,7 @@ public class GenerateFscElementForm extends JDialog {
         String errorMessageOverridesExist = "The TCA definition file for the element already exists. Unsupported operation.";
 
         // Exit if element exists. Maybe one day... *sigh*
-        if (ExtensionFileGenerationUtil.extensionHasFile(extensionDefinition, "Configuration/TCA/Overrides/tt_content_element_"+ formElementName + ".php")) {
+        if (ExtensionFileGenerationUtil.extensionHasFile(extensionDefinition, "Configuration/TCA/Overrides/tt_content_element_" + formElementName + ".php")) {
             Notification notification = new Notification(
                     "TYPO3 CMS Plugin",
                     "TYPO3 CMS",
