@@ -93,6 +93,10 @@ public class IconLineMarkerProvider extends RelatedItemLineMarkerProvider {
         } else {
             try {
                 Icon icon = createIconFromFile(virtualFile);
+                if (icon == null) {
+                    icon = TYPO3CMSIcons.ICON_NOT_RESOLVED;
+                }
+
                 builder = NavigationGutterIconBuilder
                         .create(icon)
                         .setTarget(iconForLine.getElement())

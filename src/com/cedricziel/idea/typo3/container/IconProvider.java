@@ -1,12 +1,14 @@
 package com.cedricziel.idea.typo3.container;
 
 import com.cedricziel.idea.typo3.domain.TYPO3IconDefinition;
+import com.cedricziel.idea.typo3.psi.visitor.CoreFlagParserVisitor;
 import com.cedricziel.idea.typo3.psi.visitor.CoreIconParserVisitor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.Field;
+import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
 import java.util.*;
@@ -33,7 +35,7 @@ public class IconProvider {
 
     private void initialize(Project project) {
         // Initialize with a larger capacity since core alone has around 400 definitions
-        this.icons.put(project, new HashMap<>(500));
+        this.icons.put(project, new HashMap<>(800));
     }
 
     public static void destroyInstance(Project project) {
@@ -77,10 +79,19 @@ public class IconProvider {
         }
 
         iconRegistry.forEach(iconRegistryClass -> {
+            // parse static icon map
             Collection<Field> fields = iconRegistryClass.getFields();
             fields.forEach(field -> {
                 if ("icons".equals(field.getName())) {
                     field.accept(new CoreIconParserVisitor(icons.get(project)));
+                }
+            });
+
+            // parse dynamically registered flag icons
+            Collection<Method> methods = iconRegistryClass.getMethods();
+            methods.forEach(method -> {
+                if ("registerFlags".equals(method.getName())) {
+                    method.accept(new CoreFlagParserVisitor(icons.get(project)));
                 }
             });
         });

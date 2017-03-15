@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.ClassConstantReference;
 
 public class TYPO3IconDefinition {
-    private String name;
+    private String identifier;
     private String extension;
     private PsiElement element;
     private String filename;
@@ -13,12 +13,22 @@ public class TYPO3IconDefinition {
     private String source;
     private VirtualFile virtualFile;
 
-    public String getName() {
-        return name;
+    public TYPO3IconDefinition(ClassConstantReference provider, String identifier, String source, PsiElement element) {
+        this.provider = provider;
+        this.identifier = identifier;
+        this.source = source;
+        this.element = element;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public TYPO3IconDefinition() {
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public PsiElement getElement() {
