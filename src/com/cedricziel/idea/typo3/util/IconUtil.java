@@ -25,6 +25,9 @@ public class IconUtil {
             } catch (TranscoderException e) {
                 // invalid svg
                 return null;
+            } catch (RuntimeException e) {
+                // unsupported svg version
+                return null;
             }
         } else {
             image = ImageIO.read(virtualFile.getInputStream());

@@ -53,12 +53,12 @@ public class IconCompletionContributor extends CompletionContributor {
                     throw new IOException("Unable to create image from icon source");
                 }
                 lookupElement = LookupElementBuilder
-                        .create(iconDefinition.getName())
+                        .create(iconDefinition.getIdentifier())
                         .withIcon(iconFromFile);
             } catch (IOException e) {
                 // Silent error
                 lookupElement = LookupElementBuilder
-                        .create(iconDefinition.getName())
+                        .create(iconDefinition.getIdentifier())
                         .withIcon(TYPO3CMSIcons.ICON_NOT_RESOLVED);
             }
 
