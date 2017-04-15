@@ -1,12 +1,10 @@
 #!/bin/bash
 
-ideaVersion="2016.3.1"
-if [ "$PHPSTORM_ENV" == "2016.3.1" ]; then
-    ideaVersion="2016.3.3"
-elif [ "$PHPSTORM_ENV" == "2016.3.2" ]; then
-    ideaVersion="2016.3.3"
+ideaVersion="2017.1"
+if [ "$PHPSTORM_ENV" == "2017.1" ]; then
+    ideaVersion="2017.1"
 elif [ "$PHPSTORM_ENV" == "eap" ]; then
-    ideaVersion="163.5644.15"
+    ideaVersion="171.4249.4"
 fi
 
 travisCache=".cache"
@@ -42,7 +40,7 @@ if [ -d ./idea  ]; then
 fi
 
 # Download main idea folder
-download "https://download.jetbrains.com/idea/ideaIU-${ideaVersion}.tar.gz"
+download "http://download.jetbrains.com/idea/ideaIU-${ideaVersion}.tar.gz"
 tar zxf ${travisCache}/ideaIU-${ideaVersion}.tar.gz -C .
 
 # Move the versioned IDEA folder to a known location
@@ -55,35 +53,25 @@ if [ -d ./plugins ]; then
   echo "created plugin dir"
 fi
 
-if [ "$PHPSTORM_ENV" == "2016.3.1" ]; then
+if [ "$PHPSTORM_ENV" == "2017.1" ]; then
 
     #php
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2016.3.1-php.zip"
-    unzip -qo $travisCache/phpstorm-2016.3.1-php.zip -d ./plugins
+    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-php.zip"
+    unzip -qo $travisCache/phpstorm-2017.1-php.zip -d ./plugins
 
     #twig
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2016.3.1-twig.zip"
-    unzip -qo $travisCache/phpstorm-2016.3.1-twig.zip -d ./plugins
-
-elif [ "$PHPSTORM_ENV" == "2016.3.2" ]; then
-
-    #php
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2016.3.2-php.zip"
-    unzip -qo $travisCache/phpstorm-2016.3.2-php.zip -d ./plugins
-
-    #twig
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2016.3.2-twig.zip"
-    unzip -qo $travisCache/phpstorm-2016.3.2-twig.zip -d ./plugins
+    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-twig.zip"
+    unzip -qo $travisCache/phpstorm-2017.1-twig.zip -d ./plugins
 
 elif [ "$PHPSTORM_ENV" == "eap" ]; then
 
     #php
-    download "https://plugins.jetbrains.com/files/6610/28510/php-163.4830.18.zip"
-    unzip -qo $travisCache/php-163.4830.18.zip -d ./plugins
+    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-php.zip"
+    unzip -qo $travisCache/phpstorm-2017.1-php.zip -d ./plugins
 
     #twig
-    download "https://plugins.jetbrains.com/files/7303/28516/twig-163.4830.18.zip"
-    unzip -qo $travisCache/twig-163.4830.18.zip -d ./plugins
+    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-twig.zip"
+    unzip -qo $travisCache/phpstorm-2017.1-twig.zip -d ./plugins
 
     # TODO: extract latest builds for plugins from eap site they are not public
     # https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Early+Access+Program

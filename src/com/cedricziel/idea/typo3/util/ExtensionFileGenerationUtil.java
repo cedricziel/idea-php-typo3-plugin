@@ -25,8 +25,18 @@ public class ExtensionFileGenerationUtil {
      */
     public static String readTemplateToString(@NotNull String templateFile, @NotNull Map<String, String> context) {
         String template = getFileTemplateContent("/resources/fileTemplates/" + templateFile);
+        if (template == null) {
+            // empty template file, this should never happen.
+            return "";
+        }
+
         for (Map.Entry<String, String> entry : context.entrySet()) {
-            template = template.replace("{{ " + entry.getKey() + " }}", entry.getValue());
+            String variableValue = entry.getValue();
+            if (variableValue == null) {
+                variableValue = "";
+            }
+
+            template = template.replace("{{ " + entry.getKey() + " }}", variableValue);
         }
 
         return template;
