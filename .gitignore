@@ -69,3 +69,6 @@ fabric.properties
 /build
 /build_test
 /plugins/typo3-plugin
+/libs/*
+!libs/.gitkeep
+/.sandbox

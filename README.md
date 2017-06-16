@@ -45,6 +45,19 @@ Icons used in this project are provided by:
 * Göran Bodenschatz (@coding46)
 * [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) (MIT Licensed)
 
+## Development
+
+Contributions are welcome!
+
+To start developing the plugin, you need either IntelliJ Community Edition or
+Ultimate.
+
+* fork the repo
+* clone your fork locally
+* check out a feature branch
+* import the project from existing sources
+* run `./gradlew buildPlugin` to build the project locally or `./gradlew buildPlugin` to run the IDE with the plugin enabled
+
 # License
 
 MIT

@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.2.11"
+    id "de.undercouch.download" version "3.2.0"
+}
+
+import de.undercouch.gradle.tasks.download.Download
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+intellij {
+    version 'IU-2017.1.4'
+    pluginName 'TYPO3 CMS Plugin'
+
+    plugins = ['CSS', 'yaml']
+
+    sandboxDirectory = project.rootDir.canonicalPath + "/.sandbox"
+
+    publishPlugin {
+        username "$JETBRAINS_USERNAME"
+        password "$JETBRAINS_PASSWORD"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['**/*.jar'])
+}
+
+group 'com.cedricziel.idea'
+version '0.1.12' // Plugin version
+
+task downloadPhpPlugin {
+    def destFile = new File(buildDir, "php-plugin.zip")
+    if (!destFile.exists()) {
+        def tempFile = new File(buildDir, "php-plugin.zip.part")
+        download {
+            src 'https://download.plugins.jetbrains.com/6610/35779/php-171.4694.2.zip?updateId=35779&pluginId=6610'
+            dest tempFile
+            overwrite true
+        }
+        tempFile.renameTo(destFile)
+    }
+}
+
+task downloadAndUnzipFile(dependsOn: downloadPhpPlugin, type: Copy) {
+    from zipTree(new File(buildDir.name + "/php-plugin.zip"))
+    into new File(buildDir.name + '/../libs')
+}
+
+task unzipToSandbox(dependsOn: downloadPhpPlugin, type: Copy) {
+    from zipTree(new File(buildDir.name + "/php-plugin.zip"))
+    into new File(buildDir.name + '/../.sandbox/plugins')
+}
+
+classes.dependsOn downloadAndUnzipFile
+classes.dependsOn unzipToSandbox
