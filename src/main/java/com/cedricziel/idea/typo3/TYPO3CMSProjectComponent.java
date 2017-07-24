@@ -33,6 +33,10 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectOpened() {
+        if (this.project == null) {
+            return;
+        }
+
         Project ref = this.project;
         ApplicationManager.getApplication().executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
             IconProvider.getInstance(ref);

@@ -9,10 +9,12 @@ plugins {
     id "de.undercouch.download" version "3.2.0"
 }
 
-import de.undercouch.gradle.tasks.download.Download
+configurations {
+    runtime.exclude group: 'com.jetbrains', module: 'php'
+}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = javaVersion
+targetCompatibility = javaTargetVersion
 
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
@@ -40,27 +42,28 @@ group 'com.cedricziel.idea'
 version '0.1.12' // Plugin version
 
 task downloadPhpPlugin {
-    def destFile = new File(buildDir, "php-plugin.zip")
-    if (!destFile.exists()) {
-        def tempFile = new File(buildDir, "php-plugin.zip.part")
-        download {
-            src 'https://download.plugins.jetbrains.com/6610/35779/php-171.4694.2.zip?updateId=35779&pluginId=6610'
-            dest tempFile
-            overwrite true
-        }
-        tempFile.renameTo(destFile)
+    def destFile = "${rootDir}/cache/php-plugin-${phpPluginVersion}.zip"
+    download {
+        src "https://download.plugins.jetbrains.com/6610/35779/php-${phpPluginVersion}.zip"
+        dest destFile
+        overwrite false
+    }
+
+    copy {
+        from zipTree(destFile)
+        into "${rootDir}/cache/"
+        include 'php/lib/php.jar', 'php/lib/php-openapi.jar'
+    }
+
+    copy {
+        from "${rootDir}/cache/php/lib/php.jar", "${rootDir}/cache/php/lib/php-openapi.jar"
+        into 'libs/'
+    }
+
+    copy {
+        from "${rootDir}/cache/php/lib/php.jar", "${rootDir}/cache/php/lib/php-openapi.jar"
+        into '.sandbox/config/plugins/php/lib/'
     }
 }
 
-task downloadAndUnzipFile(dependsOn: downloadPhpPlugin, type: Copy) {
-    from zipTree(new File(buildDir.name + "/php-plugin.zip"))
-    into new File(buildDir.name + '/../libs')
-}
-
-task unzipToSandbox(dependsOn: downloadPhpPlugin, type: Copy) {
-    from zipTree(new File(buildDir.name + "/php-plugin.zip"))
-    into new File(buildDir.name + '/../.sandbox/plugins')
-}
-
-classes.dependsOn downloadAndUnzipFile
-classes.dependsOn unzipToSandbox
+compileJava.dependsOn downloadPhpPlugin
