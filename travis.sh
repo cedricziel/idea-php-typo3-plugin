@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ideaVersion="2017.1"
-if [ "$PHPSTORM_ENV" == "2017.1" ]; then
-    ideaVersion="2017.1"
+ideaVersion="2017.2.3"
+if [ "$PHPSTORM_ENV" == "2017.2.3" ]; then
+    ideaVersion="2017.2"
 elif [ "$PHPSTORM_ENV" == "eap" ]; then
     ideaVersion="171.4249.4"
 fi
@@ -39,29 +39,23 @@ if [ -d ./idea  ]; then
   echo "created idea dir"
 fi
 
-# Download main idea folder
-download "http://download.jetbrains.com/idea/ideaIU-${ideaVersion}.tar.gz"
-tar zxf ${travisCache}/ideaIU-${ideaVersion}.tar.gz -C .
-
-# Move the versioned IDEA folder to a known location
-ideaPath=$(find . -name 'idea-IU*' | head -n 1)
-mv ${ideaPath} ./idea
-
 if [ -d ./plugins ]; then
   rm -rf plugins
   mkdir plugins
   echo "created plugin dir"
+else
+  mkdir plugins
 fi
 
-if [ "$PHPSTORM_ENV" == "2017.1" ]; then
+if [ "$PHPSTORM_ENV" == "2017.2.3" ]; then
 
     #php
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-php.zip"
-    unzip -qo $travisCache/phpstorm-2017.1-php.zip -d ./plugins
+    download "https://download.plugins.jetbrains.com/6610/38422/php-172.4155.25.zip"
+    unzip -qo $travisCache/php-172.4155.25.zip -d ./plugins
 
     #twig
-    download "http://phpstorm.espend.de/files/proxy/phpstorm-2017.1-twig.zip"
-    unzip -qo $travisCache/phpstorm-2017.1-twig.zip -d ./plugins
+    download "https://download.plugins.jetbrains.com/7303/35796/twig-172.2827.17.zip"
+    unzip -qo $travisCache/twig-172.2827.17.zip -d ./plugins
 
 elif [ "$PHPSTORM_ENV" == "eap" ]; then
 
@@ -83,11 +77,11 @@ else
     exit 1
 fi
 
-download "http://plugins.jetbrains.com/files/7320/19208/php-annotation.jar"
-cp $travisCache/php-annotation.jar ./plugins
+download "https://download.plugins.jetbrains.com/7320/37215/idea-php-annotation-plugin.jar"
+cp $travisCache/idea-php-annotation-plugin.jar ./plugins
 
 rm -f $travisCache/php-toolbox.jar
-download "https://plugins.jetbrains.com/files/8133/23580/php-toolbox.jar"
+download "https://download.plugins.jetbrains.com/8133/36499/php-toolbox.jar"
 cp $travisCache/php-toolbox.jar ./plugins
 
 # Run the tests

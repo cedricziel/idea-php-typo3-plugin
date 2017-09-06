@@ -11,11 +11,13 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * TypeProvider for `GeneralUtility::makeInstanceService`
@@ -29,7 +31,7 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
 
     @Nullable
     @Override
-    public String getType(PsiElement psiElement) {
+    public PhpType getType(PsiElement psiElement) {
         if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
             return null;
         }
@@ -49,23 +51,21 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
             StringLiteralExpression ref = (StringLiteralExpression) firstParam;
             String serviceId = ref.getContents();
 
-            return methodReference.getSignature() + "%" + serviceId;
+            return new PhpType().add("#" + this.getKey() + serviceId);
         }
 
         return null;
     }
 
     @Override
-    public Collection<? extends PhpNamedElement> getBySignature(String expression, Project project) {
-
-        String serviceName = expression.split("%")[1];
+    public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
 
         Collection<PhpNamedElement> phpNamedElementCollections = new ArrayList<>();
         PhpIndex phpIndex = PhpIndex.getInstance(project);
         CoreServiceParser serviceParser = new CoreServiceParser();
         serviceParser.collect(project);
 
-        List<TYPO3ServiceDefinition> resolvedServices = serviceParser.resolve(project, serviceName);
+        List<TYPO3ServiceDefinition> resolvedServices = serviceParser.resolve(project, expression);
         if (resolvedServices == null || resolvedServices.isEmpty()) {
             return phpNamedElementCollections;
         }

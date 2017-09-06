@@ -3,15 +3,16 @@ package com.cedricziel.idea.typo3.provider;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
-abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider2 {
-    @Override
-    public Collection<? extends PhpNamedElement> getBySignature(String s, Project project) {
-        int endIndex = s.lastIndexOf("%");
+abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider3 {
+
+    public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
+        int endIndex = expression.lastIndexOf("%");
         if (endIndex == -1) {
             return Collections.emptySet();
         }
@@ -19,7 +20,7 @@ abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvi
         // Get FQN from parameter string.
         // Example (PhpStorm 8): #K#C\Foo\Bar::get()%#K#C\Bar\Baz. -> \Bar\Baz.
         // Example (PhpStorm 9): #K#C\Foo\Bar::get()%#K#C\Bar\Baz.class -> \Bar\Baz.class
-        String parameter = s.substring(endIndex + 5, s.length());
+        String parameter = expression.substring(endIndex + 5, expression.length());
 
         if (parameter.contains(".class")) { // for PhpStorm 9
             parameter = parameter.replace(".class", "");

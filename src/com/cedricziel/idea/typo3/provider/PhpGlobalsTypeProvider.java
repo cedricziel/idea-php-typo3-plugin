@@ -7,15 +7,17 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * TypeProvider for `$GLOBALS`
  */
-public class PhpGlobalsTypeProvider implements PhpTypeProvider2 {
+public class PhpGlobalsTypeProvider implements PhpTypeProvider3 {
 
     @Override
     public char getKey() {
@@ -24,7 +26,7 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider2 {
 
     @Nullable
     @Override
-    public String getType(PsiElement psiElement) {
+    public PhpType getType(PsiElement psiElement) {
         // $GLOBALS['TYPO3_DB']
         if (!(psiElement instanceof ArrayAccessExpression)) {
             return null;
@@ -47,18 +49,18 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider2 {
 
         switch (arrayIndexName.getContents()) {
             case "TYPO3_DB":
-                return "#C\\TYPO3\\CMS\\Core\\Database\\DatabaseConnection";
+                return new PhpType().add("#C\\TYPO3\\CMS\\Core\\Database\\DatabaseConnection");
             case "TSFE":
-                return "#C\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController";
+                return new PhpType().add("#C\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController");
             case "BE_USER":
-                return "#C\\TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication";
+                return new PhpType().add("#C\\TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication");
             default:
                 return null;
         }
     }
 
     @Override
-    public Collection<? extends PhpNamedElement> getBySignature(String s, Project project) {
-        return PhpIndex.getInstance(project).getBySignature(s);
+    public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
+        return PhpIndex.getInstance(project).getBySignature(expression);
     }
 }

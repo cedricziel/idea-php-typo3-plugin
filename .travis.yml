@@ -2,7 +2,7 @@ sudo: false
 language: java
 jdk:
   - oraclejdk8
-  
+
 script: "./travis.sh"
 cache:
   directories:
@@ -12,7 +12,7 @@ before_script:
  - mkdir lib
 
 env:
-  - PHPSTORM_ENV=2017.1
+  - PHPSTORM_ENV=2017.2.3
   - PHPSTORM_ENV=eap
 
 matrix:
