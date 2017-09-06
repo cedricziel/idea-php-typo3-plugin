@@ -181,18 +181,20 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="171.0"/>
+    <idea-version since-build="171.3780"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.jetbrains.php</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
-        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
-        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider"/>
-        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
-        <php.typeProvider2 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
+    <extensions defaultExtensionNs="com.jetbrains.php">
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider"/>
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
+    </extensions>
 
+    <extensions defaultExtensionNs="com.intellij">
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
 

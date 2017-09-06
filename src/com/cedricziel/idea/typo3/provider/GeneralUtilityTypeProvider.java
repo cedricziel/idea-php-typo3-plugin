@@ -5,6 +5,7 @@ import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpReference;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,7 +20,7 @@ public class GeneralUtilityTypeProvider extends AbstractServiceLocatorTypeProvid
 
     @Nullable
     @Override
-    public String getType(PsiElement psiElement) {
+    public PhpType getType(PsiElement psiElement) {
         if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
             return null;
         }
@@ -38,7 +39,7 @@ public class GeneralUtilityTypeProvider extends AbstractServiceLocatorTypeProvid
         if (firstParam instanceof PhpReference) {
             PhpReference ref = (PhpReference) firstParam;
             if (ref.getText().toLowerCase().contains("::class")) {
-                return methodReference.getSignature() + "%" + ref.getSignature();
+                return new PhpType().add(methodReference.getSignature() + "%" + ref.getSignature());
             }
         }
 

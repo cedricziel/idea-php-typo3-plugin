@@ -15,7 +15,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="php-openapi" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="php" level="project" />
+    <orderEntry type="library" scope="TEST" name="php" level="project" />
     <orderEntry type="library" scope="TEST" name="junit:junit:4.9" level="project" />
     <orderEntry type="library" scope="TEST" name="css-openapi" level="project" />
     <orderEntry type="library" scope="TEST" name="css" level="project" />
