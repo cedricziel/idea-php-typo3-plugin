@@ -51,7 +51,7 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
             StringLiteralExpression ref = (StringLiteralExpression) firstParam;
             String serviceId = ref.getContents();
 
-            new PhpType().add(methodReference.getSignature() + "%" + serviceId);
+            return new PhpType().add("#" + this.getKey() + serviceId);
         }
 
         return null;
@@ -60,14 +60,12 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
     @Override
     public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
 
-        String serviceName = expression.split("%")[1];
-
         Collection<PhpNamedElement> phpNamedElementCollections = new ArrayList<>();
         PhpIndex phpIndex = PhpIndex.getInstance(project);
         CoreServiceParser serviceParser = new CoreServiceParser();
         serviceParser.collect(project);
 
-        List<TYPO3ServiceDefinition> resolvedServices = serviceParser.resolve(project, serviceName);
+        List<TYPO3ServiceDefinition> resolvedServices = serviceParser.resolve(project, expression);
         if (resolvedServices == null || resolvedServices.isEmpty()) {
             return phpNamedElementCollections;
         }
