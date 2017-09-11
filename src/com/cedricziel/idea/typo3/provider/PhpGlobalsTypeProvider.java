@@ -54,6 +54,8 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider3 {
                 return new PhpType().add("#C\\TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController");
             case "BE_USER":
                 return new PhpType().add("#C\\TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication");
+            case "LANG":
+                return new PhpType().add("#C\\TYPO3\\CMS\\Lang\\LanguageService");
             default:
                 return null;
         }

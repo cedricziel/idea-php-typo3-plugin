@@ -103,6 +103,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
     <change-notes><![CDATA[
 
+<h2>0.2.1</h2>
+<ul>
+  <li>Amend PhpGlobalsTypeProvider to provide a type for the $GLOBALS['LANG'] index</li>
+</ul>
+
 <h2>0.2.0</h2>
 <ul>
   <li>Migrate to PHP TypeProvider3 </li>
