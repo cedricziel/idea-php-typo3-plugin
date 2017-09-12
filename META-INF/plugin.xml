@@ -213,6 +213,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
+        <completion.contributor language="PHP"
+                                implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesContributor"/>
 
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
