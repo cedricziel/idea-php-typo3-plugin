@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
@@ -29,12 +30,19 @@ public class RouteAnnotator implements Annotator {
         }
 
         PsiElement methodReference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
-        if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getAjaxUrl")) {
+        if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getAjaxUrl") && !hasArrayCreationParent(psiElement)) {
             annotateAjaxRoutes(psiElement, annotationHolder, value);
         }
-        if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "buildUriFromRoute")) {
+        if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "buildUriFromRoute") && !hasArrayCreationParent(psiElement)) {
             annotateRoutes(psiElement, annotationHolder, value);
         }
+    }
+
+    private boolean hasArrayCreationParent(@NotNull PsiElement psiElement) {
+        if (psiElement.getParent() == null) {
+            return false;
+        }
+        return psiElement.getParent().getParent() instanceof ArrayCreationExpression;
     }
 
     private void annotateAjaxRoutes(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
@@ -56,7 +64,7 @@ public class RouteAnnotator implements Annotator {
         if (routeProvider.has(value, routeType)) {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
             Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
-            annotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
+            annotation.setTextAttributes(DefaultLanguageHighlighterColors.STRING);
         } else {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
             annotationHolder.createErrorAnnotation(range, "Unresolved route");
