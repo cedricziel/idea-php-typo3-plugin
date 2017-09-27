@@ -11,10 +11,11 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.ParameterList;
+import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -43,11 +44,49 @@ public class DoctrineTablesContributor extends CompletionContributor {
                 }
 
                 MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
+                if (methodReference == null) {
+                    return;
+                }
+
                 if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getConnectionForTable")) {
                     completeAvailableTables(methodReference, completionResultSet);
+
+                    return;
                 }
+
                 if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getQueryBuilderForTable")) {
                     completeAvailableTables(methodReference, completionResultSet);
+
+                    return;
+                }
+
+                String methodName = methodReference.getName();
+                ClassReference classReference = PsiTreeUtil.getChildOfType(methodReference, ClassReference.class);
+                if (classReference != null && methodName != null) {
+                    String name = classReference.getFQN();
+
+                    // there can be multiple classes in one project scope that share the same FQN
+                    Collection<PhpClass> phpClasses = PhpIndex.getInstance(element.getProject()).getClassesByFQN(name);
+                    for (PhpClass c : phpClasses) {
+                        Method method = c.findMethodByName(methodName);
+
+                        ParameterList originalMethodParameterList = PsiTreeUtil.getChildOfType(method, ParameterList.class);
+                        if (originalMethodParameterList != null) {
+                            Parameter firstParameter = PsiTreeUtil.getChildOfType(originalMethodParameterList, Parameter.class);
+
+                            // completion on method with no arguments
+                            if (firstParameter == null) {
+                                return;
+                            }
+
+                            String parameterName = firstParameter.getName();
+                            if (parameterName.equals("table") || parameterName.equals("tableName")) {
+                                completeAvailableTables(methodReference, completionResultSet);
+
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         });
