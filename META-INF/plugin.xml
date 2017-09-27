@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -102,6 +102,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+
+<h2>0.2.4</h2>
+<ul>
+  <li>Complete $table and $tableName arguments with table names (#57)</li>
+</ul>
 
 <h2>0.2.3</h2>
 <ul>
