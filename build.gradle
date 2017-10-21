@@ -12,7 +12,7 @@ plugins {
 }
 
 dependencies {
-    compile 'com.jetbrains.plugins:com.jetbrains.php:173.3188.26@jar'
+    compile 'com.jetbrains.plugins:com.jetbrains.php:172.4155.41@jar'
 }
 
 apply plugin: 'idea'
@@ -21,7 +21,7 @@ apply plugin: 'java'
 
 intellij {
     version 'IU-2017.2.5' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
-    plugins = ['coverage', 'com.jetbrains.php:173.3188.26'] //Bundled plugin dependencies
+    plugins = ['coverage', 'com.jetbrains.php:172.4155.41'] //Bundled plugin dependencies
     pluginName 'plugin_name_goes_here'
 }
 
