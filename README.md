@@ -1,6 +1,6 @@
 # TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm
 
-![](https://jetbrains-plugins-badges.cedric-ziel.com/plugin/9496/downloads/svg)
+[![TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm in the Jetrbains Plugin repository](https://img.shields.io/jetbrains/plugin/d/9496-typo3-cms-plugin.svg)](https://plugins.jetbrains.com/plugin/9496-typo3-cms-plugin)
 
 [TYPO3 CMS Plugin in Jetbrains plugin repository](https://plugins.jetbrains.com/idea/plugin/9496-typo3-cms-plugin)
 
