@@ -3,8 +3,5 @@ language: java
 jdk:
   - oraclejdk8
 
-script: 
-  - "./gradlew"
-cache:
-  directories:
-    - .cache
+script:
+  - ./gradlew buildPlugin
