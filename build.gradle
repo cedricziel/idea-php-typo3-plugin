@@ -3,7 +3,6 @@ buildscript {
         mavenCentral()
 
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
-        maven { url 'https://plugins.jetbrains.com/maven' }
     }
 }
 
