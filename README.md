@@ -32,6 +32,26 @@ On PhpStorm or IntelliJ:
 * Inspection: Extbase `@inject` property injection + QuickFix
 * **Experimental:** Generate Fluid Styled Content Element (please report bugs!)
 
+## Development and Contribution
+
+Contributions are very welcome! :tada:
+
+### Requirements
+
+* IntelliJ IDEA works best when developing the plugin (Community Edition should be sufficient),
+  but in theory, every Java IDE or even your text-editor should work
+
+### QuickStart (*nix, please adjust to your platform)
+
+* `git clone https://github.com/cedricziel/idea-php-typo3-plugin.git`
+* `cd idea-php-typo3-plugin`
+* `./gradlew runIde` - `gradlew.bat runIde` for Windows, this starts the IDE with the
+  plugin configured and enabled
+* to begin development with IntelliJ, please import the `build.gradle` file as `new project from
+  existing sources`
+* from IntelliJ run the Gradle task `runIde` (in debug mode), set break-points, profit!
+* ideally: send your pull request from a feature branch
+
 ## Credits
 
 Thank you to <a href="https://github.com/Haehnchen">Daniel Espendiller</a> and <a href="https://github.com/adrienbrault">Adrien Brault</a>
