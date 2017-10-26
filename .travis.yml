@@ -1,7 +1,18 @@
 sudo: false
 language: java
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 script:
-  - ./gradlew buildPlugin
+- "./gradlew buildPlugin"
+deploy:
+  provider: releases
+  api_key:
+    secure: "${GITHUB_KEY}"
+  file: build/distributions/TYPO3*.zip
+  skip_cleanup: true
+  file_glob: true
+  on:
+    tags: true
+    condition: "$TRAVIS_TAG =~ ^v[0-9]+.*$"
+after_deploy:
+- "./gradlew publishPlugin"
