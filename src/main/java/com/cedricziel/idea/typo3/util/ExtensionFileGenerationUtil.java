@@ -24,7 +24,7 @@ public class ExtensionFileGenerationUtil {
      * @param context             Template Context variables
      */
     public static String readTemplateToString(@NotNull String templateFile, @NotNull Map<String, String> context) {
-        String template = getFileTemplateContent("/resources/fileTemplates/" + templateFile);
+        String template = getFileTemplateContent("/fileTemplates/" + templateFile);
         if (template == null) {
             // empty template file, this should never happen.
             return "";
