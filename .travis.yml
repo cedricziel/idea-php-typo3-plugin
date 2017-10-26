@@ -6,8 +6,7 @@ script:
 - "./gradlew buildPlugin"
 deploy:
   provider: releases
-  api_key:
-    secure: "${GITHUB_KEY}"
+  api_key: "${GITHUB_KEY}"
   file: build/distributions/TYPO3*.zip
   skip_cleanup: true
   file_glob: true
