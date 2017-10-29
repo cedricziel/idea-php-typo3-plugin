@@ -21,9 +21,9 @@ import java.util.Collection;
  * <p>
  * and provides autocompletion
  */
-public class DoctrineTablesContributor extends CompletionContributor {
+public class DoctrineTablesCompletionContributor extends CompletionContributor {
 
-    public DoctrineTablesContributor() {
+    public DoctrineTablesCompletionContributor() {
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {

@@ -229,7 +229,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
         <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesContributor"/>
+                                implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesCompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
 
