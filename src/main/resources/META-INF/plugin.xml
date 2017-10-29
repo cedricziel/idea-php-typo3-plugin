@@ -102,6 +102,10 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>0.2.8</h2>
+<ul>
+  <li>CompletionProvider for table names in TCA configuration</li>
+</ul>
 
 <h2>0.2.4</h2>
 <ul>
