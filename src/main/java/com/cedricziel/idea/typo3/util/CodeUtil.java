@@ -13,7 +13,6 @@ import java.util.List;
 public class CodeUtil {
 
     /**
-     *
      * @param phpClass PhpClass
      * @param methodName The method
      * @return last int position of method psi element
@@ -49,5 +48,4 @@ public class CodeUtil {
 
         return method.getTextRange().getEndOffset();
     }
-
 }
