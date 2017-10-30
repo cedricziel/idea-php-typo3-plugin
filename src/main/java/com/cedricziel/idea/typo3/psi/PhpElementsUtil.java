@@ -1,12 +1,15 @@
 package com.cedricziel.idea.typo3.psi;
 
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
+import com.jetbrains.php.lang.patterns.PhpPatterns;
 import com.jetbrains.php.lang.psi.elements.ClassReference;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,5 +63,14 @@ public class PhpElementsUtil {
         }
 
         return classReferences;
+    }
+
+    public static PsiElementPattern.Capture<PsiElement> isStringArrayValue() {
+
+        return PhpPatterns.psiElement()
+                .withParent(
+                        PlatformPatterns.psiElement(StringLiteralExpression.class)
+                                .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
+                );
     }
 }

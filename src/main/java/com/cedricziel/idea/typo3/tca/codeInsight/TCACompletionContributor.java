@@ -1,12 +1,10 @@
 package com.cedricziel.idea.typo3.tca.codeInsight;
 
+import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.TableUtil;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import com.jetbrains.php.lang.parser.PhpElementTypes;
-import com.jetbrains.php.lang.patterns.PhpPatterns;
 import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
@@ -27,10 +25,7 @@ public class TCACompletionContributor extends CompletionContributor {
          */
         extend(
                 CompletionType.BASIC,
-                PhpPatterns.psiElement().withParent(
-                        PlatformPatterns.psiElement(StringLiteralExpression.class).withParent(
-                                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
-                ),
+                PhpElementsUtil.isStringArrayValue(),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
@@ -50,6 +45,7 @@ public class TCACompletionContributor extends CompletionContributor {
                             }
                         }
                     }
-                });
+                }
+        );
     }
 }
