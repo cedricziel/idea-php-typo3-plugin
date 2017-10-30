@@ -12,12 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class TCACompletionContributor extends CompletionContributor {
+import static com.cedricziel.idea.typo3.util.TableUtil.TCA_TABLE_FIELDS;
 
-    private static final String[] TCA_TABLE_FIELDS = {
-            "foreign_table",
-            "allowed",
-    };
+public class TCACompletionContributor extends CompletionContributor {
 
     public TCACompletionContributor() {
         /*
