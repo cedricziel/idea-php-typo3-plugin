@@ -58,5 +58,32 @@ public class TCACompletionContributor extends CompletionContributor {
                     }
                 }
         );
+
+        /*
+         * Complete 'type' fields in TCA
+         */
+        extend(
+                CompletionType.BASIC,
+                PhpElementsUtil.isStringArrayValue(),
+                new CompletionProvider<CompletionParameters>() {
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                        PsiElement element = parameters.getPosition();
+
+                        String arrayIndex = extractArrayIndexFromValue(element);
+                        if ("type".equals(arrayIndex)) {
+                            for(String name: TCAUtil.getAvailableColumnTypes(element)) {
+                                result.addElement(new LookupElement() {
+                                    @NotNull
+                                    @Override
+                                    public String getLookupString() {
+                                        return name;
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+        );
     }
 }

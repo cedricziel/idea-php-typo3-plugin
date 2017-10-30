@@ -71,6 +71,7 @@
 <h3>TCA</h3>
 <ul>
   <li>completion for built-in TCA render types</li>
+  <li>completion for built-in TCA column types</li>
 </ul>
 
 <h3>Code inspections</h3>
@@ -111,6 +112,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 <ul>
   <li>Autocompletion for TCA renderTypes</li>
   <li>Inspection for valid renderTypes</li>
+  <li>Autocompletion for TCA column types</li>
 </ul>
 
 <h2>0.2.9</h2>
