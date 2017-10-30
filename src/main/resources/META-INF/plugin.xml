@@ -252,8 +252,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         -->
 
         <!-- inspections -->
-        <inspectionToolProvider
-                implementation="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionProvider"/>
+        <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.jetbrains.php">
