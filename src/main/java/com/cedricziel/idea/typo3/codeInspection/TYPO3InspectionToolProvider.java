@@ -9,6 +9,7 @@ public class TYPO3InspectionToolProvider implements InspectionToolProvider {
 
         return new Class[]{
                 ExtbasePropertyInjectionInspection.class,
+                MissingTableInspection.class,
         };
     }
 }
