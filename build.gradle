@@ -31,7 +31,7 @@ intellij {
 }
 
 group 'com.cedricziel'
-version '0.2.8'
+version '0.2.9'
 
 apply plugin: 'de.undercouch.download'
 task downloadPsiViewerPlugin() {
