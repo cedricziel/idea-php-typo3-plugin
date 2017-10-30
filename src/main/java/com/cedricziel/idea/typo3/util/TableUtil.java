@@ -18,11 +18,6 @@ public class TableUtil {
 
     public static final String EXT_TABLES_SQL_FILENAME = "ext_tables.sql";
 
-    public static final String[] TCA_TABLE_FIELDS = {
-            "foreign_table",
-            "allowed",
-    };
-
     public static Set<String> getAvailableTableNames(@NotNull Project project) {
         PsiFile[] extSqlFiles = FilenameIndex.getFilesByName(project, EXT_TABLES_SQL_FILENAME, GlobalSearchScope.allScope(project));
 
