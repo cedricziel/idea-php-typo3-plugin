@@ -6,10 +6,8 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.patterns.PhpPatterns;
-import com.jetbrains.php.lang.psi.elements.ClassReference;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,5 +70,19 @@ public class PhpElementsUtil {
                         PlatformPatterns.psiElement(StringLiteralExpression.class)
                                 .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
                 );
+    }
+
+    @Nullable
+    public static String extractArrayIndexFromValue(PsiElement element) {
+        PsiElement arrayElement = element.getParent().getParent().getParent();
+        if (arrayElement instanceof ArrayHashElement) {
+            ArrayHashElement arrayHashElement = (ArrayHashElement) arrayElement;
+            PhpPsiElement keyPsiElement = arrayHashElement.getKey();
+            if (keyPsiElement instanceof StringLiteralExpression) {
+                return ((StringLiteralExpression) keyPsiElement).getContents();
+            }
+        }
+
+        return null;
     }
 }
