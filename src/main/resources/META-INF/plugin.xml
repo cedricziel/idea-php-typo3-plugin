@@ -68,11 +68,15 @@
   <li>line marker to allow quick navigation to the route definition</li>
 </ul>
 
+<br/>
+
 <h3>TCA</h3>
 <ul>
   <li>completion for built-in TCA render types</li>
   <li>completion for built-in TCA column types</li>
 </ul>
+
+<br/>
 
 <h3>Code inspections</h3>
 
@@ -80,6 +84,8 @@
 
 <ul>
   <li>Extbase property injection (@inject) performance inspection</li>
+  <li>TCA renderTypes</li>
+  <li>TCA column types</li>
 </ul>
 
 <br/>
@@ -113,6 +119,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
   <li>Autocompletion for TCA renderTypes</li>
   <li>Inspection for valid renderTypes</li>
   <li>Autocompletion for TCA column types</li>
+  <li>Inspection for valid column types</li>
 </ul>
 
 <h2>0.2.9</h2>
