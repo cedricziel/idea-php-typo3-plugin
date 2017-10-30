@@ -26,10 +26,10 @@ public class TCACompletionContributor extends CompletionContributor {
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-                        PsiElement position = parameters.getPosition();
+                        PsiElement element = parameters.getPosition();
 
                         // ArrayHashElement
-                        PsiElement arrayElement = position.getParent().getParent().getParent();
+                        PsiElement arrayElement = element.getParent().getParent().getParent();
                         if (arrayElement instanceof ArrayHashElement) {
                             ArrayHashElement arrayHashElement = (ArrayHashElement) arrayElement;
                             PhpPsiElement keyPsiElement = arrayHashElement.getKey();
@@ -37,7 +37,7 @@ public class TCACompletionContributor extends CompletionContributor {
                                 String key = ((StringLiteralExpression) keyPsiElement).getContents();
 
                                 if (Arrays.asList(TCA_TABLE_FIELDS).contains(key)) {
-                                    TableUtil.completeAvailableTableNames(position.getProject(), result);
+                                    TableUtil.completeAvailableTableNames(element.getProject(), result);
                                 }
                             }
                         }
