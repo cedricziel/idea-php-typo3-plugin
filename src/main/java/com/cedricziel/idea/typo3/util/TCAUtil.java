@@ -16,6 +16,6 @@ public class TCAUtil {
     public static boolean arrayIndexIsTCATableNameField(PsiElement element) {
         String arrayIndex = extractArrayIndexFromValue(element);
 
-        return null != arrayIndex && Arrays.asList(TCA_TABLE_FIELDS).contains(arrayIndex);
+        return Arrays.asList(TCA_TABLE_FIELDS).contains(arrayIndex);
     }
 }
