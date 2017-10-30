@@ -66,23 +66,39 @@ public class PhpElementsUtil {
     public static PsiElementPattern.Capture<PsiElement> isStringArrayValue() {
 
         return PhpPatterns.psiElement()
-                .withParent(
-                        PlatformPatterns.psiElement(StringLiteralExpression.class)
+                .andOr(
+                        PhpPatterns.psiElement().withParent(
+                            PlatformPatterns.psiElement(StringLiteralExpression.class)
                                 .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
+                        ),
+                        PlatformPatterns.psiElement(StringLiteralExpression.class)
+                                        .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
                 );
     }
 
     @Nullable
     public static String extractArrayIndexFromValue(PsiElement element) {
-        PsiElement arrayElement = element.getParent().getParent().getParent();
-        if (arrayElement instanceof ArrayHashElement) {
-            ArrayHashElement arrayHashElement = (ArrayHashElement) arrayElement;
-            PhpPsiElement keyPsiElement = arrayHashElement.getKey();
-            if (keyPsiElement instanceof StringLiteralExpression) {
-                return ((StringLiteralExpression) keyPsiElement).getContents();
-            }
+        PsiElement arrayElement;
+        if (element.getParent() instanceof StringLiteralExpression) {
+            arrayElement = element.getParent().getParent().getParent();
+        } else {
+            arrayElement = element.getParent().getParent();
         }
 
+        if (arrayElement instanceof ArrayHashElement) {
+            ArrayHashElement arrayHashElement = (ArrayHashElement) arrayElement;
+            return extractIndexFromArrayHash(arrayHashElement);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static String extractIndexFromArrayHash(ArrayHashElement arrayHashElement) {
+        PhpPsiElement keyPsiElement = arrayHashElement.getKey();
+        if (keyPsiElement instanceof StringLiteralExpression) {
+            return ((StringLiteralExpression) keyPsiElement).getContents();
+        }
         return null;
     }
 }
