@@ -110,6 +110,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 <h2>0.2.10</h2>
 <ul>
   <li>Autocompletion for TCA renderTypes</li>
+  <li>Inspection for valid renderTypes</li>
 </ul>
 
 <h2>0.2.9</h2>
