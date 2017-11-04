@@ -24,6 +24,7 @@ public class TCAUtil {
     };
 
     public static final String[] TCA_CORE_TYPES = {
+            "check",
             "flex",
             "group",
             "imageManipulation",
@@ -50,6 +51,14 @@ public class TCAUtil {
             "belayoutwizard",
             "t3editor",
             "textTable",
+    };
+
+    public static final String[] TCA_NUMERIC_CONFIG_KEYS = {
+            "size",
+            "min",
+            "max",
+            "maxitems",
+            "autoSizeMax",
     };
 
     private static final String EXT_LOCALCONF_FILENAME = "ext_localconf.php";
