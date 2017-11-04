@@ -59,6 +59,8 @@ public class TCAUtil {
             "max",
             "maxitems",
             "autoSizeMax",
+            "cols",
+            "rows",
     };
 
     private static final String EXT_LOCALCONF_FILENAME = "ext_localconf.php";
