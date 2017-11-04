@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFromValue;
 
-public class MissingColumnInspection extends PhpInspection {
+public class MissingColumnTypeInspection extends PhpInspection {
     @Nls
     @NotNull
     @Override
@@ -29,7 +29,7 @@ public class MissingColumnInspection extends PhpInspection {
 
     @NotNull
     public String getShortName() {
-        return "MisssingColumnInspection";
+        return "MisssingColumnTypeInspection";
     }
 
     @NotNull
