@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.13</version>
+    <version>0.2.14</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -84,8 +84,8 @@
 
 <ul>
   <li>Extbase property injection (@inject) performance inspection</li>
-  <li>TCA renderTypes</li>
-  <li>TCA column types</li>
+  <li>TCA renderTypes (+ inspections)</li>
+  <li>TCA column types (+ inspections)</li>
 </ul>
 
 <br/>
@@ -114,6 +114,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>0.2.14</h2>
+<ul>
+  <li>Inspection for quantity based TCA properties</li>
+</ul>
+
 <h2>0.2.10</h2>
 <ul>
   <li>Autocompletion for TCA renderTypes</li>
