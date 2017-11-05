@@ -142,4 +142,17 @@ public class TCAUtil {
 
         return elements;
     }
+
+    public static boolean insideTCAColumnDefinition(PsiElement element) {
+        return PlatformPatterns.psiElement()
+                .withAncestor(
+                        11,
+                        PlatformPatterns
+                                .psiElement(PhpElementTypes.HASH_ARRAY_ELEMENT)
+                                .withChild(
+                                        PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY).withText("'columns'")
+                                )
+                )
+                .accepts(element);
+    }
 }

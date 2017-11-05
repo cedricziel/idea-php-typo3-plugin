@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFromValue;
+import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
 public class InvalidQuantityInspection extends PhpInspection {
     @Nls
@@ -37,7 +38,7 @@ public class InvalidQuantityInspection extends PhpInspection {
             public void visitPhpElement(PhpPsiElement element) {
 
                 boolean isArrayStringValue = PhpElementsUtil.isStringArrayValue().accepts(element);
-                if (!isArrayStringValue) {
+                if (!isArrayStringValue || !insideTCAColumnDefinition(element)) {
                     return;
                 }
 
