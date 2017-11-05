@@ -43,12 +43,12 @@ public class ConstantMatcherInspection extends PhpInspection {
             @Override
             public void visitPhpElement(PhpPsiElement element) {
 
-                if (!PlatformPatterns.psiElement(PhpElementTypes.CLASS_REFERENCE).accepts(element)) {
+                if (!PlatformPatterns.psiElement(PhpElementTypes.CONSTANT_REF).accepts(element)) {
                     return;
                 }
 
-                Set<String> constants = getRemovedConstantsFQNs(element);
                 ConstantReference constantReference = (ConstantReference) element;
+                Set<String> constants = getRemovedConstantsFQNs(constantReference);
                 if (constants.contains(constantReference.getFQN())) {
                     problemsHolder.registerProblem(element, "Constant removed with TYPO3 9, consider using an alternative");
                 }
@@ -56,7 +56,7 @@ public class ConstantMatcherInspection extends PhpInspection {
         };
     }
 
-    private Set<String> getRemovedConstantsFQNs(PhpPsiElement element) {
+    private Set<String> getRemovedConstantsFQNs(ConstantReference element) {
         Set<PsiElement> elements = new HashSet<>();
         PsiFile[] constantMatcherFiles = FilenameIndex.getFilesByName(element.getProject(), "ConstantMatcher.php", GlobalSearchScope.allScope(element.getProject()));
         for (PsiFile file : constantMatcherFiles) {
