@@ -275,6 +275,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
+        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.PathResourceAnnotator"/>
 
         <!-- marker -->
         <codeInsight.lineMarkerProvider language="PHP"
