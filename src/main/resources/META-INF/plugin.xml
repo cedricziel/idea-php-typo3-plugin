@@ -271,6 +271,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                                 implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesCompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
+        <completion.contributor language="PHP"
+                                implementationClass="com.cedricziel.idea.typo3.codeInsight.PathResourceCompletionContributor"/>
+
 
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
