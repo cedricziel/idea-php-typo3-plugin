@@ -4,12 +4,15 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +51,17 @@ public class TableUtil {
         }
 
         return tableNames;
+    }
+
+    public static PsiElement[] getExtTablesSqlFilesForTable(@NotNull String tableName, @NotNull Project project) {
+        PsiFile[] extSqlFiles = FilenameIndex.getFilesByName(project, EXT_TABLES_SQL_FILENAME, GlobalSearchScope.allScope(project));
+
+        return Arrays
+                .stream(extSqlFiles)
+                .filter(Objects::nonNull)
+                .filter(file -> LoadTextUtil.loadText(file.getVirtualFile()).toString().contains(tableName))
+                .map(file -> file.findElementAt(LoadTextUtil.loadText(file.getVirtualFile()).toString().indexOf(tableName)))
+                .toArray(PsiElement[]::new);
     }
 
     public static void completeAvailableTableNames(@NotNull Project project, @NotNull CompletionResultSet completionResultSet) {
