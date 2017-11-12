@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -19,12 +20,17 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
     @Override
     public PsiElement[] getGotoDeclarationTargets(@Nullable PsiElement sourceElement, int offset, Editor editor) {
         if (!isExtResourcePath(sourceElement)) {
-            return new PsiElement[0];
+            return emptyPsiElementArray();
         }
 
         if (sourceElement != null) {
             String text = sourceElement.getText();
-            String fileName = text.split("/")[text.split("/").length - 1];
+            String[] strings = text.split("/");
+            if (strings.length == 0) {
+                return emptyPsiElementArray();
+            }
+
+            String fileName = strings[strings.length - 1];
             String relativePath = text.replaceFirst("EXT:", "");
 
             List<PsiFile> psiFiles = Arrays.asList(
@@ -40,6 +46,11 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
                     .toArray(PsiElement[]::new);
         }
 
+        return emptyPsiElementArray();
+    }
+
+    @NotNull
+    private PsiElement[] emptyPsiElementArray() {
         return new PsiElement[0];
     }
 
