@@ -23,12 +23,8 @@ public class PathResourceCompletionContributor extends CompletionContributor {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                         PsiElement position = parameters.getPosition();
-
                         Project project = position.getProject();
                         PsiElement parent = position.getParent();
-                        if (!(parent instanceof StringLiteralExpression)) {
-                            return;
-                        }
 
                         String currentText = parent.getText();
                         if (project.getBasePath() == null || !currentText.contains("EXT:")) {
