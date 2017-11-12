@@ -297,6 +297,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- inspections -->
         <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
+
+        <!-- got handlers -->
+        <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.jetbrains.php">
