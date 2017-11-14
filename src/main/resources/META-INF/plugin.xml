@@ -266,6 +266,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <extensions defaultExtensionNs="com.intellij">
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
 
         <!-- completion -->
         <completion.contributor language="PHP"
