@@ -298,8 +298,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- inspections -->
         <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
 
-        <!-- got handlers -->
+        <!-- goto handlers -->
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
+        <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.tca.codeInsight.navigation.TablenameGotoDeclarationHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.jetbrains.php">
