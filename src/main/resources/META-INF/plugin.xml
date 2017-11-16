@@ -267,6 +267,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.IconIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
 
         <!-- completion -->
@@ -290,8 +291,6 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- marker -->
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="PHP"
-                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
         <!--
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.extbase.EntityLineMarkerProvider"/>
@@ -301,6 +300,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
 
         <!-- goto handlers -->
+        <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.IconGotoDeclarationHandler"/>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.tca.codeInsight.navigation.TablenameGotoDeclarationHandler"/>
     </extensions>

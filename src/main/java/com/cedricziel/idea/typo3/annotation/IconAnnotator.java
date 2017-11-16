@@ -1,12 +1,9 @@
 package com.cedricziel.idea.typo3.annotation;
 
-import com.cedricziel.idea.typo3.container.IconProvider;
+import com.cedricziel.idea.typo3.index.IconIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
@@ -35,18 +32,14 @@ public class IconAnnotator implements Annotator {
     }
 
     private void annotateIconUsage(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        IconProvider iconProvider = IconProvider.getInstance(psiElement.getProject());
-        annotateIcon(psiElement, annotationHolder, value, iconProvider);
+        annotateIcon(psiElement, annotationHolder, value);
     }
 
-    private void annotateIcon(PsiElement psiElement, AnnotationHolder annotationHolder, String value, IconProvider iconProvider) {
-        if (iconProvider.has(psiElement.getProject(), value)) {
-            TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
-            Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
-            annotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
+    private void annotateIcon(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
+        if (IconIndex.getAllAvailableIcons(psiElement.getProject()).contains(value)) {
+            annotationHolder.createInfoAnnotation(psiElement, null);
         } else {
-            TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
-            annotationHolder.createWarningAnnotation(range, "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
+            annotationHolder.createWarningAnnotation(psiElement, "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
         }
     }
 }
