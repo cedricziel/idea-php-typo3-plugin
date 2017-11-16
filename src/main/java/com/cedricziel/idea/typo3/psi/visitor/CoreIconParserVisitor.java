@@ -1,12 +1,12 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
-import com.cedricziel.idea.typo3.domain.TYPO3IconDefinition;
+import com.cedricziel.idea.typo3.domain.IconStub;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,10 +14,15 @@ import java.util.Map;
  */
 public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
 
-    private Map<String, List<TYPO3IconDefinition>> map;
+    private Map<String, IconStub> map;
 
-    public CoreIconParserVisitor(Map<String, List<TYPO3IconDefinition>> map) {
-        this.map = map;
+    public CoreIconParserVisitor() {
+        this.map = new HashMap<>();
+    }
+
+    @NotNull
+    public Map<String, IconStub> getMap () {
+        return map;
     }
 
     @Override
@@ -33,10 +38,8 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
         for (ArrayHashElement hashElement : element.getHashElements()) {
             PhpPsiElement child = hashElement.getKey();
             if (child instanceof StringLiteralExpression) {
-                TYPO3IconDefinition iconDefinition = new TYPO3IconDefinition();
                 String key = ((StringLiteralExpression) child).getContents();
-                iconDefinition.setIdentifier(key);
-                iconDefinition.setElement(child);
+                IconStub iconDefinition = new IconStub(key, hashElement);
 
                 PhpPsiElement valueMap = hashElement.getValue();
                 if (valueMap == null) {
@@ -53,7 +56,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
                                 continue;
                             }
 
-                            iconDefinition.setProvider(((ClassConstantReference) iconPropertyHashElement.getValue()));
+                            iconDefinition.setProvider(((ClassConstantReference) iconPropertyHashElement.getValue()).getFQN());
                         }
                         if ("options".equals(propertyName)) {
                             if (!(iconPropertyHashElement.getValue() instanceof ArrayCreationExpression)) {
@@ -68,13 +71,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
                         }
                     }
 
-                    if (map.containsKey(key)) {
-                        map.get(key).add(iconDefinition);
-                        continue;
-                    }
-                    List<TYPO3IconDefinition> definitionList = new ArrayList<>();
-                    definitionList.add(iconDefinition);
-                    map.put(key, definitionList);
+                    map.put(key, iconDefinition);
                 }
             }
         }

@@ -1,25 +1,26 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
-import com.cedricziel.idea.typo3.domain.TYPO3IconDefinition;
+import com.cedricziel.idea.typo3.domain.IconStub;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Cedric Ziel <cedric@cedric-ziel.com>
  */
 public class CoreFlagParserVisitor extends PsiElementVisitor {
 
-    private final Map<String, List<TYPO3IconDefinition>> iconMap;
+    private final Map<String, IconStub> map;
 
-    public CoreFlagParserVisitor(Map<String, List<TYPO3IconDefinition>> iconMap) {
-        this.iconMap = iconMap;
+    public CoreFlagParserVisitor() {
+        this.map = new HashMap<>();
+    }
+
+    public Map<String, IconStub> getMap() {
+        return map;
     }
 
     @Override
@@ -76,15 +77,10 @@ public class CoreFlagParserVisitor extends PsiElementVisitor {
         String iconIdentifier = prefix.concat(countryAbbreviation.toLowerCase());
         String iconSource = iconFolderValue.concat(countryAbbreviation).concat(".svg");
 
-        TYPO3IconDefinition icon = new TYPO3IconDefinition(iconProvider, iconIdentifier, iconSource, element);
-        if (iconMap.containsKey(iconIdentifier)) {
-            iconMap.get(iconIdentifier).add(icon);
+        IconStub icon = new IconStub(iconIdentifier, element);
+        icon.setSource(iconSource);
+        icon.setProvider(iconProvider.getFQN());
 
-            return;
-        }
-
-        List<TYPO3IconDefinition> definitionList = new ArrayList<>();
-        definitionList.add(icon);
-        iconMap.put(iconIdentifier, definitionList);
+        map.put(iconIdentifier, icon);
     }
 }

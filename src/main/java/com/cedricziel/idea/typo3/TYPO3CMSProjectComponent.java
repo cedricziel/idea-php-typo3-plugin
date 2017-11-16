@@ -1,10 +1,8 @@
 package com.cedricziel.idea.typo3;
 
 import com.cedricziel.idea.typo3.container.IconProvider;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +14,10 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     public TYPO3CMSProjectComponent(Project project) {
         this.project = project;
+    }
+
+    public static Logger getLogger() {
+        return LOG;
     }
 
     @Override
@@ -34,26 +36,10 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-        Project ref = this.project;
-
-            ApplicationManager.getApplication().executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
-                while (DumbService.isDumb(ref)) {
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                IconProvider.getInstance(ref);
-            }));
-        }
+    }
 
     @Override
     public void projectClosed() {
         IconProvider.destroyInstance(project);
-    }
-
-    public static Logger getLogger() {
-        return LOG;
     }
 }

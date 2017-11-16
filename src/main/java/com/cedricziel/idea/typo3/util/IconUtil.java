@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class IconUtil {
 
+    public static final String ICON_REGISTRY_CLASS = "TYPO3\\CMS\\Core\\Imaging\\IconRegistry";
+
     public static Icon createIconFromFile(VirtualFile virtualFile) throws IOException {
         Image image;
         if (virtualFile.getExtension().equalsIgnoreCase("svg")) {
