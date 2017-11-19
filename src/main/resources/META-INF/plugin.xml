@@ -268,6 +268,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.IconIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ResourcePathIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
 
         <!-- completion -->
