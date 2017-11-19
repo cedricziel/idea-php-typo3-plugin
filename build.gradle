@@ -18,7 +18,7 @@ apply plugin: 'java'
 
 intellij {
     version 'IU-2017.2.5'
-    plugins = ['com.jetbrains.php:172.4155.41']
+    plugins = ['com.jetbrains.php:172.4155.41', 'CSS', 'java-i18n', 'properties']
     pluginName 'TYPO3 CMS Plugin'
 
     publishPlugin {
