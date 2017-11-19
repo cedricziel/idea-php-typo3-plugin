@@ -12,6 +12,7 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 script:
+- "./gradlew check"
 - "./gradlew buildPlugin"
 deploy:
   provider: releases
