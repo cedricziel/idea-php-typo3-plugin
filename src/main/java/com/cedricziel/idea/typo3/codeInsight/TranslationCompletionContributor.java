@@ -34,13 +34,12 @@ public class TranslationCompletionContributor extends CompletionContributor {
                         allKeys
                                 .parallelStream()
                                 .forEach(id -> {
-                            LookupElementBuilder element = LookupElementBuilder
-                                    .create(id)
-                                    .bold()
-                                    .withPresentableText(id.split(":")[3])
-                                    .withTailText(id.split(":")[2], true);
-                            result.addElement(element);
-                        });
+                                    LookupElementBuilder element = LookupElementBuilder
+                                            .create(id)
+                                            .withPresentableText(id.split(":")[3])
+                                            .withTypeText(id.split(":")[2], true);
+                                    result.addElement(element);
+                                });
                     }
                 }
         );
