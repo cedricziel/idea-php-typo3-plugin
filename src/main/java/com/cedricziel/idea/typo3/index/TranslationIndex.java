@@ -25,25 +25,57 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         @Override
         @NotNull
         public Map<String, Void> map(@NotNull FileContent inputData) {
-            CharSequence input = inputData.getContentAsText();
             Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
             String extension = inputData.getFile().getExtension();
+
             if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xlf")) {
                 PsiFile psiFile = inputData.getPsiFile();
                 Map<String, Void> result = new HashMap<>();
 
                 for (PsiElement element : psiFile.getChildren()) {
                     if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
-                        for (PsiElement xliffElement: element.getChildren()) {
+                        for (PsiElement xliffElement : element.getChildren()) {
                             if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("xliff").accepts(xliffElement)) {
-                                for (PsiElement fileElement: xliffElement.getChildren()) {
+                                for (PsiElement fileElement : xliffElement.getChildren()) {
                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("file").accepts(fileElement)) {
-                                        for (PsiElement bodyElement: fileElement.getChildren()) {
+                                        for (PsiElement bodyElement : fileElement.getChildren()) {
                                             if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("body").accepts(bodyElement)) {
-                                                for (PsiElement transUnitElement: bodyElement.getChildren()) {
+                                                for (PsiElement transUnitElement : bodyElement.getChildren()) {
                                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("trans-unit").accepts(transUnitElement)) {
                                                         if (transUnitElement instanceof XmlTag) {
                                                             String id = ((XmlTag) transUnitElement).getAttributeValue("id");
+                                                            result.put(compileId(inputData, id), null);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xml")) {
+                PsiFile psiFile = inputData.getPsiFile();
+                Map<String, Void> result = new HashMap<>();
+
+                for (PsiElement element : psiFile.getChildren()) {
+                    if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
+                        for (PsiElement xliffElement : element.getChildren()) {
+                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("T3locallang").accepts(xliffElement)) {
+                                for (PsiElement fileElement : xliffElement.getChildren()) {
+                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("data").accepts(fileElement)) {
+                                        for (PsiElement bodyElement : fileElement.getChildren()) {
+                                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("languageKey").accepts(bodyElement)) {
+                                                for (PsiElement transUnitElement : bodyElement.getChildren()) {
+                                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("label").accepts(transUnitElement)) {
+                                                        if (transUnitElement instanceof XmlTag) {
+                                                            String id = ((XmlTag) transUnitElement).getAttributeValue("index");
                                                             result.put(compileId(inputData, id), null);
                                                         }
                                                     }
@@ -115,6 +147,6 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
     @Override
     public int getVersion() {
-        return 1;
+        return 2;
     }
 }
