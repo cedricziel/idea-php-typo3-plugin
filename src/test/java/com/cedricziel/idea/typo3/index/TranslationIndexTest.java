@@ -60,7 +60,7 @@ public class TranslationIndexTest extends LightCodeInsightFixtureTestCase {
         Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, getProject());
 
         // may fail until we can register the xlf file extension conditionally
-        // assertContainsElements(allKeys, "LLL:EXT:baz/bar.xlf:mlang_labels_tabdescr");
+        assertContainsElements(allKeys, "LLL:EXT:baz/bar.xlf:mlang_labels_tabdescr");
         assertContainsElements(allKeys, "LLL:EXT:baz/bar.xml:.seeAlso");
     }
 }
