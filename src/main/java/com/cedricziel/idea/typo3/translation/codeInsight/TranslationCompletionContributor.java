@@ -1,4 +1,4 @@
-package com.cedricziel.idea.typo3.codeInsight;
+package com.cedricziel.idea.typo3.translation.codeInsight;
 
 import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.intellij.codeInsight.completion.*;

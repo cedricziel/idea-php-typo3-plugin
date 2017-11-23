@@ -1,10 +1,9 @@
-package com.cedricziel.idea.typo3.annotation;
+package com.cedricziel.idea.typo3.translation.annotation;
 
-import com.cedricziel.idea.typo3.index.TranslationIndex;
+import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +18,7 @@ public class TranslationAnnotator implements Annotator {
         StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
         String value = literalExpression.getContents();
 
-        if (value.isEmpty()) {
-            return;
-        }
-
-        if (value.contains("LLL:")) {
+        if (TranslationUtil.isTranslationKeyString(value)) {
             annotateTranslationUsage(psiElement, annotationHolder, value);
         }
     }
@@ -33,7 +28,7 @@ public class TranslationAnnotator implements Annotator {
     }
 
     private void annotateTranslation(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        if (FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, psiElement.getProject()).contains(value)) {
+        if (TranslationUtil.keyExists(psiElement.getProject(), value)) {
             annotationHolder.createInfoAnnotation(psiElement, null);
         } else {
             annotationHolder.createErrorAnnotation(psiElement, "Unresolved translation - this may occur if you defined the translation key only in TypoScript");

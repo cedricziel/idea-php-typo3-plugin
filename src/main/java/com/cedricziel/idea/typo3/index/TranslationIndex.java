@@ -28,7 +28,7 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
             Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
             String extension = inputData.getFile().getExtension();
 
-            if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xlf")) {
+            if (language instanceof XMLLanguage && extension != null && extension.equals("xlf")) {
                 PsiFile psiFile = inputData.getPsiFile();
                 Map<String, Void> result = new HashMap<>();
 
