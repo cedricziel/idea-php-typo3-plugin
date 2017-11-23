@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3.index;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -9,8 +10,11 @@ import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+
+import static com.cedricziel.idea.typo3.util.ComposerUtil.findExtensionKey;
 
 public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
@@ -57,10 +61,49 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
         return inputData -> {
             Map<String, Void> map = new THashMap<>();
 
-            map.put(compileId(inputData), null);
+            String path = inputData.getFile().getPath();
+            if (path.contains("sysext") || path.contains("typo3conf/ext")) {
+                map.put(compileId(inputData), null);
+
+                return map;
+            }
+
+            VirtualFile extensionRootFolder = findExtensionRootFolder(inputData.getFile());
+            if (extensionRootFolder != null) {
+                // 1. try to read sibling composer.json
+                VirtualFile composerJsonFile = extensionRootFolder.findChild("composer.json");
+                if (composerJsonFile != null) {
+                    String extensionKey = findExtensionKey(composerJsonFile);
+                    if (extensionKey != null) {
+                        map.put(compileId(extensionRootFolder, extensionKey, inputData.getFile()), null);
+                        return map;
+                    }
+                }
+
+                // 2. try to infer from directory name
+                map.put(compileId(extensionRootFolder.getName(), extensionRootFolder.getPath(), inputData.getFile()), null);
+            }
 
             return map;
         };
+    }
+
+    @Nullable
+    private VirtualFile findExtensionRootFolder(@NotNull VirtualFile file) {
+        if (file.isDirectory()) {
+            VirtualFile child = file.findChild("ext_emconf.php");
+
+            if (child != null) {
+                return file;
+            }
+        }
+
+        // dragons ahead.
+        if (file.getParent() != null) {
+            return findExtensionRootFolder(file.getParent());
+        }
+
+        return null;
     }
 
     private String compileId(FileContent inputData) {
@@ -76,6 +119,16 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
         return "EXT:" + filePosition;
     }
 
+    private String compileId(String extensionKey, String directoryPath, VirtualFile file) {
+
+        return "EXT:" + extensionKey + file.getPath().replace(directoryPath, "");
+    }
+
+    private String compileId(VirtualFile extensionRootDirectory, String extensionKey, VirtualFile file) {
+
+        return "EXT:" + extensionKey + file.getPath().replace(extensionRootDirectory.getPath(), "");
+    }
+
     @NotNull
     @Override
     public KeyDescriptor<String> getKeyDescriptor() {
@@ -84,13 +137,13 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
     @Override
     public int getVersion() {
-        return 0;
+        return 1;
     }
 
     @NotNull
     @Override
     public FileBasedIndex.InputFilter getInputFilter() {
-        return file -> file.isInLocalFileSystem() && (file.getPath().contains("sysext") || file.getPath().contains("typo3conf/ext"));
+        return VirtualFile::isInLocalFileSystem;
     }
 
     @Override
