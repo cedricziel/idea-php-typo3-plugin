@@ -45,6 +45,7 @@ public class PathResourceAnnotator implements Annotator {
 
     private void createErrorMessage(@NotNull PsiElement element, @NotNull AnnotationHolder holder, String resourceName) {
         String message = "Resource \"%s\" could not be found in your current project.".replace("%s", resourceName);
-        holder.createErrorAnnotation(element, message);
+
+        holder.createWarningAnnotation(element, message);
     }
 }
