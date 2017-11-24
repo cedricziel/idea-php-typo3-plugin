@@ -9,6 +9,7 @@ import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import gnu.trove.THashMap;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,23 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
     }
 
     public static boolean projectContainsResourceDirectory(@NotNull Project project, @NotNull String resourceId) {
-        return false;
+        Set<String> keys = new HashSet<>();
+        keys.add(StringUtils.strip(resourceId, "/"));
+
+        Set<VirtualFile> matches = new HashSet<>();
+
+        FileBasedIndex.getInstance().getFilesWithKey(ResourcePathIndex.KEY, keys, file -> {
+            if (file.isDirectory()) {
+
+                matches.add(file);
+
+                return false;
+            }
+
+            return true;
+        }, GlobalSearchScope.allScope(project));
+
+        return matches.size() > 0;
     }
 
     public static PsiElement[] findElementsForKey(@NotNull Project project, @NotNull String identifier) {
