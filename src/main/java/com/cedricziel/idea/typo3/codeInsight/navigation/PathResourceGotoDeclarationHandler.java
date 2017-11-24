@@ -20,6 +20,11 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
 
         if (sourceElement != null) {
             String identifier = sourceElement.getText();
+
+            if (ResourcePathIndex.projectContainsResourceDirectory(sourceElement.getProject(), identifier)) {
+                return emptyPsiElementArray();
+            }
+
             return ResourcePathIndex.findElementsForKey(sourceElement.getProject(), identifier);
         }
 
