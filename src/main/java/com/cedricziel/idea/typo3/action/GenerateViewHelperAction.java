@@ -20,7 +20,7 @@ public class GenerateViewHelperAction extends NewExtensionFileAction {
 
     public GenerateViewHelperAction() {
 
-        super("Create ViewHelper", "", TYPO3CMSIcons.TYPO3_ICON);
+        super("ViewHelper", "Generate a Fluid ViewHelper", TYPO3CMSIcons.TYPO3_ICON);
     }
 
     @Override
