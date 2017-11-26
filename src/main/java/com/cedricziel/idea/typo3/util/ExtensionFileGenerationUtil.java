@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.util;
 import com.cedricziel.idea.typo3.domain.TYPO3ExtensionDefinition;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -10,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
+import com.jetbrains.php.lang.PhpFileType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +22,8 @@ import java.util.Map;
 public class ExtensionFileGenerationUtil {
 
     /**
-     * @param templateFile        Name of the generated file
-     * @param context             Template Context variables
+     * @param templateFile Name of the generated file
+     * @param context      Template Context variables
      */
     public static String readTemplateToString(@NotNull String templateFile, @NotNull Map<String, String> context) {
         String template = getFileTemplateContent("/fileTemplates/" + templateFile);
@@ -54,7 +56,37 @@ public class ExtensionFileGenerationUtil {
 
         VirtualFile targetDirectory = getOrCreateDestinationPath(extensionDefinition.getRootDirectory(), destinationPath);
 
-        PsiFile fileFromText = PsiFileFactory.getInstance(project).createFileFromText(destinationFileName, FileTypes.PLAIN_TEXT, template);
+        LanguageFileType fileType = FileTypes.PLAIN_TEXT;
+        if (templateFile.endsWith(".php")) {
+            fileType = PhpFileType.INSTANCE;
+        }
+
+        PsiFile fileFromText = PsiFileFactory.getInstance(project).createFileFromText(destinationFileName, fileType, template);
+        CodeStyleManager.getInstance(project).reformat(fileFromText);
+        return PsiDirectoryFactory
+                .getInstance(project)
+                .createDirectory(targetDirectory)
+                .add(fileFromText);
+    }
+
+    /**
+     * @param templateFile           Name of the generated file
+     * @param destinationPath        Relative path to the target file system entry
+     * @param extensionRootDirectory Extension definition containing all relevant metadata
+     * @param context                Template Context variables
+     * @param project                Project in context
+     */
+    public static PsiElement fromTemplate(@NotNull String templateFile, @NotNull String destinationPath, @NotNull String destinationFileName, @NotNull PsiDirectory extensionRootDirectory, @NotNull Map<String, String> context, Project project) {
+        String template = readTemplateToString(templateFile, context);
+
+        VirtualFile targetDirectory = getOrCreateDestinationPath(extensionRootDirectory.getVirtualFile(), destinationPath);
+
+        LanguageFileType fileType = FileTypes.PLAIN_TEXT;
+        if (templateFile.endsWith(".php")) {
+            fileType = PhpFileType.INSTANCE;
+        }
+
+        PsiFile fileFromText = PsiFileFactory.getInstance(project).createFileFromText(destinationFileName, fileType, template);
         CodeStyleManager.getInstance(project).reformat(fileFromText);
         return PsiDirectoryFactory
                 .getInstance(project)
