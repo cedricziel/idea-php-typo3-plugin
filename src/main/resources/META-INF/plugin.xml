@@ -325,6 +325,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                         class="com.cedricziel.idea.typo3.action.GenerateFscElementAction"/>
             </group>
 
+            <action id="TYPO3CMS.Generation.ViewHelper"
+                    class="com.cedricziel.idea.typo3.action.GenerateViewHelperAction"/>
+
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>
     </actions>
