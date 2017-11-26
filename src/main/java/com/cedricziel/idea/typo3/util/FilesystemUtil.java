@@ -2,13 +2,26 @@ package com.cedricziel.idea.typo3.util;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FilesystemUtil {
-    public static PsiDirectory[] findParentExtensionDirectory(@NotNull PsiDirectory directory) {
+    @Nullable
+    public static PsiDirectory findParentExtensionDirectory(@NotNull PsiDirectory directory) {
 
-        return new PsiDirectory[0];
+        VirtualFile extensionRootFolder = findExtensionRootFolder(directory.getVirtualFile());
+        if (extensionRootFolder == null) {
+            return null;
+        }
+
+        PsiFile file = PsiManager.getInstance(directory.getProject()).findFile(extensionRootFolder);
+        if (file == null || !file.isDirectory()) {
+            return null;
+        }
+
+        return (PsiDirectory) file;
     }
 
     @Nullable
