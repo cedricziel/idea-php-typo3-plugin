@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.16</version>
+    <version>0.2.24</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -95,6 +95,8 @@
 <br/>
 
 <ul>
+  <li>Extbase ActionController</li>
+  <li>Fluid ViewHelper</li>
   <li>Fluid Styled Content Element (experimental)</li>
 </ul>
 
@@ -114,6 +116,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>0.2.24</h2>
+<ul>
+  <li>Add support for generating a new ViewHelper</li>
+  <li>Add support for generating a new Extbase Controller</li>
+</ul>
+
 <h2>0.2.16</h2>
 <ul>
   <li>Add support for EXT:resource Strings</li>
@@ -323,6 +331,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
             <action id="TYPO3CMS.Generation.ViewHelper"
                     class="com.cedricziel.idea.typo3.action.GenerateViewHelperAction"/>
+
+            <action id="TYPO3CMS.Generation.ActionController"
+                    class="com.cedricziel.idea.typo3.action.GenerateActionControllerAction"/>
 
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>
