@@ -80,7 +80,7 @@ public class ComposerUtil {
             return false;
         }
 
-        return packageType.equals("typo3-cms-extension");
+        return packageType.equals("typo3-cms-extension") || packageType.equals("typo3-cms-framework");
     }
 
     @Nullable
