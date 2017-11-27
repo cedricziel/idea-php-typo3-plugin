@@ -96,6 +96,7 @@
 
 <ul>
   <li>Extbase ActionController</li>
+  <li>Extbase ActionController action</li>
   <li>Fluid ViewHelper</li>
   <li>Fluid Styled Content Element (experimental)</li>
 </ul>
@@ -116,6 +117,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>0.2.25</h2>
+<ul>
+  <li>Add action to add controller action to extbase controller</li>
+</ul>
+
 <h2>0.2.24</h2>
 <ul>
   <li>Add support for generating a new ViewHelper</li>
@@ -337,6 +343,10 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>
+
+        <action class="com.cedricziel.idea.typo3.action.ExtbaseControllerActionAction" id="TYPO3CMS.Generation.Extbase.Controller.Action">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
     </actions>
 
     <project-components>

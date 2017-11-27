@@ -7,12 +7,10 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.patterns.PhpPatterns;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PhpElementsUtil {
@@ -100,5 +98,21 @@ public class PhpElementsUtil {
             return ((StringLiteralExpression) keyPsiElement).getContents();
         }
         return null;
+    }
+
+    @NotNull
+    public static boolean hasSuperClass(@NotNull PhpClass targetClass, @NotNull String fqn) {
+
+        Set<PhpClass> hierarchy = new HashSet<>();
+        hierarchy.addAll(Arrays.asList(targetClass.getSupers()));
+        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
+        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
+        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
+
+        return hierarchy
+                .stream()
+                .map(PhpNamedElement::getFQN)
+                .collect(Collectors.toList())
+                .contains(fqn);
     }
 }
