@@ -1,4 +1,4 @@
-package com.cedricziel.idea.typo3.generation.action;
+package com.cedricziel.idea.typo3.action;
 
 import com.cedricziel.idea.typo3.container.IconProvider;
 import com.cedricziel.idea.typo3.domain.TYPO3ExtensionDefinition;

@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
 public class ComposerUtil {
     @Nullable
@@ -78,7 +80,7 @@ public class ComposerUtil {
             return false;
         }
 
-        return packageType.equals("typo3-cms-extension");
+        return packageType.equals("typo3-cms-extension") || packageType.equals("typo3-cms-framework");
     }
 
     @Nullable
@@ -116,5 +118,44 @@ public class ComposerUtil {
         }
 
         return null;
+    }
+
+    @NotNull
+    public static String[] findNamespaces(@NotNull VirtualFile composerJsonFile) {
+        try {
+            JsonElement jsonElement = ComposerConfigUtils.parseJson(composerJsonFile);
+
+            if (!isTYPO3ExtensionManifest(jsonElement)) {
+                return new String[0];
+            }
+
+            return psr4Roots(jsonElement);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new String[0];
+    }
+
+    @NotNull
+    private static String[] psr4Roots(JsonElement composerJsonFile) {
+        JsonObject asJsonObject = composerJsonFile.getAsJsonObject();
+        if (!asJsonObject.has("autoload")) {
+            return new String[0];
+        }
+
+        JsonObject autoloadHash = asJsonObject.get("autoload").getAsJsonObject();
+        if (!autoloadHash.has("psr-4")) {
+            return new String[0];
+        }
+
+        JsonObject psr4Hash = autoloadHash.get("psr-4").getAsJsonObject();
+
+        return psr4Hash
+                .entrySet()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Map.Entry::getKey)
+                .toArray(String[]::new);
     }
 }

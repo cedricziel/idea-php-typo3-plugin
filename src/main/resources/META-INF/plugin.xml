@@ -306,10 +306,6 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.tca.codeInsight.navigation.TablenameGotoDeclarationHandler"/>
     </extensions>
 
-    <extensions defaultExtensionNs="com.jetbrains.php">
-        <!-- Add your extensions here -->
-    </extensions>
-
     <actions>
         <group id="TYPO3GenerateGroup"
                text="TYPO3 CMS"
@@ -322,8 +318,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                    popup="true"
             >
                 <action id="TYPO3CMS.Generation.FSCElement"
-                        class="com.cedricziel.idea.typo3.generation.action.GenerateFscElementAction"/>
+                        class="com.cedricziel.idea.typo3.action.GenerateFscElementAction"/>
             </group>
+
+            <action id="TYPO3CMS.Generation.ViewHelper"
+                    class="com.cedricziel.idea.typo3.action.GenerateViewHelperAction"/>
 
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>

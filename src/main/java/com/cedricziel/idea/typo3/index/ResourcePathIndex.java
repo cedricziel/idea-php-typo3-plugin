@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.index;
 
+import com.cedricziel.idea.typo3.util.FilesystemUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -85,7 +86,7 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
                 return map;
             }
 
-            VirtualFile extensionRootFolder = findExtensionRootFolder(inputData.getFile());
+            VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData.getFile());
             if (extensionRootFolder != null) {
                 // 1. try to read sibling composer.json
                 VirtualFile composerJsonFile = extensionRootFolder.findChild("composer.json");
@@ -103,24 +104,6 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
             return map;
         };
-    }
-
-    @Nullable
-    private VirtualFile findExtensionRootFolder(@NotNull VirtualFile file) {
-        if (file.isDirectory()) {
-            VirtualFile child = file.findChild("ext_emconf.php");
-
-            if (child != null) {
-                return file;
-            }
-        }
-
-        // dragons ahead.
-        if (file.getParent() != null) {
-            return findExtensionRootFolder(file.getParent());
-        }
-
-        return null;
     }
 
     private String compileId(FileContent inputData) {
