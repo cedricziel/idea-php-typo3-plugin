@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.24</version>
+    <version>0.2.25</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -97,6 +97,7 @@
 <ul>
   <li>Extbase ActionController</li>
   <li>Extbase ActionController action</li>
+  <li>Extbase Entity class</li>
   <li>Fluid ViewHelper</li>
   <li>Fluid Styled Content Element (experimental)</li>
 </ul>
@@ -120,6 +121,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 <h2>0.2.25</h2>
 <ul>
   <li>Add action to add controller action to extbase controller</li>
+  <li>Add action to add extbase entity to extension</li>
 </ul>
 
 <h2>0.2.24</h2>
@@ -335,11 +337,14 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                         class="com.cedricziel.idea.typo3.action.GenerateFscElementAction"/>
             </group>
 
-            <action id="TYPO3CMS.Generation.ViewHelper"
-                    class="com.cedricziel.idea.typo3.action.GenerateViewHelperAction"/>
-
             <action id="TYPO3CMS.Generation.ActionController"
                     class="com.cedricziel.idea.typo3.action.GenerateActionControllerAction"/>
+
+            <action id="TYPO3CMS.Generation.Entity"
+                    class="com.cedricziel.idea.typo3.action.GenerateExtbaseEntityAction"/>
+
+            <action id="TYPO3CMS.Generation.ViewHelper"
+                    class="com.cedricziel.idea.typo3.action.GenerateViewHelperAction"/>
 
             <add-to-group group-id="NewGroup" anchor="last"/>
         </group>
