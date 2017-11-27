@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.action;
 import com.cedricziel.idea.typo3.TYPO3CMSIcons;
 import com.cedricziel.idea.typo3.util.ExtensionFileGenerationUtil;
 import com.cedricziel.idea.typo3.util.ExtensionUtility;
+import com.cedricziel.idea.typo3.util.TYPO3Utility;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.RunResult;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -11,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -48,20 +50,37 @@ public class GenerateViewHelperAction extends NewExtensionFileAction {
                 context.put("namespace", calculatedNamespace);
                 context.put("className", finalClassName);
 
-                extensionFile = ExtensionFileGenerationUtil.fromTemplate(
-                        "extension_file/ViewHelper.php",
-                        "Classes/ViewHelpers",
-                        finalClassName + ".php",
-                        extensionRootDirectory,
-                        context,
-                        project
-                );
+                String majorVersion = null;
+                if (TYPO3Utility.getTYPO3Version(project) != null && TYPO3Utility.isMajorMinorCmsVersion(project, "7.6")) {
+                    majorVersion = "7";
+                } else if (TYPO3Utility.getTYPO3Version(project) != null && TYPO3Utility.isMajorMinorCmsVersion(project, "8.7")) {
+                    majorVersion = "8";
+                } else if (TYPO3Utility.getTYPO3Version(project) != null && TYPO3Utility.getTYPO3Version(project).startsWith("9.")) {
+                    majorVersion = "9";
+                }
 
-                if (extensionFile != null) {
-                    result.setResult(extensionFile);
+                if (majorVersion == null) {
+                    result.setResult(null);
+                    return;
+                }
+
+                try {
+                    extensionFile = ExtensionFileGenerationUtil.fromTemplate(
+                            "extension_file/" + majorVersion + "/ViewHelper.php",
+                            "Classes/ViewHelpers",
+                            finalClassName + ".php",
+                            extensionRootDirectory,
+                            context,
+                            project
+                    );
+
+                    if (extensionFile != null) {
+                        result.setResult(extensionFile);
+                    }
+                } catch (IncorrectOperationException e) {
+                    // file already exists
                 }
             }
-
         }.execute();
 
         if (elementRunResult.getResultObject() != null) {
