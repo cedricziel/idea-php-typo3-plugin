@@ -1,6 +1,6 @@
 package com.cedricziel.idea.typo3.annotation;
 
-import com.cedricziel.idea.typo3.container.RouteProvider;
+import com.cedricziel.idea.typo3.index.RouteIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -9,10 +9,13 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 public class RouteAnnotator implements Annotator {
     @Override
@@ -31,10 +34,11 @@ public class RouteAnnotator implements Annotator {
 
         PsiElement methodReference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
         if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "getAjaxUrl") && !hasArrayCreationParent(psiElement)) {
-            annotateAjaxRoutes(psiElement, annotationHolder, value);
+            annotateRoute(psiElement, annotationHolder, value);
         }
+
         if (PhpElementsUtil.isMethodWithFirstStringOrFieldReference(methodReference, "buildUriFromRoute") && !hasArrayCreationParent(psiElement)) {
-            annotateRoutes(psiElement, annotationHolder, value);
+            annotateRoute(psiElement, annotationHolder, value);
         }
     }
 
@@ -45,23 +49,10 @@ public class RouteAnnotator implements Annotator {
         return psiElement.getParent().getParent() instanceof ArrayCreationExpression;
     }
 
-    private void annotateAjaxRoutes(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        RouteProvider routeProvider = new RouteProvider();
-        routeProvider.collect(psiElement.getProject());
+    private void annotateRoute(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
+        Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(RouteIndex.KEY, psiElement.getProject());
 
-        annotateRoute(psiElement, annotationHolder, value, routeProvider, RouteProvider.ROUTE_TYPE_AJAX);
-    }
-
-    private void annotateRoutes(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        RouteProvider routeProvider = new RouteProvider();
-        routeProvider.collect(psiElement.getProject());
-
-        annotateRoute(psiElement, annotationHolder, value, routeProvider, RouteProvider.ROUTE_TYPE_BACKEND);
-    }
-
-
-    private void annotateRoute(PsiElement psiElement, AnnotationHolder annotationHolder, String value, RouteProvider routeProvider, String routeType) {
-        if (routeProvider.has(value, routeType)) {
+        if (allKeys.contains(value)) {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
             Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
             annotation.setTextAttributes(DefaultLanguageHighlighterColors.STRING);
