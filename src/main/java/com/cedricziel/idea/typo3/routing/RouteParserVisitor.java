@@ -1,31 +1,30 @@
-package com.cedricziel.idea.typo3.psi.visitor;
+package com.cedricziel.idea.typo3.routing;
 
-import com.cedricziel.idea.typo3.container.RouteProvider;
-import com.cedricziel.idea.typo3.domain.TYPO3RouteDefinition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 /**
  * Walks a psiFile recursively and parses the service definitions.
  */
-public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
+public class RouteParserVisitor extends PsiRecursiveElementVisitor {
 
-    private final String type;
-    private Map<String, List<TYPO3RouteDefinition>> routes;
-    private Map<String, List<TYPO3RouteDefinition>> ajaxRoutes;
+    private Collection<RouteStub> routeStubs;
 
-    public RouteDefinitionParserVisitor(Map<String, List<TYPO3RouteDefinition>> routes, Map<String, List<TYPO3RouteDefinition>> ajaxRoutes, String type) {
-        this.routes = routes;
-        this.ajaxRoutes = ajaxRoutes;
-        this.type = type;
+    public RouteParserVisitor() {
+        routeStubs = new ArrayList<>();
+    }
+
+    @NotNull
+    public Collection<RouteStub> getRouteStubs() {
+        return routeStubs;
     }
 
     @Override
@@ -37,31 +36,9 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
         super.visitElement(element);
     }
 
-    /**
-     * The following element structure should be parsed:
-     * <pre>
-     * return [
-     * // Login screen of the TYPO3 Backend
-     * 'login' => [
-     * 'path' => '/login',
-     * 'access' => 'public',
-     * 'target' => Controller\LoginController::class . '::formAction'
-     * ],
-     * ]
-     * </pre>
-     *
-     * @param element
-     */
     private void visitRouteCreation(ArrayCreationExpression element) {
 
-        Map<String, List<TYPO3RouteDefinition>> routeSet;
-        if (type.equals(RouteProvider.ROUTE_TYPE_BACKEND)) {
-            routeSet = this.routes;
-        } else {
-            routeSet = this.ajaxRoutes;
-        }
-
-        TYPO3RouteDefinition routeDefinition = new TYPO3RouteDefinition();
+        RouteStub routeDefinition = new RouteStub();
 
         for (ArrayHashElement arrayHashElement : element.getHashElements()) {
             PhpPsiElement child = arrayHashElement.getKey();
@@ -77,8 +54,6 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
                     ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
 
                     routeDefinition.setName(key);
-                    routeDefinition.setType(type);
-                    routeDefinition.setElement(valueMap);
 
                     for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
                         String propertyName = ((StringLiteralExpression) routePropertyHashElement.getKey()).getContents();
@@ -88,13 +63,20 @@ public class RouteDefinitionParserVisitor extends PsiRecursiveElementVisitor {
                         if ("access".equals(propertyName)) {
                             routeDefinition.setPath(((StringLiteralExpression) routePropertyHashElement.getValue()).getContents());
                         }
+                        if ("target".equals(propertyName)) {
+                            PhpPsiElement value = routePropertyHashElement.getValue();
+                            String text = value.getText();
+                            text = text.replace("'", "").replace(".", "");
+
+                            String[] split = text.split("::");
+                            if (split.length == 3) {
+                                routeDefinition.setController(split[0]);
+                                routeDefinition.setMethod(split[2]);
+                            }
+                        }
                     }
 
-                    if (!routeSet.containsKey(key)) {
-                        routeSet.put(key, new ArrayList<>());
-                    }
-
-                    routeSet.get(key).add(routeDefinition);
+                    routeStubs.add(routeDefinition);
                 }
             }
         }

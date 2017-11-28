@@ -118,6 +118,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>0.2.26</h2>
+<ul>
+  <li>Add Route index and PsiReference</li>
+</ul>
+
 <h2>0.2.25</h2>
 <ul>
   <li>Add action to add controller action to extbase controller</li>
@@ -285,13 +290,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.IconIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ResourcePathIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.RouteIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
 
         <!-- completion -->
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
-        <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.codeInsight.RoutesCompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesCompletionContributor"/>
         <completion.contributor language="PHP"
@@ -320,6 +324,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.IconGotoDeclarationHandler"/>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.tca.codeInsight.navigation.TablenameGotoDeclarationHandler"/>
+
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceProvider"/>
     </extensions>
 
     <actions>
