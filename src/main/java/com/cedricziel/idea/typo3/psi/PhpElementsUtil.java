@@ -61,6 +61,7 @@ public class PhpElementsUtil {
         return classReferences;
     }
 
+    @NotNull
     public static PsiElementPattern.Capture<PsiElement> isStringArrayValue() {
 
         return PhpPatterns.psiElement()
