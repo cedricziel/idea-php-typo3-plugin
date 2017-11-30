@@ -297,8 +297,6 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
         <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.persistence.codeInsight.DoctrineTablesCompletionContributor"/>
-        <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.PathResourceCompletionContributor"/>
@@ -323,9 +321,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- goto handlers -->
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.IconGotoDeclarationHandler"/>
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
-        <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.tca.codeInsight.navigation.TablenameGotoDeclarationHandler"/>
 
-        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceProvider"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
     </extensions>
 
     <actions>

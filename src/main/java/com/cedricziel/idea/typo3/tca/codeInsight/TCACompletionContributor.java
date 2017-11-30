@@ -16,23 +16,6 @@ public class TCACompletionContributor extends CompletionContributor {
 
     public TCACompletionContributor() {
         /*
-         * Complete table names in array values.
-         */
-        extend(
-                CompletionType.BASIC,
-                PhpElementsUtil.isStringArrayValue(),
-                new CompletionProvider<CompletionParameters>() {
-                    @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-                        PsiElement element = parameters.getPosition();
-                        if (arrayIndexIsTCATableNameField(element)) {
-                            TableUtil.completeAvailableTableNames(element.getProject(), result);
-                        }
-                    }
-                }
-        );
-
-        /*
          * Complete 'renderType' fields in TCA
          */
         extend(

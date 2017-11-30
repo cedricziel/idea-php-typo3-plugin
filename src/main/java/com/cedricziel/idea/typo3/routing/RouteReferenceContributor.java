@@ -6,7 +6,7 @@ import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.annotations.NotNull;
 
-public class RouteReferenceProvider extends PsiReferenceContributor {
+public class RouteReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
         registrar.registerReferenceProvider(

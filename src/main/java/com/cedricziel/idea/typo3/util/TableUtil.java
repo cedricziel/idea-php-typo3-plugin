@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3.util;
 
 import com.cedricziel.idea.typo3.index.TablenameFileIndex;
+import com.cedricziel.idea.typo3.tca.TableLookupElement;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.project.Project;
@@ -12,6 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,5 +84,15 @@ public class TableUtil {
                 }
             });
         }
+    }
+
+    @NotNull
+    public static LookupElement[] createAvailableTableNamesLookupElements(@NotNull Project project) {
+        Collection<LookupElement> elements = new HashSet<>();
+        for (String name : TableUtil.getAvailableTableNames(project)) {
+            elements.add(new TableLookupElement(name));
+        }
+
+        return elements.toArray(new LookupElement[elements.size()]);
     }
 }
