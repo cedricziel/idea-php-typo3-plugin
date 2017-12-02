@@ -276,7 +276,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="171.3780"/>
+    <idea-version since-build="173"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.jetbrains.php</depends>
