@@ -1,4 +1,4 @@
-package com.cedricziel.idea.typo3.annotation;
+package com.cedricziel.idea.typo3.resources.annotation;
 
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.intellij.lang.annotation.AnnotationHolder;
