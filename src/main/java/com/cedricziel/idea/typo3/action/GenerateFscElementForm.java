@@ -1,8 +1,7 @@
 package com.cedricziel.idea.typo3.action;
 
-import com.cedricziel.idea.typo3.container.IconProvider;
 import com.cedricziel.idea.typo3.domain.TYPO3ExtensionDefinition;
-import com.cedricziel.idea.typo3.domain.TYPO3IconDefinition;
+import com.cedricziel.idea.typo3.index.IconIndex;
 import com.cedricziel.idea.typo3.util.ExtensionFileGenerationUtil;
 import com.cedricziel.idea.typo3.util.Slugify;
 import com.intellij.notification.Notification;
@@ -44,13 +43,10 @@ public class GenerateFscElementForm extends JDialog {
         this.project = project;
         this.extensionDefinition = extensionDefinition;
 
-        IconProvider iconProvider = IconProvider.getInstance(project);
         slugger = new Slugify().withUnderscoreSeparator(true);
 
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for (TYPO3IconDefinition iconDefinition : iconProvider.all(project)) {
-            model.addElement(iconDefinition.getIdentifier());
-        }
+        IconIndex.getAllAvailableIcons(project).forEach(model::addElement);
 
         this.icon.setModel(model);
 
