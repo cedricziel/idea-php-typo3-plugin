@@ -17,9 +17,9 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 intellij {
-    version 'IU-2017.3'
-    plugins = ['com.jetbrains.php:173.3727.138', 'CSS', 'java-i18n', 'properties']
+    version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
+    plugins = ['com.jetbrains.php:173.3727.138', 'CSS', 'java-i18n', 'properties']
 
     publishPlugin {
         username System.getenv('IJ_REPO_USERNAME')
