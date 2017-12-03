@@ -1,5 +1,8 @@
 package com.cedricziel.idea.typo3.util;
 
+import com.cedricziel.idea.typo3.icons.IconLookupElement;
+import com.cedricziel.idea.typo3.index.IconIndex;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ui.UIUtil;
@@ -7,6 +10,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,6 +18,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class IconUtil {
 
@@ -71,14 +77,23 @@ public class IconUtil {
         return transcoder.getImage();
     }
 
+    public static IconLookupElement[] createIconLookupElements(@NotNull Project project) {
+        return Arrays.stream(IconIndex.getAllIcons(project))
+                .filter(Objects::nonNull)
+                .map(IconLookupElement::new).toArray(IconLookupElement[]::new);
+    }
+
     private static class MyTranscoder extends ImageTranscoder {
         private BufferedImage image = null;
+
         public BufferedImage createImage(int w, int h) {
             image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             return image;
         }
+
         public void writeImage(BufferedImage img, TranscoderOutput out) {
         }
+
         public BufferedImage getImage() {
             return image;
         }

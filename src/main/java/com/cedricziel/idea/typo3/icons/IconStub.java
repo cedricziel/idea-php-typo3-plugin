@@ -1,12 +1,11 @@
-package com.cedricziel.idea.typo3.domain;
+package com.cedricziel.idea.typo3.icons;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 
 import java.io.Serializable;
 
-public class IconStub implements Serializable {
+public class IconStub implements IconInterface, Serializable {
 
     private String identifier;
     private String extension;
@@ -42,16 +41,32 @@ public class IconStub implements Serializable {
         this.source = source;
     }
 
+    public TextRange getTextRange() {
+        return textRange;
+    }
+
+    @Override
+    public String getExtension() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return identifier;
+    }
+
+    @Override
+    public String getExtensionKey() {
+        return null;
+    }
+
+    @Override
     public String getProvider() {
-        return provider;
+        return null;
     }
 
     public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public TextRange getTextRange() {
-        return textRange;
     }
 
     @Override

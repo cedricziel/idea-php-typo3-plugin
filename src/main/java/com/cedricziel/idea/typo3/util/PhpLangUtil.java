@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,6 +91,12 @@ public class PhpLangUtil {
         MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
         if (methodReference == null) {
             return null;
+        }
+
+        Variable variableBeingCalledOn = PsiTreeUtil.findChildOfType(methodReference, Variable.class);
+        if (variableBeingCalledOn != null && variableBeingCalledOn.getInferredType() != null) {
+            PhpType inferredType = variableBeingCalledOn.getInferredType();
+            return inferredType.toString();
         }
 
         ClassReference classReference = PsiTreeUtil.getChildOfType(methodReference, ClassReference.class);
