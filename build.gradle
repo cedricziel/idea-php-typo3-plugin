@@ -17,9 +17,9 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 intellij {
-    version 'IU-2017.2.5'
-    plugins = ['com.jetbrains.php:172.4155.41', 'CSS', 'java-i18n', 'properties']
+    version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
+    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties']
 
     publishPlugin {
         username System.getenv('IJ_REPO_USERNAME')
@@ -52,3 +52,7 @@ task copyPsiViewerPluginToSandBox(type: Copy) {
 copyPsiViewerPluginToSandBox.dependsOn downloadPsiViewerPlugin
 copyPsiViewerPluginToSandBox.mustRunAfter prepareSandbox
 runIde.dependsOn copyPsiViewerPluginToSandBox
+
+wrapper {
+    gradleVersion '4.3.1'
+}
