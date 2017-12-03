@@ -18,6 +18,8 @@ matrix:
   include:
   - env: IDEA_VERSION="IU-2017.2.5"
   - env: IDEA_VERSION="IU-2017.3"
+  allow_failures:
+  - env: IDEA_VERSION="IU-2017.3"
 
 before_install:
 - "export ORG_GRADLE_PROJECT_ideaVersion=${IDEA_VERSION}"
