@@ -20,6 +20,7 @@ intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
     plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties']
+    downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
         username System.getenv('IJ_REPO_USERNAME')

@@ -303,14 +303,11 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                                 implementationClass="com.cedricziel.idea.typo3.codeInsight.IconCompletionContributor"/>
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
-        <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.codeInsight.PathResourceCompletionContributor"/>
-
 
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
-        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.PathResourceAnnotator"/>
+        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.resources.annotation.PathResourceAnnotator"/>
 
         <!-- marker -->
         <codeInsight.lineMarkerProvider language="PHP"
@@ -329,6 +326,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
     </extensions>
 
     <actions>
