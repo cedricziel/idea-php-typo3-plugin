@@ -1,6 +1,5 @@
 package com.cedricziel.idea.typo3;
 
-import com.cedricziel.idea.typo3.container.IconProvider;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -40,6 +39,5 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectClosed() {
-        IconProvider.destroyInstance(project);
     }
 }
