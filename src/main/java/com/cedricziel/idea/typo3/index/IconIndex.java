@@ -1,6 +1,6 @@
 package com.cedricziel.idea.typo3.index;
 
-import com.cedricziel.idea.typo3.domain.IconStub;
+import com.cedricziel.idea.typo3.icons.IconStub;
 import com.cedricziel.idea.typo3.index.externalizer.ObjectStreamDataExternalizer;
 import com.cedricziel.idea.typo3.psi.visitor.CoreFlagParserVisitor;
 import com.cedricziel.idea.typo3.psi.visitor.CoreIconParserVisitor;
@@ -76,6 +76,17 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
     }
 
     @NotNull
+    public static IconStub[] getAllIcons(@NotNull Project project) {
+        List<IconStub> iconStubs = new ArrayList<>();
+        FileBasedIndex.getInstance().getAllKeys(IconIndex.KEY, project).forEach(k -> {
+            List<IconStub> values = FileBasedIndex.getInstance().getValues(IconIndex.KEY, k, GlobalSearchScope.allScope(project));
+            iconStubs.addAll(values);
+        });
+
+        return iconStubs.toArray(new IconStub[iconStubs.size()]);
+    }
+
+    @NotNull
     @Override
     public ID<String, IconStub> getName() {
         return KEY;
@@ -107,7 +118,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
                                         CoreIconParserVisitor visitor = new CoreIconParserVisitor();
                                         visitor.visitElement(field.getDefaultValue());
 
-                                        visitor.getMap().forEach(map::put);
+                                        Map<String, IconStub> map1 = visitor.getMap();map1.forEach(map::put);
                                     }
                                 }
                             }
@@ -120,7 +131,8 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
                                 method.accept(visitor);
                                 visitor.visitElement(method);
 
-                                visitor.getMap().forEach(map::put);
+                                Map<String, IconStub> map1 = visitor.getMap();
+                                map1.forEach(map::put);
                             }
                         }
                     }

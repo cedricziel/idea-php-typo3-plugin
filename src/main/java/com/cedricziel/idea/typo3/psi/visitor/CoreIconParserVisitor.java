@@ -1,6 +1,6 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
-import com.cedricziel.idea.typo3.domain.IconStub;
+import com.cedricziel.idea.typo3.icons.IconStub;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.jetbrains.php.lang.psi.elements.*;
