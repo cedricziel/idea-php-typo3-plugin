@@ -32,6 +32,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
 
     public static ID<String, IconStub> KEY = ID.create("com.cedricziel.idea.typo3.index.icon");
 
+    @NotNull
     public static Collection<String> getAllAvailableIcons(@NotNull Project project) {
 
         return FileBasedIndex.getInstance().getAllKeys(KEY, project);
