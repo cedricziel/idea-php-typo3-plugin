@@ -52,3 +52,7 @@ task copyPsiViewerPluginToSandBox(type: Copy) {
 copyPsiViewerPluginToSandBox.dependsOn downloadPsiViewerPlugin
 copyPsiViewerPluginToSandBox.mustRunAfter prepareSandbox
 runIde.dependsOn copyPsiViewerPluginToSandBox
+
+wrapper {
+    gradleVersion '4.3.1'
+}
