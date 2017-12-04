@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.codeInsight;
 import com.cedricziel.idea.typo3.TYPO3CMSIcons;
 import com.cedricziel.idea.typo3.index.RouteIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
+import com.cedricziel.idea.typo3.routing.RouteHelper;
 import com.cedricziel.idea.typo3.routing.RouteStub;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
@@ -17,7 +18,7 @@ import java.util.Collection;
 
 public class RouteLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
 
         if (!(element instanceof StringLiteralExpression)) {
             return;
@@ -36,8 +37,14 @@ public class RouteLineMarkerProvider extends RelatedItemLineMarkerProvider {
             if (RouteIndex.hasRoute(element.getProject(), value)) {
                 Collection<RouteStub> routes = RouteIndex.getRoute(element.getProject(), value);
                 routes.forEach(def -> {
+                    PsiElement[] routeDefinitionElements = RouteHelper.getRouteDefinitionElements(element.getProject(), value);
                     NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder
-                            .create(TYPO3CMSIcons.ROUTE_ICON);
+                            .create(TYPO3CMSIcons.ROUTE_ICON)
+                            .setTargets(routeDefinitionElements);
+
+                    if (def.getPath() != null) {
+                        builder.setTooltipTitle("Path: " + def.getPath());
+                    }
 
                     result.add(builder.createLineMarkerInfo(element));
                 });
