@@ -18,6 +18,8 @@ public class TYPO3InspectionToolProvider implements InspectionToolProvider {
                 MissingRenderTypeInspection.class,
                 MissingTableInspection.class,
                 InvalidQuantityInspection.class,
+                // Code Migration
+                LegacyClassesForIDEInspection.class,
                 // Extension Scanner
                 ClassConstantMatcherInspection.class,
                 ClassNameMatcherInspection.class,
