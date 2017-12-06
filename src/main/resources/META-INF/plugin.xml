@@ -302,6 +302,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ResourcePathIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.RouteIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex"/>
+
 
         <!-- completion -->
         <completion.contributor language="PHP"
