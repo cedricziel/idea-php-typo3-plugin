@@ -14,7 +14,7 @@ public class ExtensionScannerUtil {
         return FileBasedIndex.getInstance().getAllKeys(MethodArgumentDroppedIndex.KEY, project).contains(compiledClassMethodKey);
     }
 
-    public static Integer getMaximumNumberOfArguments(@NotNull Project project, @NotNull String compiledClassMethodKey) {
+    public static int getMaximumNumberOfArguments(@NotNull Project project, @NotNull String compiledClassMethodKey) {
         List<Integer> values = FileBasedIndex.getInstance().getValues(MethodArgumentDroppedIndex.KEY, compiledClassMethodKey, GlobalSearchScope.allScope(project));
 
         if (values.size() == 0) {
