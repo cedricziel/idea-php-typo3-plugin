@@ -48,7 +48,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
         }
 
         String version = instance.getVersion();
-        if (!version.equals(plugin.getVersion())) {
+        if (version == null || !plugin.getVersion().equals(version)) {
             instance.setVersion(plugin.getVersion());
 
             FileBasedIndex index = FileBasedIndex.getInstance();
