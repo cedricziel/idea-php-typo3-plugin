@@ -8,13 +8,11 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -47,8 +45,15 @@ public class MethodArgumentDroppedMatcherInspection extends PhpInspection {
 
                 Map<String, Integer> changedMethods = getChangedMethods(element);
                 MethodReference methodReference = (MethodReference) element;
-                if (methodReference.getClassReference() != null && changedMethods.containsKey(methodReference.getClassReference().getInferredType() + "->" + methodReference.getText())) {
-                    problemsHolder.registerProblem(element, "Number of arguments changed with TYPO3 9, consider using an alternative");
+                ParameterList parameterList = methodReference.getParameterList();
+                PhpExpression classReference = methodReference.getClassReference();
+                if (classReference != null) {
+                    PhpType inferredType = classReference.getInferredType();
+                    if (changedMethods.containsKey(inferredType.toString() + "->" + methodReference.getName())) {
+                        Integer maximumNumberOfArguments = changedMethods.get(inferredType.toString() + "->" + methodReference.getName());
+                        if (parameterList.getParameters().length != maximumNumberOfArguments)
+                        problemsHolder.registerProblem(element, "Number of arguments changed with TYPO3 9, consider refactoring");
+                    }
                 }
             }
         };
@@ -76,19 +81,20 @@ public class MethodArgumentDroppedMatcherInspection extends PhpInspection {
         }
 
         Map<String, Integer> methodMap = new HashMap<>();
-        for (PsiElement gatheredElement : elements) {
-            PsiElement[] numberOfArgumentsNumbers = PsiTreeUtil.processElements(
-                    gatheredElement,
-                    new PsiElementProcessor() {
-                        @Override
-                        public boolean execute(@NotNull PsiElement element) {
-                            return false;
-                        }
-                    }
-            );
 
-            for (PsiElement el : numberOfArgumentsNumbers) {
-                methodMap.put("\\" + ((StringLiteralExpression) gatheredElement).getContents(), Integer.parseInt(el.getFirstChild().getFirstChild().getText()));
+        for (PsiElement gatheredElement : elements) {
+            PsiElement parent = gatheredElement.getParent().getParent();
+            if (parent instanceof ArrayHashElement) {
+                ArrayHashElement arr = (ArrayHashElement) parent;
+                PhpPsiElement value = arr.getValue();
+                if (value != null && value instanceof ArrayCreationExpression) {
+                    ArrayCreationExpression creationExpression = (ArrayCreationExpression) value;
+                    creationExpression.getHashElements().forEach(x -> {
+                        if (x.getKey().getText().contains("maximumNumberOfArguments")) {
+                            methodMap.put("\\" + ((StringLiteralExpression) gatheredElement).getContents(), Integer.parseInt(x.getValue().getText()));
+                        }
+                    });
+                }
             }
         }
 
