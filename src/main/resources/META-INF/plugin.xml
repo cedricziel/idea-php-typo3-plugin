@@ -295,6 +295,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSSettings"/>
+
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
