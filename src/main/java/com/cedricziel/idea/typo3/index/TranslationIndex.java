@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class TranslationIndex extends FileBasedIndexExtension<String, StubTranslation> {
@@ -44,6 +45,7 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
                 return new HashMap<>();
             }
 
+            String languageKey = extractLanguageKeyFromFile(inputData);
 
             if (language instanceof XMLLanguage && extension != null && extension.equals("xlf")) {
                 PsiFile psiFile = inputData.getPsiFile();
@@ -61,11 +63,10 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
                                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("trans-unit").accepts(transUnitElement)) {
                                                         if (transUnitElement instanceof XmlTag) {
                                                             String id = ((XmlTag) transUnitElement).getAttributeValue("id");
-                                                            StubTranslation v = new StubTranslation(compileId(inputData, extensionKeyFromFile, id));
-                                                            v.setTextRange(transUnitElement.getTextRange());
-                                                            v.setIndex(id);
-                                                            v.setExtension(extensionKeyFromFile);
-                                                            result.put(compileId(inputData, extensionKeyFromFile, id), v);
+                                                            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
+                                                                StubTranslation v = createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, transUnitElement, id);
+                                                                result.put(calculatedId, v);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -97,11 +98,10 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
                                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("label").accepts(transUnitElement)) {
                                                         if (transUnitElement instanceof XmlTag) {
                                                             String id = ((XmlTag) transUnitElement).getAttributeValue("index");
-                                                            StubTranslation v = new StubTranslation(compileId(inputData, extensionKeyFromFile, id));
-                                                            v.setTextRange(transUnitElement.getTextRange());
-                                                            v.setIndex(id);
-                                                            v.setExtension(extensionKeyFromFile);
-                                                            result.put(compileId(inputData, extensionKeyFromFile, id), v);
+                                                            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
+                                                                StubTranslation v = createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, transUnitElement, id);
+                                                                result.put(calculatedId, v);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -135,7 +135,52 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
         return FileBasedIndex.getInstance().getValues(TranslationIndex.KEY, id, GlobalSearchScope.allScope(project));
     }
 
+    private String[] compileIds(FileContent inputData, String extensionKeyFromFile, String id) {
+        String languageKey = extractLanguageKeyFromFile(inputData);
+
+        VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData.getFile());
+
+        String path = inputData.getFile().getPath();
+        String filePosition = extensionKeyFromFile + path.split(extensionRootFolder.getPath())[1];
+
+        if (!languageKey.equals("en")) {
+            filePosition = filePosition.replace(languageKey + ".", "");
+        }
+
+        String fileBasedId = compileId(inputData, extensionKeyFromFile, id);
+        String s = "LLL:EXT:" + filePosition + ":" + id;
+
+        if (fileBasedId.equals(s)) {
+            return new String[]{fileBasedId};
+        }
+
+        return new String[]{fileBasedId, s};
+    }
+
+    private String extractLanguageKeyFromFile(FileContent inputData) {
+        String languageKey = "en";
+        String nameWithoutExtension = inputData.getFile().getNameWithoutExtension();
+        if (nameWithoutExtension.indexOf(".") == 2) {
+            String[] split = nameWithoutExtension.split(Pattern.quote("."));
+            if (split.length != 0) {
+                languageKey = split[0];
+            }
+        }
+        return languageKey;
+    }
+
+    @NotNull
+    private StubTranslation createStubTranslationFromIndex(@NotNull FileContent inputData, String extensionKeyFromFile, String languageKey, PsiElement transUnitElement, String id) {
+        StubTranslation v = new StubTranslation(compileId(inputData, extensionKeyFromFile, id));
+        v.setTextRange(transUnitElement.getTextRange());
+        v.setIndex(id);
+        v.setExtension(extensionKeyFromFile);
+        v.setLanguage(languageKey);
+        return v;
+    }
+
     private String compileId(FileContent inputData, String extensionKeyFromFile, String id) {
+
         VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData.getFile());
 
         String path = inputData.getFile().getPath();

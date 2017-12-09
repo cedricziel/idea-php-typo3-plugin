@@ -10,6 +10,7 @@ public class StubTranslation implements TranslationInterface, Serializable {
     private TextRange textRange;
     private String extension;
     private String index;
+    private String language;
 
     public StubTranslation(String id) {
         this.id = id;
@@ -28,13 +29,14 @@ public class StubTranslation implements TranslationInterface, Serializable {
         return Objects.equals(id, that.id) &&
                 Objects.equals(textRange, that.textRange) &&
                 Objects.equals(extension, that.extension) &&
-                Objects.equals(index, that.index);
+                Objects.equals(index, that.index) &&
+                Objects.equals(language, that.language);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, textRange, extension, index);
+        return Objects.hash(id, textRange, extension, index, language);
     }
 
     public TextRange getTextRange() {
@@ -59,5 +61,13 @@ public class StubTranslation implements TranslationInterface, Serializable {
 
     public void setIndex(String index) {
         this.index = index;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

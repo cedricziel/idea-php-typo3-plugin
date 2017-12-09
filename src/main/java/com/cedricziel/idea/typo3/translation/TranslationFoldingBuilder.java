@@ -37,7 +37,9 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
 
                 final List<StubTranslation> properties = TranslationIndex.findById(project, value);
 
-                if (properties.size() == 1) {
+                StubTranslation defaultTranslation = findDefaultTranslationFromVariants(properties);
+
+                if (defaultTranslation != null) {
                     TextRange foldingRange = new TextRange(literalExpression.getTextRange().getStartOffset() + 1, literalExpression.getTextRange().getEndOffset() - 1);
                     descriptors.add(new FoldingDescriptor(literalExpression.getNode(), foldingRange, group) {
                         @Nullable
@@ -58,11 +60,8 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
                                     }
                                 }
                             }
-                            // IMPORTANT: keys can come with no values, so a test for null is needed
-                            // IMPORTANT: Convert embedded \n to backslash n, so that the string will look like it has LF embedded
-                            // in it and embedded " to escaped "
-                            String valueOf = properties.get(0).getExtension();
-                            return valueOf == null ? "" : valueOf.replaceAll("\n", "\\n").replaceAll("\"", "\\\\\"");
+
+                            return null;
                         }
                     });
                 }
@@ -70,6 +69,26 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
         }
 
         return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+    }
+
+    private StubTranslation findDefaultTranslationFromVariants(List<StubTranslation> properties) {
+        if (properties.size() == 1) {
+            return properties.iterator().next();
+        }
+
+        if (properties.size() > 1) {
+            for (StubTranslation property : properties) {
+                // TYPO3 CMS documentation suggests that every element has a mandatory english variant
+                if (property.getLanguage().equals("en")) {
+                    return property;
+                }
+            }
+
+            // default if no english element was found
+            return properties.iterator().next();
+        }
+
+        return null;
     }
 
     @Nullable
