@@ -299,6 +299,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSSettings"/>
 
+        <directoryProjectGenerator implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSClassicLayoutDirectoryProjectGenerator"/>
+        <projectTemplatesFactory implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSProjectTemplatesFactory"/>
+
         <!-- indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.CoreServiceMapStubIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.ExtensionNameStubIndex"/>
