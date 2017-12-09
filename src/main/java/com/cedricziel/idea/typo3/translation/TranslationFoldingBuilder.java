@@ -12,8 +12,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.xml.XmlTagValue;
-import com.intellij.psi.xml.XmlText;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +47,10 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
                             PsiElement[] definitionElements = TranslationUtil.findDefinitionElements(project, value);
                             for (PsiElement definitionElement : definitionElements) {
                                 if (definitionElement instanceof XmlTag) {
+                                    if (((XmlTag) definitionElement).getName().equals("label")) {
+                                        return ((XmlTag) definitionElement).getValue().getTrimmedText();
+                                    }
+
                                     for (XmlTag xmlTag : ((XmlTag) definitionElement).getSubTags()) {
                                         if (xmlTag.getName().equals("source")) {
                                             return xmlTag.getValue().getTrimmedText();
