@@ -33,7 +33,7 @@ public class TranslationUtil {
 
     public static String extractResourceFilenameFromTranslationString(@NotNull String contents) {
 
-        String[] split = contents.replace("LLL:", "").split(":");
+        String[] split = contents.replace("LLL:EXT:", "").split("/");
         if (split.length > 0) {
             return split[0];
         }
