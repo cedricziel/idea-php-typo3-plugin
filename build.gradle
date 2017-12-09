@@ -14,7 +14,6 @@ plugins {
 
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'jacoco'
 apply plugin: 'java'
 
 intellij {
@@ -33,16 +32,6 @@ intellij {
         untilBuild '173.*'
     }
 }
-
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-
-check.dependsOn jacocoTestReport
 
 group 'com.cedricziel'
 version gitVersion()
