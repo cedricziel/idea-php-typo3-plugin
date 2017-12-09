@@ -1,6 +1,9 @@
 package com.cedricziel.idea.typo3.index;
 
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.jetbrains.php.lang.PhpFileType;
+
+import java.util.List;
 
 public class ResourcePathIndexTest extends LightCodeInsightFixtureTestCase {
     public void testResourcesAreIndexed() {
