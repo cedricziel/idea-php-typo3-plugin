@@ -9,6 +9,7 @@ public class TranslationIndexTest extends LightCodeInsightFixtureTestCase {
     public void testResourcesAreIndexed() {
         myFixture.addFileToProject("typo3conf/ext/foo/bar.php", "");
         myFixture.addFileToProject("typo3/sysext/baz/bar.png", "");
+        myFixture.addFileToProject("typo3/sysext/baz/ext_emconf.php", "");
 
         myFixture.addFileToProject("typo3/sysext/baz/bar.xml", "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>\n" +
                 "<T3locallang>\n" +
