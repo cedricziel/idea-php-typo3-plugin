@@ -348,6 +348,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.translation.TranslationReferenceContributor"/>
+
+        <!-- code folding -->
+        <lang.foldingBuilder language="PHP" implementationClass="com.cedricziel.idea.typo3.translation.TranslationFoldingBuilder"/>
     </extensions>
 
     <actions>

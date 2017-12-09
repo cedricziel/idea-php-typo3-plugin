@@ -21,9 +21,10 @@ public class TranslationLookupElement extends LookupElement {
 
     @Override
     public void renderElement(LookupElementPresentation presentation) {
-        presentation.setItemText(translation.getIndex());
+        presentation.setItemText(translation.getIndex() + "  ");
+        presentation.setTailText(getLookupString(), true);
         presentation.setIcon(TYPO3CMSIcons.TYPO3_ICON);
-        presentation.setTypeText(translation.getExtension());
+        presentation.setTypeText("EXT:" + translation.getExtension());
         presentation.setTypeGrayed(true);
     }
 }
