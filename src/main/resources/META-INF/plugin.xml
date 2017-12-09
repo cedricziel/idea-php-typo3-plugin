@@ -285,6 +285,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.jetbrains.php</depends>
+    <depends optional="true">com.cedricziel.idea.xliff</depends>
 
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
@@ -306,6 +307,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.RouteIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TranslationIndex"/>
         <!-- extensionscanner indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedIndex"/>
 
@@ -318,6 +320,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.RouteAnnotator"/>
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.resources.annotation.PathResourceAnnotator"/>
+        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.translation.annotation.TranslationAnnotator"/>
 
         <!-- marker -->
         <codeInsight.lineMarkerProvider language="PHP"
@@ -327,16 +330,27 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.extbase.EntityLineMarkerProvider"/>
         -->
 
-        <!-- inspections -->
-        <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
-
         <!-- goto handlers -->
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
+
+        <!-- inspections -->
+
+        <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS,Translation"
+                         shortName="TranslationMissingInspection"  displayName="Translation missing"
+                         groupName="Translation"
+                         enabledByDefault="true"                   level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.translation.TranslationReferenceContributor"/>
+
+        <!-- code folding -->
+        <lang.foldingBuilder language="PHP" implementationClass="com.cedricziel.idea.typo3.translation.TranslationFoldingBuilder"/>
     </extensions>
 
     <actions>
