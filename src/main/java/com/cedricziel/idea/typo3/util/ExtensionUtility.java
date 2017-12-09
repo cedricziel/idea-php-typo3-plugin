@@ -159,4 +159,27 @@ public class ExtensionUtility {
             return ns.toArray(new String[ns.size()]);
         }
     }
+
+    @Nullable
+    public static String findExtensionKeyFromFile(@NotNull VirtualFile inputData) {
+        VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData);
+        if (extensionRootFolder == null) {
+            return null;
+        }
+
+        String extensionKey = null;
+        VirtualFile composerJsonFile = extensionRootFolder.findChild("composer.json");
+        if (composerJsonFile != null) {
+            String extensionKeyFromComposerJson = ComposerUtil.findExtensionKey(composerJsonFile);
+            if (extensionKeyFromComposerJson == null) {
+                extensionKey = extensionRootFolder.getName();
+            } else {
+                extensionKey = extensionKeyFromComposerJson;
+            }
+        } else {
+            extensionKey = extensionRootFolder.getName();
+        }
+
+        return extensionKey;
+    }
 }

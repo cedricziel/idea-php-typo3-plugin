@@ -1,36 +1,53 @@
 package com.cedricziel.idea.typo3.index;
 
+import com.cedricziel.idea.typo3.index.externalizer.ObjectStreamDataExternalizer;
+import com.cedricziel.idea.typo3.translation.StubTranslation;
+import com.cedricziel.idea.typo3.util.ExtensionUtility;
+import com.cedricziel.idea.typo3.util.FilesystemUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.containers.HashMap;
 import com.intellij.util.indexing.*;
+import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class TranslationIndex extends ScalarIndexExtension<String> {
+public class TranslationIndex extends FileBasedIndexExtension<String, StubTranslation> {
 
-    public static final ID<String, Void> KEY = ID.create("com.cedricziel.idea.typo3.index.translation_key");
+    public static final ID<String, StubTranslation> KEY = ID.create("com.cedricziel.idea.typo3.index.translation_key");
 
-    private final DataIndexer<String, Void, FileContent> myIndexer = new DataIndexer<String, Void, FileContent>() {
+    private final DataIndexer<String, StubTranslation, FileContent> myIndexer = new DataIndexer<String, StubTranslation, FileContent>() {
         @Override
         @NotNull
-        public Map<String, Void> map(@NotNull FileContent inputData) {
+        public Map<String, StubTranslation> map(@NotNull FileContent inputData) {
             Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
             String extension = inputData.getFile().getExtension();
 
+            String extensionKeyFromFile = ExtensionUtility.findExtensionKeyFromFile(inputData.getFile());
+            if (extensionKeyFromFile == null) {
+                return new HashMap<>();
+            }
+
+
             if (language instanceof XMLLanguage && extension != null && extension.equals("xlf")) {
                 PsiFile psiFile = inputData.getPsiFile();
-                Map<String, Void> result = new HashMap<>();
+                Map<String, StubTranslation> result = new HashMap<>();
 
                 for (PsiElement element : psiFile.getChildren()) {
                     if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
@@ -44,7 +61,11 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("trans-unit").accepts(transUnitElement)) {
                                                         if (transUnitElement instanceof XmlTag) {
                                                             String id = ((XmlTag) transUnitElement).getAttributeValue("id");
-                                                            result.put(compileId(inputData, id), null);
+                                                            StubTranslation v = new StubTranslation(compileId(inputData, extensionKeyFromFile, id));
+                                                            v.setTextRange(transUnitElement.getTextRange());
+                                                            v.setIndex(id);
+                                                            v.setExtension(extensionKeyFromFile);
+                                                            result.put(compileId(inputData, extensionKeyFromFile, id), v);
                                                         }
                                                     }
                                                 }
@@ -62,7 +83,7 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
             if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xml")) {
                 PsiFile psiFile = inputData.getPsiFile();
-                Map<String, Void> result = new HashMap<>();
+                Map<String, StubTranslation> result = new HashMap<>();
 
                 for (PsiElement element : psiFile.getChildren()) {
                     if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
@@ -76,7 +97,11 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                                                     if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("label").accepts(transUnitElement)) {
                                                         if (transUnitElement instanceof XmlTag) {
                                                             String id = ((XmlTag) transUnitElement).getAttributeValue("index");
-                                                            result.put(compileId(inputData, id), null);
+                                                            StubTranslation v = new StubTranslation(compileId(inputData, extensionKeyFromFile, id));
+                                                            v.setTextRange(transUnitElement.getTextRange());
+                                                            v.setIndex(id);
+                                                            v.setExtension(extensionKeyFromFile);
+                                                            result.put(compileId(inputData, extensionKeyFromFile, id), v);
                                                         }
                                                     }
                                                 }
@@ -96,28 +121,38 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         }
     };
 
-    private String compileId(FileContent inputData, String id) {
+    @NotNull
+    public static Collection<String> findAllTranslations(@NotNull Project project) {
+        return FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, project);
+    }
+
+    @NotNull
+    public static List<StubTranslation> findAllTranslationStubs(@NotNull Project project) {
+        return findAllTranslations(project).stream().map(id -> findById(project, id)).flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
+    public static List<StubTranslation> findById(@NotNull Project project, @NotNull String id) {
+        return FileBasedIndex.getInstance().getValues(TranslationIndex.KEY, id, GlobalSearchScope.allScope(project));
+    }
+
+    private String compileId(FileContent inputData, String extensionKeyFromFile, String id) {
+        VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData.getFile());
+
         String path = inputData.getFile().getPath();
-        String filePosition = "";
-        if (path.contains("typo3conf/ext/")) {
-            filePosition = path.split("typo3conf/ext/")[1];
-        }
-        if (path.contains("sysext/")) {
-            filePosition = path.split("sysext/")[1];
-        }
+        String filePosition = extensionKeyFromFile + path.split(extensionRootFolder.getPath())[1];
 
         return "LLL:EXT:" + filePosition + ":" + id;
     }
 
     @NotNull
     @Override
-    public ID<String, Void> getName() {
+    public ID<String, StubTranslation> getName() {
         return KEY;
     }
 
     @NotNull
     @Override
-    public DataIndexer<String, Void, FileContent> getIndexer() {
+    public DataIndexer<String, StubTranslation, FileContent> getIndexer() {
         return myIndexer;
     }
 
@@ -125,6 +160,12 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
     @Override
     public KeyDescriptor<String> getKeyDescriptor() {
         return EnumeratorStringDescriptor.INSTANCE;
+    }
+
+    @NotNull
+    @Override
+    public DataExternalizer<StubTranslation> getValueExternalizer() {
+        return new ObjectStreamDataExternalizer<>();
     }
 
     @NotNull
@@ -147,6 +188,6 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
     @Override
     public int getVersion() {
-        return 2;
+        return 3;
     }
 }

@@ -315,8 +315,6 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- completion -->
         <completion.contributor language="PHP"
                                 implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
-        <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.translation.codeInsight.TranslationCompletionContributor"/>
 
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
@@ -339,17 +337,17 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
 
-        <localInspection groupPath="TYPO3 CMS" shortName="TranslationMissingInspection" displayName="Translation missing"
+        <localInspection language="PHP" groupPath="TYPO3 CMS,Translation"
+                         shortName="TranslationMissingInspection"  displayName="Translation missing"
                          groupName="Translation"
-                         enabledByDefault="true"
-                         level="WARNING"
-                         language="PHP"
+                         enabledByDefault="true"                   level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.translation.TranslationReferenceContributor"/>
     </extensions>
 
     <actions>
