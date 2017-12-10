@@ -20,7 +20,12 @@ public class ComposerUtil {
             String name = nameElement.getAsString();
             if (name != null) {
                 if (name.contains("/")) {
-                    return name.split("/")[1].replaceAll("-", "_");
+                    String packageName = name.split("/")[1];
+                    if (packageName.startsWith("cms-")) {
+                        packageName = packageName.replace("cms-", "");
+                    }
+
+                    return packageName.replaceAll("-", "_");
                 }
             }
         }
