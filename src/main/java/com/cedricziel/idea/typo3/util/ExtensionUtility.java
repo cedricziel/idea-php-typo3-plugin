@@ -161,8 +161,8 @@ public class ExtensionUtility {
     }
 
     @Nullable
-    public static String findExtensionKeyFromFile(@NotNull VirtualFile inputData) {
-        VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(inputData);
+    public static String findExtensionKeyFromFile(@NotNull VirtualFile file) {
+        VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(file);
         if (extensionRootFolder == null) {
             return null;
         }

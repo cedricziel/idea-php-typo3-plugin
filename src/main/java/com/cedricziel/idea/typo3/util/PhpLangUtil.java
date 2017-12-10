@@ -69,17 +69,21 @@ public class PhpLangUtil {
     }
 
     public static String getMethodName(@NotNull PsiElement element) {
-        ParameterList parameterList = PsiTreeUtil.getParentOfType(element, ParameterList.class);
-        if (parameterList == null) {
-            return null;
-        }
-
-        MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
+        MethodReference methodReference = getMethodReference(element);
         if (methodReference == null) {
             return null;
         }
 
         return methodReference.getName();
+    }
+
+    public static MethodReference getMethodReference(@NotNull PsiElement element) {
+        ParameterList parameterList = PsiTreeUtil.getParentOfType(element, ParameterList.class);
+        if (parameterList == null) {
+            return null;
+        }
+
+        return PsiTreeUtil.getParentOfType(element, MethodReference.class);
     }
 
     public static String getClassName(@NotNull PsiElement element) {
