@@ -24,7 +24,7 @@ public class TranslationMissingInspection extends PhpInspection {
                 }
 
                 String contents = expression.getContents();
-                if (TranslationUtil.isTranslationKeyString(contents) && !TranslationUtil.keyExists(problemsHolder.getProject(), contents)) {
+                if (TranslationUtil.isTranslationKeyString(contents) && contents.length() > 4 && !TranslationUtil.keyExists(problemsHolder.getProject(), contents)) {
                     // new CreateMissingTranslationQuickFix(contents)
                     problemsHolder.registerProblem(expression, MESSAGE);
                 }

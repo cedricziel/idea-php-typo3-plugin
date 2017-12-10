@@ -19,7 +19,7 @@ public class TranslationAnnotator implements Annotator {
         StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
         String value = literalExpression.getContents();
 
-        if (TranslationUtil.isTranslationKeyString(value) && !(psiElement.getParent() instanceof ConcatenationExpression)) {
+        if (TranslationUtil.isTranslationKeyString(value) && value.length() > 4 && !(psiElement.getParent() instanceof ConcatenationExpression)) {
             annotateTranslationUsage(psiElement, annotationHolder, value);
         }
     }

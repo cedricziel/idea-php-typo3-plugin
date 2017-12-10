@@ -28,7 +28,7 @@ public class TranslationUtil {
             return false;
         }
 
-        return possibleKey.contains("LLL:");
+        return possibleKey.startsWith("LLL:");
     }
 
     public static String extractResourceFilenameFromTranslationString(@NotNull String contents) {
