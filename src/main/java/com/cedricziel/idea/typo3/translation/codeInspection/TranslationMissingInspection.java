@@ -5,6 +5,7 @@ import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.inspections.PhpInspection;
+import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ public class TranslationMissingInspection extends PhpInspection {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
-                if (expression == null) {
+                if (expression == null || expression.getParent() instanceof ConcatenationExpression) {
                     return;
                 }
 
