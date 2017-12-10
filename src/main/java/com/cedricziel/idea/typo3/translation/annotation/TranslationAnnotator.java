@@ -4,6 +4,7 @@ import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ public class TranslationAnnotator implements Annotator {
         StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
         String value = literalExpression.getContents();
 
-        if (TranslationUtil.isTranslationKeyString(value)) {
+        if (TranslationUtil.isTranslationKeyString(value) && value.length() > 4 && !(psiElement.getParent() instanceof ConcatenationExpression)) {
             annotateTranslationUsage(psiElement, annotationHolder, value);
         }
     }
