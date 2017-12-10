@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3;
 
 import com.cedricziel.idea.typo3.index.*;
+import com.cedricziel.idea.typo3.index.extbase.ControllerActionIndex;
 import com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedIndex;
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
@@ -61,6 +62,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
             index.scheduleRebuild(TablenameFileIndex.KEY, new Throwable());
             index.scheduleRebuild(LegacyClassesForIDEIndex.KEY, new Throwable());
             index.scheduleRebuild(MethodArgumentDroppedIndex.KEY, new Throwable());
+            index.scheduleRebuild(ControllerActionIndex.KEY, new Throwable());
         }
     }
 

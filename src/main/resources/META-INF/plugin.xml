@@ -308,6 +308,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TablenameFileIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex"/>
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.TranslationIndex"/>
+        <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.extbase.ControllerActionIndex"/>
+
         <!-- extensionscanner indexes -->
         <fileBasedIndex implementation="com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedIndex"/>
 
@@ -348,6 +350,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.tca.TableReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.translation.TranslationReferenceContributor"/>
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.extbase.controller.ControllerActionReferenceContributor"/>
 
         <!-- code folding -->
         <lang.foldingBuilder language="PHP" implementationClass="com.cedricziel.idea.typo3.translation.TranslationFoldingBuilder"/>
