@@ -17,6 +17,7 @@ public class RouteIndexTest extends LightCodeInsightFixtureTestCase {
         myFixture.addFileToProject("typo3conf/ext/bar/ext_emconf.php", "");
         myFixture.copyFileToProject("Routes.php", "typo3conf/ext/foo/Configuration/Backend/Routes.php");
         myFixture.copyFileToProject("BackendRoutes.php", "typo3conf/ext/bar/Configuration/Backend/Routes.php");
+        myFixture.copyFileToProject("ext_tables.php", "typo3conf/ext/bar/ext_tables.php");
     }
 
     public void testRoutesAreIndexed() {
@@ -30,6 +31,14 @@ public class RouteIndexTest extends LightCodeInsightFixtureTestCase {
         assertRouteStubEquals("file_newfolder", "/file/new", "\\TYPO3\\CMS\\Backend\\Controller\\File\\CreateFolderController", "mainAction", "private");
         assertRouteStubEquals("tce_db", "/record/commit", "\\TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController", "mainAction", "private");
         assertRouteStubEquals("login", "/login", "\\TYPO3\\CMS\\Backend\\Controller\\LoginController", "formAction", "public");
+    }
+
+    public void testRoutesFromExtTablesPhpAreIndexed() {
+        assertRouteExists("web_list");
+    }
+
+    public void testRouteStubsFromExtTablesPhpAreIndexed() {
+        assertRouteStubEquals("web_list", null, "\\TYPO3\\CMS\\Recordlist\\RecordList", "mainAction", "user,group");
     }
 
     private void assertRouteStubEquals(String name, String path, String controllerClass, String action, String access) {
