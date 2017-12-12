@@ -1,15 +1,17 @@
 package com.cedricziel.idea.typo3.routing;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class RouteStub implements RouteInterface, Serializable {
     private String name;
     private String path;
     private String controller;
     private String method;
+    private String access;
 
     public RouteStub() {
-
+        access = "private";
     }
 
     public RouteStub(String name, String path, String controller, String method) {
@@ -55,25 +57,29 @@ public class RouteStub implements RouteInterface, Serializable {
         this.method = method;
     }
 
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         RouteStub routeStub = (RouteStub) o;
-
-        if (name != null ? !name.equals(routeStub.name) : routeStub.name != null) return false;
-        if (path != null ? !path.equals(routeStub.path) : routeStub.path != null) return false;
-        if (controller != null ? !controller.equals(routeStub.controller) : routeStub.controller != null) return false;
-        return method != null ? method.equals(routeStub.method) : routeStub.method == null;
+        return Objects.equals(name, routeStub.name) &&
+                Objects.equals(path, routeStub.path) &&
+                Objects.equals(controller, routeStub.controller) &&
+                Objects.equals(method, routeStub.method) &&
+                Objects.equals(access, routeStub.access);
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (path != null ? path.hashCode() : 0);
-        result = 31 * result + (controller != null ? controller.hashCode() : 0);
-        result = 31 * result + (method != null ? method.hashCode() : 0);
-        return result;
+
+        return Objects.hash(name, path, controller, method, access);
     }
 }

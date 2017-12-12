@@ -1,11 +1,9 @@
 package com.cedricziel.idea.typo3.routing;
 
+import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.jetbrains.php.lang.psi.elements.ArrayCreationExpression;
-import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,54 +27,83 @@ public class RouteParserVisitor extends PsiRecursiveElementVisitor {
 
     @Override
     public void visitElement(PsiElement element) {
-        if ((element instanceof ArrayCreationExpression)) {
-            ArrayCreationExpression arrayCreationExpression = (ArrayCreationExpression) element;
+        if (isRouteElement(element)) {
+            ArrayHashElement arrayCreationExpression = (ArrayHashElement) element;
             visitRouteCreation(arrayCreationExpression);
         }
         super.visitElement(element);
     }
 
-    private void visitRouteCreation(ArrayCreationExpression element) {
+    private boolean isRouteElement(PsiElement element) {
+        return PlatformPatterns.psiElement(ArrayHashElement.class).withParent(
+                PlatformPatterns.psiElement(ArrayCreationExpression.class).withParent(
+                        PlatformPatterns.psiElement(PhpReturn.class)
+                )
+        ).accepts(element);
+    }
+
+    private void visitRouteCreation(ArrayHashElement element) {
 
         RouteStub routeDefinition = new RouteStub();
 
-        for (ArrayHashElement arrayHashElement : element.getHashElements()) {
-            PhpPsiElement child = arrayHashElement.getKey();
-            if (child instanceof StringLiteralExpression) {
-                String key = ((StringLiteralExpression) child).getContents();
+        PhpPsiElement child = element.getKey();
+        if (child instanceof StringLiteralExpression) {
+            String key = ((StringLiteralExpression) child).getContents();
 
-                PhpPsiElement valueMap = arrayHashElement.getValue();
-                if (valueMap == null) {
-                    continue;
+            PhpPsiElement valueMap = element.getValue();
+            if (valueMap == null) {
+                return;
+            }
+
+            if (valueMap instanceof ArrayCreationExpression) {
+                ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
+
+                routeDefinition.setName(key);
+
+                for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
+                    visitProperty(routeDefinition, routePropertyHashElement);
                 }
 
-                if (valueMap instanceof ArrayCreationExpression) {
-                    ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
+                routeStubs.add(routeDefinition);
+            }
+        }
+    }
 
-                    routeDefinition.setName(key);
+    private void visitProperty(RouteStub routeDefinition, ArrayHashElement routePropertyHashElement) {
+        if (!(routePropertyHashElement.getKey() instanceof StringLiteralExpression)) {
+            return;
+        }
 
-                    for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
-                        String propertyName = ((StringLiteralExpression) routePropertyHashElement.getKey()).getContents();
-                        if ("path".equals(propertyName)) {
-                            routeDefinition.setPath(((StringLiteralExpression) routePropertyHashElement.getValue()).getContents());
-                        }
-                        if ("access".equals(propertyName)) {
-                            routeDefinition.setPath(((StringLiteralExpression) routePropertyHashElement.getValue()).getContents());
-                        }
-                        if ("target".equals(propertyName)) {
-                            PhpPsiElement value = routePropertyHashElement.getValue();
-                            String text = value.getText();
-                            text = text.replace("'", "").replace(".", "");
+        String propertyName = ((StringLiteralExpression) routePropertyHashElement.getKey()).getContents();
+        PhpPsiElement arrayValue = routePropertyHashElement.getValue();
 
-                            String[] split = text.split("::");
-                            if (split.length == 3) {
-                                routeDefinition.setController(split[0]);
-                                routeDefinition.setMethod(split[2]);
-                            }
-                        }
+        if (arrayValue instanceof StringLiteralExpression) {
+            StringLiteralExpression propertyValue = (StringLiteralExpression) arrayValue;
+            if ("path".equals(propertyName)) {
+                routeDefinition.setPath(propertyValue.getContents());
+            }
+            if ("access".equals(propertyName)) {
+                routeDefinition.setAccess(propertyValue.getContents());
+            }
+        }
+
+        if ("target".equals(propertyName)) {
+            if (arrayValue != null) {
+                String text = arrayValue.getText();
+                text = text.replace("'", "").replace(".", "");
+
+                String[] split = text.split("::");
+                if (split.length == 3) {
+                    routeDefinition.setController(split[0]);
+                    routeDefinition.setMethod(split[2]);
+                }
+
+                if (arrayValue.getFirstChild() instanceof ClassConstantReference) {
+                    ClassConstantReference classConstantReference = (ClassConstantReference) arrayValue.getFirstChild();
+                    PhpExpression classReference = classConstantReference.getClassReference();
+                    if (classReference instanceof ClassReference) {
+                        routeDefinition.setController(((ClassReference) classReference).getFQN());
                     }
-
-                    routeStubs.add(routeDefinition);
                 }
             }
         }
