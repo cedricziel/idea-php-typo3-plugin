@@ -65,6 +65,9 @@ public class RouteFoldingBuilder extends FoldingBuilderEx {
             @Nullable
             @Override
             public String getPlaceholderText() {
+                if (routeDef.getPath() == null) {
+                    return routeDef.getController() + "::" + routeDef.getMethod();
+                }
 
                 return routeDef.getPath();
             }
