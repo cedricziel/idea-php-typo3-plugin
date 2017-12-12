@@ -1,5 +1,7 @@
 package com.cedricziel.idea.typo3.routing;
 
+import com.intellij.openapi.util.TextRange;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +11,7 @@ public class RouteStub implements RouteInterface, Serializable {
     private String controller;
     private String method;
     private String access;
+    private TextRange textRange;
 
     public RouteStub() {
         access = "private";
@@ -65,6 +68,14 @@ public class RouteStub implements RouteInterface, Serializable {
         this.access = access;
     }
 
+    public TextRange getTextRange() {
+        return textRange;
+    }
+
+    public void setTextRange(TextRange textRange) {
+        this.textRange = textRange;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,12 +85,13 @@ public class RouteStub implements RouteInterface, Serializable {
                 Objects.equals(path, routeStub.path) &&
                 Objects.equals(controller, routeStub.controller) &&
                 Objects.equals(method, routeStub.method) &&
-                Objects.equals(access, routeStub.access);
+                Objects.equals(access, routeStub.access) &&
+                Objects.equals(textRange, routeStub.textRange);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, path, controller, method, access);
+        return Objects.hash(name, path, controller, method, access, textRange);
     }
 }
