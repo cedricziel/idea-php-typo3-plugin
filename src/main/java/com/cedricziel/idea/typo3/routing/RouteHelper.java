@@ -5,6 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.PhpIndex;
@@ -12,9 +13,7 @@ import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class RouteHelper {
     @NotNull
@@ -37,6 +36,25 @@ public class RouteHelper {
             }
 
         }
+
+        // Route definition
+        Set<String> keys = new HashSet<>();
+        keys.add(routeName);
+        FileBasedIndex.getInstance().getFilesWithKey(RouteIndex.KEY, keys, virtualFile -> {
+            FileBasedIndex.getInstance().processValues(RouteIndex.KEY, routeName, virtualFile, (file, value) -> {
+                PsiFile file1 = PsiManager.getInstance(project).findFile(file);
+                if (file1 != null) {
+                    PsiElement elementAt = file1.findElementAt(value.getTextRange().getStartOffset());
+                    if (elementAt != null) {
+                        results.add(elementAt.getParent());
+                    }
+                }
+
+                return true;
+            }, GlobalSearchScope.allScope(project));
+
+            return true;
+        }, GlobalSearchScope.allScope(project));
 
         return results.toArray(new PsiElement[results.size()]);
     }

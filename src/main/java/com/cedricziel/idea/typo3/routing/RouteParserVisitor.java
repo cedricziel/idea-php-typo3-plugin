@@ -55,6 +55,8 @@ public class RouteParserVisitor extends PsiRecursiveElementVisitor {
                 return;
             }
 
+            routeDefinition.setTextRange(child.getTextRange());
+
             if (valueMap instanceof ArrayCreationExpression) {
                 ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
 
