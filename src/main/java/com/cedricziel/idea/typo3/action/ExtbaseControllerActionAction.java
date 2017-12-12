@@ -13,6 +13,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDocumentManager;
@@ -37,6 +38,11 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
     public void update(AnActionEvent event) {
         Project project = getEventProject(event);
         if (project == null) {
+            this.setStatus(event, false);
+            return;
+        }
+
+        if (DumbService.isDumb(project)) {
             this.setStatus(event, false);
             return;
         }

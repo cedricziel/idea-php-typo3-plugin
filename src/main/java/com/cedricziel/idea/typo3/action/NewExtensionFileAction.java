@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.action;
 import com.cedricziel.idea.typo3.TYPO3CMSIcons;
 import com.cedricziel.idea.typo3.util.ExtensionUtility;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDirectory;
@@ -21,6 +22,11 @@ abstract class NewExtensionFileAction extends AbstractDumbAwareAction {
     public void update(AnActionEvent event) {
         Project project = getEventProject(event);
         if (project == null) {
+            this.setStatus(event, false);
+            return;
+        }
+
+        if (DumbService.isDumb(project)) {
             this.setStatus(event, false);
             return;
         }
