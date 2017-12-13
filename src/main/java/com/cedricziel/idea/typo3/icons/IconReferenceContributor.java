@@ -35,7 +35,11 @@ public class IconReferenceContributor extends PsiReferenceContributor {
 
                             if (parent != null) {
                                 parent = parent.getParent();
+
+                                continue;
                             }
+
+                            return new PsiReference[0];
                         }
 
                         MethodReference methodReference = (MethodReference) parent;
