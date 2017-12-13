@@ -1,10 +1,14 @@
 package com.cedricziel.idea.typo3.icons;
 
+import com.cedricziel.idea.typo3.util.PhpLangUtil;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.Variable;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,10 +38,6 @@ public class IconReferenceContributor extends PsiReferenceContributor {
                             }
                         }
 
-                        if (!(parent instanceof MethodReference)) {
-                            return new PsiReference[0];
-                        }
-
                         MethodReference methodReference = (MethodReference) parent;
                         String methodName = methodReference.getName();
 
@@ -46,22 +46,21 @@ public class IconReferenceContributor extends PsiReferenceContributor {
                             PhpType inferredType = variable.getInferredType();
                             Set<String> types = inferredType.getTypes();
                             for (String type : types) {
-                                Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(element.getProject()).getBySignature(type);
-                                for (PhpNamedElement el : bySignature) {
-                                    if (el.getFQN().equals(ICON_FACTORY) && methodName.equals("getIcon")) {
-                                        return new PsiReference[]{new IconReference(stringLiteralExpression)};
+                                try {
+                                    Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(element.getProject()).getBySignature(type);
+                                    for (PhpNamedElement el : bySignature) {
+                                        if (el.getFQN().equals(ICON_FACTORY) && methodName.equals("getIcon")) {
+                                            return new PsiReference[]{new IconReference(stringLiteralExpression)};
+                                        }
                                     }
+                                } catch (RuntimeException e) {
+                                    // invalid index signature, skip
                                 }
                             }
                         }
 
-                        PhpExpression classReference = methodReference.getClassReference();
-                        if (classReference == null || !(classReference instanceof ClassReference)) {
-                            return new PsiReference[0];
-                        }
-
-                        String fqn = ((ClassReference) classReference).getFQN();
-                        if (methodName != null && methodName.equals("getIcon") && fqn.equals(ICON_FACTORY)) {
+                        String className = PhpLangUtil.getClassName(stringLiteralExpression);
+                        if (methodName != null && className != null && methodName.equals("getIcon") && className.equals(ICON_FACTORY)) {
                             return new PsiReference[]{new IconReference(stringLiteralExpression)};
                         }
 
