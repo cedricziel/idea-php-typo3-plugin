@@ -41,10 +41,11 @@ public class TranslationIndexTest extends LightCodeInsightFixtureTestCase {
 
     public void testStubModelIsBuiltCorrectly() {
         List<StubTranslation> stubsById = TranslationIndex.findById(myFixture.getProject(), "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab");
-        Iterator<StubTranslation> iterator = stubsById.iterator();
-        StubTranslation stubTranslation = iterator.next();
 
         assertSize(2, stubsById);
+
+        Iterator<StubTranslation> iterator = stubsById.iterator();
+        StubTranslation stubTranslation = iterator.next();
 
         assertNotNull("A stub model is available from the index ", stubTranslation);
         assertEquals("The extension key is correctly resolved when building the index", stubTranslation.getExtension(), "foo");
