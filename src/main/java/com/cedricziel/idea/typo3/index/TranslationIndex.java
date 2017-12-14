@@ -7,6 +7,7 @@ import com.cedricziel.idea.typo3.util.FilesystemUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.fileTypes.UnknownFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
@@ -37,6 +38,11 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
         @Override
         @NotNull
         public Map<String, StubTranslation> map(@NotNull FileContent inputData) {
+            // covers the case where no FileType association has been made yet
+            if (inputData.getFileType() instanceof UnknownFileType) {
+                return new HashMap<>();
+            }
+
             Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
             String extension = inputData.getFile().getExtension();
 
