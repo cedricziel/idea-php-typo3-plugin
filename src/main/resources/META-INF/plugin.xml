@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.28</version>
+    <version>0.2.40</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -118,165 +118,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     ]]></description>
 
     <change-notes><![CDATA[
-<h2>0.2.28</h2>
+
 <ul>
-  <li>Refactor icon computations to use PsiReference</li>
+  <li>allow wildcard symbol in TCA allowed index</li>
+  <li>generate new entity to Entity sub-namespace</li>
 </ul>
 
-<h2>0.2.27</h2>
-<ul>
-  <li>Refactor table name completion to use PsiReference</li>
-</ul>
-
-<h2>0.2.26</h2>
-<ul>
-  <li>Add Route index and PsiReference</li>
-</ul>
-
-<h2>0.2.25</h2>
-<ul>
-  <li>Add action to add controller action to extbase controller</li>
-  <li>Add action to add extbase entity to extension</li>
-</ul>
-
-<h2>0.2.24</h2>
-<ul>
-  <li>Add support for generating a new ViewHelper</li>
-  <li>Add support for generating a new Extbase Controller</li>
-</ul>
-
-<h2>0.2.16</h2>
-<ul>
-  <li>Add support for EXT:resource Strings</li>
-</ul>
-
-<h2>0.2.15</h2>
-<ul>
-  <li>Fix error when creating a new project</li>
-</ul>
-
-<h2>0.2.14</h2>
-<ul>
-  <li>Inspection for quantity based TCA properties</li>
-</ul>
-
-<h2>0.2.10</h2>
-<ul>
-  <li>Autocompletion for TCA renderTypes</li>
-  <li>Inspection for valid renderTypes</li>
-  <li>Autocompletion for TCA column types</li>
-  <li>Inspection for valid column types</li>
-</ul>
-
-<h2>0.2.9</h2>
-<ul>
-  <li>Add MissingTableInspection</li>
-</ul>
-
-<h2>0.2.8</h2>
-<ul>
-  <li>CompletionProvider for table names in TCA configuration</li>
-</ul>
-
-<h2>0.2.4</h2>
-<ul>
-  <li>Complete $table and $tableName arguments with table names (#57)</li>
-</ul>
-
-<h2>0.2.3</h2>
-<ul>
-  <li>Fix faulty error highlighting for route parameters (#50)</li>
-</ul>
-
-<h2>0.2.2</h2>
-<ul>
-  <li>Add completion contributor for tables defined in ext_tables.sql files</li>
-</ul>
-
-<h2>0.2.1</h2>
-<ul>
-  <li>Amend PhpGlobalsTypeProvider to provide a type for the $GLOBALS['LANG'] index</li>
-</ul>
-
-<h2>0.2.0</h2>
-<ul>
-  <li>Migrate to PHP TypeProvider3 </li>
-</ul>
-
-<h2>0.1.12</h2>
-<ul>
-  <li>Prevent NPE on CE creation</li>
-</ul>
-
-<h2>0.1.11</h2>
-<ul>
-  <li>Icon API: Parse flag icons</li>
-</ul>
-
-<h2>0.1.10</h2>
-<ul>
-  <li>Bugfix: Remove entity line marker</li>
-  <li>Stability: Scope icon providers by project and make access synchronized</li>
-</ul>
-
-<h2>0.1.9</h2>
-<ul>
-  <li>Add generation of Fluid Styled Content elements</li>
-  <li>Change severity of icon not found from error to warning since user icons are not yet supported</li>
-  <li>Add line marker to extbase entities</li>
-</ul>
-
-<h2>0.1.8</h2>
-<ul>
-  <li>Added TypeProvider for $GLOBALS['TYPO3_DB'], $GLOBALS['TSFE'], $GLOBALS['BE_USER']</li>
-</ul>
-
-<h2>0.1.7</h2>
-<ul>
-  <li>QuickFix for Extbase property injection</li>
-</ul>
-
-<h2>0.1.6</h2>
-<ul>
-  <li>New icon for icon type objects</li>
-  <li>Icon name completion for core icons on calls to IconFactory::getIcon</li>
-  <li>Annotators for icon references (with preview and jump-to-definition)</li>
-</ul>
-
-<h2>0.1.5</h2>
-<ul>
-  <li>New icon for route type objects</li>
-</ul>
-
-<h2>0.1.4</h2>
-<ul>
-  <li>Annotator for both valid and invalid route references to make them distinguishable from normal strings</li>
-  <li>LineMarkerProvider to allow quick navigation to the route definition</li>
-  <li>Extbase property injection (@inject) performance inspection</li>
-</ul>
-
-<h2>0.1.3</h2>
-<ul>
-    <li>Added route name completion for BackendUtility::getAjaxUrl()</li>
-    <li>Added route name completion for UriBuilder::buildUriFromRoute()</li>
-</ul>
-
-<h2>0.1.2</h2>
-<ul>
-    <li>Added TypeProvider for GeneralUtility::makeInstanceService</li>
-</ul>
-
-<h2>0.1.1</h2>
-<ul>
-    <li>Added TypeProvider for ObjectManager::get</li>
-</ul>
-
-<h2>0.1.0</h2>
-<ul>
-    <li>Added TypeProvider for GeneralUtility::makeInstance</li>
-</ul>
-
-<br/>
     ]]>
     </change-notes>
 
