@@ -41,7 +41,7 @@ public class GenerateExtbaseEntityAction extends NewExtensionFileAction {
                     return;
                 }
 
-                calculatedNamespace += "Domain\\Entity";
+                calculatedNamespace += "Domain\\Model";
 
                 context.put("namespace", calculatedNamespace);
                 context.put("className", finalClassName);
@@ -49,7 +49,7 @@ public class GenerateExtbaseEntityAction extends NewExtensionFileAction {
                 try {
                     extensionFile = ExtensionFileGenerationUtil.fromTemplate(
                             "extension_file/ExtbaseEntity.php",
-                            "Classes/Domain/Entity",
+                            "Classes/Domain/Model",
                             finalClassName + ".php",
                             extensionRootDirectory,
                             context,
