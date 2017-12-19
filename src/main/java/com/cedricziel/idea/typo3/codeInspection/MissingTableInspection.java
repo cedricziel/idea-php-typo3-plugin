@@ -12,6 +12,7 @@ import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
+import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFromValue;
 import static com.cedricziel.idea.typo3.util.TCAUtil.arrayIndexIsTCATableNameField;
 import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
@@ -41,7 +42,12 @@ public class MissingTableInspection extends PhpInspection {
             public void visitPhpElement(PhpPsiElement element) {
 
                 boolean isArrayStringValue = PhpElementsUtil.isStringArrayValue().accepts(element);
-                if (!isArrayStringValue || !insideTCAColumnDefinition(element)) {
+                if (element == null || !isArrayStringValue || !insideTCAColumnDefinition(element)) {
+                    return;
+                }
+
+                String arrayKey = extractArrayIndexFromValue(element);
+                if (arrayKey != null && arrayKey.equals("allowed") && element instanceof StringLiteralExpression && ((StringLiteralExpression) element).getContents().equals("*")) {
                     return;
                 }
 
