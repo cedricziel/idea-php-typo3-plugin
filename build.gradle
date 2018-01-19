@@ -19,7 +19,7 @@ apply plugin: 'java'
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
-    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', "com.cedricziel.idea.xliff:v${xliffPluginVersion}"]
+    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties']
     downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
@@ -28,7 +28,7 @@ intellij {
     }
 
     patchPluginXml {
-        sinceBuild '172'
+        sinceBuild '173'
         untilBuild '173.*'
     }
 }
@@ -39,7 +39,7 @@ version gitVersion()
 apply plugin: 'de.undercouch.download'
 task downloadPsiViewerPlugin() {
     download {
-        src 'https://download.plugins.jetbrains.com/227/31087/PsiViewer.jar'
+        src 'https://plugins.jetbrains.com/plugin/download?updateId=31087'
         dest new File("${buildDir}/tmp/plugins/", 'PsiViewer.jar')
         onlyIfNewer true
     }

@@ -1,6 +1,9 @@
 package com.cedricziel.idea.typo3.translation;
 
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.ide.highlighter.XmlFileType;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -13,6 +16,10 @@ public class TranslationReferenceTest extends LightCodeInsightFixtureTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> {
+            FileTypeManager.getInstance().associateExtension(XmlFileType.INSTANCE, "xlf");
+        });
 
         myFixture.addFileToProject("typo3conf/ext/foo/ext_emconf.php", "");
 
