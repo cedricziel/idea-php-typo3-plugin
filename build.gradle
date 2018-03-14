@@ -7,7 +7,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.2.17"
+    id "org.jetbrains.intellij" version "0.2.18"
     id "de.undercouch.download" version "3.2.0"
     id 'com.palantir.git-version' version "0.9.1"
 }
@@ -29,7 +29,7 @@ intellij {
 
     patchPluginXml {
         sinceBuild '173'
-        untilBuild '173.*'
+        untilBuild '181.*'
     }
 }
 
