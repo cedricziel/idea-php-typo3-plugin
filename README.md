@@ -3,6 +3,7 @@
 [![TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm in the Jetrbains Plugin repository](https://img.shields.io/jetbrains/plugin/d/9496-typo3-cms-plugin.svg)](https://plugins.jetbrains.com/plugin/9496-typo3-cms-plugin)
 [![Build Status](https://travis-ci.org/cedricziel/idea-php-typo3-plugin.svg?branch=master)](https://travis-ci.org/cedricziel/idea-php-typo3-plugin)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/ziel)
+[![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-red.svg)](https://www.patreon.com/cedricziel)
 
 [TYPO3 CMS Plugin in Jetbrains plugin repository](https://plugins.jetbrains.com/idea/plugin/9496-typo3-cms-plugin)
 
@@ -42,6 +43,8 @@ On PhpStorm or IntelliJ:
 ## Development and Contribution
 
 Contributions are very welcome! :tada:
+
+If you want to sustain further development, you can donate via [PayPal](https://www.paypal.me/ziel), [Patreon](https://www.patreon.com/cedricziel) or Invoice.
 
 ### Requirements
 
