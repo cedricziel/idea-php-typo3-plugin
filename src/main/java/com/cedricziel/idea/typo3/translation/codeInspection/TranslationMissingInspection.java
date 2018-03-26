@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.translation.codeInspection;
 
+import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
@@ -25,6 +26,10 @@ public class TranslationMissingInspection extends PhpInspection {
 
                 String contents = expression.getContents();
                 if (TranslationUtil.isTranslationKeyString(contents) && contents.length() > 4 && !TranslationUtil.keyExists(problemsHolder.getProject(), contents)) {
+                    if (ResourcePathIndex.projectContainsResourceFile(expression.getProject(), contents)) {
+                        // string references a translation file instead
+                        return;
+                    }
                     // new CreateMissingTranslationQuickFix(contents)
                     problemsHolder.registerProblem(expression, MESSAGE);
                 }
