@@ -18,7 +18,7 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression stringLiteralExpression = (StringLiteralExpression)element;
-                        if (!stringLiteralExpression.getContents().startsWith("EXT:")) {
+                        if (!stringLiteralExpression.getContents().startsWith("EXT:") && !stringLiteralExpression.getContents().startsWith("LLL:EXT:")) {
                             return new PsiReference[0];
                         }
 

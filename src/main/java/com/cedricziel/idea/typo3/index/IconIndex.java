@@ -4,6 +4,8 @@ import com.cedricziel.idea.typo3.icons.IconStub;
 import com.cedricziel.idea.typo3.index.externalizer.ObjectStreamDataExternalizer;
 import com.cedricziel.idea.typo3.psi.visitor.CoreFlagParserVisitor;
 import com.cedricziel.idea.typo3.psi.visitor.CoreIconParserVisitor;
+import com.intellij.openapi.file.exclude.EnforcedPlainTextFileTypeManager;
+import com.intellij.openapi.file.exclude.ProjectPlainTextFileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
@@ -167,7 +169,9 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
         return file -> {
             String extension = file.getExtension();
 
-            return extension != null && extension.equalsIgnoreCase("php");
+            Boolean isEnforcedPlaintext = EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(file);
+
+            return extension != null && extension.equalsIgnoreCase("php") && !isEnforcedPlaintext;
         };
     }
 

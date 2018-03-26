@@ -12,7 +12,6 @@ import com.intellij.util.io.KeyDescriptor;
 import gnu.trove.THashMap;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -81,7 +80,7 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
             String path = inputData.getFile().getPath();
             if (path.contains("sysext") || path.contains("typo3conf/ext")) {
-                map.put(compileId(inputData), null);
+                map.putAll(compileId(inputData));
 
                 return map;
             }
@@ -93,20 +92,21 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
                 if (composerJsonFile != null) {
                     String extensionKey = findExtensionKey(composerJsonFile);
                     if (extensionKey != null) {
-                        map.put(compileId(extensionRootFolder, extensionKey, inputData.getFile()), null);
+                        map.putAll(compileId(extensionRootFolder, extensionKey, inputData.getFile()));
                         return map;
                     }
                 }
 
                 // 2. try to infer from directory name
-                map.put(compileId(extensionRootFolder.getName(), extensionRootFolder.getPath(), inputData.getFile()), null);
+                map.putAll(compileId(extensionRootFolder.getName(), extensionRootFolder.getPath(), inputData.getFile()));
             }
 
             return map;
         };
     }
 
-    private String compileId(FileContent inputData) {
+    private Map<String, Void> compileId(FileContent inputData) {
+        Map<String, Void> map = new HashMap<>();
         String path = inputData.getFile().getPath();
         String filePosition = "";
         if (path.contains("typo3conf/ext/")) {
@@ -116,17 +116,36 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
             filePosition = path.split("sysext/")[1];
         }
 
-        return "EXT:" + filePosition;
+        String primaryKey = "EXT:" + filePosition;
+
+        putSecondaryKeyIfNeeded(map, primaryKey);
+
+        return map;
     }
 
-    private String compileId(String extensionKey, String directoryPath, VirtualFile file) {
-
-        return "EXT:" + extensionKey + file.getPath().replace(directoryPath, "");
+    private void putSecondaryKeyIfNeeded(Map<String, Void> map, String primaryKey) {
+        map.put(primaryKey, null);
+        if (primaryKey.endsWith(".xlf") || primaryKey.endsWith(".xml")) {
+            map.put("LLL:" + primaryKey, null);
+        }
     }
 
-    private String compileId(VirtualFile extensionRootDirectory, String extensionKey, VirtualFile file) {
+    private Map<String, Void> compileId(String extensionKey, String directoryPath, VirtualFile file) {
+        Map<String, Void> map = new HashMap<>();
+        String primaryKey = "EXT:" + extensionKey + file.getPath().replace(directoryPath, "");
 
-        return "EXT:" + extensionKey + file.getPath().replace(extensionRootDirectory.getPath(), "");
+        putSecondaryKeyIfNeeded(map, primaryKey);
+
+        return map;
+    }
+
+    private Map<String, Void> compileId(VirtualFile extensionRootDirectory, String extensionKey, VirtualFile file) {
+        Map<String, Void> map = new HashMap<>();
+        String primaryKey = "EXT:" + extensionKey + file.getPath().replace(extensionRootDirectory.getPath(), "");
+
+        putSecondaryKeyIfNeeded(map, primaryKey);
+
+        return map;
     }
 
     @NotNull
@@ -137,7 +156,7 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
     @Override
     public int getVersion() {
-        return 1;
+        return 2;
     }
 
     @NotNull

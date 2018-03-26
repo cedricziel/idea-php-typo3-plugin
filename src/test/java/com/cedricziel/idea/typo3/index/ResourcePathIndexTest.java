@@ -69,4 +69,14 @@ public class ResourcePathIndexTest extends LightCodeInsightFixtureTestCase {
         assertContainsElements(lookupElementStrings, "EXT:foo_bar_baz/ext_emconf.php");
         assertContainsElements(lookupElementStrings, "EXT:bar/ext_emconf.php");
     }
+
+    public void testLanguageFilesAreIndexedWithPrefixes() {
+        myFixture.addFileToProject("typo3conf/ext/foo/Resources/Private/locallang.xlf", "");
+        myFixture.addFileToProject("typo3conf/ext/foo/Resources/Private/locallang.xml", "");
+
+        assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "EXT:foo/Resources/Private/locallang.xlf"));
+        assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "LLL:EXT:foo/Resources/Private/locallang.xlf"));
+        assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "EXT:foo/Resources/Private/locallang.xml"));
+        assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "LLL:EXT:foo/Resources/Private/locallang.xml"));
+    }
 }
