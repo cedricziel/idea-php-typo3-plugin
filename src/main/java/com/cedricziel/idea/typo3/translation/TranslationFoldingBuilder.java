@@ -11,6 +11,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,18 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
                                     }
 
                                     for (XmlTag xmlTag : ((XmlTag) definitionElement).getSubTags()) {
+                                        if (xmlTag.getName().equals("source")) {
+                                            return xmlTag.getValue().getTrimmedText();
+                                        }
+                                    }
+                                }
+
+                                if (definitionElement instanceof XmlAttributeValue) {
+                                    if (((XmlTag) definitionElement.getParent().getParent()).getName().equals("label")) {
+                                        return ((XmlTag) definitionElement).getValue().getTrimmedText();
+                                    }
+
+                                    for (XmlTag xmlTag : ((XmlTag) definitionElement.getParent().getParent()).getSubTags()) {
                                         if (xmlTag.getName().equals("source")) {
                                             return xmlTag.getValue().getTrimmedText();
                                         }

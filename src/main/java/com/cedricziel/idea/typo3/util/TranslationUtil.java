@@ -2,12 +2,17 @@ package com.cedricziel.idea.typo3.util;
 
 import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.cedricziel.idea.typo3.translation.TranslationLookupElement;
+import com.cedricziel.idea.typo3.translation.TranslationReference;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.indexing.FileBasedIndex;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -72,6 +77,16 @@ public class TranslationUtil {
                 if (file1 != null) {
                     PsiElement elementAt = file1.findElementAt(value.getTextRange().getStartOffset());
                     if (elementAt != null) {
+                        if (elementAt.getParent() instanceof XmlTag) {
+                            XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
+                            if (id == null) {
+                                return true;
+                            }
+
+                            elements.add(id.getValueElement());
+
+                            return true;
+                        }
                         elements.add(elementAt.getParent());
                     }
                 }
@@ -83,5 +98,31 @@ public class TranslationUtil {
         }, GlobalSearchScope.allScope(project));
 
         return elements.toArray(new PsiElement[elements.size()]);
+    }
+
+    public static boolean hasTranslationReference(@NotNull PsiElement element) {
+
+        for (PsiReference reference : element.getReferences()) {
+            if (reference instanceof TranslationReference) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static TranslationReference getTranslationReference(@NotNull PsiElement element) {
+
+        for (PsiReference reference : element.getReferences()) {
+            if (reference instanceof TranslationReference) {
+                return (TranslationReference) reference;
+            }
+        }
+
+        return null;
+    }
+
+    public static String keyFromReference(String key) {
+        return StringUtils.substringAfterLast(key, ":");
     }
 }
