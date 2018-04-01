@@ -4,7 +4,7 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public class TranslationUtilTest extends LightCodeInsightFixtureTestCase {
@@ -49,10 +49,7 @@ public class TranslationUtilTest extends LightCodeInsightFixtureTestCase {
 
         PsiElement[] definitionElements = TranslationUtil.findDefinitionElements(myFixture.getProject(), "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab");
         for (PsiElement definitionElement : definitionElements) {
-            assertInstanceOf(definitionElement, XmlTag.class);
-
-            XmlTag tag = (XmlTag) definitionElement;
-            assertEquals("In case the element is XLIFF, the tag name is trans-unit", "trans-unit", tag.getName());
+            assertInstanceOf(definitionElement, XmlAttributeValue.class);
         }
     }
 }

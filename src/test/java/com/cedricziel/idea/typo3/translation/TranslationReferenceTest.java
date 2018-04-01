@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
-import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import com.jetbrains.php.lang.PhpFileType;
 
@@ -42,7 +42,7 @@ public class TranslationReferenceTest extends LightCodeInsightFixtureTestCase {
             if (reference instanceof TranslationReference) {
                 ResolveResult[] resolveResults = ((TranslationReference) reference).multiResolve(false);
                 for (ResolveResult resolveResult : resolveResults) {
-                    assertInstanceOf(resolveResult.getElement(), XmlTag.class);
+                    assertInstanceOf(resolveResult.getElement(), XmlAttributeValue.class);
 
                     return;
                 }
