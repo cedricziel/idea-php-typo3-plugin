@@ -36,12 +36,12 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        YAMLQuotedText stringLiteralExpression = (YAMLQuotedText)element;
-                        if (!stringLiteralExpression.getTextValue().startsWith("EXT:") && !stringLiteralExpression.getTextValue().startsWith("LLL:EXT:")) {
+                        YAMLQuotedText yamlQuotedText = (YAMLQuotedText)element;
+                        if (!yamlQuotedText.getTextValue().startsWith("EXT:") && !yamlQuotedText.getTextValue().startsWith("LLL:EXT:")) {
                             return new PsiReference[0];
                         }
 
-                        return new PsiReference[]{new ResourceReference(stringLiteralExpression)};
+                        return new PsiReference[]{new ResourceReference(yamlQuotedText)};
                     }
                 }
         );

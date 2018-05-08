@@ -59,13 +59,13 @@ public class ResourceReferenceContributorTest extends LightCodeInsightFixtureTes
     }
 
     public void testResourceReferenceResolves() {
-        PsiFile psiFile = myFixture.addFileToProject("foo/ext_emconf.php", "");
+        myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.addFileToProject("foo/bar.txt", "");
 
-        myFixture.addFileToProject("foo/Configuration/RTE/Processing.yaml", "");
+        PsiFile psiFile = myFixture.addFileToProject("foo/Configuration/RTE/Processing.yaml", "");
 
         myFixture.configureByText(YAMLFileType.YML, "imports:\n" +
-                "  - { resource: \"EXT:foo/Configuration/RTE/<caret>Processing.yaml\" }';");
+                "  - { resource: \"EXT:foo<caret>/Configuration/RTE/Processing.yaml\" }';");
 
         PsiElement elementAtCaret = myFixture.getFile().findElementAt(myFixture.getCaretOffset()).getParent();
 
