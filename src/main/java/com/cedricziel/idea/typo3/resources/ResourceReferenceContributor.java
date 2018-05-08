@@ -5,11 +5,12 @@ import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.yaml.psi.YAMLQuotedText;
 
 public class ResourceReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-        // "EXT:" strings
+        // PHP: "EXT:" strings
         registrar.registerReferenceProvider(
                 PlatformPatterns.psiElement(StringLiteralExpression.class),
                 new PsiReferenceProvider() {
@@ -23,6 +24,24 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
                         }
 
                         return new PsiReference[]{new ResourceReference(stringLiteralExpression)};
+                    }
+                }
+        );
+
+        // YAML: "EXT:" strings
+        registrar.registerReferenceProvider(
+                PlatformPatterns.psiElement(YAMLQuotedText.class),
+                new PsiReferenceProvider() {
+                    @NotNull
+                    @Override
+                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+
+                        YAMLQuotedText yamlQuotedText = (YAMLQuotedText)element;
+                        if (!yamlQuotedText.getTextValue().startsWith("EXT:") && !yamlQuotedText.getTextValue().startsWith("LLL:EXT:")) {
+                            return new PsiReference[0];
+                        }
+
+                        return new PsiReference[]{new ResourceReference(yamlQuotedText)};
                     }
                 }
         );
