@@ -7,6 +7,7 @@ import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.yaml.psi.YAMLQuotedText;
 
 public class ResourceReference extends PsiPolyVariantReferenceBase<PsiElement> {
     private final String resourceName;
@@ -15,6 +16,12 @@ public class ResourceReference extends PsiPolyVariantReferenceBase<PsiElement> {
         super(psiElement);
 
         this.resourceName = psiElement.getContents();
+    }
+
+    public ResourceReference(YAMLQuotedText psiElement) {
+        super(psiElement);
+
+        this.resourceName = psiElement.getTextValue();
     }
 
     /**

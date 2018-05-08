@@ -1,5 +1,7 @@
-package com.cedricziel.idea.typo3.resources;
+package com.cedricziel.idea.typo3.resources.php;
 
+import com.cedricziel.idea.typo3.resources.ResourceLookupElement;
+import com.cedricziel.idea.typo3.resources.ResourceReference;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;

@@ -19,7 +19,7 @@ apply plugin: 'java'
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
-    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties']
+    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml']
     downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
