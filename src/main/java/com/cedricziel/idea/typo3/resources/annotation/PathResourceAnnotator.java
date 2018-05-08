@@ -6,6 +6,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.yaml.psi.YAMLQuotedText;
 
 /**
  * Matches {@link StringLiteralExpression} elements and annotates them if a resource does not exist.
@@ -16,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class PathResourceAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-        if (!(element instanceof StringLiteralExpression)) {
+        if (!(element instanceof StringLiteralExpression) && !(element instanceof YAMLQuotedText)) {
             return;
         }
 
-        String content = ((StringLiteralExpression) element).getContents();
+        String content = getContents(element);
         if (!content.startsWith("EXT:") || element.getProject().getBasePath() == null) {
             return;
         }
@@ -41,6 +42,19 @@ public class PathResourceAnnotator implements Annotator {
         }
 
         createErrorMessage(element, holder, resourceName);
+    }
+
+    @NotNull
+    private String getContents(@NotNull PsiElement element) {
+        if (element instanceof StringLiteralExpression) {
+            return ((StringLiteralExpression) element).getContents();
+        }
+
+        if (element instanceof YAMLQuotedText) {
+            return ((YAMLQuotedText) element).getTextValue();
+        }
+
+        return "";
     }
 
     private void createErrorMessage(@NotNull PsiElement element, @NotNull AnnotationHolder holder, String resourceName) {
