@@ -33,7 +33,7 @@ public class TYPO3CMSSettings implements PersistentStateComponent<Element> {
     }
 
     @Override
-    public void loadState(Element state) {
+    public void loadState(@NotNull Element state) {
 
         String value = state.getAttributeValue(KEY.VERSION.toString());
         if (value != null) {
