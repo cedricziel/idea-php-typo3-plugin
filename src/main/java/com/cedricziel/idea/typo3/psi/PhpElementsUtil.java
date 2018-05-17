@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.psi;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.patterns.PhpPatterns;
@@ -10,7 +11,10 @@ import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class PhpElementsUtil {
@@ -67,11 +71,11 @@ public class PhpElementsUtil {
         return PhpPatterns.psiElement()
                 .andOr(
                         PhpPatterns.psiElement().withParent(
-                            PlatformPatterns.psiElement(StringLiteralExpression.class)
-                                .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
+                                PlatformPatterns.psiElement(StringLiteralExpression.class)
+                                        .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
                         ),
                         PlatformPatterns.psiElement(StringLiteralExpression.class)
-                                        .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
+                                .withParent(PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE))
                 );
     }
 
@@ -101,19 +105,19 @@ public class PhpElementsUtil {
         return null;
     }
 
-    @NotNull
-    public static boolean hasSuperClass(@NotNull PhpClass targetClass, @NotNull String fqn) {
+    public static boolean hasSuperClass(@NotNull PhpClass targetClass, @NotNull String parentClassName) {
 
-        Set<PhpClass> hierarchy = new HashSet<>();
-        hierarchy.addAll(Arrays.asList(targetClass.getSupers()));
-        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
-        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
-        hierarchy.forEach(x -> hierarchy.addAll(Arrays.asList(x.getSupers())));
+        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(targetClass.getProject()).getClassesByFQN(parentClassName);
+        if (classesByFQN.size() == 0) {
+            return false;
+        }
 
-        return hierarchy
-                .stream()
-                .map(PhpNamedElement::getFQN)
-                .collect(Collectors.toList())
-                .contains(fqn);
+        for (PhpClass phpClass : classesByFQN) {
+            if (PhpClassHierarchyUtils.isSuperClass(phpClass, targetClass, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
