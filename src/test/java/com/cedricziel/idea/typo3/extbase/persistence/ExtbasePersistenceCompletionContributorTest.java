@@ -36,6 +36,12 @@ public class ExtbasePersistenceCompletionContributorTest extends LightCodeInsigh
         assertContainsLookupElementWithText(lookupElements, "countByTitle", "(title : string)", "int");
         assertContainsLookupElementWithText(lookupElements, "countByAuthor", "(author : string)", "int");
         assertNotContainsLookupElementWithText(lookupElements, "countByPublishers");
+    }
+
+    public void testCanCompleteExtbaseRepositoryMagicMethodsOnMembers() {
+        myFixture.copyFileToProject("PersistenceMocks.php");
+
+        LookupElement[] lookupElements;
 
         myFixture.configureByFile("RepositoryMagicFindMethodsCompletionOnMember.php");
 

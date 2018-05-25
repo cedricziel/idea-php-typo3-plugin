@@ -11,10 +11,7 @@ import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIcons;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.lexer.PhpTokenTypes;
-import com.jetbrains.php.lang.psi.elements.FieldReference;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.Variable;
+import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -53,11 +50,17 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                 return;
             }
 
-            if (!(position.getParent().getFirstChild() instanceof Variable)) {
+            if (!(position.getParent().getFirstChild() instanceof Variable) && !(position.getParent().getFirstChild() instanceof FieldReference)) {
                 return;
             }
 
-            Variable variable = (Variable) position.getParent().getFirstChild();
+            PhpTypedElement variable;
+            if (position.getParent().getFirstChild() instanceof Variable) {
+                variable = (PhpTypedElement) position.getParent().getFirstChild();
+            } else {
+                variable = (PhpTypedElement) position.getParent().getFirstChild();
+            }
+
             PhpType type = variable.getType();
             type.getTypes().forEach(t -> {
                 Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(t);
@@ -69,7 +72,7 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
             });
         }
 
-        private void createLookupElementsForRepository(@NotNull Variable position, @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
+        private void createLookupElementsForRepository(@NotNull PhpTypedElement position, @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
             String repositoryClassFqn = repositoryClass.getFQN();
 
             String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClassFqn);
