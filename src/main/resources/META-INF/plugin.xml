@@ -140,6 +140,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
+
+        <!-- extbase persistence -->
+        <referenceResolver implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceReferenceResolver"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">

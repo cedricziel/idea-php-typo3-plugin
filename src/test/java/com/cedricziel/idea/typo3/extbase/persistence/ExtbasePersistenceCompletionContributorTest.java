@@ -1,6 +1,5 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
@@ -15,9 +14,10 @@ public class ExtbasePersistenceCompletionContributorTest extends LightCodeInsigh
     public void testCanCompleteExtbaseRepositoryMagicMethods() {
         myFixture.copyFileToProject("PersistenceMocks.php");
 
+        LookupElement[] lookupElements;
+
         myFixture.configureByFile("RepositoryMagicFindMethodsCompletion.php");
 
-        LookupElement[] lookupElements;
         lookupElements = myFixture.completeBasic();
 
         assertContainsLookupElementWithText(lookupElements, "findByTitle", "(title : string)", "Book[]");
@@ -30,6 +30,27 @@ public class ExtbasePersistenceCompletionContributorTest extends LightCodeInsigh
         assertNotContainsLookupElementWithText(lookupElements, "findOneByPublishers");
 
         myFixture.configureByFile("RepositoryMagicCountMethodsCompletion.php");
+
+        lookupElements = myFixture.completeBasic();
+
+        assertContainsLookupElementWithText(lookupElements, "countByTitle", "(title : string)", "int");
+        assertContainsLookupElementWithText(lookupElements, "countByAuthor", "(author : string)", "int");
+        assertNotContainsLookupElementWithText(lookupElements, "countByPublishers");
+
+        myFixture.configureByFile("RepositoryMagicFindMethodsCompletionOnMember.php");
+
+        lookupElements = myFixture.completeBasic();
+
+        assertContainsLookupElementWithText(lookupElements, "findByTitle", "(title : string)", "Book[]");
+        assertContainsLookupElementWithText(lookupElements, "findOneByTitle", "(title : string)", "Book");
+
+        assertContainsLookupElementWithText(lookupElements, "findByAuthor", "(author : string)", "Book[]");
+        assertContainsLookupElementWithText(lookupElements, "findOneByAuthor", "(author : string)", "Book");
+
+        assertNotContainsLookupElementWithText(lookupElements, "findByPublishers");
+        assertNotContainsLookupElementWithText(lookupElements, "findOneByPublishers");
+
+        myFixture.configureByFile("RepositoryMagicCountMethodsCompletionOnMember.php");
 
         lookupElements = myFixture.completeBasic();
 

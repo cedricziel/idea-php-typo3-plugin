@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -26,9 +27,9 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
         this.extend(CompletionType.BASIC, PlatformPatterns.psiElement(PhpTokenTypes.IDENTIFIER), new ExtbaseRepositoryMagicMethodsCompletionProvider());
     }
 
-    private static class ExtbaseRepositoryMagicMethodsCompletionProvider extends CompletionProvider<CompletionParameters> {
+    public static class ExtbaseRepositoryMagicMethodsCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-        private static final String TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY = "TYPO3\\CMS\\Extbase\\Persistence\\Repository";
+        public static final String TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY = "TYPO3\\CMS\\Extbase\\Persistence\\Repository";
         private static final String QUERY_RESULT_INTERFACE = "TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface";
         private static final String OBJECT_STORAGE = "TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage";
 
@@ -70,7 +71,9 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
 
         private void createLookupElementsForRepository(@NotNull Variable position, @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
             String repositoryClassFqn = repositoryClass.getFQN();
-            String potentialModelClass = StringUtils.stripStart(StringUtils.replace(StringUtils.replace(repositoryClassFqn, "\\Domain\\Repository", "\\Domain\\Model"), "Repository", ""), "\\");
+
+            String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClassFqn);
+
             Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(potentialModelClass);
             classesByFQN.forEach(c -> {
                 c.getFields().forEach(f -> {
@@ -84,13 +87,15 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                             @NotNull
                             @Override
                             public String getLookupString() {
-                                return "findBy" + StringUtils.capitalize(f.getName());
+                                return "findBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
                             }
 
                             @Override
                             public void renderElement(LookupElementPresentation presentation) {
                                 super.renderElement(presentation);
 
+                                presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
+                                presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
                                 presentation.setIcon(PhpIcons.METHOD_ICON);
                                 presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
                                 presentation.setTypeText(c.getName() + "[]|" + QUERY_RESULT_INTERFACE);
@@ -104,13 +109,15 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                             @NotNull
                             @Override
                             public String getLookupString() {
-                                return "countBy" + StringUtils.capitalize(f.getName());
+                                return "countBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
                             }
 
                             @Override
                             public void renderElement(LookupElementPresentation presentation) {
                                 super.renderElement(presentation);
 
+                                presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
+                                presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
                                 presentation.setIcon(PhpIcons.METHOD_ICON);
                                 presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
                                 presentation.setTypeText("int");
@@ -124,13 +131,15 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                             @NotNull
                             @Override
                             public String getLookupString() {
-                                return "findOneBy" + StringUtils.capitalize(f.getName());
+                                return "findOneBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
                             }
 
                             @Override
                             public void renderElement(LookupElementPresentation presentation) {
                                 super.renderElement(presentation);
 
+                                presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
+                                presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
                                 presentation.setIcon(PhpIcons.METHOD_ICON);
                                 presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
                                 presentation.setTypeText("null|" + c.getName());
