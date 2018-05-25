@@ -29,7 +29,7 @@ public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver
             return Collections.emptyList();
         }
 
-        Variable variable = PsiTreeUtil.findChildOfType(phpReference, Variable.class);
+        PhpTypedElement variable = PsiTreeUtil.findChildOfType(phpReference, PhpTypedElement.class);
         if (variable == null) {
             return Collections.emptyList();
         }
