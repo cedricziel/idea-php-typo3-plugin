@@ -143,6 +143,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- extbase persistence -->
         <referenceResolver implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceReferenceResolver"/>
+
+        <typeProvider3 implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbaseModelCollectionReturnTypeProvider"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
