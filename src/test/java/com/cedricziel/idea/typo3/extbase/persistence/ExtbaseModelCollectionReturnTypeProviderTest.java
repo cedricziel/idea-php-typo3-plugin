@@ -36,16 +36,4 @@ public class ExtbaseModelCollectionReturnTypeProviderTest extends LightCodeInsig
         Set<String> types = ((Method) elementAtCaret).getInferredType().getTypes();
         assertTrue(types.contains("\\My\\Extension\\Domain\\Model\\Book[]"));
     }
-
-    public void testResolvesObjectStoragePropertiesToObjectTypesOnOutsideCalls() {
-        myFixture.copyFileToProject("PersistenceMocks.php");
-        myFixture.configureByFile("MethodReferenceTypeProvider.php");
-
-        PsiElement elementAtCaret = myFixture.getElementAtCaret();
-
-        assertInstanceOf(elementAtCaret, Method.class);
-
-        Set<String> types = ((Method) elementAtCaret).getType().getTypes();
-        assertTrue(types.contains("\\My\\Extension\\Domain\\Model\\Book[]"));
-    }
 }
