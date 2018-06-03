@@ -7,9 +7,7 @@ import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
-import com.jetbrains.php.lang.psi.elements.Field;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
+import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
 import org.jetbrains.annotations.Nullable;
@@ -35,27 +33,32 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
             return null;
         }
 
-        if (!(psiElement instanceof Field)) {
+        if (!(psiElement instanceof Field) && !isGetter(psiElement)) {
             return null;
         }
 
-        PhpClass containingClass = ((Field) psiElement).getContainingClass();
-        if (containingClass == null) {
+        if (!isEntityClass(psiElement)) {
             return null;
         }
 
-        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(psiElement.getProject()).getClassesByFQN(TYPO3_CMS_EXTBASE_DOMAIN_OBJECT_ABSTRACT_ENTITY);
-        if (classesByFQN.isEmpty()) {
+        return extractReturnType(psiElement);
+    }
+
+    private PhpType extractReturnType(PsiElement psiElement) {
+        Field field;
+        if (psiElement instanceof MethodReference) {
+            field = extractFieldFromGetter((MethodReference) psiElement);
+        } else if (psiElement instanceof Method) {
+            field = extractFieldFromGetter((Method) psiElement);
+        } else {
+            field = ((Field) psiElement);
+        }
+
+        if (field == null) {
             return null;
         }
 
-        PhpClass abstractEntityClass = classesByFQN.iterator().next();
-
-        if (!PhpClassHierarchyUtils.isSuperClass(abstractEntityClass, containingClass, true)) {
-            return null;
-        }
-
-        PhpDocComment docComment = ((Field) psiElement).getDocComment();
+        PhpDocComment docComment = field.getDocComment();
         if (docComment == null) {
             return null;
         }
@@ -80,6 +83,62 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         }
 
         return phpType;
+    }
+
+    private Field extractFieldFromGetter(MethodReference methodReference) {
+        String substring = methodReference.getName().substring(2);
+        char[] cArr = substring.toCharArray();
+        cArr[0] = Character.toLowerCase(cArr[0]);
+
+        String propertyName = new String(cArr);
+
+        PsiElement method = methodReference.resolve();
+        if (!(method instanceof Method)) {
+            return null;
+        }
+
+        PhpClass containingClass = ((Method) method).getContainingClass();
+
+        if (containingClass == null) {
+            return null;
+        }
+
+        return containingClass.findFieldByName(propertyName, true);
+    }
+
+    private Field extractFieldFromGetter(Method method) {
+        String substring = method.getName().substring(3);
+        char[] cArr = substring.toCharArray();
+        cArr[0] = Character.toLowerCase(cArr[0]);
+
+        String propertyName = new String(cArr);
+
+        PhpClass containingClass = method.getContainingClass();
+
+        if (containingClass == null) {
+            return null;
+        }
+
+        return containingClass.findFieldByName(propertyName, false);
+    }
+
+    private boolean isEntityClass(PsiElement psiElement) {
+        PhpClass containingClass = ((PhpClassMember) psiElement).getContainingClass();
+        if (containingClass == null) {
+            return false;
+        }
+
+        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(psiElement.getProject()).getClassesByFQN(TYPO3_CMS_EXTBASE_DOMAIN_OBJECT_ABSTRACT_ENTITY);
+        if (classesByFQN.isEmpty()) {
+            return false;
+        }
+
+        PhpClass abstractEntityClass = classesByFQN.iterator().next();
+        return PhpClassHierarchyUtils.isSuperClass(abstractEntityClass, containingClass, true);
+    }
+
+    private boolean isGetter(PsiElement psiElement) {
+        return (psiElement instanceof Method) && ((Method) psiElement).getName().startsWith("get");
     }
 
     @Override
