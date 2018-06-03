@@ -6,6 +6,10 @@ namespace TYPO3\CMS\Extbase\Persistence {
     class ObjectStorage {}
 }
 
+namespace TYPO3\CMS\Extbase\DomainObject {
+    class AbstractEntity {}
+}
+
 namespace My\Extension\Domain\Model {
     class Book extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
         /**
