@@ -86,7 +86,12 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
     }
 
     private Field extractFieldFromGetter(MethodReference methodReference) {
-        String substring = methodReference.getName().substring(2);
+        String name = methodReference.getName();
+        if (name == null) {
+            return null;
+        }
+
+        String substring = name.substring(2);
         char[] cArr = substring.toCharArray();
         cArr[0] = Character.toLowerCase(cArr[0]);
 
