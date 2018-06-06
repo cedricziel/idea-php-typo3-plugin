@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <multiHostInjector implementation="com.cedricziel.idea.typo3.injection.TypoScriptInjector"/>
+    </extensions>
+</idea-plugin>

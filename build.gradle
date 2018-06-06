@@ -21,7 +21,7 @@ apply plugin: 'java'
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
-    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml']
+    plugins = ["com.jetbrains.php:${phpPluginVersion}", "de.sgalinski.typoscript.plugin.id:${typoScriptPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml', 'IntelliLang']
     downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
