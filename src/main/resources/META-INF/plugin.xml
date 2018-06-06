@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
     <name>TYPO3 CMS Plugin</name>
-    <version>0.2.46</version>
+    <version>0.2.47</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
@@ -120,7 +120,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <change-notes><![CDATA[
 
 <ul>
-  <li>Allow 2018.2 platform</li>
+  <li>Infer types from ObjectStorage properties</li>
 </ul>
 
     ]]>
