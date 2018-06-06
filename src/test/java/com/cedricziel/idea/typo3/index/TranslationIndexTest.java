@@ -1,31 +1,15 @@
 package com.cedricziel.idea.typo3.index;
 
+import com.cedricziel.idea.typo3.translation.AbtractTranslationTest;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
-import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import com.intellij.util.indexing.FileBasedIndex;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class TranslationIndexTest extends LightCodeInsightFixtureTestCase {
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> {
-            FileTypeManager.getInstance().associateExtension(XmlFileType.INSTANCE, "xlf");
-        });
-
-        myFixture.addFileToProject("typo3conf/ext/foo/ext_emconf.php", "");
-
-        myFixture.copyFileToProject("sample.xlf", "typo3conf/ext/foo/sample.xlf");
-        myFixture.copyFileToProject("de.sample.xlf", "typo3conf/ext/foo/de.sample.xlf");
-    }
+public class TranslationIndexTest extends AbtractTranslationTest {
 
     @Override
     protected String getTestDataPath() {
