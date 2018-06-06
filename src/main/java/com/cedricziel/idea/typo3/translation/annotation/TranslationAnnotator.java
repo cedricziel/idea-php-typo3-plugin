@@ -13,11 +13,17 @@ public class TranslationAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
 
-        if (!(psiElement instanceof StringLiteralExpression)) {
+        if (!(psiElement instanceof StringLiteralExpression) && !(psiElement.getParent() instanceof StringLiteralExpression)) {
             return;
         }
 
-        StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
+        StringLiteralExpression literalExpression;
+        if (psiElement instanceof StringLiteralExpression) {
+            literalExpression = (StringLiteralExpression) psiElement;
+        } else {
+            literalExpression = (StringLiteralExpression) psiElement.getParent();
+        }
+
         String value = literalExpression.getContents();
 
         if (TranslationUtil.isTranslationKeyString(value) && value.length() > 4 && !(psiElement.getParent() instanceof ConcatenationExpression)) {
@@ -26,6 +32,10 @@ public class TranslationAnnotator implements Annotator {
     }
 
     private void annotateTranslationUsage(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
+        if (value.endsWith(":")) {
+            return;
+        }
+
         annotateTranslation(psiElement, annotationHolder, value);
     }
 
