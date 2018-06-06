@@ -133,6 +133,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.xml</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>org.intellij.intelliLang</depends>
+    <depends optional="true" config-file="typoscript-plugin.xml">de.sgalinski.typoscript.plugin.id</depends>
 
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
