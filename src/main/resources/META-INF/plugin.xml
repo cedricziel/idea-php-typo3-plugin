@@ -134,6 +134,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <depends>com.intellij.modules.xml</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
+    <depends optional="true" config-file="plugin-javascript.xml">JavaScript</depends>
+
     <extensions defaultExtensionNs="com.jetbrains.php">
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityTypeProvider"/>
         <typeProvider3 implementation="com.cedricziel.idea.typo3.provider.GeneralUtilityServiceTypeProvider"/>

@@ -21,7 +21,7 @@ apply plugin: 'java'
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
-    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml']
+    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml', 'JavaScriptLanguage']
     downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
@@ -49,7 +49,7 @@ task downloadPsiViewerPlugin() {
 
 task copyPsiViewerPluginToSandBox(type: Copy) {
     from "${buildDir}/tmp/plugins/PsiViewer.jar"
-    into "${buildDir}/idea-sandbox/plugins/"
+    into "${buildDir}/idea-sandbox/plugins/PsiViewer/lib/"
 }
 
 copyPsiViewerPluginToSandBox.dependsOn downloadPsiViewerPlugin

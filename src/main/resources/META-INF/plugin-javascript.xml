@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<idea-plugin>
+    <extensions defaultExtensionNs="JavaScript">
+        <moduleReferenceContributor implementation="com.cedricziel.idea.typo3.javaScript.TYPO3RequireJSModuleReferenceContributor"/>
+    </extensions>
+</idea-plugin>
