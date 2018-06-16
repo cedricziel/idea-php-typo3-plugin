@@ -24,6 +24,23 @@ public class UserFuncReferenceContributorTest extends AbstractTestCase {
         fail("No UserFuncReference found");
     }
 
+    public void testCanCreateItemsProcFuncReferencesOnXmlStrings() {
+        PsiFile file = myFixture.configureByText(
+                "foo.xml",
+                "<itemsProcFunc>coun<caret>t</itemsProcFunc>"
+        );
+
+        PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset());
+        PsiReference[] references = elementAtCaret.getReferences();
+        for (PsiReference reference: references) {
+            if (reference instanceof UserFuncReference) {
+                return;
+            }
+        }
+
+        fail("No UserFuncReference found");
+    }
+
     public void testCanCreateUserFuncReferencesOnPHPArrays() {
         PsiFile file = myFixture.configureByText(
                 "foo.php",

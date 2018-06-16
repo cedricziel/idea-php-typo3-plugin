@@ -19,7 +19,9 @@ public class UserFuncPatterns {
                 XmlPatterns.xmlText().withParent(
                         PlatformPatterns.or(
                                 XmlPatterns.xmlTag().withLocalName("userFunc"),
-                                XmlPatterns.xmlTag().withName("userFunc")
+                                XmlPatterns.xmlTag().withName("userFunc"),
+                                XmlPatterns.xmlTag().withLocalName("itemsProcFunc"),
+                                XmlPatterns.xmlTag().withName("itemsProcFunc")
                         )
                 )
         );
