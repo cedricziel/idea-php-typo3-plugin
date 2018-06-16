@@ -18,12 +18,8 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @NotNull
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-                        if (!(element.getParent() instanceof XmlText)) {
-                            return PsiReference.EMPTY_ARRAY;
-                        }
 
-                        XmlText text = (XmlText) element.getParent();
-                        return new PsiReference[]{new UserFuncReference(text)};
+                        return new PsiReference[]{new UserFuncReference((XmlText) element.getParent())};
                     }
                 }
         );
@@ -45,6 +41,36 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
 
         /*
          * ['itemsProcFunc' => 'My\Extension\Foo\Bar->method']
+         */
+        registrar.registerReferenceProvider(
+                UserFuncPatterns.expectUserFuncReferenceArrayValuePattern("itemsProcFunc"),
+                new PsiReferenceProvider() {
+                    @NotNull
+                    @Override
+                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+
+                        return new PsiReference[]{new UserFuncReference((StringLiteralExpression) element)};
+                    }
+                }
+        );
+
+        /*
+         * ['itemsProcFunc' => My\Extension\Foo\Bar::class . '->method']
+         */
+        registrar.registerReferenceProvider(
+                UserFuncPatterns.expectUserFuncReferenceArrayValuePattern("userFunc"),
+                new PsiReferenceProvider() {
+                    @NotNull
+                    @Override
+                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+
+                        return new PsiReference[]{new UserFuncReference((StringLiteralExpression) element)};
+                    }
+                }
+        );
+
+        /*
+         * ['itemsProcFunc' => My\Extension\Foo\Bar::class . '->method']
          */
         registrar.registerReferenceProvider(
                 UserFuncPatterns.expectUserFuncReferenceArrayValuePattern("itemsProcFunc"),
