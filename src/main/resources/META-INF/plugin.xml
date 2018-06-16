@@ -216,6 +216,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- extbase persistence -->
         <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor"/>
+
+        <!-- userFunc -->
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.userFunc.UserFuncReferenceContributor"/>
     </extensions>
 
     <actions>
