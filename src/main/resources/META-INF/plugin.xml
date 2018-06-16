@@ -216,6 +216,13 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- extbase persistence -->
         <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor"/>
+
+        <!-- tca migrations -->
+        <localInspection language="PHP" groupPath="TYPO3 CMS,TCA deprecation"
+                         shortName="MigrateT3editorWizardToRenderTypeInspection" displayName="T3Editor wizard is deprecated"
+                         groupName="TCA deprecation"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.migrations.MigrateT3editorWizardToRenderTypeInspection"/>
     </extensions>
 
     <actions>
