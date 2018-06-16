@@ -9,8 +9,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.3.2"
-    id "de.undercouch.download" version "3.2.0"
+    id "org.jetbrains.intellij" version "0.3.3"
     id 'com.palantir.git-version' version "0.9.1"
 }
 
@@ -21,7 +20,14 @@ apply plugin: 'java'
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
-    plugins = ["com.jetbrains.php:${phpPluginVersion}", 'CSS', 'java-i18n', 'properties', 'yaml']
+    plugins = [
+            "com.jetbrains.php:${phpPluginVersion}",
+            'CSS',
+            'java-i18n',
+            'properties',
+            'yaml',
+            "PsiViewer:${psiViewerPluginVersion}"
+    ]
     downloadSources !Boolean.valueOf(System.getenv('CI'))
 
     publishPlugin {
@@ -37,24 +43,6 @@ intellij {
 
 group 'com.cedricziel'
 version gitVersion()
-
-apply plugin: 'de.undercouch.download'
-task downloadPsiViewerPlugin() {
-    download {
-        src 'https://plugins.jetbrains.com/plugin/download?updateId=46431'
-        dest new File("${buildDir}/tmp/plugins/", 'PsiViewer.jar')
-        onlyIfNewer true
-    }
-}
-
-task copyPsiViewerPluginToSandBox(type: Copy) {
-    from "${buildDir}/tmp/plugins/PsiViewer.jar"
-    into "${buildDir}/idea-sandbox/plugins/"
-}
-
-copyPsiViewerPluginToSandBox.dependsOn downloadPsiViewerPlugin
-copyPsiViewerPluginToSandBox.mustRunAfter prepareSandbox
-runIde.dependsOn copyPsiViewerPluginToSandBox
 
 wrapper {
     gradleVersion '4.3.1'
