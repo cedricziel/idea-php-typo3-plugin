@@ -50,7 +50,7 @@ public class MissingColumnTypeInspection extends PhpInspection {
                 if (arrayIndex != null && arrayIndex.equals("type")) {
                     if (element instanceof StringLiteralExpression) {
                         String tableName = ((StringLiteralExpression) element).getContents();
-                        boolean isValidRenderType = TCAUtil.getAvailableColumnTypes(element).contains(tableName);
+                        boolean isValidRenderType = TCAUtil.getAvailableColumnTypes().contains(tableName);
 
                         if (!isValidRenderType) {
                             problemsHolder.registerProblem(element, "Missing column type definition");
