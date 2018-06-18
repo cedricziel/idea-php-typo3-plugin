@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.userFunc;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.XmlText;
 import com.intellij.util.ProcessingContext;
@@ -35,7 +36,16 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        return new PsiReference[]{new UserFuncReference((StringLiteralExpression) element)};
+                        StringLiteralExpression element1 = (StringLiteralExpression) element;
+                        if (element1.getContents().contains("->")) {
+                            int i = element1.getContents().indexOf("->");
+
+                            return new PsiReference[]{
+                                    new UserFuncReference(element1, new TextRange(i + 3, element1.getTextLength() - 1))
+                            };
+                        }
+
+                        return new PsiReference[]{new UserFuncReference(element1)};
                     }
                 }
         );
@@ -50,7 +60,16 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        return new PsiReference[]{new UserFuncReference((StringLiteralExpression) element)};
+                        StringLiteralExpression element1 = (StringLiteralExpression) element;
+                        if (element1.getContents().contains("->")) {
+                            int i = element1.getContents().indexOf("->");
+
+                            return new PsiReference[]{
+                                    new UserFuncReference(element1, new TextRange(i + 3, element1.getTextLength() - 1))
+                            };
+                        }
+
+                        return new PsiReference[]{new UserFuncReference(element1)};
                     }
                 }
         );
@@ -65,7 +84,17 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        return new PsiReference[]{new UserFuncReference((ConcatenationExpression) element.getParent())};
+                        ConcatenationExpression parent = (ConcatenationExpression) element.getParent();
+                        StringLiteralExpression element1 = (StringLiteralExpression) element;
+                        if (element1.getContents().contains("->")) {
+                            int i = element1.getContents().indexOf("->");
+
+                            return new PsiReference[]{
+                                    new UserFuncReference(element1, new TextRange(i + 3, element1.getTextLength() - 1), parent)
+                            };
+                        }
+
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );
@@ -80,7 +109,17 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        return new PsiReference[]{new UserFuncReference((ConcatenationExpression) element.getParent())};
+                        ConcatenationExpression parent = (ConcatenationExpression) element.getParent();
+                        StringLiteralExpression element1 = (StringLiteralExpression) element;
+                        if (element1.getContents().contains("->")) {
+                            int i = element1.getContents().indexOf("->");
+
+                            return new PsiReference[]{
+                                    new UserFuncReference(element1, new TextRange(i + 3, element1.getTextLength() - 1), parent)
+                            };
+                        }
+
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );

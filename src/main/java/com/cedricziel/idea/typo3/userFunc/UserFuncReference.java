@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.userFunc;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
@@ -50,7 +51,11 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
     }
 
     public UserFuncReference(StringLiteralExpression stringLiteralExpression) {
-        super(stringLiteralExpression);
+        this(stringLiteralExpression, null);
+    }
+
+    public UserFuncReference(StringLiteralExpression stringLiteralExpression, TextRange textRange) {
+        super(stringLiteralExpression, textRange);
 
         String text = stringLiteralExpression.getContents();
         if (text.contains("->")) {
@@ -79,11 +84,11 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
         }
     }
 
-    public UserFuncReference(ConcatenationExpression element) {
-        super(element);
+    public UserFuncReference(StringLiteralExpression element1, TextRange textRange, ConcatenationExpression parent) {
+        super(element1, textRange);
 
-        ClassConstantReference classRef = PsiTreeUtil.findChildOfType(element, ClassConstantReference.class);
-        StringLiteralExpression stringEl = PsiTreeUtil.findChildOfType(element, StringLiteralExpression.class);
+        ClassConstantReference classRef = PsiTreeUtil.findChildOfType(parent, ClassConstantReference.class);
+        StringLiteralExpression stringEl = PsiTreeUtil.findChildOfType(parent, StringLiteralExpression.class);
 
         if (classRef == null || stringEl == null) {
             methodName = null;
@@ -92,7 +97,7 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
             return;
         }
 
-        className = classRef.getFQN();
+        className = classRef.getText().replace("::class", "");
 
         String[] split = StringUtils.split(stringEl.getContents(), "->");
         if (split.length == 0) {
@@ -130,20 +135,22 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
 
         List<Object> list = new ArrayList<>();
         PhpIndex phpIndex = PhpIndex.getInstance(myElement.getProject());
-        Iterator<String> count = phpIndex.getAllFunctionNames(null).iterator();
 
-        while (true) {
-            while (count.hasNext()) {
-                String functionName = count.next();
+        if (className == null) {
+            Iterator<String> globalFunctions = phpIndex.getAllFunctionNames(null).iterator();
+            while (true) {
+                while (globalFunctions.hasNext()) {
+                    String functionName = globalFunctions.next();
 
-                phpIndex
-                        .getFunctionsByName(functionName)
-                        .stream()
-                        .map(UserFuncLookupElement::new)
-                        .forEach(list::add);
+                    phpIndex
+                            .getFunctionsByName(functionName)
+                            .stream()
+                            .map(UserFuncLookupElement::new)
+                            .forEach(list::add);
+                }
+
+                break;
             }
-
-            break;
         }
 
         if (className != null) {
@@ -154,21 +161,6 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
                         .map(UserFuncLookupElement::new)
                         .forEach(list::add);
             });
-        }
-
-        Iterator<String> classes = phpIndex.getAllClassNames(null).iterator();
-        while (true) {
-            while (classes.hasNext()) {
-                String className = classes.next();
-
-                phpIndex
-                        .getFunctionsByName(className)
-                        .stream()
-                        .map(UserFuncLookupElement::new)
-                        .forEach(list::add);
-            }
-
-            break;
         }
 
         return list.toArray();

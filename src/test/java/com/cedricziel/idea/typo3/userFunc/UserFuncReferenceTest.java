@@ -37,6 +37,14 @@ public class UserFuncReferenceTest extends AbstractTestCase {
                 Function.class,
                 "A global function can be resolved"
         );
+
+        assertResolvesTo(
+                "bar.php",
+                "<?php \n['userFunc' => Foo\\Bar::class . '->q<caret>ux'];",
+                UserFuncReference.class,
+                Method.class,
+                "A class method can be resolved through concatenation"
+        );
     }
 
     public void testReferenceCanResolveVariants() {
@@ -58,12 +66,36 @@ public class UserFuncReferenceTest extends AbstractTestCase {
                 "Reference can correctly resolve static methods as variants"
         );
 
+        assertHasVariant(
+                "foo.php",
+                "<?php \n['userFunc' => Foo\\Bar::class . '->q<caret>'];",
+                "quo",
+                UserFuncReference.class,
+                "Reference can correctly resolve public methods as variants on concatenation expression"
+        );
+
+        assertHasVariant(
+                "foo.php",
+                "<?php \n['userFunc' => Foo\\Bar::class . '->q<caret>'];",
+                "qux",
+                UserFuncReference.class,
+                "Reference can correctly resolve static methods as variants on concatenation expression"
+        );
+
         assertNotHasVariant(
                 "foo.php",
                 "<?php \n['userFunc' => 'Foo\\Bar->q<caret>'];",
                 "invisible",
                 UserFuncReference.class,
                 "Reference does not present inaccessible variants (non public methods)"
+        );
+
+        assertNotHasVariant(
+                "foo.php",
+                "<?php \n['userFunc' => Foo\\Bar::class . '->q<caret>'];",
+                "invisible",
+                UserFuncReference.class,
+                "Reference does not present inaccessible variants (non public methods) on concatenation expression"
         );
     }
 }
