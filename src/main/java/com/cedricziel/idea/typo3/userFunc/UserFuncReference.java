@@ -3,11 +3,10 @@ package com.cedricziel.idea.typo3.userFunc;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlText;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.psi.elements.Function;
-import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,6 +77,31 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
             className = null;
             methodName = text;
         }
+    }
+
+    public UserFuncReference(ConcatenationExpression element) {
+        super(element);
+
+        ClassConstantReference classRef = PsiTreeUtil.findChildOfType(element, ClassConstantReference.class);
+        StringLiteralExpression stringEl = PsiTreeUtil.findChildOfType(element, StringLiteralExpression.class);
+
+        if (classRef == null || stringEl == null) {
+            methodName = null;
+            className = null;
+
+            return;
+        }
+
+        className = classRef.getFQN();
+
+        String[] split = StringUtils.split(stringEl.getContents(), "->");
+        if (split.length == 0) {
+            methodName = null;
+
+            return;
+        }
+
+        methodName = split[0];
     }
 
     @NotNull
