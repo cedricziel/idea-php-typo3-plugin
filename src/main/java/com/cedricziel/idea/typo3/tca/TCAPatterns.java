@@ -110,6 +110,16 @@ public class TCAPatterns {
         return PlatformPatterns.psiElement().withParent(
                 PlatformPatterns.psiElement(StringLiteralExpression.class).withParent(
                         PlatformPatterns.or(
+                                // ['config' => ['<caret>']]
+                                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE).withParent(
+                                        PlatformPatterns.psiElement(PhpElementTypes.ARRAY_CREATION_EXPRESSION).withParent(
+                                                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE).withParent(
+                                                        PlatformPatterns.psiElement(ArrayHashElement.class).withChild(
+                                                                elementWithStringLiteral(PhpElementTypes.ARRAY_KEY, targetIndex)
+                                                        )
+                                                )
+                                        )
+                                ),
                                 // ['config' => ['<caret>' => '']]
                                 PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY).withParent(
                                         PlatformPatterns.psiElement(ArrayHashElement.class).withParent(

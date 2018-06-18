@@ -114,5 +114,15 @@ public class TCACompletionContributorTest extends AbstractTestCase {
         myFixture.complete(CompletionType.BASIC);
         lookupElementStrings = myFixture.getLookupElementStrings();
         assertTrue("Can complete partial value", lookupElementStrings.contains("renderType"));
+
+        myFixture.configureByText(PhpFileType.INSTANCE, "<?php $foo = ['config' => ['<caret>']];");
+        myFixture.complete(CompletionType.BASIC);
+        lookupElementStrings = myFixture.getLookupElementStrings();
+        assertTrue("Can complete empty value", lookupElementStrings.containsAll(Arrays.asList(TCAUtil.TCA_CONFIG_SECTION_CHILDREN)));
+
+        myFixture.configureByText(PhpFileType.INSTANCE, "<?php $foo = ['config' => ['r<caret>'];");
+        myFixture.complete(CompletionType.BASIC);
+        lookupElementStrings = myFixture.getLookupElementStrings();
+        assertTrue("Can complete partial value", lookupElementStrings.contains("renderType"));
     }
 }
