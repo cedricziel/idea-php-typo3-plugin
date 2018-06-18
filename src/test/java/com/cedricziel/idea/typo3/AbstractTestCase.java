@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3;
 
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
@@ -8,10 +9,7 @@ import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.*;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +30,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
         ProblemsHolder problemsHolder = new ProblemsHolder(InspectionManager.getInstance(getProject()), psiFile.getContainingFile(), false);
 
-        for (LocalInspectionEP localInspectionEP : LocalInspectionEP.LOCAL_INSPECTION.getExtensions()) {
+        for (LocalInspectionEP localInspectionEP: LocalInspectionEP.LOCAL_INSPECTION.getExtensions()) {
             Object object = localInspectionEP.getInstance();
             if (!(object instanceof LocalInspectionTool)) {
                 continue;
@@ -58,7 +56,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         Set<String> matches = new HashSet<>();
 
         Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
-        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
+        for (ProblemDescriptor result: localInspectionsAtCaret.getFirst()) {
             TextRange textRange = result.getPsiElement().getTextRange();
             if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().equals(contains)) {
                 return;
@@ -72,7 +70,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
     public void assertAnnotationContains(String filename, String content, String contains) {
         List<String> matches = new ArrayList<>();
-        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
+        for (Annotation annotation: getAnnotationsAtCaret(filename, content)) {
             matches.add(annotation.toString());
             if (annotation.getMessage().contains(contains)) {
                 return;
@@ -85,7 +83,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     public void assertLocalInspectionNotContains(String filename, String content, String contains) {
         Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
 
-        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
+        for (ProblemDescriptor result: localInspectionsAtCaret.getFirst()) {
             TextRange textRange = result.getPsiElement().getTextRange();
             if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().contains(contains)) {
                 fail(String.format("Fail inspection not contains '%s'", contains));
@@ -94,7 +92,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     }
 
     public void assertAnnotationNotContains(String filename, String content, String contains) {
-        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
+        for (Annotation annotation: getAnnotationsAtCaret(filename, content)) {
             if (annotation.getMessage() != null && annotation.getMessage().contains(contains)) {
                 fail(String.format("Fail not matching '%s' with '%s'", contains, annotation));
             }
@@ -108,10 +106,74 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
         AnnotationHolderImpl annotations = new AnnotationHolderImpl(new AnnotationSession(psiFile));
 
-        for (Annotator annotator : LanguageAnnotators.INSTANCE.allForLanguage(psiFile.getLanguage())) {
+        for (Annotator annotator: LanguageAnnotators.INSTANCE.allForLanguage(psiFile.getLanguage())) {
             annotator.annotate(psiElement, annotations);
         }
 
         return annotations;
+    }
+
+    protected void assertResolvesTo(String fileName, String content, Class psiReferenceClass, Class expectedClass, String s) {
+        PsiFile file = myFixture.configureByText(fileName, content);
+        PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
+
+        PsiReference[] references = elementAtCaret.getReferences();
+        for (PsiReference reference: references) {
+            if (psiReferenceClass.isInstance(reference)) {
+                ResolveResult[] resolveResults = ((PsiPolyVariantReference) reference).multiResolve(false);
+                for (ResolveResult resolveResult: resolveResults) {
+                    assertInstanceOf(resolveResult.getElement(), expectedClass);
+
+                    return;
+                }
+            }
+        }
+
+        fail(String.format("Reference %s does not resolve to correct element", psiReferenceClass.getName()));
+    }
+
+    protected void assertHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass, String message) {
+        PsiFile file = myFixture.configureByText(fileName, content);
+        PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
+
+        PsiReference[] references = elementAtCaret.getReferences();
+        for (PsiReference reference: references) {
+            if (translationReferenceClass.isInstance(reference)) {
+                Object[] variants = reference.getVariants();
+                for (Object variant: variants) {
+                    if (variant instanceof LookupElement) {
+                        String lookupString = ((LookupElement) variant).getLookupString();
+                        if (lookupString.equals(expectedLookupString)) {
+                            return;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        fail(String.format("%s could not resolve variant %s", translationReferenceClass.getName(), expectedLookupString));
+    }
+
+
+    protected void assertNotHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass, String message) {
+        PsiFile file = myFixture.configureByText(fileName, content);
+        PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
+
+        PsiReference[] references = elementAtCaret.getReferences();
+        for (PsiReference reference: references) {
+            if (translationReferenceClass.isInstance(reference)) {
+                Object[] variants = reference.getVariants();
+                for (Object variant: variants) {
+                    if (variant instanceof LookupElement) {
+                        String lookupString = ((LookupElement) variant).getLookupString();
+                        if (lookupString.equals(expectedLookupString)) {
+                            fail(String.format("%s could not resolve variant %s", translationReferenceClass.getName(), expectedLookupString));
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

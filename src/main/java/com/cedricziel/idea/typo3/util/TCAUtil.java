@@ -11,6 +11,8 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import gnu.trove.THashSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -63,6 +65,135 @@ public class TCAUtil {
             "rows",
     };
 
+    public static final String[] TCA_DEFAULT_EVALUATIONS = {
+            "alpha",
+            "alphanum",
+            "alphanum_x",
+            "date",
+            "datetime",
+            "domainname",
+            "double2",
+            "int",
+            "is_in",
+            "lower",
+            "md5",
+            "nospace",
+            "null",
+            "num",
+            "password",
+            "required",
+            "time",
+            "timesec",
+            "trim",
+            "unique",
+            "uniqueInPid",
+            "upper",
+            "year",
+    };
+
+    public static final String[] TCA_CONFIG_SECTION_CHILDREN = {
+            "appearance",
+            "allowNonIdValues",
+            "authMode",
+            "authMode_enforce",
+            "autoSizeMax",
+            "allowed",
+            "behaviour",
+            "checkbox",
+            "cols",
+            "dbType",
+            "default",
+            "disableNoMatchingValueElement",
+            "disable_controls",
+            "disallowed",
+            "dontRemapTablesOnCopy",
+            "ds",
+            "ds_tableField",
+            "ds_pointerField",
+            "ds_pointerField_searchParent",
+            "ds_pointerField_searchParent_subField",
+            "enableMultiSelectFilterTextfield",
+            "exclusiveKeys",
+            "eval",
+            "items",
+            "itemsProcFunc",
+            "itemListStyle",
+            "filter",
+            "fixedRows",
+            "fieldWizard",
+            "fileFolder",
+            "fileFolder_extList",
+            "fileFolder_recursions",
+            "form_type",
+            "format",
+            "foreign_match_fields",
+            "foreign_default_sortby",
+            "foreign_field",
+            "foreign_label",
+            "foreign_record_defaults",
+            "foreign_sortby",
+            "foreign_selector",
+            "foreign_selector_fieldTcaOverride",
+            "foreign_table",
+            "foreign_table_field",
+            "foreign_table_loadIcons",
+            "foreign_table_prefix",
+            "foreign_table_where",
+            "foreign_types",
+            "foreign_unique",
+            "is_in",
+            "internal_type",
+            "iconsInOptionTags",
+            "localizeReferencesAtParentLocalization",
+            "max",
+            "mode",
+            "MM",
+            "MM_oppositeUsage",
+            "MM_hasUidField",
+            "MM_insert_fields",
+            "MM_match_fields",
+            "MM_opposite_field",
+            "MM_table_where",
+            "maxitems",
+            "minitems",
+            "max_size",
+            "multiple",
+            "multiSelectFilterItems",
+            "neg_foreign_table",
+            "noTableWrapping",
+            "noIconsBelowSelect",
+            "parameters",
+            "pass_content",
+            "placeholder",
+            "prepend_tname",
+            "range",
+            "renderType",
+            "renderMode",
+            "rootLevel",
+            "rows",
+            "show_thumbs",
+            "selicon_cols",
+            "search",
+            "selectedListStyle",
+            "showIfRte",
+            "size",
+            "softref",
+            "special",
+            "suppress_icons",
+            "symmetric_field",
+            "symmetric_label",
+            "symmetric_sortby",
+            "readOnly",
+            "treeConfig",
+            "type",
+            "userFunc",
+            "uploadfolder",
+            "validation",
+            "wizards",
+            "wrap",
+    };
+
+
     private static final String EXT_LOCALCONF_FILENAME = "ext_localconf.php";
 
     private static final String NODE_FACTORY_CLASS = "TYPO3\\CMS\\Backend\\Form\\NodeFactory";
@@ -90,7 +221,7 @@ public class TCAUtil {
         return renderTypes;
     }
 
-    public static Set<String> getAvailableColumnTypes(PsiElement element) {
+    public static Set<String> getAvailableColumnTypes() {
 
         return new HashSet<>(Arrays.asList(TCA_CORE_TYPES));
     }
@@ -154,5 +285,17 @@ public class TCAUtil {
                                 )
                 )
                 .accepts(element);
+    }
+
+    @NotNull
+    public static Set<String> getAvailableEvaluations() {
+        Set<String> evaluations = new THashSet<>();
+        evaluations.addAll(Arrays.asList(TCA_DEFAULT_EVALUATIONS));
+
+        return evaluations;
+    }
+
+    public static String[] getConfigSectionChildren() {
+        return TCA_CONFIG_SECTION_CHILDREN;
     }
 }

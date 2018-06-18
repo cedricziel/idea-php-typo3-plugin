@@ -120,7 +120,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <change-notes><![CDATA[
 
 <ul>
-  <li>Infer types from ObjectStorage properties</li>
+  <li>Complete sub keys of TCA config section</li>
+  <li>Complete available TCA evaluations</li>
+  <li>Reference (complete, navigate) userFuncs</li>
 </ul>
 
     ]]>
@@ -170,8 +172,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
 
         <!-- completion -->
-        <completion.contributor language="PHP"
-                                implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.tca.codeInsight.TCACompletionContributor"/>
 
         <!-- annotation -->
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.annotation.IconAnnotator"/>
@@ -216,6 +217,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- extbase persistence -->
         <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor"/>
+
+        <!-- userFunc -->
+        <psi.referenceContributor implementation="com.cedricziel.idea.typo3.userFunc.UserFuncReferenceContributor"/>
     </extensions>
 
     <actions>

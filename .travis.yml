@@ -16,7 +16,7 @@ cache:
 
 matrix:
   include:
-  - env: IDEA_VERSION="IU-182.2757.3" PHP_PLUGIN_VERSION="182.2574.13" DEPLOY=true
+  - env: IDEA_VERSION="IU-182.2757.3" PHP_PLUGIN_VERSION="182.2574.13" PSI_VIEWER_PLUGIN_VERSION=182.2757.2 DEPLOY=true
 #  - env: IDEA_VERSION="IU-173.4127.17" PHP_PLUGIN_VERSION="173.4127.13"
 #  allow_failures:
 #  - env: IDEA_VERSION="IU-173.4127.17" PHP_PLUGIN_VERSION="173.4127.13"
@@ -25,6 +25,7 @@ before_install:
 - "export ORG_GRADLE_PROJECT_ideaVersion=${IDEA_VERSION}"
 - "export ORG_GRADLE_PROJECT_ideaType=${IDEA_TYPE}"
 - "export ORG_GRADLE_PROJECT_phpPluginVersion=${PHP_PLUGIN_VERSION}"
+- "export ORG_GRADLE_PROJECT_psiViewerPluginVersion=${PSI_VIEWER_PLUGIN_VERSION}"
 - java -version
 
 script:
