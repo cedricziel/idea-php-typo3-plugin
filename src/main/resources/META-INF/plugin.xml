@@ -122,6 +122,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 <ul>
   <li>Complete sub keys of TCA config section</li>
   <li>Complete available TCA evaluations</li>
+  <li>Reference (complete, navigate) userFuncs</li>
 </ul>
 
     ]]>
