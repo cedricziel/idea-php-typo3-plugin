@@ -2,6 +2,7 @@ package com.cedricziel.idea.typo3;
 
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
@@ -173,6 +174,40 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
                     }
                 }
 
+            }
+        }
+    }
+
+    protected void assertContainsLookupElementWithText(LookupElement[] lookupElements, String title) {
+        for (LookupElement lookupElement: lookupElements) {
+            LookupElementPresentation presentation = new LookupElementPresentation();
+            lookupElement.renderElement(presentation);
+            if (presentation.getItemText().equals(title)) {
+                return;
+            }
+        }
+
+        fail("No such element");
+    }
+
+    protected void assertContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title, @NotNull String tailText, @NotNull String typeText) {
+        for (LookupElement lookupElement: lookupElements) {
+            LookupElementPresentation presentation = new LookupElementPresentation();
+            lookupElement.renderElement(presentation);
+            if (presentation.getItemText().equals(title) && presentation.getTailText().equals(tailText) && presentation.getTypeText().contains(typeText)) {
+                return;
+            }
+        }
+
+        fail("No such element");
+    }
+
+    protected void assertNotContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title) {
+        for (LookupElement lookupElement: lookupElements) {
+            LookupElementPresentation presentation = new LookupElementPresentation();
+            lookupElement.renderElement(presentation);
+            if (presentation.getItemText().equals(title)) {
+                fail("Element shouldnt be present but is");
             }
         }
     }
