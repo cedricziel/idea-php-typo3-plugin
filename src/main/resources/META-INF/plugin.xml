@@ -120,9 +120,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <change-notes><![CDATA[
 
 <ul>
-  <li>Complete sub keys of TCA config section</li>
-  <li>Complete available TCA evaluations</li>
-  <li>Reference (complete, navigate) userFuncs</li>
+  <li>Fix error through recursive error TypeProvider</li>
 </ul>
 
     ]]>
