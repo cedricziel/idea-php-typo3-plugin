@@ -1,5 +1,11 @@
 <?php
 
+namespace TYPO3\CMS\Extbase\Persistence\Generic {
+    class Repository {}
+    class QueryResultInterface {}
+    class ObjectStorage {}
+}
+
 namespace TYPO3\CMS\Extbase\Persistence {
     class Repository {}
     class QueryResultInterface {}
@@ -7,7 +13,9 @@ namespace TYPO3\CMS\Extbase\Persistence {
 }
 
 namespace TYPO3\CMS\Extbase\DomainObject {
-    class AbstractEntity {}
+    class AbstractEntity {
+        public function getUid() {}
+    }
 }
 
 namespace My\Extension\Domain\Model {
@@ -31,9 +39,17 @@ namespace My\Extension\Domain\Model {
          * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\My\Extension\Domain\Model>
          */
         protected $publishers;
+
+        public function getAuthor() {
+            return $this->author;
+        }
     }
 }
 
 namespace My\Extension\Domain\Repository {
     class BookRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {}
+}
+
+namespace TYPO3\CMS\Extbase\Persistence\Generic {
+    class Query {}
 }

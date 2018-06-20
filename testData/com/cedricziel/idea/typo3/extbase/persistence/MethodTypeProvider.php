@@ -18,7 +18,8 @@ namespace MyExt {
 
         public function foo()
         {
-            return $this-><caret>getBook();
+            $book = $this->getBook()[0];
+            return $book->get<caret>Author();
         }
     }
 

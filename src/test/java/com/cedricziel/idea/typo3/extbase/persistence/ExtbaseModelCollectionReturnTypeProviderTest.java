@@ -2,10 +2,8 @@ package com.cedricziel.idea.typo3.extbase.persistence;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.Method;
-
-import java.util.Set;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
 
 public class ExtbaseModelCollectionReturnTypeProviderTest extends LightCodeInsightFixtureTestCase {
     @Override
@@ -17,23 +15,31 @@ public class ExtbaseModelCollectionReturnTypeProviderTest extends LightCodeInsig
         myFixture.copyFileToProject("PersistenceMocks.php");
         myFixture.configureByFile("FieldTypeProvider.php");
 
-        PsiElement elementAtCaret = myFixture.getElementAtCaret();
+        int caretOffset = myFixture.getCaretOffset();
+        PsiElement elementAtCaret = myFixture.getFile().findElementAt(caretOffset).getParent();
 
-        assertInstanceOf(elementAtCaret, Field.class);
+        assertInstanceOf(elementAtCaret, MethodReference.class);
 
-        Set<String> types = ((Field) elementAtCaret).getInferredType().getTypes();
-        assertTrue(types.contains("\\My\\Extension\\Domain\\Model\\Book[]"));
+        MethodReference methodReference = (MethodReference) elementAtCaret;
+        Method m = (Method) methodReference.resolve();
+
+        String fqn = m.getContainingClass().getFQN();
+        assertTrue(fqn.equals("\\My\\Extension\\Domain\\Model\\Book"));
     }
 
     public void testResolvesObjectStoragePropertiesToObjectTypesOnGetters() {
         myFixture.copyFileToProject("PersistenceMocks.php");
         myFixture.configureByFile("MethodTypeProvider.php");
 
-        PsiElement elementAtCaret = myFixture.getElementAtCaret();
+        int caretOffset = myFixture.getCaretOffset();
+        PsiElement elementAtCaret = myFixture.getFile().findElementAt(caretOffset).getParent();
 
-        assertInstanceOf(elementAtCaret, Method.class);
+        assertInstanceOf(elementAtCaret, MethodReference.class);
 
-        Set<String> types = ((Method) elementAtCaret).getInferredType().getTypes();
-        assertTrue(types.contains("\\My\\Extension\\Domain\\Model\\Book[]"));
+        MethodReference methodReference = (MethodReference) elementAtCaret;
+        Method m = (Method) methodReference.resolve();
+
+        String fqn = m.getContainingClass().getFQN();
+        assertTrue(fqn.equals("\\My\\Extension\\Domain\\Model\\Book"));
     }
 }
