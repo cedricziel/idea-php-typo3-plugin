@@ -17,6 +17,11 @@ import static com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCo
 public class ExtbaseUtils {
     public static final String TYPO3_CMS_EXTBASE_DOMAIN_OBJECT_ABSTRACT_ENTITY = "TYPO3\\CMS\\Extbase\\DomainObject\\AbstractEntity";
 
+    public static final String[] NON_QUERYABLE_ENTITY_FIELDS = {
+            "_isClone",
+            "_cleanProperties",
+    };
+
     @Nullable
     public static PhpClass getBaseRepositoryClass(@NotNull Project project) {
         Iterator<PhpClass> iterator = PhpIndex.getInstance(project).getClassesByFQN(TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY).iterator();

@@ -1,11 +1,9 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.AbstractTestCase;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.jetbrains.annotations.NotNull;
 
-public class ExtbasePersistenceCompletionContributorTest extends LightCodeInsightFixtureTestCase {
+public class ExtbasePersistenceCompletionContributorTest extends AbstractTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/extbase/persistence";
@@ -65,25 +63,36 @@ public class ExtbasePersistenceCompletionContributorTest extends LightCodeInsigh
         assertNotContainsLookupElementWithText(lookupElements, "countByPublishers");
     }
 
-    private void assertContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title, @NotNull String tailText, @NotNull String typeText) {
-        for (LookupElement lookupElement : lookupElements) {
-            LookupElementPresentation presentation = new LookupElementPresentation();
-            lookupElement.renderElement(presentation);
-            if (presentation.getItemText().equals(title) && presentation.getTailText().equals(tailText) && presentation.getTypeText().contains(typeText)) {
-                return;
-            }
-        }
+    public void testCanCompleteExtbaseDomainModelFieldsInQuery() {
+        myFixture.copyFileToProject("PersistenceMocks.php");
 
-        fail("No such element");
-    }
+        LookupElement[] lookupElements;
 
-    private void assertNotContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title) {
-        for (LookupElement lookupElement : lookupElements) {
-            LookupElementPresentation presentation = new LookupElementPresentation();
-            lookupElement.renderElement(presentation);
-            if (presentation.getItemText().equals(title)) {
-                fail("Element shouldnt be present but is");
-            }
-        }
+        myFixture.configureByText(
+                "foo.php",
+                "<?php\n" +
+                        "namespace My\\Extension\\Domain\\Repository {\n" +
+                        "    class BookRepository extends \\TYPO3\\CMS\\Extbase\\Persistence\\Repository {\n" +
+                        "        public function fooBar() {\n" +
+                        "            /** @var \\TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface $q */" +
+                        "            $q = $this->createQuery();\n" +
+                        "            $q->matching(\n" +
+                        "                $q->equals('<caret>')\n" +
+                        "            );\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}"
+        );
+
+        lookupElements = myFixture.completeBasic();
+
+        assertContainsLookupElementWithText(lookupElements, "author");
+        assertContainsLookupElementWithText(lookupElements, "uid");
+        assertContainsLookupElementWithText(lookupElements, "pid");
+        assertNotContainsLookupElementWithText(lookupElements, "_cleanProperties");
+        assertNotContainsLookupElementWithText(lookupElements, "_isClone");
+        assertContainsLookupElementWithText(lookupElements, "_versionedUid");
+        assertContainsLookupElementWithText(lookupElements, "_languageUid");
+        assertContainsLookupElementWithText(lookupElements, "_localizedUid");
     }
 }

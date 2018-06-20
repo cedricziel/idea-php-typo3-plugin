@@ -1,27 +1,33 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.extbase.ExtbasePatterns;
+import com.cedricziel.idea.typo3.extbase.ExtbaseUtils;
 import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIcons;
 import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.completion.PhpLookupElement;
 import com.jetbrains.php.lang.lexer.PhpTokenTypes;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class ExtbasePersistenceCompletionContributor extends CompletionContributor {
     public ExtbasePersistenceCompletionContributor() {
         this.extend(CompletionType.BASIC, PlatformPatterns.psiElement(PhpTokenTypes.IDENTIFIER), new ExtbaseRepositoryMagicMethodsCompletionProvider());
+        this.extend(CompletionType.BASIC, ExtbasePatterns.stringArgumentOnMethodCallPattern(), new ExtbaseQueryBuilderCompletionProvider());
     }
 
     public static class ExtbaseRepositoryMagicMethodsCompletionProvider extends CompletionProvider<CompletionParameters> {
@@ -151,6 +157,60 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                     }
                 });
             });
+        }
+    }
+
+    public static class ExtbaseQueryBuilderCompletionProvider extends CompletionProvider<CompletionParameters> {
+
+        public static String QUERY_BUILDER = "TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface";
+
+        public static String[] QUERY_BUILDER_METHODS = {
+                "equals",
+                "like",
+                "contains",
+                "in",
+                "lessThan",
+                "lessThanOrEqual",
+                "greaterThan",
+                "greaterThanOrEqual",
+                "isEmpty",
+        };
+
+        @Override
+        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            PsiElement element = parameters.getOriginalPosition();
+
+            Method containingMethod = (Method) PsiTreeUtil.findFirstParent(element, x -> PlatformPatterns.psiElement(Method.class).accepts(x));
+            MethodReference methodReference = (MethodReference) PsiTreeUtil.findFirstParent(element, x -> PlatformPatterns.psiElement(MethodReference.class).accepts(x));
+
+            if (containingMethod == null || methodReference == null) {
+                return;
+            }
+
+            Method method = (Method) methodReference.resolve();
+            if (method == null || method.getContainingClass() == null) {
+                return;
+            }
+
+            if (!Arrays.asList(QUERY_BUILDER_METHODS).contains(method.getName())) {
+                return;
+            }
+
+            PhpClass repositoryClass = containingMethod.getContainingClass();
+            if (repositoryClass == null || !ExtbaseUtils.isRepositoryClass(repositoryClass)) {
+                return;
+            }
+
+            PhpClass containingClass = method.getContainingClass();
+            if (!containingClass.getPresentableFQN().equals(QUERY_BUILDER)) {
+                return;
+            }
+
+            String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClass.getFQN());
+            Collection<PhpClass> classesByFQN = PhpIndex.getInstance(element.getProject()).getClassesByFQN(potentialModelClass);
+            for (PhpClass x: classesByFQN) {
+                x.getFields().stream().filter(field -> !Arrays.asList(ExtbaseUtils.NON_QUERYABLE_ENTITY_FIELDS).contains(field.getName())).forEach(field -> result.addElement(new PhpLookupElement(field)));
+            }
         }
     }
 }
