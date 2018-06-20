@@ -2,8 +2,9 @@ package com.cedricziel.idea.typo3.extbase.persistence;
 
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.php.PhpClassHierarchyUtils;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
@@ -12,53 +13,23 @@ import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider3 {
 
-    public static final String TYPO3_CMS_EXTBASE_DOMAIN_OBJECT_ABSTRACT_ENTITY = "TYPO3\\CMS\\Extbase\\DomainObject\\AbstractEntity";
-
-    @Override
-    public char getKey() {
-        return '\u0278';
-    }
 
     @Nullable
-    @Override
-    public PhpType getType(PsiElement psiElement) {
-        if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
+    private static PhpType inferTypeFromClassMember(PhpClassMember classMember) {
+        if (classMember == null) {
             return null;
         }
 
-        if (!(psiElement instanceof Field) && !isGetter(psiElement)) {
-            return null;
-        }
-
-        if (!isEntityClass(psiElement)) {
-            return null;
-        }
-
-        return extractReturnType(psiElement);
-    }
-
-    private PhpType extractReturnType(PsiElement psiElement) {
-        Field field;
-        if (psiElement instanceof MethodReference) {
-            field = extractFieldFromGetter((MethodReference) psiElement);
-        } else if (psiElement instanceof Method) {
-            field = extractFieldFromGetter((Method) psiElement);
-        } else {
-            field = ((Field) psiElement);
-        }
-
-        if (field == null) {
-            return null;
-        }
-
-        PhpDocComment docComment = field.getDocComment();
+        PhpDocComment docComment = classMember.getDocComment();
         if (docComment == null) {
             return null;
         }
@@ -83,6 +54,31 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         }
 
         return phpType;
+    }
+
+    @Override
+    public char getKey() {
+        return '\u0278';
+    }
+
+    @Nullable
+    @Override
+    public PhpType getType(PsiElement psiElement) {
+        if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
+            return null;
+        }
+
+        if (psiElement instanceof FieldReference) {
+            String signature = ((FieldReference) psiElement).getSignature();
+            return new PhpType().add("#" + this.getKey() + signature);
+        }
+
+        if (psiElement instanceof MethodReference && ((MethodReference) psiElement).getName().startsWith("get")) {
+            String signature = ((MethodReference) psiElement).getSignature();
+            return new PhpType().add("#" + this.getKey() + signature);
+        }
+
+        return null;
     }
 
     private Field extractFieldFromGetter(MethodReference methodReference) {
@@ -127,27 +123,62 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         return containingClass.findFieldByName(propertyName, false);
     }
 
-    private boolean isEntityClass(PsiElement psiElement) {
-        PhpClass containingClass = ((PhpClassMember) psiElement).getContainingClass();
-        if (containingClass == null) {
-            return false;
-        }
-
-        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(psiElement.getProject()).getClassesByFQN(TYPO3_CMS_EXTBASE_DOMAIN_OBJECT_ABSTRACT_ENTITY);
-        if (classesByFQN.isEmpty()) {
-            return false;
-        }
-
-        PhpClass abstractEntityClass = classesByFQN.iterator().next();
-        return PhpClassHierarchyUtils.isSuperClass(abstractEntityClass, containingClass, true);
-    }
-
-    private boolean isGetter(PsiElement psiElement) {
-        return (psiElement instanceof Method) && ((Method) psiElement).getName().startsWith("get");
-    }
-
     @Override
     public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
-        return PhpIndex.getInstance(project).getBySignature(expression);
+        Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(project).getBySignature(expression);
+
+        List<PhpNamedElement> phpNamedElements = new ArrayList<>();
+        for (PhpNamedElement phpNamedElement: bySignature) {
+            if (phpNamedElement instanceof Field) {
+                PhpType type = inferTypeFromClassMember((Field) phpNamedElement);
+                phpNamedElement.getType().add(type);
+
+                phpNamedElements.add(phpNamedElement);
+            } else if (phpNamedElement instanceof Method) {
+                phpNamedElement.getType().add(inferTypeFromClassMember((Method) phpNamedElement));
+                phpNamedElement.getType().add(inferTypeFromClassMember(extractFieldFromGetter((Method) phpNamedElement)));
+
+                MethodReturnTypeVisitor visitor = new MethodReturnTypeVisitor();
+                visitor.visitElement(phpNamedElement);
+
+                phpNamedElement.getType().add(visitor.getType());
+
+                phpNamedElements.add(phpNamedElement);
+            } else if (phpNamedElement instanceof MethodReference) {
+                phpNamedElement.getType().add(inferTypeFromClassMember(extractFieldFromGetter((MethodReference) phpNamedElement)));
+
+                phpNamedElements.add(phpNamedElement);
+            }
+        }
+
+        return phpNamedElements;
+    }
+
+    private static class MethodReturnTypeVisitor extends PsiRecursiveElementVisitor {
+        private final PhpType type;
+
+        public MethodReturnTypeVisitor() {
+            super();
+
+            this.type = new PhpType();
+        }
+
+        @Override
+        public void visitElement(PsiElement element) {
+            super.visitElement(element);
+
+            if (PlatformPatterns.psiElement(FieldReference.class).withParent(PhpReturn.class).accepts(element)) {
+                Field f = (Field) ((FieldReference) element).resolve();
+                if (f == null) {
+                    return;
+                }
+
+                this.type.add(inferTypeFromClassMember(f));
+            }
+        }
+
+        public PhpType getType() {
+            return type;
+        }
     }
 }

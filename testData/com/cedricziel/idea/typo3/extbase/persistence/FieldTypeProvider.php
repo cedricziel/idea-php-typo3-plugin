@@ -11,8 +11,8 @@ namespace MyExt {
 
         public function getBook()
         {
-            foreach ($this-><caret>book as $b) {
-                $b->getAuthor();
+            foreach ($this->book as $b) {
+                $b->get<caret>Author();
             }
         }
     }
