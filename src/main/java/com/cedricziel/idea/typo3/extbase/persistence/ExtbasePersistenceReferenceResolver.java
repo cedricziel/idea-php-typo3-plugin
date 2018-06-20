@@ -34,7 +34,12 @@ public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver
             return Collections.emptyList();
         }
 
-        Collection<PhpClass> classesByFQN = PhpIndex.getInstance(phpReference.getProject()).getClassesByFQN(variable.getType().toStringResolved());
+        Collection<PhpClass> classesByFQN = new ArrayList<>();
+
+        for (String s: variable.getType().getTypes()) {
+            classesByFQN.addAll(PhpIndex.getInstance(phpReference.getProject()).getClassesByFQN(s));
+        }
+
         if (classesByFQN.isEmpty()) {
             return Collections.emptyList();
         }
