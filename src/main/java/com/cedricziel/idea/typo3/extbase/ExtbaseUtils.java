@@ -15,14 +15,28 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor.ExtbaseRepositoryMagicMethodsCompletionProvider.TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY;
-
 public class ExtbaseUtils {
     public static final String EXTBASE_ABSTRACT_ENTITY_FQN = "TYPO3\\CMS\\Extbase\\DomainObject\\AbstractEntity";
 
     public static String EXTBASE_QUERY_INTERFACE_FQN = "TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface";
 
-    private static final String OBJECT_STORAGE_FQN = "TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage";
+    public static String[] EXTBASE_QUERY_BUILDER_METHODS = {
+            "equals",
+            "like",
+            "contains",
+            "in",
+            "lessThan",
+            "lessThanOrEqual",
+            "greaterThan",
+            "greaterThanOrEqual",
+            "isEmpty",
+    };
+
+    public static final String OBJECT_STORAGE_FQN = "TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage";
+
+    public static final String TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY = "TYPO3\\CMS\\Extbase\\Persistence\\Repository";
+
+    public static final String QUERY_RESULT_INTERFACE = "TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface";
 
     public static final String[] NON_QUERYABLE_ENTITY_FIELDS = {
             "_isClone",
