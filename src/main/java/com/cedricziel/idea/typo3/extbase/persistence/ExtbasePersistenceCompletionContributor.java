@@ -10,7 +10,6 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
-import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIcons;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.completion.PhpLookupElement;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 public class ExtbasePersistenceCompletionContributor extends CompletionContributor {
     public ExtbasePersistenceCompletionContributor() {
@@ -34,10 +32,6 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
 
         public static final String TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY = "TYPO3\\CMS\\Extbase\\Persistence\\Repository";
         private static final String QUERY_RESULT_INTERFACE = "TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface";
-        private static final String OBJECT_STORAGE = "TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage";
-
-        private ExtbaseRepositoryMagicMethodsCompletionProvider() {
-        }
 
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
             PsiElement position = parameters.getPosition().getOriginalElement();
@@ -46,123 +40,97 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                 return;
             }
 
-            Iterator<PhpClass> iterator = PhpIndex.getInstance(position.getProject()).getClassesByFQN(TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY).iterator();
-            if (!iterator.hasNext()) {
-                return;
-            }
-
-            PhpClass repositoryClass = iterator.next();
-            if (repositoryClass == null) {
-                return;
-            }
-
             if (!(position.getParent().getFirstChild() instanceof Variable) && !(position.getParent().getFirstChild() instanceof FieldReference)) {
                 return;
             }
 
-            PhpTypedElement variable;
-            if (position.getParent().getFirstChild() instanceof Variable) {
-                variable = (PhpTypedElement) position.getParent().getFirstChild();
-            } else {
-                variable = (PhpTypedElement) position.getParent().getFirstChild();
-            }
+            PhpTypedElement variable = (PhpTypedElement) position.getParent().getFirstChild();
 
             PhpType type = variable.getType();
             type.getTypes().forEach(t -> {
                 Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(t);
-                classesByFQN.forEach(c -> {
-                    if (PhpClassHierarchyUtils.isSuperClass(repositoryClass, c, true)) {
-                        createLookupElementsForRepository(variable, c, result);
-                    }
-                });
+                classesByFQN
+                        .stream()
+                        .filter(ExtbaseUtils::isRepositoryClass)
+                        .forEach(c -> createLookupElementsForRepository(variable, c, result));
             });
         }
 
         private void createLookupElementsForRepository(@NotNull PhpTypedElement position, @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
-            String repositoryClassFqn = repositoryClass.getFQN();
-
-            String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClassFqn);
+            String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClass.getFQN());
 
             Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(potentialModelClass);
             classesByFQN.forEach(c -> {
                 c.getFields().forEach(f -> {
-                    if (f.isConstant() || f.isInternal() || f.getName().equals("_cleanProperties") || f.getName().equals("_isClone")) {
+                    if (!ExtbaseUtils.fieldHasMagicFinders(f)) {
                         return;
                     }
 
                     // findBy* matches on single fields only and not on collections
-                    if (!f.getDeclaredType().toString().contains(OBJECT_STORAGE)) {
-                        result.addElement(new LookupElement() {
-                            @NotNull
-                            @Override
-                            public String getLookupString() {
-                                return "findBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                            }
+                    result.addElement(new LookupElement() {
+                        @NotNull
+                        @Override
+                        public String getLookupString() {
+                            return "findBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
+                        }
 
-                            @Override
-                            public void renderElement(LookupElementPresentation presentation) {
-                                super.renderElement(presentation);
+                        @Override
+                        public void renderElement(LookupElementPresentation presentation) {
+                            super.renderElement(presentation);
 
-                                presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setIcon(PhpIcons.METHOD_ICON);
-                                presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
-                                presentation.setTypeText(c.getName() + "[]|" + QUERY_RESULT_INTERFACE);
-                            }
-                        });
-                    }
+                            presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setIcon(PhpIcons.METHOD_ICON);
+                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+                            presentation.setTypeText(c.getName() + "[]|" + QUERY_RESULT_INTERFACE);
+                        }
+                    });
 
                     // countBy* matches on single fields only and not on collections
-                    if (!f.getDeclaredType().toString().contains(OBJECT_STORAGE)) {
-                        result.addElement(new LookupElement() {
-                            @NotNull
-                            @Override
-                            public String getLookupString() {
-                                return "countBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                            }
+                    result.addElement(new LookupElement() {
+                        @NotNull
+                        @Override
+                        public String getLookupString() {
+                            return "countBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
+                        }
 
-                            @Override
-                            public void renderElement(LookupElementPresentation presentation) {
-                                super.renderElement(presentation);
+                        @Override
+                        public void renderElement(LookupElementPresentation presentation) {
+                            super.renderElement(presentation);
 
-                                presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setIcon(PhpIcons.METHOD_ICON);
-                                presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
-                                presentation.setTypeText("int");
-                            }
-                        });
-                    }
+                            presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setIcon(PhpIcons.METHOD_ICON);
+                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+                            presentation.setTypeText("int");
+                        }
+                    });
 
                     // findOneBy* matches on single fields only and not on collections
-                    if (!f.getDeclaredType().toString().contains(OBJECT_STORAGE)) {
-                        result.addElement(new LookupElement() {
-                            @NotNull
-                            @Override
-                            public String getLookupString() {
-                                return "findOneBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                            }
+                    result.addElement(new LookupElement() {
+                        @NotNull
+                        @Override
+                        public String getLookupString() {
+                            return "findOneBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
+                        }
 
-                            @Override
-                            public void renderElement(LookupElementPresentation presentation) {
-                                super.renderElement(presentation);
+                        @Override
+                        public void renderElement(LookupElementPresentation presentation) {
+                            super.renderElement(presentation);
 
-                                presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
-                                presentation.setIcon(PhpIcons.METHOD_ICON);
-                                presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
-                                presentation.setTypeText("null|" + c.getName());
-                            }
-                        });
-                    }
+                            presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
+                            presentation.setIcon(PhpIcons.METHOD_ICON);
+                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+                            presentation.setTypeText("null|" + c.getName());
+                        }
+                    });
                 });
             });
         }
     }
 
     public static class ExtbaseQueryBuilderCompletionProvider extends CompletionProvider<CompletionParameters> {
-
-        public static String QUERY_BUILDER = "TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface";
 
         public static String[] QUERY_BUILDER_METHODS = {
                 "equals",
@@ -201,8 +169,7 @@ public class ExtbasePersistenceCompletionContributor extends CompletionContribut
                 return;
             }
 
-            PhpClass containingClass = method.getContainingClass();
-            if (!containingClass.getPresentableFQN().equals(QUERY_BUILDER)) {
+            if (!ExtbaseUtils.methodInstanceOf(ExtbaseUtils.EXTBASE_QUERY_INTERFACE_FQN, method)) {
                 return;
             }
 
