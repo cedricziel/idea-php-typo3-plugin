@@ -214,7 +214,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <lang.foldingBuilder language="PHP" implementationClass="com.cedricziel.idea.typo3.routing.RouteFoldingBuilder"/>
 
         <!-- extbase persistence -->
-        <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.codeInsight.QueryCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.cedricziel.idea.typo3.extbase.persistence.codeInsight.RepositoryMagicMethodsCompletionContributor"/>
 
         <!-- userFunc -->
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.userFunc.UserFuncReferenceContributor"/>

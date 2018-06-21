@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.extbase.ExtbaseUtils;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -12,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceCompletionContributor.ExtbaseRepositoryMagicMethodsCompletionProvider.TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY;
 
 public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver {
     @Override
@@ -45,7 +44,7 @@ public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver
         }
 
         classesByFQN.forEach(repositoryClass -> {
-            if (!PhpElementsUtil.hasSuperClass(repositoryClass, TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY)) {
+            if (!PhpElementsUtil.hasSuperClass(repositoryClass, ExtbaseUtils.TYPO3_CMS_EXTBASE_PERSISTENCE_REPOSITORY)) {
                 return;
             }
 
