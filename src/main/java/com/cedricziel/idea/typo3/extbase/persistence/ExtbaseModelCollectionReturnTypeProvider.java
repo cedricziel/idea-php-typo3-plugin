@@ -81,6 +81,7 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         return null;
     }
 
+    @Nullable
     private Field extractFieldFromGetter(MethodReference methodReference) {
         String name = methodReference.getName();
         if (name == null) {
@@ -89,6 +90,10 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
 
         String substring = name.substring(2);
         char[] cArr = substring.toCharArray();
+        if (cArr.length == 0) {
+            return null;
+        }
+
         cArr[0] = Character.toLowerCase(cArr[0]);
 
         String propertyName = new String(cArr);
@@ -107,9 +112,14 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         return containingClass.findFieldByName(propertyName, true);
     }
 
+    @Nullable
     private Field extractFieldFromGetter(Method method) {
         String substring = method.getName().substring(3);
         char[] cArr = substring.toCharArray();
+        if (cArr.length == 0) {
+            return null;
+        }
+
         cArr[0] = Character.toLowerCase(cArr[0]);
 
         String propertyName = new String(cArr);
