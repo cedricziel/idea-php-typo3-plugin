@@ -120,7 +120,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <change-notes><![CDATA[
 
 <ul>
-  <li>Fix error through recursive error TypeProvider</li>
+  <li>Fix error with incomplete methods in TypeProvider</li>
 </ul>
 
     ]]>
