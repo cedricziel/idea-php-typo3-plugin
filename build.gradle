@@ -65,8 +65,8 @@ project(":") {
             'properties',
             'yaml',
             "PsiViewer:${psiViewerPluginVersion}",
-            project(':lang-fluid'),
-            project(':lang-typoscript'),
+            project('lang-fluid'),
+            project('lang-typoscript'),
         ]
     }
 }
