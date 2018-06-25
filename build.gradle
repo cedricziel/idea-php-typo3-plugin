@@ -1,10 +1,18 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.grammarkit.tasks.*
 
 buildscript {
     repositories {
         mavenCentral()
 
+        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+
+        maven { url 'https://jitpack.io' }
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    }
+
+    dependencies {
+        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:2018.1.2"
     }
 }
 
@@ -13,36 +21,153 @@ plugins {
     id 'com.palantir.git-version' version "0.9.1"
 }
 
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
+group 'com.cedricziel.idea'
+version gitVersion()
 
-intellij {
-    version ideaVersion
-    pluginName 'TYPO3 CMS Plugin'
-    plugins = [
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'org.jetbrains.grammarkit'
+    apply plugin: 'org.jetbrains.intellij'
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    intellij {
+        version ideaVersion
+        downloadSources !Boolean.valueOf(System.getenv('CI'))
+
+        publishPlugin {
+            username System.getenv('IJ_REPO_USERNAME')
+            password System.getenv('IJ_REPO_PASSWORD')
+        }
+
+        patchPluginXml {
+            sinceBuild '173'
+            untilBuild '182.*'
+        }
+    }
+
+    grammarKit {
+        grammarKitRelease = "2017.1.4"
+        jflexRelease = '1.7.0-1'
+    }
+}
+
+project(":") {
+    intellij {
+        pluginName 'TYPO3 CMS Plugin'
+        plugins = [
+            "com.jetbrains.php:${phpPluginVersion}",
+            'CSS',
+            'java-i18n',
+            'properties',
+            'yaml',
+            "PsiViewer:${psiViewerPluginVersion}",
+            project(':lang-fluid'),
+            project(':lang-typoscript'),
+        ]
+    }
+}
+
+project(":lang-fluid") {
+    def genRoot = file('gen')
+    sourceSets {
+        main {
+            java.srcDirs 'src', genRoot
+            resources.srcDir 'resources'
+        }
+        test {
+            java.srcDir 'test'
+            resources.srcDirs 'testData'
+        }
+    }
+
+    idea {
+        module {
+            generatedSourceDirs += genRoot
+        }
+    }
+
+    intellij {
+        pluginName 'TYPO3 Fluid Plugin'
+        plugins = [
             "com.jetbrains.php:${phpPluginVersion}",
             'CSS',
             'java-i18n',
             'properties',
             'yaml',
             "PsiViewer:${psiViewerPluginVersion}"
-    ]
-    downloadSources !Boolean.valueOf(System.getenv('CI'))
-
-    publishPlugin {
-        username System.getenv('IJ_REPO_USERNAME')
-        password System.getenv('IJ_REPO_PASSWORD')
+        ]
     }
 
-    patchPluginXml {
-        sinceBuild '173'
-        untilBuild '182.*'
+    task generateFluidLexer(type: GenerateLexer) {
+        source = "src/main/grammars/FluidLexer.flex"
+        targetDir = "gen/com/cedricziel/idea/fluid/lang/lexer"
+        targetClass = "FluidLexer"
+    }
+
+    task generateFluidParser(type: GenerateParser) {
+        source = "src/main/grammars/FluidParser.bnf"
+        targetRoot = 'gen'
+        pathToParser = '/com/cedricziel/idea/fluid/lang/parser/FluidParserGenerated.java'
+        pathToPsiRoot = '/com/cedricziel/idea/fluid/lang/psi'
+    }
+
+    compileJava {
+        dependsOn generateFluidParser, generateFluidLexer
     }
 }
 
-group 'com.cedricziel'
-version gitVersion()
+project(":lang-typoscript") {
+    def genRoot = file('gen')
+    sourceSets {
+        main {
+            java.srcDirs 'src', genRoot
+            resources.srcDir 'resources'
+        }
+        test {
+            java.srcDir 'test'
+            resources.srcDirs 'testData'
+        }
+    }
+
+    idea {
+        module {
+            generatedSourceDirs += genRoot
+        }
+    }
+
+    intellij {
+        pluginName 'TypoScript Plugin'
+        plugins = [
+            "com.jetbrains.php:${phpPluginVersion}",
+            'CSS',
+            'java-i18n',
+            'properties',
+            'yaml',
+            "PsiViewer:${psiViewerPluginVersion}"
+        ]
+    }
+
+    task generateTypoScriptLexer(type: GenerateLexer) {
+        source = "src/main/grammars/TypoScriptLexer.flex"
+        targetDir = "gen/com/cedricziel/idea/typoscript/lang/lexer"
+        targetClass = "TypoScriptLexer"
+    }
+
+    task generateTypoScriptParser(type: GenerateParser) {
+        source = "src/main/grammars/TypoScriptParser.bnf"
+        targetRoot = 'gen'
+        pathToParser = '/com/cedricziel/idea/typoscript/lang/parser/TypoScriptParserGenerated.java'
+        pathToPsiRoot = '/com/cedricziel/idea/typoscript/lang/psi'
+    }
+
+    compileJava {
+        dependsOn generateTypoScriptParser, generateTypoScriptLexer
+    }
+}
 
 wrapper {
     gradleVersion '4.8'

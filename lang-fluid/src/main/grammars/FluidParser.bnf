@@ -1,0 +1,92 @@
+{
+  parserClass="com.cedricziel.idea.fluid.lang.parser.FluidParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Fluid"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.cedricziel.idea.fluid.lang.psi"
+  psiImplPackage="com.cedricziel.idea.fluid.lang.psi.impl"
+
+  elementTypeHolderClass="com.cedricziel.idea.fluid.lang.psi.FluidTypes"
+  elementTypeClass="com.cedricziel.idea.fluid.lang.psi.FluidElementType"
+  tokenTypeClass="com.cedricziel.idea.fluid.lang.psi.FluidTokenType"
+
+  tokens = [
+    OUTER_TEXT='regexp:(?:(?!\{).)*'
+
+    EXPR_START='{'
+    EXPR_END='}'
+
+    COLON=','
+    DOT='.'
+    COMMA=','
+    ARROW='->'
+
+    LEFT_PARENTH='('
+    RIGHT_PARENTH=')'
+
+    ASSIGN='='
+    AND='&&'
+    OR='||'
+    NOT='!'
+    TERNARY_QUESTION_OP='?'
+    TERNARY_BRANCHES_OP=':'
+
+    LT='<'
+    LEQ='<='
+    GEQ='>='
+    GT='>'
+    EQ='=='
+    NEQ='!='
+
+    IDENTIFIER='regexp:[\p{Alpha}_][\p{Alnum}_:]*'
+    INTEGER_NUMBER='regexp:0|[1-9]\d*'
+    FLOAT_NUMBER='regexp:[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?|[0-9]+[eE][-+]?[0-9]+'
+    BOOLEAN_LITERAL='regexp:true|false|TRUE|FALSE'
+
+    SINGLE_QUOTE="'"
+    DOUBLE_QUOTE='"'
+    STRING_CONTENT="regexp:([^\\']|\\([\\'\"/bfnrt]|u[a-fA-F0-9]{4}))*"
+
+    COMMENT_START='<!--/*'
+    COMMENT_END='*/-->'
+    COMMENT_CONTENT='regexp:.*'
+
+    NS='regexp:[a-zA-Z]+'
+    VIEWHELPER_NAME='regexp:[a-zA-Z]*?(.[a-zA-Z])*'
+  ]
+}
+
+interpolation ::= (expression | template_comment | outer_text)*
+
+template_comment ::= "<!--/*" COMMENT_CONTENT? "*/-->"
+
+private outer_text ::= OUTER_TEXT+
+
+expression ::= '{' expr_node* '}' {
+  pin=1
+  recoverWhile=expression_recover
+}
+private expression_recover ::= !('{' | outer_text )
+
+expr_node ::= textNode | viewHelperNode | booleanNode | numericNode | variableNode
+
+textNode ::= string_literal
+
+viewHelperNode ::= boundNamespace ':' viewHelperReference '(' viewHelperArgumentList ')'
+private viewHelperReference ::= VIEWHELPER_NAME
+private boundNamespace ::= NS
+
+viewHelperArgumentList ::= argumentIndex ':' argumentValue
+
+argumentIndex ::= string_literal
+argumentValue ::= string_literal | numericNode | variable
+
+booleanNode ::= BOOLEAN_LITERAL
+
+numericNode ::= FLOAT_NUMBER | INTEGER_NUMBER
+
+variableNode ::= IDENTIFIER
+
+string_literal ::= "'" STRING_CONTENT? "'" | '"' STRING_CONTENT? '"'

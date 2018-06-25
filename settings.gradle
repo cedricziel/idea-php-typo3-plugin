@@ -1,0 +1,5 @@
+rootProject.name = 'idea-typo3'
+
+include 'lang-fluid'
+include 'lang-typoscript'
+
