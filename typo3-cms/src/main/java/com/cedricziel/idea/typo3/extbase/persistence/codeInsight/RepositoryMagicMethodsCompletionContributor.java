@@ -5,6 +5,7 @@ import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
@@ -39,19 +40,20 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
             PhpTypedElement variable = (PhpTypedElement) position.getParent().getFirstChild();
 
             PhpType type = variable.getType();
+            Project project = position.getProject();
             type.getTypes().forEach(t -> {
-                Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(t);
+                Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(t);
                 classesByFQN
                         .stream()
                         .filter(ExtbaseUtils::isRepositoryClass)
-                        .forEach(c -> createLookupElementsForRepository(variable, c, result));
+                        .forEach(c -> createLookupElementsForRepository(project, c, result));
             });
         }
 
-        private void createLookupElementsForRepository(@NotNull PhpTypedElement position, @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
+        private void createLookupElementsForRepository(@NotNull Project project,  @NotNull PhpClass repositoryClass, @NotNull CompletionResultSet result) {
             String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClass.getFQN());
 
-            Collection<PhpClass> classesByFQN = PhpIndex.getInstance(position.getProject()).getClassesByFQN(potentialModelClass);
+            Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(potentialModelClass);
             classesByFQN.forEach(c -> {
                 c.getFields().forEach(f -> {
                     if (!ExtbaseUtils.fieldHasMagicFinders(f)) {
