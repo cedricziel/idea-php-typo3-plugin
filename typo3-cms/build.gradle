@@ -8,7 +8,6 @@ intellij {
         'properties',
         'yaml',
         "PsiViewer:${psiViewerPluginVersion}",
-        "com.dmarcotte.handlebars:182.3341.1",
         project(':lang-fluid'),
         project(':lang-typoscript'),
     ]
