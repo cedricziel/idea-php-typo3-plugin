@@ -71,3 +71,9 @@ fabric.properties
 /plugins/typo3-plugin
 /.cache
 /.gradle
+
+/typo3-cms/build
+/lang-fluid/build
+/lang-fluid/gen
+/lang-typoscript/build
+/lang-typoscript/gen
