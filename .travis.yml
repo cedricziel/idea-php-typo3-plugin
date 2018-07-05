@@ -16,16 +16,19 @@ cache:
 
 matrix:
   include:
-  - env: IDEA_VERSION="IU-182.3341.11" PHP_PLUGIN_VERSION="182.3341.34" PSI_VIEWER_PLUGIN_VERSION=182.2757.2 DEPLOY=true
-#  - env: IDEA_VERSION="IU-173.4127.17" PHP_PLUGIN_VERSION="173.4127.13"
-#  allow_failures:
-#  - env: IDEA_VERSION="IU-173.4127.17" PHP_PLUGIN_VERSION="173.4127.13"
+  - env: IDEA_VERSION="IU-2017.3.6" PHP_PLUGIN_VERSION="173.4674.46" PSI_VIEWER_PLUGIN_VERSION="3.28.93" SINCE_BUILD="173" UNTIL_BUILD="173.*"
+  - env: IDEA_VERSION="IU-2018.1.5" PHP_PLUGIN_VERSION="181.5281.35" PSI_VIEWER_PLUGIN_VERSION="2018.1.2" SINCE_BUILD="181" UNTIL_BUILD="181.*"
+  - env: IDEA_VERSION="IU-182.3341.11" PHP_PLUGIN_VERSION="182.3341.34" PSI_VIEWER_PLUGIN_VERSION="182.2757.2" SINCE_BUILD="182" UNTIL_BUILD="182.*"
+  allow_failures:
+  - env: IDEA_VERSION="IU-182.3341.11" PHP_PLUGIN_VERSION="182.3341.34" PSI_VIEWER_PLUGIN_VERSION=182.2757.2 SINCE_BUILD="182" UNTIL_BUILD="182.*"
 
 before_install:
 - "export ORG_GRADLE_PROJECT_ideaVersion=${IDEA_VERSION}"
 - "export ORG_GRADLE_PROJECT_ideaType=${IDEA_TYPE}"
 - "export ORG_GRADLE_PROJECT_phpPluginVersion=${PHP_PLUGIN_VERSION}"
 - "export ORG_GRADLE_PROJECT_psiViewerPluginVersion=${PSI_VIEWER_PLUGIN_VERSION}"
+- "export ORG_GRADLE_PROJECT_customSinceBuild=${SINCE_BUILD}"
+- "export ORG_GRADLE_PROJECT_customUntilBuild=${UNTIL_BUILD}"
 - java -version
 
 script:
@@ -35,7 +38,10 @@ script:
 deploy:
   provider: releases
   api_key: "${GITHUB_KEY}"
-  file: build/distributions/TYPO3*.zip
+  file:
+    - lang-fluid/build/distributions/TYPO3*.zip
+    - lang-typoscript/build/distributions/TYPO3*.zip
+    - typo3-cms/build/distributions/TYPO3*.zip
   skip_cleanup: true
   file_glob: true
   on:
@@ -43,4 +49,4 @@ deploy:
     condition: "$TRAVIS_TAG =~ ^v[0-9]+.*$"
 
 after_deploy:
-- "./gradlew publishPlugin"
+- "./gradlew :typo3-cms:publishPlugin"

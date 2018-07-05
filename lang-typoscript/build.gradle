@@ -1,0 +1,58 @@
+import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateParser
+
+def genRoot = file('gen')
+sourceSets {
+    main {
+        java.srcDirs += genRoot
+        resources.srcDir 'resources'
+    }
+    test {
+        java.srcDir 'test'
+        resources.srcDirs 'testData'
+    }
+}
+
+idea {
+    module {
+        generatedSourceDirs += genRoot
+    }
+}
+
+intellij {
+    version ideaVersion
+    pluginName 'TYPO3 TypoScript Plugin'
+    plugins = [
+        "com.jetbrains.php:${phpPluginVersion}",
+        'CSS',
+        'java-i18n',
+        'properties',
+        'yaml',
+        "PsiViewer:${psiViewerPluginVersion}",
+    ]
+}
+
+publishPlugin {
+    channels 'nightly'
+}
+
+task generateTypoScriptLexer(type: GenerateLexer) {
+    source = "src/main/grammars/TypoScriptLexer.flex"
+    targetDir = "gen/com/cedricziel/idea/typoscript/lang/lexer"
+    targetClass = "TypoScriptLexer"
+}
+
+task generateTypoScriptParser(type: GenerateParser) {
+    source = "src/main/grammars/TypoScriptParser.bnf"
+    targetRoot = 'gen'
+    pathToParser = '/com/cedricziel/idea/typoscript/lang/parser/TypoScriptParserGenerated.java'
+    pathToPsiRoot = '/com/cedricziel/idea/typoscript/lang/psi'
+}
+
+compileJava {
+    dependsOn generateTypoScriptParser, generateTypoScriptLexer
+}
+
+clean.doLast {
+    file('gen').deleteDir()
+}

@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        mavenCentral()
+
+        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+
+        maven { url 'https://jitpack.io' }
+        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    }
+
+    dependencies {
+        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:2018.1.2"
+    }
+}
+
+import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.grammarkit.tasks.GenerateParser
+
+def genRoot = file('gen')
+sourceSets {
+    main {
+        java.srcDirs += genRoot
+        resources.srcDir 'resources'
+    }
+    test {
+        java.srcDir 'test'
+        resources.srcDirs 'testData'
+    }
+}
+
+idea {
+    module {
+        generatedSourceDirs += genRoot
+    }
+}
+
+intellij {
+    version ideaVersion
+    pluginName 'TYPO3 Fluid Plugin'
+    plugins = [
+        "com.jetbrains.php:${phpPluginVersion}",
+        'uml',
+        'CSS',
+        'java-i18n',
+        'properties',
+        'yaml',
+        "PsiViewer:${psiViewerPluginVersion}"
+    ]
+}
+
+publishPlugin {
+    channels 'nightly'
+}
+
+task generateFluidLexer(type: GenerateLexer) {
+    source = "src/main/grammars/FluidLexer.flex"
+    targetDir = "gen/com/cedricziel/idea/fluid/lang/lexer"
+    targetClass = "_FluidLexer"
+}
+
+task generateFluidParser(type: GenerateParser) {
+    source = "src/main/grammars/FluidParser.bnf"
+    targetRoot = 'gen'
+    pathToParser = '/com/cedricziel/idea/fluid/lang/parser/FluidParserGenerated.java'
+    pathToPsiRoot = '/com/cedricziel/idea/fluid/lang/psi'
+}
+
+compileJava {
+    dependsOn generateFluidParser, generateFluidLexer
+}
+
+clean.doLast {
+    file('gen').deleteDir()
+}

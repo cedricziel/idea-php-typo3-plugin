@@ -6,15 +6,24 @@
     <description><![CDATA[
     ]]></description>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
-    -->
 
     <extensions defaultExtensionNs="com.intellij">
+        <xml.xmlExtension implementation="com.cedricziel.idea.fluid.codeInsight.FluidHtmlExtension" order="first" id="Fluid"/>
+
+        <!-- inner expression language -->
         <fileTypeFactory implementation="com.cedricziel.idea.fluid.lang.FluidFileTypeFactory"/>
         <lang.parserDefinition language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidParserDefinition"/>
+
+        <multiHostInjector implementation="com.cedricziel.idea.fluid.editor.FluidInjector" order="first" id="fluid"/>
+
+        <lang.substitutor language="HTML" implementationClass="com.cedricziel.idea.fluid.lang.psi.FluidLanguageSubstitutor"/>
+        <lang.syntaxHighlighterFactory language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidHighlighterFactory"/>
+
+        <!-- configuration -->
+        <projectConfigurable provider="com.cedricziel.idea.fluid.config.FluidConfigurationProvider"/>
+        <codeFoldingOptionsProvider instance="com.cedricziel.idea.fluid.config.FluidFoldingOptionsProvider"/>
+        <fileIndentOptionsProvider implementation="com.cedricziel.idea.fluid.lang.psi.codeStyle.FluidFileIndentOptionsProvider"/>
     </extensions>
 
     <actions>

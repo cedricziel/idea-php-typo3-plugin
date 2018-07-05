@@ -10,9 +10,6 @@ import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 %%
 
 %{
-  private boolean ternaryBranchesOparatorMatched = false;
-  private boolean wsAfterTernaryBranchesOparatorMatched = false;
-
   public _FluidLexer() {
     this((java.io.Reader) null);
   }
@@ -25,9 +22,6 @@ import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 %unicode
 
 WS = \s
-
-SINGLE_QUOTED_STR_CONTENT = ([^\\']|\\([\\'\"/bfnrt]|u[a-fA-F0-9]{4}))+
-DOUBLE_QUOTED_STR_CONTENT = ([^\\\"]|\\([\\'\"/bfnrt]|u[a-fA-F0-9]{4}))+
 
 INTEGER_NUMBER = 0|[1-9]\d*
 FLOAT_NUMBER = [0-9]*\.[0-9]+([eE][-+]?[0-9]+)?|[0-9]+[eE][-+]?[0-9]+
@@ -42,13 +36,8 @@ IDENTIFIER = [\p{Alpha}_][\p{Alnum}_:]*
 %%
 
 <YYINITIAL> {
-  "{"                        { yybegin(EXPRESSION); return FluidTypes.EXPR_START; }
-  "\\{"                      { return FluidTypes.OUTER_TEXT; }
-  "<!--/*"                   { yybegin(COMMENT); return FluidTypes.COMMENT_START; }
-  [^]                        { return FluidTypes.OUTER_TEXT; }
-}
-
-<EXPRESSION> {
+  "{"                         { yybegin(EXPRESSION); return FluidTypes.EXPR_START; }
+  "<!--/*"                    { yybegin(COMMENT); return FluidTypes.COMMENT_START; }
   "}"                         { yybegin(YYINITIAL); return FluidTypes.EXPR_END; }
 
   "true"                      { return FluidTypes.BOOLEAN_LITERAL; }
@@ -81,27 +70,7 @@ IDENTIFIER = [\p{Alpha}_][\p{Alnum}_:]*
 
   {WS}+                       { return TokenType.WHITE_SPACE; }
 
-  [^]                         { yybegin(YYINITIAL); return FluidTypes.OUTER_TEXT; }
-}
-
-<SINGLE_QUOTED_STRING> {
-  "'"                         { yybegin(EXPRESSION); return FluidTypes.SINGLE_QUOTE; }
-  {SINGLE_QUOTED_STR_CONTENT} { return FluidTypes.STRING_CONTENT; }
-
-  [^]                         {
-                                yypushback(1);       // cancel unexpected char
-                                yybegin(EXPRESSION); // and try to parse it again in <EXPRESSION>
-                              }
-}
-
-<DOUBLE_QUOTED_STRING> {
-  \"                          { yybegin(EXPRESSION); return FluidTypes.DOUBLE_QUOTE; }
-  {DOUBLE_QUOTED_STR_CONTENT} { return FluidTypes.STRING_CONTENT; }
-
-  [^]                         {
-                                yypushback(1);       // cancel unexpected char
-                                yybegin(EXPRESSION); // and try to parse it again in <EXPRESSION>
-                              }
+  [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
 }
 
 <COMMENT> {

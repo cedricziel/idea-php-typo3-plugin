@@ -1,6 +1,7 @@
 package com.cedricziel.idea.fluid.lang;
 
-import com.cedricziel.idea.fluid.lang.lexer.FluidLexerAdapter;
+import com.cedricziel.idea.fluid.lang.lexer.FluidLexer;
+import com.cedricziel.idea.fluid.lang.lexer.FluidRawLexerAdapter;
 import com.cedricziel.idea.fluid.lang.parser.FluidParser;
 import com.cedricziel.idea.fluid.lang.psi.FluidFile;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
@@ -26,7 +27,7 @@ public class FluidParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new FluidLexerAdapter();
+        return new FluidLexer();
     }
 
     @NotNull

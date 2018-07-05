@@ -4,8 +4,8 @@ import com.intellij.lexer.FlexAdapter;
 
 import java.io.Reader;
 
-public class FluidLexerAdapter extends FlexAdapter {
-    public FluidLexerAdapter() {
+public class FluidRawLexerAdapter extends FlexAdapter {
+    public FluidRawLexerAdapter() {
         super(new _FluidLexer((Reader) null));
     }
 }
