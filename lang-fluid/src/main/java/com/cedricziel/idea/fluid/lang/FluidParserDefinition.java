@@ -59,6 +59,11 @@ public class FluidParserDefinition implements ParserDefinition {
         return new FluidFile(viewProvider);
     }
 
+    @Override
+    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
+        return SpaceRequirements.MAY;
+    }
+
     public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }

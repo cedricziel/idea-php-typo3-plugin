@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:2018.1.2"
+        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:${grammarKitPluginVersion}"
     }
 }
 
@@ -33,7 +33,7 @@ allprojects {
     if (details.isCleanTag) {
         version = "${details.lastTag}.$customSinceBuild"
     } else {
-        version = "${details.lastTag}.$customSinceBuild-${details.gitHash}-SNAPSHOT"
+        version = "${details.lastTag}.$customSinceBuild.${details.gitHash}-SNAPSHOT"
     }
 
     intellij {
@@ -74,7 +74,7 @@ subprojects {
 
     grammarKit {
         grammarKitRelease = "2017.1.4"
-        jflexRelease = '1.7.0-1'
+        jflexRelease = jFlexRelease
     }
 
     test.testLogging.exceptionFormat = TestExceptionFormat.FULL
