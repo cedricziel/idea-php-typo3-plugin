@@ -1,0 +1,32 @@
+<idea-plugin>
+    <id>com.cedricziel.idea.fluid</id>
+    <name>TYPO3 Fluid FOSS Plugin</name>
+    <vendor email="mail@cedric-ziel.com" url="https://github.com/cedricziel/idea-php-typo3-plugin">Cedric Ziel</vendor>
+
+    <description><![CDATA[
+    ]]></description>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <xml.xmlExtension implementation="com.cedricziel.idea.fluid.codeInsight.FluidHtmlExtension" order="first" id="Fluid"/>
+
+        <!-- inner expression language -->
+        <fileTypeFactory implementation="com.cedricziel.idea.fluid.lang.FluidFileTypeFactory"/>
+        <lang.parserDefinition language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidParserDefinition"/>
+
+        <multiHostInjector implementation="com.cedricziel.idea.fluid.editor.FluidInjector" order="first" id="fluid"/>
+
+        <lang.substitutor language="HTML" implementationClass="com.cedricziel.idea.fluid.lang.psi.FluidLanguageSubstitutor"/>
+        <lang.syntaxHighlighterFactory language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidHighlighterFactory"/>
+
+        <!-- configuration -->
+        <projectConfigurable provider="com.cedricziel.idea.fluid.config.FluidConfigurationProvider"/>
+        <codeFoldingOptionsProvider instance="com.cedricziel.idea.fluid.config.FluidFoldingOptionsProvider"/>
+        <fileIndentOptionsProvider implementation="com.cedricziel.idea.fluid.lang.psi.codeStyle.FluidFileIndentOptionsProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

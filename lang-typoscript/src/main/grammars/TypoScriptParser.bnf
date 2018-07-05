@@ -1,0 +1,30 @@
+{
+  parserClass="com.cedricziel.idea.typoscript.lang.parser.TypoScriptParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Fluid"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.cedricziel.idea.typoscript.lang.psi"
+  psiImplPackage="com.cedricziel.idea.typoscript.lang.psi.impl"
+
+  elementTypeHolderClass="com.cedricziel.idea.typoscript.lang.psi.TypoScriptTypes"
+  elementTypeClass="com.cedricziel.idea.typoscript.lang.psi.TypoScriptElementType"
+  tokenTypeClass="com.cedricziel.idea.typoscript.lang.psi.TypoScriptTokenType"
+
+  tokens = [
+    OUTER_TEXT='regexp:(?:(?!\{).)*'
+
+    EXPR_START='{'
+    EXPR_END='}'
+
+    DOT='.';
+    COMMA=',';
+  ]
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

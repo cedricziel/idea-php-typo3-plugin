@@ -4,45 +4,81 @@ buildscript {
     repositories {
         mavenCentral()
 
+        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+
+        maven { url 'https://jitpack.io' }
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    }
+
+    dependencies {
+        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:${grammarKitPluginVersion}"
     }
 }
 
 plugins {
     id "org.jetbrains.intellij" version "0.3.4"
-    id 'com.palantir.git-version' version "0.9.1"
+    id 'com.palantir.git-version' version "0.11.0"
 }
 
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
+def details = versionDetails()
 
-intellij {
-    version ideaVersion
-    pluginName 'TYPO3 CMS Plugin'
-    plugins = [
-            "com.jetbrains.php:${phpPluginVersion}",
-            'CSS',
-            'java-i18n',
-            'properties',
-            'yaml',
-            "PsiViewer:${psiViewerPluginVersion}"
-    ]
-    downloadSources !Boolean.valueOf(System.getenv('CI'))
+group 'com.cedricziel.idea'
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaTargetVersion
+    tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+    if (details.isCleanTag) {
+        version = "${details.lastTag}.$customSinceBuild"
+    } else {
+        version = "${details.lastTag}.$customSinceBuild.${details.gitHash}-SNAPSHOT"
+    }
+
+    intellij {
+        version ideaVersion
+        updateSinceUntilBuild true
+    }
+
+    patchPluginXml {
+        if (customSinceBuild) {
+            sinceBuild customSinceBuild
+        }
+        if (customUntilBuild) {
+            untilBuild customUntilBuild
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'org.jetbrains.grammarkit'
+    apply plugin: 'org.jetbrains.intellij'
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    intellij {
+        version ideaVersion
+        downloadSources !Boolean.valueOf(System.getenv('CI'))
+        sameSinceUntilBuild Boolean.valueOf(isEAP)
+    }
 
     publishPlugin {
         username System.getenv('IJ_REPO_USERNAME')
         password System.getenv('IJ_REPO_PASSWORD')
     }
 
-    patchPluginXml {
-        sinceBuild '173'
-        untilBuild '182.*'
+    grammarKit {
+        grammarKitRelease = "2017.1.4"
+        jflexRelease = jFlexRelease
     }
-}
 
-group 'com.cedricziel'
-version gitVersion()
+    test.testLogging.exceptionFormat = TestExceptionFormat.FULL
+}
 
 wrapper {
     gradleVersion '4.8'
