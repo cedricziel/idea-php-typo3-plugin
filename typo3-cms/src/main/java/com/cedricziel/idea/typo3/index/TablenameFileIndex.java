@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TablenameFileIndex extends FileBasedIndexExtension <String, TextRange> {
+public class TablenameFileIndex extends FileBasedIndexExtension<String, TextRange> {
 
     public static ID<String, TextRange> KEY = ID.create("com.cedricziel.idea.typo3.index.tablename");
 
@@ -33,8 +33,8 @@ public class TablenameFileIndex extends FileBasedIndexExtension <String, TextRan
             CharSequence charSequence = LoadTextUtil.loadText(inputData.getFile());
 
             final Matcher matcher = Pattern
-                    .compile("create\\s+table\\s+(if\\s+not\\s+exists\\s+)?([a-zA-Z_0-9]+)", Pattern.CASE_INSENSITIVE)
-                    .matcher(charSequence);
+                .compile("create\\s+table\\s+(if\\s+not\\s+exists\\s+)?([a-zA-Z_0-9]+)?(`[a-zA-Z_0-9]+`)?", Pattern.CASE_INSENSITIVE)
+                .matcher(charSequence);
 
             try {
                 while (matcher.find()) {
@@ -42,7 +42,13 @@ public class TablenameFileIndex extends FileBasedIndexExtension <String, TextRan
                         return map;
                     }
 
-                    map.put(matcher.group(2), new TextRange(matcher.start(), matcher.end()));
+                    if (matcher.group(2) != null) {
+                        String group = matcher.group(2);
+                        map.put(group, new TextRange(matcher.start(), matcher.end()));
+                    } else if (matcher.group(3) != null) {
+                        String group = matcher.group(3);
+                        map.put(group.substring(1, group.length() - 1), new TextRange(matcher.start(), matcher.end()));
+                    }
                 }
             } catch (IllegalStateException e) {
                 // no matches
@@ -66,7 +72,7 @@ public class TablenameFileIndex extends FileBasedIndexExtension <String, TextRan
 
     @Override
     public int getVersion() {
-        return 0;
+        return 1;
     }
 
     @NotNull
