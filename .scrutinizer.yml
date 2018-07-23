@@ -1,5 +1,0 @@
-build:
-    environment:
-        java: 'java-8-oracle'
-checks:
-    java: true
