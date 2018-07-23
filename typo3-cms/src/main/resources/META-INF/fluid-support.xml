@@ -1,2 +1,5 @@
 <idea-plugin>
+    <extensions defaultExtensionNs="com.cedricziel.idea.fluid">
+        <provider.implicitNamespace implementation="com.cedricziel.idea.typo3.fluid.ExtLocalconfNamespaceProvider"/>
+    </extensions>
 </idea-plugin>
