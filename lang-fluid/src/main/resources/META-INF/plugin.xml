@@ -4,6 +4,7 @@
     <vendor email="mail@cedric-ziel.com" url="https://github.com/cedricziel/idea-php-typo3-plugin">Cedric Ziel</vendor>
 
     <description><![CDATA[
+    Support for the TYPO3 Fluid Templating Language
     ]]></description>
 
     <depends>com.intellij.modules.lang</depends>
