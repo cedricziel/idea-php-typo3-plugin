@@ -39,11 +39,9 @@ intellij {
     pluginName 'TYPO3 Fluid Plugin'
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
-        'uml',
         'CSS',
         'java-i18n',
         'properties',
-        'yaml',
         "PsiViewer:${psiViewerPluginVersion}"
     ]
 }
