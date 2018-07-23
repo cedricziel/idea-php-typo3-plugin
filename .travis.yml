@@ -49,3 +49,4 @@ deploy:
 
 after_deploy:
 - "./gradlew :typo3-cms:publishPlugin"
+- "./gradlew :lang-fluid:publishPlugin"
