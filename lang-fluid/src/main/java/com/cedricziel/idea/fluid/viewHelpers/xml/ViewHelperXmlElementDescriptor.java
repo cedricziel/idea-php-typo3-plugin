@@ -1,9 +1,9 @@
 package com.cedricziel.idea.fluid.viewHelpers.xml;
 
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
+import com.cedricziel.idea.fluid.xml.XmlDescriptorUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.html.dtd.HtmlNSDescriptorImpl;
-import com.intellij.psi.impl.source.xml.XmlDescriptorUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ArrayUtil;
