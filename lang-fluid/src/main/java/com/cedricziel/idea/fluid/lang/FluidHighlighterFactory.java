@@ -13,6 +13,6 @@ public class FluidHighlighterFactory extends SyntaxHighlighterFactory {
     @Override
     public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
 
-        return new FluidHighlighter();
+        return new FluidFileHighlighter();
     }
 }

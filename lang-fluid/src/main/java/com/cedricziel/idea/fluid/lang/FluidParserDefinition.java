@@ -4,6 +4,7 @@ import com.cedricziel.idea.fluid.lang.lexer.FluidLexer;
 import com.cedricziel.idea.fluid.lang.lexer.FluidRawLexerAdapter;
 import com.cedricziel.idea.fluid.lang.parser.FluidParser;
 import com.cedricziel.idea.fluid.lang.psi.FluidFile;
+import com.cedricziel.idea.fluid.lang.psi.FluidTokenType;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -42,7 +43,7 @@ public class FluidParserDefinition implements ParserDefinition {
 
     @NotNull
     public TokenSet getStringLiteralElements() {
-        return TokenSet.EMPTY;
+        return FluidTokens.tsSTRINGS;
     }
 
     @NotNull

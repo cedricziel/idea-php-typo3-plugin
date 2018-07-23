@@ -1,15 +1,16 @@
 package com.cedricziel.idea.fluid.lang;
 
-import com.cedricziel.idea.fluid.FluidBundle;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.templateLanguages.TemplateDataLanguageMappings;
 import icons.FluidIcons;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.nio.charset.Charset;
@@ -17,33 +18,21 @@ import java.nio.charset.Charset;
 public class FluidFileType extends LanguageFileType implements TemplateLanguageFileType {
     public static final FluidFileType INSTANCE = new FluidFileType();
 
-    private FluidFileType() {
-        this(FluidLanguage.INSTANCE);
-    }
+    protected FluidFileType() {
+        super(FluidLanguage.INSTANCE);
 
-    protected FluidFileType(Language lang) {
-        super(lang);
+        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this, new EditorHighlighterProvider() {
+            public EditorHighlighter getEditorHighlighter(@Nullable Project project, @NotNull FileType fileType, @Nullable VirtualFile virtualFile, @NotNull EditorColorsScheme colors) {
 
-        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(
-            this,
-            new EditorHighlighterProvider() {
-                public EditorHighlighter getEditorHighlighter(
-                    @Nullable Project project,
-                    @NotNull FileType fileType,
-                    @Nullable VirtualFile virtualFile,
-                    @NotNull EditorColorsScheme editorColorsScheme
-                ) {
-                    return new FluidTemplateHighlighter(project, virtualFile, editorColorsScheme);
-                }
+                return new FluidTemplateHighlighter(project, virtualFile, colors);
             }
-        );
+        });
     }
 
     private static LanguageFileType getAssociatedFileType(VirtualFile file, Project project) {
         if (project == null) {
             return null;
         }
-
         Language language = TemplateDataLanguageMappings.getInstance(project).getMapping(file);
 
         LanguageFileType associatedFileType = null;
@@ -61,13 +50,13 @@ public class FluidFileType extends LanguageFileType implements TemplateLanguageF
     @NotNull
     @Override
     public String getName() {
-        return "Fluid Template";
+        return "Fluid";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return FluidBundle.message("fl.files.file.type.description");
+        return "Fluid";
     }
 
     @NotNull
@@ -82,6 +71,11 @@ public class FluidFileType extends LanguageFileType implements TemplateLanguageF
         return FluidIcons.FILE;
     }
 
+    @Override
+    public String getCharset(@NotNull VirtualFile file, @NotNull byte[] content) {
+        return CharsetToolkit.UTF8;
+    }
+
     public Charset extractCharsetFromFileContent(@Nullable final Project project,
                                                  @Nullable final VirtualFile file,
                                                  @NotNull final CharSequence content) {
@@ -92,6 +86,5 @@ public class FluidFileType extends LanguageFileType implements TemplateLanguageF
         }
 
         return CharsetUtil.extractCharsetFromFileContent(project, file, associatedFileType, content);
-
     }
 }

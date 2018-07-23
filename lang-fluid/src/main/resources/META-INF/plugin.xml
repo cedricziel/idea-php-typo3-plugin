@@ -14,6 +14,22 @@
         <!-- inner expression language -->
         <fileTypeFactory implementation="com.cedricziel.idea.fluid.lang.FluidFileTypeFactory"/>
         <lang.parserDefinition language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidParserDefinition"/>
+        <lang.braceMatcher language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidBraceMatcher"/>
+        <lang.fileViewProviderFactory language="Fluid" implementationClass="com.cedricziel.idea.fluid.file.FluidFileViewProviderFactory"/>
+        <editorHighlighterProvider filetype="Fluid" implementationClass="com.cedricziel.idea.fluid.editor.highlighter.FluidEditorHighlighterFactory"/>
+
+        <!--
+        <lang.formatter language="Fluid" implementationClass="com.cedricziel.idea.fluid.formatter.FluidFormattingModelBuilder"/>
+        -->
+        <langCodeStyleSettingsProvider implementation="com.cedricziel.idea.fluid.formatter.FluidLanguageCodeStyleSettingsProvider"/>
+        <codeStyleSettingsProvider implementation="com.cedricziel.idea.fluid.formatter.FluidCodeStyleSettingsProvider"/>
+        <lang.quoteHandler language="Fluid" implementationClass="com.cedricziel.idea.fluid.codeInsight.FluidQuoteHandler" />
+
+        <!-- auto-close inline-expression -->
+        <typedHandler implementation="com.cedricziel.idea.fluid.codeInsight.editorActions.FluidTypedHandler"/>
+
+        <!-- Index -->
+        <indexPatternBuilder implementation="com.cedricziel.idea.fluid.FluidIndexPatternBuilder"/>
 
         <multiHostInjector implementation="com.cedricziel.idea.fluid.editor.FluidInjector" order="first" id="fluid"/>
 
@@ -24,7 +40,63 @@
         <projectConfigurable provider="com.cedricziel.idea.fluid.config.FluidConfigurationProvider"/>
         <codeFoldingOptionsProvider instance="com.cedricziel.idea.fluid.config.FluidFoldingOptionsProvider"/>
         <fileIndentOptionsProvider implementation="com.cedricziel.idea.fluid.lang.psi.codeStyle.FluidFileIndentOptionsProvider"/>
+
+        <!-- live templates -->
+        <defaultLiveTemplatesProvider implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidLiveTemplateProvider"/>
+        <liveTemplateContext implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidTemplateContext"/>
+
+        <!-- postfix completion -->
+        <codeInsight.template.postfixTemplateProvider language="Fluid" implementationClass="com.cedricziel.idea.fluid.codeInsight.template.postfix.templates.FluidPostfixTemplateProvider"/>
+
+        <completion.contributor language="Fluid" implementationClass="com.cedricziel.idea.fluid.completion.FluidCompletionContributor"/>
+
+        <!-- tag mode -->
+        <xml.attributeDescriptorsProvider implementation="com.cedricziel.idea.fluid.tagMode.FluidTagNameProvider"/>
+        <xml.elementDescriptorProvider implementation="com.cedricziel.idea.fluid.tagMode.FluidTagNameProvider"/>
+        <xml.fileNSInfoProvider implementation="com.cedricziel.idea.fluid.tagMode.FluidTagNameProvider"/>
+        <xml.tagNameProvider implementation="com.cedricziel.idea.fluid.tagMode.FluidTagNameProvider"/>
+
+        <!-- documentation -->
+        <lang.documentationProvider language="HTML" implementationClass="com.cedricziel.idea.fluid.viewHelpers.FluidDocumentationProvider" order="first"/>
+
+        <lang.inspectionSuppressor language="HTML" implementationClass="com.cedricziel.idea.fluid.tagMode.UnboundNamespaceSuppressor"/>
+
+        <!-- built-in inspections -->
+        <localInspection
+            language="Fluid"
+            groupName="Fluid"
+            enabledByDefault="true"
+            shortName="UndefinedVariable"
+            displayName="Undefined Variable"
+            implementationClass="com.cedricziel.idea.fluid.codeInsight.inspection.UndefinedVariableInspection"/>
+        <localInspection
+            language="Fluid"
+            groupName="Fluid"
+            enabledByDefault="true"
+            shortName="UndefinedViewHelper"
+            displayName="Undefined ViewHelper"
+            implementationClass="com.cedricziel.idea.fluid.codeInsight.inspection.UndefinedViewHelperInspection"/>
+        <localInspection
+            language="Fluid"
+            groupName="Fluid"
+            enabledByDefault="true"
+            shortName="UndefinedNamespace"
+            displayName="Unbound ViewHelper namespace"
+            implementationClass="com.cedricziel.idea.fluid.codeInsight.inspection.UndefinedNamespaceInspection"/>
     </extensions>
+
+    <extensions defaultExtensionNs="com.cedricziel.idea.fluid">
+        <provider.variables implementation="com.cedricziel.idea.fluid.variables.AllVariableProvider"/>
+        <provider.variables implementation="com.cedricziel.idea.fluid.variables.InTemplateDeclarationVariableProvider"/>
+        <provider.implicitNamespace implementation="com.cedricziel.idea.fluid.namespaces.DefaultFluidNamespaceProvider"/>
+        <provider.viewHelper implementation="com.cedricziel.idea.fluid.viewHelpers.DefaultViewHelpersProvider"/>
+    </extensions>
+
+    <extensionPoints>
+        <extensionPoint name="provider.variables" interface="com.cedricziel.idea.fluid.extensionPoints.VariableProvider"/>
+        <extensionPoint name="provider.implicitNamespace" interface="com.cedricziel.idea.fluid.extensionPoints.NamespaceProvider"/>
+        <extensionPoint name="provider.viewHelper" interface="com.cedricziel.idea.fluid.extensionPoints.ViewHelperProvider"/>
+    </extensionPoints>
 
     <actions>
         <!-- Add your actions here -->

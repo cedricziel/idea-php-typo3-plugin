@@ -1,0 +1,10 @@
+<templateSet group="Fluid">
+    <template name="namespace" value="{namespace $alias$:$namespace$}$END$" description="Namespace import"
+              toReformat="false" toShortenFQNames="false">
+        <variable name="alias" expression="" defaultValue="true" alwaysStopAt="true"/>
+        <variable name="namespace" expression="" defaultValue="true" alwaysStopAt="true"/>
+        <context>
+            <option name="FLUID" value="true"/>
+        </context>
+    </template>
+</templateSet>
