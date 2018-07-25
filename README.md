@@ -1,11 +1,22 @@
-# TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm
+# TYPO3 Plugins for IntelliJ IDEA / PhpStorm
 
-[![TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm in the Jetrbains Plugin repository](https://img.shields.io/jetbrains/plugin/d/9496-typo3-cms-plugin.svg)](https://plugins.jetbrains.com/plugin/9496-typo3-cms-plugin)
 [![Build Status](https://travis-ci.org/cedricziel/idea-php-typo3-plugin.svg?branch=master)](https://travis-ci.org/cedricziel/idea-php-typo3-plugin)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/ziel)
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-red.svg)](https://www.patreon.com/cedricziel)
 
-[TYPO3 CMS Plugin in Jetbrains plugin repository](https://plugins.jetbrains.com/idea/plugin/9496-typo3-cms-plugin)
+This repository contains IDE plugins for:
+
+* [TYPO3 CMS related functionality](typo3-cms)
+* the [TYPO3 Fluid Templating Language](lang-fluid)
+* the [TypoScript configuration language](lang-typoscript)
+
+While these 3 plugins work together and may use each others' library functions and extension points, each may be used
+independently from the others - with a limited feature set.
+
+The plugins in the JetBrains Plugin repository:
+
+* TYPO3 CMS - [![TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm in the JetBrains Plugin repository](https://img.shields.io/jetbrains/plugin/d/9496-typo3-cms-plugin.svg)](https://plugins.jetbrains.com/plugin/9496-typo3-cms-plugin)
+* TYPO3 Fluid - [![TYPO3 CMS Plugin for IntelliJ IDEA / PhpStorm in the JetBrains Plugin repository](https://img.shields.io/jetbrains/plugin/d/10959-typo3-fluid-foss-plugin.svg)](https://plugins.jetbrains.com/plugin/10959-typo3-fluid-foss-plugin)
 
 ## Installation
 
@@ -21,7 +32,7 @@ On PhpStorm or IntelliJ:
 * restart your IDE
 * profit!
 
-## Features
+## TYPO3 CMS Plugin - Features
 
 * TypeProvider for `GeneralUtility::makeInstance`
 * TypeProvider for `GeneralUtility::makeInstanceService`
@@ -55,11 +66,16 @@ If you want to sustain further development, you can donate via [PayPal](https://
 
 * `git clone https://github.com/cedricziel/idea-php-typo3-plugin.git`
 * `cd idea-php-typo3-plugin`
-* `./gradlew runIde` - `gradlew.bat runIde` for Windows, this starts the IDE with the
-  plugin configured and enabled
+* start the IDE:
+  * TYPO3 CMS Plugin: `./gradlew :typo3-cms:runIde` - `gradlew.bat runIde` for Windows
+  * TYPO3 Fluid Plugin `./gradlew :lang-fluid:runIde` - `gradlew.bat runIde` for Windows
+  * TypoScript Plugin `./gradlew :lang-typoscript:runIde` - `gradlew.bat runIde` for Windows
+  * CTRL + C to terminate the execution
 * to begin development with IntelliJ, please import the `build.gradle` file as `new project from
   existing sources`
 * from IntelliJ run the Gradle task `runIde` (in debug mode), set break-points, profit!
+* run tests:
+  * `./gradlew check`
 * ideally: send your pull request from a feature branch
 
 ## Credits
