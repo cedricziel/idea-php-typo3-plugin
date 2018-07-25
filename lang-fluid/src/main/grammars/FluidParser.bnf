@@ -145,6 +145,7 @@ Expression ::=   OrExpr
                | TernaryExpr
                | CastExpr
                | ViewHelperGroup
+               | ArrayCreationExpr
                | FieldGroup
                | PrimaryGroup
 
@@ -193,17 +194,15 @@ NumberExpr     ::= NUMBER
 
 ParenthesesExpr     ::= '(' InlineChain ')' { pin=1 }
 
-ArrayCreationExpr   ::= InlineArray  | NestedArray {
+ArrayCreationExpr ::= ArrayElement ( ',' ArrayElement )* {
   pin=1
 }
-private InlineArray ::= ArrayElement ( ',' ArrayElement )* {
-  pin=1
-}
+
 private NestedArray ::= '{' ArrayElement ( ',' ArrayElement )* '}' {
   pin=2
 }
 
-ArrayElement        ::= ArrayKey ':' ArrayValue {
+private ArrayElement        ::= ArrayKey ':' ArrayValue {
   pin=2
 }
 

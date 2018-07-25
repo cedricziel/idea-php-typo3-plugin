@@ -3,6 +3,7 @@ package com.cedricziel.idea.fluid.lang.parser;
 import com.cedricziel.idea.fluid.lang.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public class ParserTest extends LightCodeInsightFixtureTestCase {
@@ -43,12 +44,36 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
         assertParentElementAtCaretMatchesType("{foo -> f:fo(foo: <caret>false)}", FluidBooleanLiteral.class);
     }
 
+    public void testCanParseArrays() {
+        // Array Keys are discoverable
+        assertParentElementAtCaretMatchesType("{fo<caret>o : bar}", FluidArrayKey.class);
+        assertParentElementAtCaretMatchesType("{'fo<caret>o' : bar}", FluidArrayKey.class, 2);
+        assertParentElementAtCaretMatchesType("{\"fo<caret>o\" : bar}", FluidArrayKey.class, 2);
+
+        // keys can be string literals
+        assertParentElementAtCaretMatchesType("{'fo<caret>o' : bar}", FluidStringLiteral.class);
+        assertParentElementAtCaretMatchesType("{\"fo<caret>o\" : bar}", FluidStringLiteral.class);
+
+        // array values can be literals or field chains
+        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidFieldChain.class);
+        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidArrayValue.class, 3);
+        assertParentElementAtCaretMatchesType("{foo : 'b<caret>ar'}", FluidArrayValue.class, 2);
+        assertParentElementAtCaretMatchesType("{foo : \"b<caret>ar\"}", FluidArrayValue.class, 2);
+    }
+
     private void assertParentElementAtCaretMatchesType(String content, Class expected) {
+        assertParentElementAtCaretMatchesType(content, expected, 1);
+    }
+
+    private void assertParentElementAtCaretMatchesType(String content, Class expected, int levelsUp) {
         PsiFile psiFile = myFixture.configureByText("foo.fluid", content);
         int offset = myFixture.getEditor().getCaretModel().getOffset();
 
         PsiElement elementAt = psiFile.findElementAt(offset);
+        for (int i = 0; i< levelsUp; i++) {
+            elementAt = elementAt.getParent();
+        }
 
-        assertInstanceOf(elementAt.getParent(), expected);
+        assertInstanceOf(elementAt, expected);
     }
 }
