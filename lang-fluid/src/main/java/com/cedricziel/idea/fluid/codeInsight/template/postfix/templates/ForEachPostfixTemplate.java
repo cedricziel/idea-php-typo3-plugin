@@ -1,6 +1,6 @@
 package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
-import com.cedricziel.idea.fluid.lang.psi.FluidIdentifierExpr;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
 import com.cedricziel.idea.fluid.lang.psi.FluidInlineStatement;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
@@ -22,7 +22,7 @@ public class ForEachPostfixTemplate extends PostfixTemplate {
     @Override
     public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
         return PlatformPatterns.psiElement(FluidTypes.IDENTIFIER)
-            .withParent(PlatformPatterns.psiElement(FluidIdentifierExpr.class))
+            .withParent(PlatformPatterns.psiElement(FluidFieldChain.class))
             .accepts(context);
     }
 

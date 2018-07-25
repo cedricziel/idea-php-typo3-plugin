@@ -64,20 +64,11 @@
 
     COLON=':'
 
-    LAYOUT_TAG_START='<f:layout'
-    TAG_END='/>'
-
     NS='regexp:[a-zA-Z]+'
-    VIEWHELPER_NAME='regexp:[a-zA-Z]*?(.[a-zA-Z])*'
     NAMESPACE_FQN='regexp:[a-zA-Z\\\]*]'
-    NAMESPACE_ALIAS='regexp:[a-z]+'
 
     NAMESPACE = 'namespace'
     AS = 'as'
-
-    CONTENT = 'content'
-
-    VAR_ALL = '_all'
   ]
 
   extends("string_literal|number_literal|boolean_literal|null_literal")=literal
@@ -94,7 +85,6 @@ File ::= StatementList
 private StatementList ::= (  TEXT+ | NamespaceStatement | InlineStatement )*
 
 fake Statement ::=
-fake ViewHelperCall ::=
 
 template_comment ::= "<!--/*" COMMENT_CONTENT? "*/-->"
 
@@ -142,7 +132,7 @@ literal ::= string_literal | number_literal | boolean_literal | null_literal {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidLiteralMixin"
 }
 
-FieldChain      ::= IDENT FieldChain?
+FieldChain      ::= IDENTIFIER ('.' FieldChain)?
 FieldExpr       ::= FieldChain
 FieldChainExpr  ::= Expression FieldChain
 
@@ -176,7 +166,7 @@ CastExpr           ::=    Expression as_op IDENTIFIER
 ViewHelperExpr     ::=    boundNamespace ':' viewHelperReference '(' viewHelperArgumentList ')' {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidViewHelperNodeMixin"
   implements="com.cedricziel.idea.fluid.lang.psi.FluidPresentableName"
-  pin=2
+  pin=4
 }
 viewHelperReference ::= IDENTIFIER ('.' viewHelperPath)*
 private viewHelperPath ::= IDENTIFIER ( '.' viewHelperPath)*
@@ -195,22 +185,30 @@ viewHelperArgument ::= argumentKey ':' argumentValue {
 }
 argumentKey ::= IDENTIFIER
 
-argumentValue ::= literal | IdentifierExpr
+argumentValue ::= literal | FieldExpr | ArrayCreationExpr
 
 StringExpr     ::= string_literal
-IdentifierExpr ::= IDENTIFIER ('.' PropertyAccessExpr)?
-PropertyAccessExpr ::= IDENTIFIER ( '.' PropertyAccessExpr)?
 
 NumberExpr     ::= NUMBER
 
 ParenthesesExpr     ::= '(' InlineChain ')' { pin=1 }
 
-ArrayCreationExpr   ::= '{' ArrayElement ( ',' ArrayElement )* '}' { pin=1 }
+ArrayCreationExpr   ::= InlineArray  | NestedArray {
+  pin=1
+}
+private InlineArray ::= ArrayElement ( ',' ArrayElement )* {
+  pin=1
+}
+private NestedArray ::= '{' ArrayElement ( ',' ArrayElement )* '}' {
+  pin=2
+}
+
 ArrayElement        ::= ArrayKey ':' ArrayValue {
   pin=2
 }
-ArrayKey ::= IDENTIFIER
-ArrayValue ::= literal | IdentifierExpr
+
+ArrayKey ::= IDENTIFIER | literal
+ArrayValue ::= literal | FieldExpr | NestedArray
 
 InlineChain      ::= Expression Chain? {
  pin=1
@@ -222,7 +220,7 @@ Chain          ::= '->' Expression Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr
-private PrimaryGroup ::= NumberExpr  | IdentifierExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
+private PrimaryGroup ::= NumberExpr  | FieldExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
 
 InlineStatement ::= '{' InlineChain '}' {
   pin=2

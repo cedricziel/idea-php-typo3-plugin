@@ -29,7 +29,7 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
             return new THashMap<>();
         }
 
-        String schemaLocation = "/schemas/fluid/6.2.xsd";
+        String schemaLocation = "/schemas/fluid/7.6.xsd";
         String schema = readSchema(schemaLocation);
 
         XmlFile xmlLanguage = (XmlFile) PsiFileFactory.getInstance(project).createFileFromText(XMLLanguage.INSTANCE, schema);

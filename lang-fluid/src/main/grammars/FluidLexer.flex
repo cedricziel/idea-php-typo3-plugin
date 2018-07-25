@@ -26,32 +26,20 @@ EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WS=({LINE_WS}|{EOL})+
 
-ALL_VARIABLE = '_all'
-
 INTEGER_NUMBER = 0|[1-9]\d*
 FLOAT_NUMBER = [0-9]*\.[0-9]+([eE][-+]?[0-9]+)?|[0-9]+[eE][-+]?[0-9]+
 IDENTIFIER = [\p{Alpha}_][\p{Alnum}_]*
-VIEWHELPER_CALL = [\p{Alpha}_][\p{Alnum}_:]*
-VIEWHELPER_NAME= [a-zA-Z]*?(.[a-zA-Z])*
 
 SINGLE_QUOTED_STRING=((\" ([^\"\n])* \"?) | ("'" ([^\'\n])* \'?))
 DOUBLE_QUOTED_STRING=((\" ([^\"\n])* \"?) | ("\"" ([^\"\n])* \"?))
 
 NAMESPACE_DECL = [a-zA-Z\\\]+][\\\a-zA-Z]+]*
-NAMESPACE_ALIAS= [a-z]+
 
 TEXT = [^{]*
 
 %state EXPRESSION_LIST
 %state NAMESPACE_IMPORT
-%state VIEW_HELPER
-%state SECTION_NODE
-%state RENDER_NODE
-%state LAYOUT_NODE
-%state ARGUMENT_LIST
-%state SINGLE_QUOTED_STRING
-%state DOUBLE_QUOTED_STRING
-%state TERNARY_BRANCHES_OP
+%state ARRAY
 %state COMMENT
 
 %%
@@ -65,18 +53,6 @@ TEXT = [^{]*
   [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
 }
 
-<LAYOUT_NODE> {
-  {IDENTIFIER}                { return FluidTypes.IDENTIFIER; }
-  "="                         { return FluidTypes.ASSIGN; }
-  {DOUBLE_QUOTED_STRING}      { return FluidTypes.DOUBLE_QUOTED_STRING; }
-  {SINGLE_QUOTED_STRING}      { return FluidTypes.SINGLE_QUOTED_STRING; }
-  {WS}+                       { return TokenType.WHITE_SPACE; }
-
-  "/>"                        { yybegin(YYINITIAL); return FluidTypes.TAG_END; }
-
-  [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
-}
-
 <EXPRESSION_LIST> {
   "}"                         { yybegin(YYINITIAL); return FluidTypes.EXPR_END; }
   "true"                      { return FluidTypes.TRUE; }
@@ -84,8 +60,10 @@ TEXT = [^{]*
   "TRUE"                      { return FluidTypes.TRUE; }
   "FALSE"                     { return FluidTypes.FALSE; }
 
-  '_all'                      { return FluidTypes.VAR_ALL; }
+  "{"                         { yybegin(ARRAY); return FluidTypes.EXPR_START; }
+
   'as'                        { return FluidTypes.AS; }
+  "namespace"                 { yybegin(NAMESPACE_IMPORT); return FluidTypes.NAMESPACE; }
 
   "->"                        { return FluidTypes.ARROW; }
   ":"                         { return FluidTypes.COLON; }
@@ -94,7 +72,6 @@ TEXT = [^{]*
 
   {DOUBLE_QUOTED_STRING}      { return FluidTypes.DOUBLE_QUOTED_STRING; }
   {SINGLE_QUOTED_STRING}      { return FluidTypes.SINGLE_QUOTED_STRING; }
-  "namespace"                 { yybegin(NAMESPACE_IMPORT); return FluidTypes.NAMESPACE; }
   {INTEGER_NUMBER}            { return FluidTypes.NUMBER; }
   {FLOAT_NUMBER}              { return FluidTypes.FLOAT_NUMBER; }
 
@@ -125,6 +102,20 @@ TEXT = [^{]*
   ":"                         { return FluidTypes.COLON; }
 
   {IDENTIFIER}                { return FluidTypes.IDENTIFIER; }
+
+  {WS}+                       { return TokenType.WHITE_SPACE; }
+
+  [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
+}
+
+<ARRAY> {
+  "}"                         { yybegin(YYINITIAL); return FluidTypes.EXPR_END; }
+  ":"                         { return FluidTypes.COLON; }
+  {IDENTIFIER}                { return FluidTypes.IDENTIFIER; }
+  {DOUBLE_QUOTED_STRING}      { return FluidTypes.DOUBLE_QUOTED_STRING; }
+  {SINGLE_QUOTED_STRING}      { return FluidTypes.SINGLE_QUOTED_STRING; }
+  {INTEGER_NUMBER}            { return FluidTypes.NUMBER; }
+  {FLOAT_NUMBER}              { return FluidTypes.FLOAT_NUMBER; }
 
   {WS}+                       { return TokenType.WHITE_SPACE; }
 

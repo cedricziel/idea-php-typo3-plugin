@@ -21,7 +21,7 @@ public class FluidCompletionContributor extends CompletionContributor {
             }
         });
 
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidIdentifierExpr.class), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidFieldChain.class), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 for (VariableProvider extension : VariableProvider.EP_NAME.getExtensions()) {
@@ -30,7 +30,7 @@ public class FluidCompletionContributor extends CompletionContributor {
             }
         });
 
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidIdentifierExpr.class).afterLeaf("->"), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidFieldChain.class).afterLeaf("->"), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 for (NamespaceProvider extension : NamespaceProvider.EP_NAME.getExtensions()) {

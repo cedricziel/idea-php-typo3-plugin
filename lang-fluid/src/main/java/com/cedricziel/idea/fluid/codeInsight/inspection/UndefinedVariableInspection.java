@@ -1,6 +1,6 @@
 package com.cedricziel.idea.fluid.codeInsight.inspection;
 
-import com.cedricziel.idea.fluid.lang.psi.FluidIdentifierExpr;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
 import com.cedricziel.idea.fluid.util.FluidUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -16,7 +16,7 @@ public class UndefinedVariableInspection extends LocalInspectionTool {
         return new PsiElementVisitor() {
             @Override
             public void visitElement(PsiElement element) {
-                if (!(element instanceof FluidIdentifierExpr)) {
+                if (!(element instanceof FluidFieldChain)) {
                     super.visitElement(element);
                     return;
                 }

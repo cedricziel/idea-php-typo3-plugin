@@ -12,7 +12,6 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.EmptyNode;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -39,8 +38,8 @@ public class FluidViewHelperReferenceInsertHandler implements InsertHandler<Look
             viewHelper = findViewHelperByReference((FluidViewHelperReference) completionParent, item);
         } else if(completionParent instanceof FluidBoundNamespace) {
             // find viewhelper
-        } else if (completionParent instanceof FluidIdentifierExpr) {
-            viewHelper = findViewHelperByIdentifierPosition((FluidIdentifierExpr) completionParent, item);
+        } else if (completionParent instanceof FluidFieldChain) {
+            viewHelper = findViewHelperByFieldPosition((FluidFieldChain) completionParent, item);
         }
 
         if (viewHelper == null) {
@@ -65,7 +64,7 @@ public class FluidViewHelperReferenceInsertHandler implements InsertHandler<Look
         TemplateManager.getInstance(context.getProject()).startTemplate(context.getEditor(), t);
     }
 
-    private ViewHelper findViewHelperByIdentifierPosition(@NotNull FluidIdentifierExpr completionParent, @NotNull LookupElement item) {
+    private ViewHelper findViewHelperByFieldPosition(@NotNull FluidFieldChain completionParent, @NotNull LookupElement item) {
         String[] split = StringUtils.split(item.getLookupString(), ":");
         if (split.length != 2) {
             return null;
