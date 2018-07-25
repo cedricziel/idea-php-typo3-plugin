@@ -3,7 +3,7 @@
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
-  psiClassPrefix="Fluid"
+  psiClassPrefix="TypoScript"
   psiImplClassSuffix="Impl"
   psiPackage="com.cedricziel.idea.typoscript.lang.psi"
   psiImplPackage="com.cedricziel.idea.typoscript.lang.psi.impl"
@@ -13,18 +13,53 @@
   tokenTypeClass="com.cedricziel.idea.typoscript.lang.psi.TypoScriptTokenType"
 
   tokens = [
-    OUTER_TEXT='regexp:(?:(?!\{).)*'
-
-    EXPR_START='{'
-    EXPR_END='}'
+    LBRACE='{'
+    RBRACE='}'
+    LBRACKET='['
+    RBRACKET=']'
+    LPARENTH='('
+    RPARENTH=')'
 
     DOT='.';
     COMMA=',';
+
+    ASSIGN='=';
   ]
+
+  extends(".*Expr")=Expression
+  consumeTokenMethod(".*Expr")="consumeTokenFast"
 }
 
-simpleFile ::= item_*
+TypoScriptFile ::= Statement*
 
-private item_ ::= (property|COMMENT|CRLF)
+Statement ::= (InlineChain | COMMENT | CRLF)
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+Expression ::=   AssignExpr
+                 | ArrayExpr
+                 | PrimaryGroup
+
+AssignExpr ::= IdentifierExpr '=' Value {
+  pin = 2
+}
+ArrayExpr  ::= IdentifierExpr (DOT PropertyAccessExpr)? '{' Statement* '}' {
+  pin = 3
+}
+
+Value ::= OBJECT_NAME | ConstantExpression | IDENTIFIER | TEXT
+private ConstantExpression ::= '${' ConstantName '}'
+private ConstantName ::= IDENTIFIER {
+  pin = 1
+  recoverWhile = constantNameRecover
+}
+private constantNameRecover::= !{"}"}
+
+IdentifierExpr ::= IDENTIFIER (DOT PropertyAccessExpr)?
+PropertyAccessExpr ::= IDENTIFIER ( DOT PropertyAccessExpr)?
+
+InlineChain      ::= Expression Chain? {
+ pin=1
+}
+
+Chain          ::= DOT Expression Chain? { pin=1 }
+
+private PrimaryGroup ::= IdentifierExpr

@@ -4,6 +4,7 @@
     <vendor email="cedric@cedric-ziel.com" url="https://github.com/cedricziel/idea-php-typo3-plugin">Cedric Ziel</vendor>
 
     <description><![CDATA[
+    TypoScript Language support
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -14,6 +15,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.cedricziel.idea.typoscript.lang.TypoScriptFileTypeFactory"/>
+        <lang.parserDefinition language="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.parser.TypoScriptParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.TypoScriptSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="com.cedricziel.idea.typoscript.lang.TypoScriptColorSettingsPage"/>
     </extensions>
 
     <actions>

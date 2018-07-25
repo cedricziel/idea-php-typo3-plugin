@@ -17,19 +17,19 @@ public class TypoScriptFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "Simple file";
+        return "TypoScript file";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Simple language file";
+        return "TypoScript file";
     }
 
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return "simple";
+        return "typoscript";
     }
 
     @Nullable
@@ -37,4 +37,6 @@ public class TypoScriptFileType extends LanguageFileType {
     public Icon getIcon() {
         return TypoScriptIcons.FILE;
     }
+
+
 }
