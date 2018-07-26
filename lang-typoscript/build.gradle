@@ -1,6 +1,7 @@
 import org.jetbrains.grammarkit.tasks.GenerateLexer
 import org.jetbrains.grammarkit.tasks.GenerateParser
 
+def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
 def genRoot = file('gen')
 sourceSets {
     main {
@@ -31,6 +32,19 @@ intellij {
         "PsiViewer:${psiViewerPluginVersion}",
     ]
 }
+
+patchPluginXml {
+    if (customSinceBuild) {
+        sinceBuild customSinceBuild
+    }
+    if (customUntilBuild) {
+        untilBuild customUntilBuild
+    }
+
+    changeNotes = htmlFixer('src/main/resources/META-INF/change-notes.html')
+    pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
+}
+
 
 publishPlugin {
     channels 'nightly'

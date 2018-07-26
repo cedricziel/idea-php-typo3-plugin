@@ -1,7 +1,10 @@
 package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
 import com.cedricziel.idea.fluid.codeInsight.template.LiveTemplateFactory;
-import com.cedricziel.idea.fluid.lang.psi.*;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
+import com.cedricziel.idea.fluid.lang.psi.FluidInlineStatement;
+import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
+import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
@@ -14,15 +17,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class ForEachPostfixTemplate extends PostfixTemplate {
+public class DebugInlinePostfixTemplate extends PostfixTemplate {
 
-    protected ForEachPostfixTemplate() {
-        super("f:for", "Wrap element in f:for loop");
+    protected DebugInlinePostfixTemplate() {
+        super("f:debug", "Pipes the expression result into a debug statement");
     }
 
     @Override
     public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
-        return PlatformPatterns.or(
+        return PlatformPatterns
+            .or(
                 PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
                     PlatformPatterns.psiElement(FluidFieldChain.class)
                 ),
@@ -43,11 +47,10 @@ public class ForEachPostfixTemplate extends PostfixTemplate {
             return;
         }
 
-        Template tagTemplate = LiveTemplateFactory.createTagModeForLoopTemplate(expression);
-        tagTemplate.addVariable("EACH", new TextExpression(expression.getText()), true);
-        tagTemplate.addVariable("AS", new TextExpression("myVar"), true);
+        Template tagTemplate = LiveTemplateFactory.createInlinePipeToDebugTemplate(expression);
+        tagTemplate.addVariable("EXPR", new TextExpression(expression.getInlineChain().getText()), true);
 
-        int textOffset = expression.getTextOffset();
+        int textOffset = expression.getTextOffset() + expression.getTextLength();
         editor.getCaretModel().moveToOffset(textOffset);
 
         TemplateManager.getInstance(context.getProject()).startTemplate(editor, tagTemplate);
