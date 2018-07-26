@@ -1,0 +1,4 @@
+<f:for each="{ foo.bar }" as="myVar">
+
+</f:for>
+
