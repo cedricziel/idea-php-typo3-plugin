@@ -1,3 +1,5 @@
+def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
+
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Plugin'
@@ -11,4 +13,16 @@ intellij {
         project(':lang-fluid'),
         project(':lang-typoscript'),
     ]
+}
+
+patchPluginXml {
+    if (customSinceBuild) {
+        sinceBuild customSinceBuild
+    }
+    if (customUntilBuild) {
+        untilBuild customUntilBuild
+    }
+
+    changeNotes = htmlFixer('src/main/resources/META-INF/change-notes.html')
+    pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
 }
