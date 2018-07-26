@@ -2,7 +2,7 @@ package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
 import com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor;
 
-public class ForEachPostfixTemplateTest extends AbtractTemplateTest {
+public class DebugInlinePostfixTemplateTest extends AbtractTemplateTest {
 
     @Override
     protected String getTestDataPath() {
@@ -12,18 +12,18 @@ public class ForEachPostfixTemplateTest extends AbtractTemplateTest {
     public void testCanExpandLiveTemplateOnVariable() {
         LiveTemplateCompletionContributor.setShowTemplatesInTests(true, myFixture.getTestRootDisposable());
 
-        testLiveTemplateIsAvailable(".for", "{foo.bar<caret>}", ForEachPostfixTemplate.class);
+        testLiveTemplateIsAvailable(".deb", "{foo.bar<caret>}", DebugInlinePostfixTemplate.class);
     }
 
     public void testCanExpandLiveTemplateOnChainedExpression() {
         LiveTemplateCompletionContributor.setShowTemplatesInTests(true, myFixture.getTestRootDisposable());
 
-        testLiveTemplateIsAvailable(".for", "{foo.bar -> my:view.helper()<caret>}", ForEachPostfixTemplate.class);
+        testLiveTemplateIsAvailable(".deb", "{foo.bar -> my:view.helper()<caret>}", DebugInlinePostfixTemplate.class);
     }
 
-    public void testForeachTemplate() {
+    public void testDebugTemplate() {
         LiveTemplateCompletionContributor.setShowTemplatesInTests(true, myFixture.getTestRootDisposable());
 
-        doCompleteTest(".for", '\n');
+        doCompleteTest(".deb", '\n');
     }
 }

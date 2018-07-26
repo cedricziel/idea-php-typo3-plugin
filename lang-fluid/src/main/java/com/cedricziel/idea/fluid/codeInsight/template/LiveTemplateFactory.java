@@ -47,4 +47,17 @@ public class LiveTemplateFactory {
 
         return template;
     }
+
+    public static Template createInlinePipeToDebugTemplate(@NotNull PsiElement source) {
+        StringBuilder sb = new StringBuilder();
+        sb
+            .append("{ $EXPR$ -> f:debug() }")
+        ;
+
+        TemplateImpl template = new TemplateImpl("f:debug", sb.toString(), "Fluid");
+        template.setDescription("f:debug the expression result");
+        template.setToReformat(true);
+
+        return template;
+    }
 }

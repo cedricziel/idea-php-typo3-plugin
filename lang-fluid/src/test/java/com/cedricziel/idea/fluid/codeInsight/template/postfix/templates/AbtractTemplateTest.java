@@ -47,7 +47,7 @@ abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
         myFixture.checkResultByFile(getTestName(true) + "_after.fluid", true);
     }
 
-    protected void testLiveTemplateIsAvailable(String completionChar, String templateContent) {
+    protected void testLiveTemplateIsAvailable(String completionChar, String templateContent, Class templateClass) {
         myFixture.configureByText("foo.fluid", templateContent);
         type(completionChar);
         LookupImpl lookup = getLookup();
@@ -56,6 +56,6 @@ abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
         LookupElement item = lookup.getCurrentItem();
         assertNotNull(item);
         assertInstanceOf(item, PostfixTemplateLookupElement.class);
-        assertInstanceOf(((PostfixTemplateLookupElement) item).getPostfixTemplate(), ForEachPostfixTemplate.class);
+        assertInstanceOf(((PostfixTemplateLookupElement) item).getPostfixTemplate(), templateClass);
     }
 }
