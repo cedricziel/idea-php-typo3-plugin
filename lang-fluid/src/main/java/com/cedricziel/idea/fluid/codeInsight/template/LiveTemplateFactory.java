@@ -48,6 +48,22 @@ public class LiveTemplateFactory {
         return template;
     }
 
+    public static Template createTagModeAliasTemplate(@NotNull PsiElement wrap) {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+            .append("<f:alias map=\"{$ALIAS$: $EXPR$}\">\n")
+            .append("  $END$\n")
+            .append("</f:alias>\n")
+        ;
+
+        TemplateImpl template = new TemplateImpl("f:alias", sb.toString(), "Fluid");
+        template.setDescription("f:alias the current expression");
+        template.setToReformat(true);
+
+        return template;
+    }
+
     public static Template createInlinePipeToDebugTemplate(@NotNull PsiElement source) {
         StringBuilder sb = new StringBuilder();
         sb

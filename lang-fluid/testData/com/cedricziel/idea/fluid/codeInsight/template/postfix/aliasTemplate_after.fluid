@@ -1,0 +1,4 @@
+<f:alias map="{myVar: '{ foo.bar }'}">
+
+</f:alias>
+
