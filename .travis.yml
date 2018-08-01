@@ -36,6 +36,7 @@ script:
 deploy:
   provider: releases
   api_key: "${GITHUB_KEY}"
+  overwrite: true
   file:
     - lang-fluid/build/distributions/TYPO3*.zip
     - lang-typoscript/build/distributions/TYPO3*.zip
