@@ -136,7 +136,7 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
 
     @Override
     public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
-        Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(project).getBySignature(expression);
+        Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(project).getBySignature(StringUtils.strip(expression, "\\"));
 
         List<PhpNamedElement> phpNamedElements = new ArrayList<>();
         for (PhpNamedElement phpNamedElement: bySignature) {
