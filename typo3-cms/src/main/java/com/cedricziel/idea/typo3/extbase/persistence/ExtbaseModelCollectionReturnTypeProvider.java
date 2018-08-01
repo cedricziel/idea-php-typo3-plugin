@@ -11,6 +11,7 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -69,12 +70,12 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         }
 
         if (psiElement instanceof FieldReference) {
-            String signature = ((FieldReference) psiElement).getSignature();
+            String signature = StringUtils.strip(((FieldReference) psiElement).getSignature(), "\\");
             return new PhpType().add("#" + this.getKey() + signature);
         }
 
-        if (psiElement instanceof MethodReference && ((MethodReference) psiElement).getName().startsWith("get")) {
-            String signature = ((MethodReference) psiElement).getSignature();
+        if (psiElement instanceof MethodReference && ((MethodReference) psiElement).getName() != null && ((MethodReference) psiElement).getName().startsWith("get")) {
+            String signature = StringUtils.strip(((MethodReference) psiElement).getSignature(), "\\");
             return new PhpType().add("#" + this.getKey() + signature);
         }
 
