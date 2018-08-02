@@ -91,6 +91,19 @@ Icons used in this project are provided by:
 * Göran Bodenschatz (@coding46)
 * [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) (MIT Licensed)
 
+## YourKit Java Profiler Sponsoring
+
+We're glad, to have YourKit as a sponsor!
+
+<a href="https://www.yourkit.com/java/profiler/" title="YourKit">
+<img src="https://www.yourkit.com/images/yklogo.png"/>
+</a>
+
+YourKit supports open source projects with its full-featured Java Profiler.
+YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/">YourKit Java Profiler</a>
+and <a href="https://www.yourkit.com/.net/profiler/">YourKit .NET Profiler</a>,
+innovative and intelligent tools for profiling Java and .NET applications.
+
 # License
 
 MIT
