@@ -8,8 +8,8 @@ import com.intellij.psi.PsiFile;
 
 import java.util.List;
 
-public class HtmlNSNamespaceProviderTest extends AbstractFluidTest {
-    public void testHtmlNamespacesCanBeProvided() {
+public class DefaultFluidNamespaceProviderTest extends AbstractFluidTest {
+    public void testDefaultNamespaceIsAlwaysAvailable() {
         PsiFile psiFile = myFixture.configureByText("foo.fluid", "<html xmlns:f=\"http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers\" xmlns:formvh=\"http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers\" data-namespace-typo3-fluid=\"true\">\n" +
             "<formvh:renderRenderable renderable=\"{element}\">\n" +
             "\t<f:render partial=\"Field/Field\" arguments=\"{element: element}\" contentAs=\"elementContent\">\n" +
@@ -30,8 +30,6 @@ public class HtmlNSNamespaceProviderTest extends AbstractFluidTest {
 
         List<FluidNamespace> namespaces = FluidUtil.getFluidNamespaces(elementAtCaret);
 
-        assertContainsNamespace(namespaces, "f", "TYPO3/CMS/Fluid/ViewHelpers");
-        assertContainsNamespace(namespaces, "formvh", "TYPO3/CMS/Form/ViewHelpers");
+        assertContainsNamespace(namespaces, "f", "TYPO3/Fluid/ViewHelpers");
     }
-
 }
