@@ -4,7 +4,8 @@ import com.cedricziel.idea.fluid.lang.FluidLanguage;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageParserDefinitions;
-import com.intellij.openapi.fileTypes.*;
+import com.intellij.openapi.fileTypes.PlainTextLanguage;
+import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.LanguageSubstitutors;
 import com.intellij.psi.MultiplePsiFilesPerDocumentFileViewProvider;
@@ -29,6 +30,7 @@ public class FluidFileViewProvider extends MultiplePsiFilesPerDocumentFileViewPr
     public static final IElementType TEMPLATE_DATA = new TemplateDataElementType("FluidTextElementType", FluidLanguage.INSTANCE, FluidTypes.TEXT, FLUID_FRAGMENT);
 
     private final Language myTemplateDataLanguage;
+    private THashSet<Language> languages = null;
 
     public FluidFileViewProvider(PsiManager manager, VirtualFile file, boolean physical) {
         super(manager, file, physical);
@@ -76,7 +78,11 @@ public class FluidFileViewProvider extends MultiplePsiFilesPerDocumentFileViewPr
     @Override
     public Set<Language> getLanguages() {
 
-        return new THashSet<>(Arrays.asList(FluidLanguage.INSTANCE, myTemplateDataLanguage));
+        if (languages == null) {
+            languages = new THashSet<>(Arrays.asList(FluidLanguage.INSTANCE, myTemplateDataLanguage));
+        }
+
+        return languages;
     }
 
 

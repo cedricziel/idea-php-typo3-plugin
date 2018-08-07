@@ -7,7 +7,6 @@ import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
 import com.cedricziel.idea.fluid.util.FluidTypeResolver;
 import com.cedricziel.idea.fluid.util.FluidUtil;
 import com.cedricziel.idea.fluid.variables.FluidTypeContainer;
-import com.cedricziel.idea.fluid.variables.FluidVariable;
 import com.cedricziel.idea.fluid.variables.PhpFluidMethodLookupElement;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -21,7 +20,6 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class FluidCompletionContributor extends CompletionContributor {
     public FluidCompletionContributor() {
@@ -37,19 +35,16 @@ public class FluidCompletionContributor extends CompletionContributor {
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement psiElement = parameters.getPosition().getOriginalElement();
 
-                for (Map.Entry<String, FluidVariable> entry : FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).entrySet()) {
+                FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> {
                     result.addElement(
                         LookupElementBuilder
-                            .create(entry.getKey())
+                            .create(name)
                             .withTypeText(
-                                FluidTypeResolver.getTypeDisplayName(
-                                    psiElement.getProject(),
-                                    entry.getValue().getTypes()),
-                                true
+                                FluidTypeResolver.getTypeDisplayName(psiElement.getProject(), var.getTypes()), true
                             )
-                            .withIcon(PhpIcons.CLASS)
+                            .withIcon(PhpIcons.VARIABLE)
                     );
-                }
+                });
             }
         });
 

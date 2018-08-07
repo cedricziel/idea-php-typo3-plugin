@@ -1,34 +1,39 @@
 package com.cedricziel.idea.fluid.variables;
 
-import icons.FluidIcons;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import java.util.Collections;
+import java.util.Set;
 
 public class FluidVariable {
-    public String description;
-    public Icon icon;
-    public String identifier;
+    @NotNull
+    final private Set<String> types;
 
-    public FluidVariable(@NotNull String identifier) {
-        this(identifier, FluidIcons.VARIABLE);
+    @Nullable
+    private PsiElement psiElement;
+
+    public FluidVariable(@NotNull Set<String> types, @Nullable PsiElement psiElement) {
+        this.types = types;
+        this.psiElement = psiElement;
     }
 
-    public FluidVariable(@NotNull String identifier, @Nullable Icon icon) {
-        this(identifier, "", icon);
+    public FluidVariable(@NotNull Set<String> types) {
+        this.types = types;
     }
 
-    public FluidVariable(@NotNull String identifier, @NotNull String description, @Nullable Icon icon) {
-        this.identifier = identifier;
-        this.description = description;
-
-        this.icon = icon != null ? icon : FluidIcons.VARIABLE;
+    public FluidVariable(@NotNull String type) {
+        this.types = Collections.singleton(type);
     }
 
-    public FluidVariable setDescription(String description) {
-        this.description = description;
+    @NotNull
+    public Set<String> getTypes() {
+        return types;
+    }
 
-        return this;
+    @Nullable
+    public PsiElement getElement() {
+        return psiElement;
     }
 }
