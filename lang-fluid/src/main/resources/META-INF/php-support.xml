@@ -3,4 +3,8 @@
         <provider.variables implementation="com.cedricziel.idea.fluid.variables.provider.ControllerVariableProvider" order="first"/>
         <provider.viewHelper implementation="com.cedricziel.idea.fluid.viewHelpers.PhpViewHelpersProvider" order="first"/>
     </extensions>
+    <extensions defaultExtensionNs="com.intellij.codeInsight">
+        <lineMarkerProvider language="PHP" implementationClass="com.cedricziel.idea.fluid.codeInsight.ControllerLineMarkerProvider"/>
+        <lineMarkerProvider language="Fluid" implementationClass="com.cedricziel.idea.fluid.codeInsight.TemplateLineMarkerProvider"/>
+    </extensions>
 </idea-plugin>

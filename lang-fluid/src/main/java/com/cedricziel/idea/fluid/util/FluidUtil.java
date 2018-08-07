@@ -13,10 +13,13 @@ import com.cedricziel.idea.fluid.variables.FluidVariable;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
@@ -73,10 +76,34 @@ public class FluidUtil {
         return (FluidElement) elementAt;
     }
 
-    public static Map<String, FluidVariable> collectControllerVariable(FluidFile templateFile) {
+    public static Map<String, FluidVariable> collectControllerVariables(FluidFile templateFile) {
         Map<String, FluidVariable> collected = new THashMap<>();
-        String controllerName = null;
+        String controllerName = inferControllerNameFromTemplateFile(templateFile);
+        String actionName = inferActionNameFromTemplateFile(templateFile);
 
+        findPossibleMethodTargetsForControllerAction(templateFile.getProject(), controllerName, actionName).forEach(c -> {
+            ControllerMethodWalkerVisitor visitor = new ControllerMethodWalkerVisitor();
+            c.accept(visitor);
+
+            collected.putAll(visitor.variables);
+        });
+
+        return collected;
+    }
+
+    public static Collection<Method> findPossibleMethodTargetsForControllerAction(Project project, String controllerName, String actionName) {
+        List<Method> methods = new ArrayList<>();
+        PhpIndex.getInstance(project).getClassesByName(controllerName).forEach(c -> {
+            Method methodByName = c.findMethodByName(actionName);
+            if (methodByName != null) {
+                methods.add(methodByName);
+            }
+        });
+
+        return methods;
+    }
+
+    public static String inferActionNameFromTemplateFile(FluidFile templateFile) {
         VirtualFile virtualFile;
         if (templateFile.getVirtualFile() != null) {
             virtualFile = templateFile.getVirtualFile();
@@ -84,28 +111,15 @@ public class FluidUtil {
             virtualFile = templateFile.getOriginalFile().getVirtualFile();
         }
 
-        String nameWithoutExtension = virtualFile.getNameWithoutExtension();
+        return String.format("%sAction", StringUtils.uncapitalize(virtualFile.getNameWithoutExtension()));
+    }
 
-        final String actionName = String.format("%sAction", StringUtils.uncapitalize(nameWithoutExtension));
+    public static String inferControllerNameFromTemplateFile(FluidFile templateFile) {
         if (templateFile.getContainingDirectory() == null) {
-            return collected;
+            return null;
         }
 
-        controllerName = String.format("%sController", templateFile.getContainingDirectory().getName());
-
-        PhpIndex phpIndex = PhpIndex.getInstance(templateFile.getProject());
-        Collection<PhpClass> classesByName = phpIndex.getClassesByName(controllerName);
-        classesByName.forEach(c -> {
-            Method methodByName = c.findMethodByName(actionName);
-            if (methodByName != null) {
-                ControllerMethodWalkerVisitor visitor = new ControllerMethodWalkerVisitor();
-                methodByName.accept(visitor);
-
-                collected.putAll(visitor.variables);
-            }
-        });
-
-        return collected;
+        return String.format("%sController", templateFile.getContainingDirectory().getName());
     }
 
     public static void completeViewHelpers(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
@@ -142,6 +156,26 @@ public class FluidUtil {
         }
 
         return namespaces;
+    }
+
+    @NotNull
+    public static Collection<FluidFile> findTemplatesForControllerAction(Method method) {
+        List<FluidFile> fluidFiles = new ArrayList<>();
+
+        String fileName = method.getName().substring(0,1).toUpperCase() + method.getName().substring(1, method.getName().length() - "Action".length());
+        PhpClass containingClass = method.getContainingClass();
+        if (containingClass == null) {
+            return fluidFiles;
+        }
+
+        String controllerName = containingClass.getName().substring(0, containingClass.getName().length() - "Controller".length());
+        for (PsiFile psiFile : FilenameIndex.getFilesByName(method.getProject(), fileName + ".html", GlobalSearchScope.allScope(method.getProject()))) {
+            if (psiFile.getContainingDirectory().getName().equals(controllerName) && psiFile instanceof FluidFile) {
+                fluidFiles.add((FluidFile) psiFile);
+            }
+        }
+
+        return fluidFiles;
     }
 
     private static class ControllerMethodWalkerVisitor extends PhpRecursiveElementVisitor {

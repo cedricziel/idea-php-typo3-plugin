@@ -25,7 +25,7 @@ public class ControllerVariableProvider implements VariableProvider {
             return;
         }
 
-        variableMap.putAll(FluidUtil.collectControllerVariable((FluidFile) containingFile));
+        variableMap.putAll(FluidUtil.collectControllerVariables((FluidFile) containingFile));
     }
 
     @Override
@@ -35,6 +35,6 @@ public class ControllerVariableProvider implements VariableProvider {
             return;
         }
 
-        variableMap.putAll(FluidUtil.collectControllerVariable((FluidFile) containingFile));
+        variableMap.putAll(FluidUtil.collectControllerVariables((FluidFile) containingFile));
     }
 }
