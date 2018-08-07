@@ -27,7 +27,7 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
         }
     }
 
-    protected void assertCurrentCompletionContains(String content, String... completions) {
+    protected void assertCurrentCompletionContains(String... completions) {
         List<String> lookupElementStrings = myFixture.getLookupElementStrings();
         for (String completion : completions) {
             assertTrue(lookupElementStrings.contains(completion));

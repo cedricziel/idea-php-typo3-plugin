@@ -21,6 +21,8 @@ import java.io.StringWriter;
 import java.util.Map;
 
 public class DefaultViewHelpersProvider implements ViewHelperProvider {
+    private static final Map<String, Map<String, ViewHelper>> myCache = new THashMap<>();
+
     @NotNull
     @Override
     public Map<String, ViewHelper> provideForNamespace(@NotNull Project project, @NotNull String namespace) {
@@ -30,6 +32,15 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
         }
 
         String schemaLocation = "/schemas/fluid/7.6.xsd";
+        return getStringViewHelperMap(project, schemaLocation);
+    }
+
+    private synchronized Map<String, ViewHelper> getStringViewHelperMap(@NotNull Project project, String schemaLocation) {
+        if (myCache.containsKey(schemaLocation)) {
+
+            return myCache.get(schemaLocation);
+        }
+
         String schema = readSchema(schemaLocation);
 
         XmlFile xmlLanguage = (XmlFile) PsiFileFactory.getInstance(project).createFileFromText(XMLLanguage.INSTANCE, schema);
@@ -37,7 +48,9 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
         ViewHelperSchemaRecursiveElementVisitor visitor = new ViewHelperSchemaRecursiveElementVisitor();
         visitor.visitXmlFile(xmlLanguage);
 
-        return visitor.viewHelpers;
+        myCache.put(schemaLocation, visitor.viewHelpers);
+
+        return myCache.get(schemaLocation);
     }
 
     private String readSchema(String schemaLocation) {

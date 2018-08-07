@@ -30,10 +30,15 @@ public class FluidCompletionContributor extends CompletionContributor {
             }
         });
 
+        /*
+         * { <caret> }
+         */
         extend(CompletionType.BASIC, FluidPatterns.getFirstIdentifierPattern(), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement psiElement = parameters.getPosition().getOriginalElement();
+
+                FluidUtil.completeViewHelpers(parameters, result);
 
                 FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> {
                     result.addElement(
@@ -80,6 +85,9 @@ public class FluidCompletionContributor extends CompletionContributor {
             }
         });
 
+        /*
+         * {object -> <caret>}
+         */
         extend(CompletionType.BASIC, FluidPatterns.inlineChainPipeTarget(), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
