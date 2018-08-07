@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public interface NamespaceProvider {
-    public static ExtensionPointName<NamespaceProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.implicitNamespace");
+    ExtensionPointName<NamespaceProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.implicitNamespace");
 
-    public @NotNull Collection<FluidNamespace> provideForElement(@NotNull PsiElement element);
+    @NotNull Collection<FluidNamespace> provideForElement(@NotNull PsiElement element);
 }

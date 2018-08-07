@@ -167,7 +167,7 @@ CastExpr           ::=    Expression as_op IDENTIFIER
 ViewHelperExpr     ::=    boundNamespace ':' viewHelperReference '(' viewHelperArgumentList ')' {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidViewHelperNodeMixin"
   implements="com.cedricziel.idea.fluid.lang.psi.FluidPresentableName"
-  pin=4
+  pin=2
 }
 viewHelperReference ::= IDENTIFIER ('.' viewHelperPath)*
 private viewHelperPath ::= IDENTIFIER ( '.' viewHelperPath)*
@@ -215,7 +215,7 @@ InlineChain      ::= Expression Chain? {
 }
 private inline_chain_recover ::= !('}')
 
-Chain          ::= '->' Expression Chain? { pin=1 }
+Chain          ::= '->' ViewHelperExpr Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr
