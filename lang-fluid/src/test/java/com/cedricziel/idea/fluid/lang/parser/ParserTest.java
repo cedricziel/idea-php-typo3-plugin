@@ -24,11 +24,20 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
     }
 
     public void testCanDetectNamespaceDeclarations() {
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar')}", FluidNamespaceStatement.class);
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz')}", FluidNamespaceStatement.class);
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz\\Buz')}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz\\Buz}", FluidNamespaceStatement.class);
 
-        FluidNamespaceStatement parentElementAtConfiguredOffset = (FluidNamespaceStatement) getParentElementAtConfiguredOffset("{name<caret>space foo=Bar\\Baz\\Buz')}", 1);
+        assertNamespaceStatementWithPrefixAndNamespace("{namespace f=Bar\\Foo\\Bar}", "f", "Bar/Foo/Bar");
+        assertNamespaceStatementWithPrefixAndNamespace("{namespace v=FluidTYPO3\\Vhs\\ViewHelpers}", "v", "FluidTYPO3/Vhs/ViewHelpers");
+    }
+
+    private void assertNamespaceStatementWithPrefixAndNamespace(String content, String f, String expected) {
+        FluidNamespaceStatement namespaceStatement = (FluidNamespaceStatement) getParentElementAtConfiguredOffset(content, 1);
+        assertNotNull(namespaceStatement);
+        assertInstanceOf(namespaceStatement, FluidNamespaceStatement.class);
+        assertEquals(f, namespaceStatement.getAlias());
+        assertEquals(expected, namespaceStatement.getNamespace());
     }
 
     public void testCanDetectExpressions() {

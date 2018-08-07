@@ -31,6 +31,6 @@ public class InlineNSNamespaceProviderTest extends AbstractFluidTest {
 
         List<FluidNamespace> namespaces = FluidUtil.getFluidNamespaces(elementAtCaret);
 
-        assertContainsNamespace(namespaces, "foo", "Bar/Baz");
+        assertContainsNamespace(namespaces, "v", "FluidTYPO3/Vhs/ViewHelpers");
     }
 }
