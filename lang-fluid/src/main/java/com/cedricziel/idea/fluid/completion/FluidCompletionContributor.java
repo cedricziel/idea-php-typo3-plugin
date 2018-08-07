@@ -38,8 +38,6 @@ public class FluidCompletionContributor extends CompletionContributor {
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement psiElement = parameters.getPosition().getOriginalElement();
 
-                FluidUtil.completeViewHelpers(parameters, result);
-
                 FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> {
                     result.addElement(
                         LookupElementBuilder
@@ -50,6 +48,8 @@ public class FluidCompletionContributor extends CompletionContributor {
                             .withIcon(PhpIcons.VARIABLE)
                     );
                 });
+
+                FluidUtil.completeViewHelpers(parameters, result);
             }
         });
 
