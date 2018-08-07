@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public interface ViewHelperProvider {
-    public static ExtensionPointName<ViewHelperProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.viewHelper");
+    ExtensionPointName<ViewHelperProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.viewHelper");
 
-    public @NotNull Map<String, ViewHelper> provideForNamespace(@NotNull Project project, @NotNull String namespace);
+    @NotNull Map<String, ViewHelper> provideForNamespace(@NotNull Project project, @NotNull String namespace);
 }

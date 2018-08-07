@@ -109,29 +109,27 @@ public class FluidUtil {
     }
 
     public static void completeViewHelpers(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        for (NamespaceProvider extension : NamespaceProvider.EP_NAME.getExtensions()) {
-            for (FluidNamespace fluidNamespace : extension.provideForElement(parameters.getPosition())) {
-                for (ViewHelperProvider viewHelperProvider : ViewHelperProvider.EP_NAME.getExtensions()) {
-                    viewHelperProvider
-                        .provideForNamespace(parameters.getPosition().getProject(), fluidNamespace.namespace)
-                        .forEach((name, vh) -> {
-                            LookupElementBuilder elementBuilder;
-                            if (parameters.getPosition().getParent() instanceof FluidViewHelperReference) {
-                                elementBuilder = LookupElementBuilder.create(vh.name);
-                            } else {
-                                elementBuilder = LookupElementBuilder.create(fluidNamespace.prefix + ":" + vh.name);
-                            }
+        for (FluidNamespace fluidNamespace : FluidUtil.getFluidNamespaces(parameters.getPosition())) {
+            for (ViewHelperProvider viewHelperProvider : ViewHelperProvider.EP_NAME.getExtensions()) {
+                viewHelperProvider
+                    .provideForNamespace(parameters.getPosition().getProject(), fluidNamespace.namespace)
+                    .forEach((name, vh) -> {
+                        LookupElementBuilder elementBuilder;
+                        if (parameters.getPosition().getParent() instanceof FluidViewHelperReference) {
+                            elementBuilder = LookupElementBuilder.create(vh.name);
+                        } else {
+                            elementBuilder = LookupElementBuilder.create(fluidNamespace.prefix + ":" + vh.name);
+                        }
 
-                            result.addElement(
-                                elementBuilder
-                                    .withPresentableText(fluidNamespace.prefix + ":" + vh.name)
-                                    .withIcon(vh.icon)
-                                    .withTypeText(vh.fqn)
-                                    .withInsertHandler(FluidViewHelperReferenceInsertHandler.INSTANCE)
-                                    .withPsiElement(parameters.getPosition())
-                            );
-                        });
-                }
+                        result.addElement(
+                            elementBuilder
+                                .withPresentableText(fluidNamespace.prefix + ":" + vh.name)
+                                .withIcon(vh.icon)
+                                .withTypeText(vh.fqn)
+                                .withInsertHandler(FluidViewHelperReferenceInsertHandler.INSTANCE)
+                                .withPsiElement(parameters.getPosition())
+                        );
+                    });
             }
         }
     }

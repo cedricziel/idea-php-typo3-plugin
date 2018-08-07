@@ -9,6 +9,7 @@
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.xml</depends>
+    <depends optional="true" config-file="php-support.xml">com.jetbrains.php</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <xml.xmlExtension implementation="com.cedricziel.idea.fluid.codeInsight.FluidHtmlExtension" order="first" id="Fluid"/>
@@ -88,9 +89,13 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.cedricziel.idea.fluid">
-        <provider.variables implementation="com.cedricziel.idea.fluid.variables.AllVariableProvider"/>
-        <provider.variables implementation="com.cedricziel.idea.fluid.variables.InTemplateDeclarationVariableProvider"/>
         <provider.implicitNamespace implementation="com.cedricziel.idea.fluid.namespaces.DefaultFluidNamespaceProvider"/>
+        <provider.implicitNamespace implementation="com.cedricziel.idea.fluid.namespaces.HtmlNSNamespaceProvider"/>
+        <provider.implicitNamespace implementation="com.cedricziel.idea.fluid.namespaces.InlineNSNamespaceProvider"/>
+
+        <provider.variables implementation="com.cedricziel.idea.fluid.variables.provider.AllVariableProvider"/>
+        <provider.variables implementation="com.cedricziel.idea.fluid.variables.provider.InTemplateDeclarationVariableProvider"/>
+
         <provider.viewHelper implementation="com.cedricziel.idea.fluid.viewHelpers.DefaultViewHelpersProvider"/>
     </extensions>
 
