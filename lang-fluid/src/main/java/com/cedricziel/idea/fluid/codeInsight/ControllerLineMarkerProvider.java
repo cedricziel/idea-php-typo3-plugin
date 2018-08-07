@@ -7,6 +7,7 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.lang.lexer.PhpTokenTypes;
 import com.jetbrains.php.lang.psi.elements.Method;
 import icons.FluidIcons;
 import org.jetbrains.annotations.NotNull;
@@ -16,11 +17,11 @@ import java.util.Collection;
 public class ControllerLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (!PlatformPatterns.psiElement(Method.class).withName(PlatformPatterns.string().endsWith("Action")).accepts(element)) {
+        if (!PlatformPatterns.psiElement(PhpTokenTypes.IDENTIFIER).withParent(PlatformPatterns.psiElement(Method.class).withName(PlatformPatterns.string().endsWith("Action"))).accepts(element)) {
             return;
         }
 
-        Collection<FluidFile> possibleMatchedTemplates = FluidUtil.findTemplatesForControllerAction((Method) element);
+        Collection<FluidFile> possibleMatchedTemplates = FluidUtil.findTemplatesForControllerAction((Method) element.getParent());
         if (possibleMatchedTemplates.size() > 0) {
             result.add(
                 NavigationGutterIconBuilder
