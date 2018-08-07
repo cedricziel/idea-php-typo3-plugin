@@ -1,21 +1,24 @@
 package com.cedricziel.idea.fluid.variables;
 
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 import java.util.List;
 
 public class InTemplateDeclarationVariableProviderTest extends LightCodeInsightFixtureTestCase {
     public void testVariablesAreProvided() {
-        myFixture.configureByText(
-            "foo.fluid",
-            "<f:variable name=\"foo\" value=\"foo\"/>\n" +
-                "{ f<caret> }"
-        );
+        assertCompletionContains("<f:variable name=\"foo\" value=\"foo\"/>\n{<caret>}", "foo", "bar");
+        assertCompletionContains("{f:variable(name: 'buz', value: 'buz')}", "buz");
+        assertCompletionContains("{expr -> f:variable(name: 'piped')}", "piped");
+    }
 
-        LookupElement[] lookupElements = myFixture.completeBasic();
+    private void assertCompletionContains(String content, String... completions) {
+        myFixture.configureByText("foo.fluid", content);
+
+        myFixture.completeBasic();
 
         List<String> lookupElementStrings = myFixture.getLookupElementStrings();
-        assertTrue(lookupElementStrings.contains("foo"));
+        for (String completion : completions) {
+            assertTrue(lookupElementStrings.contains(completion));
+        }
     }
 }
