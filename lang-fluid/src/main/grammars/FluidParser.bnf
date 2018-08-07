@@ -97,8 +97,6 @@ NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' Namespace '}' {
 }
 private Namespace ::= NS ('\' NS)*
 
-numericNode ::= FLOAT_NUMBER | INTEGER_NUMBER
-
 string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
   methods=[
     getTextFragments
