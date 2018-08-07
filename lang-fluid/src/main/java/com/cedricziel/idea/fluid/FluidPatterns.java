@@ -8,7 +8,6 @@ import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 
 public class FluidPatterns {
@@ -18,18 +17,9 @@ public class FluidPatterns {
     public static ElementPattern<PsiElement> getFirstIdentifierPattern() {
 
         return PlatformPatterns
-            .psiElement()
+            .psiElement(FluidTypes.IDENTIFIER)
             .andNot(
-                PlatformPatterns.or(
-                    PlatformPatterns.psiElement().afterLeaf(PlatformPatterns.psiElement(FluidTypes.DOT))
-                )
-            )
-            .afterLeafSkipping(
-                PlatformPatterns.or(
-                    PlatformPatterns.psiElement(FluidTypes.EXPR_START),
-                    PlatformPatterns.psiElement(PsiWhiteSpace.class)
-                ),
-                PlatformPatterns.psiElement()
+                PlatformPatterns.psiElement().afterLeaf(PlatformPatterns.psiElement(FluidTypes.DOT))
             )
             .withLanguage(FluidLanguage.INSTANCE);
     }
