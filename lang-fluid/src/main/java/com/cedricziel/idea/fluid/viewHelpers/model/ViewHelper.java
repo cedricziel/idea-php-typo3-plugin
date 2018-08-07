@@ -56,4 +56,8 @@ public class ViewHelper {
 
         return requiredArguments;
     }
+
+    public void setFqn(String fqn) {
+        this.fqn = fqn;
+    }
 }
