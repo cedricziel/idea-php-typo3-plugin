@@ -7,12 +7,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface VariableProvider {
-    public static ExtensionPointName<VariableProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.variables");
+    ExtensionPointName<VariableProvider> EP_NAME = ExtensionPointName.create("com.cedricziel.idea.fluid.provider.variables");
 
-    public @NotNull Collection<FluidVariable> provide(@NotNull CompletionParameters parameters, ProcessingContext context);
+    void provide(@NotNull CompletionParameters parameters, ProcessingContext context, Map<String, FluidVariable> variableMap);
 
-    public @NotNull Collection<FluidVariable> provide(@NotNull PsiElement element);
+    void provide(@NotNull PsiElement element, Map<String, FluidVariable> variableMap);
 }

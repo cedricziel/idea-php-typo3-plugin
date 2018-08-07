@@ -33,7 +33,7 @@ IDENTIFIER = [\p{Alpha}_][\p{Alnum}_]*
 SINGLE_QUOTED_STRING=((\" ([^\"\n])* \"?) | ("'" ([^\'\n])* \'?))
 DOUBLE_QUOTED_STRING=((\" ([^\"\n])* \"?) | ("\"" ([^\"\n])* \"?))
 
-NAMESPACE_DECL = [a-zA-Z\\\]+][\\\a-zA-Z]+]*
+NAMESPACE_DECL = [a-zA-Z\\\]+][\\\a-zA-Z0-9]+]*
 
 TEXT = [^{]*
 

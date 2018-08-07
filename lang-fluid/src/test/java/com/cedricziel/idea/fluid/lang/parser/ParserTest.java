@@ -3,7 +3,6 @@ package com.cedricziel.idea.fluid.lang.parser;
 import com.cedricziel.idea.fluid.lang.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public class ParserTest extends LightCodeInsightFixtureTestCase {
@@ -25,9 +24,20 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
     }
 
     public void testCanDetectNamespaceDeclarations() {
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar')}", FluidNamespaceStatement.class);
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz')}", FluidNamespaceStatement.class);
-        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz\\Buz')}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz}", FluidNamespaceStatement.class);
+        assertParentElementAtCaretMatchesType("{name<caret>space foo=Bar\\Baz\\Buz}", FluidNamespaceStatement.class);
+
+        assertNamespaceStatementWithPrefixAndNamespace("{namespace f=Bar\\Foo\\Bar}", "f", "Bar/Foo/Bar");
+        assertNamespaceStatementWithPrefixAndNamespace("{namespace v=FluidTYPO3\\Vhs\\ViewHelpers}", "v", "FluidTYPO3/Vhs/ViewHelpers");
+    }
+
+    private void assertNamespaceStatementWithPrefixAndNamespace(String content, String f, String expected) {
+        FluidNamespaceStatement namespaceStatement = (FluidNamespaceStatement) getParentElementAtConfiguredOffset(content, 1);
+        assertNotNull(namespaceStatement);
+        assertInstanceOf(namespaceStatement, FluidNamespaceStatement.class);
+        assertEquals(f, namespaceStatement.getAlias());
+        assertEquals(expected, namespaceStatement.getNamespace());
     }
 
     public void testCanDetectExpressions() {
@@ -66,14 +76,18 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
     }
 
     private void assertParentElementAtCaretMatchesType(String content, Class expected, int levelsUp) {
+        assertInstanceOf(getParentElementAtConfiguredOffset(content, levelsUp), expected);
+    }
+
+    private PsiElement getParentElementAtConfiguredOffset(String content, int levelsUp) {
         PsiFile psiFile = myFixture.configureByText("foo.fluid", content);
         int offset = myFixture.getEditor().getCaretModel().getOffset();
 
         PsiElement elementAt = psiFile.findElementAt(offset);
-        for (int i = 0; i< levelsUp; i++) {
+        for (int i = 0; i < levelsUp; i++) {
             elementAt = elementAt.getParent();
         }
 
-        assertInstanceOf(elementAt, expected);
+        return elementAt;
     }
 }

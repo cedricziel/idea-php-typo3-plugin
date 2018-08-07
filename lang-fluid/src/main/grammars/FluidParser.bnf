@@ -64,7 +64,7 @@
 
     COLON=':'
 
-    NS='regexp:[a-zA-Z]+'
+    NS='regexp:[a-zA-Z0-9]+'
     NAMESPACE_FQN='regexp:[a-zA-Z\\\]*]'
 
     NAMESPACE = 'namespace'
@@ -88,16 +88,16 @@ fake Statement ::=
 
 template_comment ::= "<!--/*" COMMENT_CONTENT? "*/-->"
 
-NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' Namespace '}' {
+NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' ViewHelperNamespace '}' {
   pin=2
   methods = [
     getAlias
     getNamespace
   ]
+  mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamespaceStatementMixin"
+  implements = "com.cedricziel.idea.fluid.lang.psi.FluidAccessibleNamespaceStatement"
 }
-private Namespace ::= NS ('\' NS)*
-
-numericNode ::= FLOAT_NUMBER | INTEGER_NUMBER
+ViewHelperNamespace ::= NS ('\' NS)*
 
 string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
   methods=[
@@ -215,7 +215,7 @@ InlineChain      ::= Expression Chain? {
 }
 private inline_chain_recover ::= !('}')
 
-Chain          ::= '->' Expression Chain? { pin=1 }
+Chain          ::= '->' ViewHelperExpr Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr

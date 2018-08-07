@@ -1,0 +1,6 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.cedricziel.idea.fluid">
+        <provider.variables implementation="com.cedricziel.idea.fluid.variables.provider.ControllerVariableProvider" order="first"/>
+        <provider.viewHelper implementation="com.cedricziel.idea.fluid.viewHelpers.PhpViewHelpersProvider" order="first"/>
+    </extensions>
+</idea-plugin>

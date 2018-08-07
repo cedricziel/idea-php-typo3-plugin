@@ -9,9 +9,15 @@ abstract public class FluidViewHelperNodeMixin extends FluidElementImpl implemen
         super(node);
     }
 
-    public @NotNull String getPresentableName() {
+    public @NotNull
+    String getPresentableName() {
         String text = this.getBoundNamespace().getText();
-        String text1 = this.getViewHelperReference().getText();
+        String text1;
+        if (this.getViewHelperReference() == null) {
+            text1 = "";
+        } else {
+            text1 = this.getViewHelperReference().getText();
+        }
 
         return text + ":" + text1;
     }
