@@ -15,4 +15,15 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
 
         fail(String.format("Expected %s bound to %s, but didnt find it.", namespace, prefix));
     }
+
+    protected void assertCompletionContains(String content, String... completions) {
+        myFixture.configureByText("foo.fluid", content);
+
+        myFixture.completeBasic();
+
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+        for (String completion : completions) {
+            assertTrue(lookupElementStrings.contains(completion));
+        }
+    }
 }
