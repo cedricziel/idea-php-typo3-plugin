@@ -97,7 +97,7 @@ NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' ViewHelperNamespace '
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamespaceStatementMixin"
   implements = "com.cedricziel.idea.fluid.lang.psi.FluidAccessibleNamespaceStatement"
 }
-private Namespace ::= NS ('\' NS)*
+ViewHelperNamespace ::= NS ('\' NS)*
 
 string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
   methods=[
@@ -167,7 +167,7 @@ CastExpr           ::=    Expression as_op IDENTIFIER
 ViewHelperExpr     ::=    boundNamespace ':' viewHelperReference '(' viewHelperArgumentList ')' {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidViewHelperNodeMixin"
   implements="com.cedricziel.idea.fluid.lang.psi.FluidPresentableName"
-  pin=2
+  pin=4
 }
 viewHelperReference ::= IDENTIFIER ('.' viewHelperPath)*
 private viewHelperPath ::= IDENTIFIER ( '.' viewHelperPath)*
