@@ -10,8 +10,13 @@ import java.util.List;
 
 public class InlineNSNamespaceProviderTest extends AbstractFluidTest {
     public void testThatInlineNamespacesAreProvided() {
+        assertNamespaceDeclared("{namespace v=FluidTYPO3\\Vhs\\ViewHelpers}", "v", "FluidTYPO3/Vhs/ViewHelpers");
+        assertNamespaceDeclared("{namespace app=My\\App\\ViewHelpers}", "app", "My/App/ViewHelpers");
+    }
+
+    private void assertNamespaceDeclared(String nsNode, String prefix, String namespace) {
         PsiFile psiFile = myFixture.configureByText("foo.fluid", "<html xmlns:f=\"http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers\" xmlns:formvh=\"http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers\" data-namespace-typo3-fluid=\"true\">\n" +
-            "{namespace v=FluidTYPO3\\Vhs\\ViewHelpers}\n"+
+            nsNode + "\n" +
             "<formvh:renderRenderable renderable=\"{element}\">\n" +
             "\t<f:render partial=\"Field/Field\" arguments=\"{element: element}\" contentAs=\"elementContent\">\n" +
             "\t\t<f:form.textfield\n" +
@@ -31,6 +36,6 @@ public class InlineNSNamespaceProviderTest extends AbstractFluidTest {
 
         List<FluidNamespace> namespaces = FluidUtil.getFluidNamespaces(elementAtCaret);
 
-        assertContainsNamespace(namespaces, "v", "FluidTYPO3/Vhs/ViewHelpers");
+        assertContainsNamespace(namespaces, prefix, namespace);
     }
 }
