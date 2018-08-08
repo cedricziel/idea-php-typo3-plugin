@@ -25,6 +25,10 @@ public class InlineNSNamespaceProvider implements NamespaceProvider {
         }
 
         PsiFile htmlFile = viewProvider.getPsi(FluidLanguage.INSTANCE);
+        if (htmlFile == null) {
+            return ContainerUtil.emptyList();
+        }
+
         FluidInlineNsVisitor visitor = new FluidInlineNsVisitor();
         htmlFile.accept(visitor);
 
