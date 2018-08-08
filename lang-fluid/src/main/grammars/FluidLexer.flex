@@ -26,6 +26,8 @@ EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WS=({LINE_WS}|{EOL})+
 
+LETTERS=[a-zA-Z]+
+
 INTEGER_NUMBER = 0|[1-9]\d*
 FLOAT_NUMBER = [0-9]*\.[0-9]+([eE][-+]?[0-9]+)?|[0-9]+[eE][-+]?[0-9]+
 IDENTIFIER = [\p{Alpha}_][\p{Alnum}_]*
@@ -39,6 +41,7 @@ TEXT = [^{]*
 
 %state EXPRESSION_LIST
 %state NAMESPACE_IMPORT
+%state IN_NAMESPACE_IMPORT_AFTER_ASSIGN
 %state ARRAY
 %state COMMENT
 
@@ -123,12 +126,20 @@ TEXT = [^{]*
 }
 
 <NAMESPACE_IMPORT> {
-  "="                         { return FluidTypes.ASSIGN; }
-  {WS}+                       { return TokenType.WHITE_SPACE; }
-  {NAMESPACE_DECL}            { return FluidTypes.NS; }
-  {IDENTIFIER}                { return FluidTypes.NAMESPACE_ALIAS; }
+  "="                         { yybegin(IN_NAMESPACE_IMPORT_AFTER_ASSIGN); return FluidTypes.ASSIGN; }
   "}"                         { yybegin(YYINITIAL); return FluidTypes.EXPR_END; }
+  {WS}+                       { return TokenType.WHITE_SPACE; }
 
+  {LETTERS}                   { return FluidTypes.NAMESPACE_ALIAS; }
+
+  [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
+}
+
+<IN_NAMESPACE_IMPORT_AFTER_ASSIGN> {
+  "}"                         { yybegin(YYINITIAL); return FluidTypes.EXPR_END; }
+  {WS}+                       { return TokenType.WHITE_SPACE; }
+
+  {NAMESPACE_DECL}            { return FluidTypes.NS; }
   [^]                         { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
 }
 

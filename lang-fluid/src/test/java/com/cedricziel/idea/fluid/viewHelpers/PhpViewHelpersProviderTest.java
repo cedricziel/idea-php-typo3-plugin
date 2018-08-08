@@ -11,14 +11,19 @@ public class PhpViewHelpersProviderTest extends AbstractFluidTest {
     public void testViewHelpersCanBeProvidedViaPHP() {
         myFixture.copyFileToProject("classes.php");
 
+        configureNamespaceAndTriggerComplete("{namespace a=App\\ViewHelpers}");
+        assertCurrentCompletionContains("a:foo");
+
+        configureNamespaceAndTriggerComplete("{namespace app=App\\ViewHelpers}");
+        assertCurrentCompletionContains("app:foo");
+    }
+
+    private void configureNamespaceAndTriggerComplete(String namespaceNode) {
         myFixture.configureByText(
             "foo.fluid",
-            "{namespace a=App\\ViewHelpers}\n" +
-                "{<caret>}"
+            namespaceNode + "\n" + "{<caret>}"
         );
 
         myFixture.completeBasic();
-
-        assertCurrentCompletionContains("a:foo");
     }
 }

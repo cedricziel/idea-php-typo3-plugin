@@ -88,7 +88,7 @@ fake Statement ::=
 
 template_comment ::= "<!--/*" COMMENT_CONTENT? "*/-->"
 
-NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' ViewHelperNamespace '}' {
+NamespaceStatement ::= '{' 'namespace' NamespaceAlias '=' ViewHelperNamespace '}' {
   pin=2
   methods = [
     getAlias
@@ -97,6 +97,7 @@ NamespaceStatement ::= '{' 'namespace' NAMESPACE_ALIAS '=' ViewHelperNamespace '
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamespaceStatementMixin"
   implements = "com.cedricziel.idea.fluid.lang.psi.FluidAccessibleNamespaceStatement"
 }
+private NamespaceAlias ::= NAMESPACE_ALIAS
 ViewHelperNamespace ::= NS ('\' NS)*
 
 string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
