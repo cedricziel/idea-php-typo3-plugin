@@ -25,14 +25,13 @@ public class TranslationAnnotator implements Annotator {
         }
 
         String value = literalExpression.getContents();
-
-        if (TranslationUtil.isTranslationKeyString(value) && value.length() > 4 && !(psiElement.getParent() instanceof ConcatenationExpression)) {
-            annotateTranslationUsage(psiElement, annotationHolder, value);
+        if (TranslationUtil.isTranslationKeyString(value) && value.length() > 4) {
+            annotateTranslationUsage(psiElement, annotationHolder, literalExpression, value);
         }
     }
 
-    private void annotateTranslationUsage(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        if (value.endsWith(":")) {
+    private void annotateTranslationUsage(PsiElement psiElement, AnnotationHolder annotationHolder, StringLiteralExpression literalExpression, String value) {
+        if (value.endsWith(":") || literalExpression.getParent() instanceof ConcatenationExpression) {
             return;
         }
 
@@ -49,7 +48,7 @@ public class TranslationAnnotator implements Annotator {
                 return;
             }
 
-            annotationHolder.createErrorAnnotation(psiElement, "Unresolved translation - this may occur if you defined the translation key only in TypoScript");
+            annotationHolder.createWeakWarningAnnotation(psiElement, "Unresolved translation - this may occur if you defined the translation key only in TypoScript");
         }
     }
 }

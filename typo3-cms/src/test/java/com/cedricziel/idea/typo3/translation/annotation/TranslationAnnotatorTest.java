@@ -14,4 +14,8 @@ public class TranslationAnnotatorTest extends AbtractTranslationTest {
     public void testShortenedReferenceIsNotAnnotated() {
         assertAnnotationNotContains("foo.php", "<?php \n\"LLL:EXT:foo/sample.xlf:sys_<caret>language.language_isocode.ab\";", "Unresolved translation");
     }
+
+    public void testConcatenationIsNotAnnotated() {
+        assertAnnotationNotContains("foo.php", "<?php \n\"LLL:EXT:foo/sample.xlf:sys_<caret>language.language_isocode.\" . \"ab\";", "Unresolved translation");
+    }
 }
