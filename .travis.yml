@@ -37,6 +37,7 @@ deploy:
   provider: releases
   api_key: "${GITHUB_KEY}"
   overwrite: true
+  body: lang-fluid/src/main/resources/META-INF/change-notes.html
   file:
     - lang-fluid/build/distributions/TYPO3*.zip
     - lang-typoscript/build/distributions/TYPO3*.zip
