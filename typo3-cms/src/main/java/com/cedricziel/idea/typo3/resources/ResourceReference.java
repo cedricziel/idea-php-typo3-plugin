@@ -35,7 +35,7 @@ public class ResourceReference extends PsiPolyVariantReferenceBase<PsiElement> {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return PsiElementResolveResult.createResults(ResourceUtil.getResourceDefintionElements(myElement.getProject(), resourceName));
+        return PsiElementResolveResult.createResults(ResourceUtil.getResourceDefinitionElements(myElement.getProject(), resourceName));
     }
 
     /**

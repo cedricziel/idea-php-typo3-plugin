@@ -23,7 +23,7 @@ public class ResourceUtil {
         return element.getProject().getBasePath() != null && currentText.contains("EXT:");
     }
 
-    public static PsiElement[] getResourceDefintionElements(@NotNull Project project, @NotNull String resourceName) {
+    public static PsiElement[] getResourceDefinitionElements(@NotNull Project project, @NotNull String resourceName) {
         if (!ResourcePathIndex.projectContainsResourceFile(project, resourceName)) {
             return null;
         }
