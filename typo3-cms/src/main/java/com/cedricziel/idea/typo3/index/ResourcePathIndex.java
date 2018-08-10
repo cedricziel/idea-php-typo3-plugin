@@ -2,10 +2,15 @@ package com.cedricziel.idea.typo3.index;
 
 import com.cedricziel.idea.typo3.util.FilesystemUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
@@ -14,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static com.cedricziel.idea.typo3.util.ComposerUtil.findExtensionKey;
 
@@ -21,12 +28,38 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
 
     public static final ID<String, Void> KEY = ID.create("com.cedricziel.idea.typo3.index.resource_path");
 
+    private static final Key<CachedValue<Collection<String>>> RESOURCE_KEYS = new Key<>("TYPO3_CMS_RESOURCE_KEYS");
+
+    private static final ConcurrentMap<Project, Collection<String>> RESOURCE_KEYS_LOCAL_CACHE = new ConcurrentHashMap<>();
+
     public static Collection<String> getAvailableExtensionResourceFiles(@NotNull Project project) {
-        return FileBasedIndex.getInstance().getAllKeys(ResourcePathIndex.KEY, project);
+        return getAllResourceKeys(project);
     }
 
     public static boolean projectContainsResourceFile(@NotNull Project project, @NotNull String resourceId) {
-        return FileBasedIndex.getInstance().getAllKeys(ResourcePathIndex.KEY, project).contains(resourceId);
+        return getAllResourceKeys(project).contains(resourceId);
+    }
+
+    @NotNull
+    private synchronized static Collection<String> getAllResourceKeys(@NotNull Project project) {
+        CachedValue<Collection<String>> userData = project.getUserData(RESOURCE_KEYS);
+        if (userData != null && userData.hasUpToDateValue()) {
+            return RESOURCE_KEYS_LOCAL_CACHE.getOrDefault(project, new ArrayList<>());
+        }
+
+        CachedValue<Collection<String>> cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
+            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(ResourcePathIndex.KEY, project);
+            if (RESOURCE_KEYS_LOCAL_CACHE.containsKey(project)) {
+                RESOURCE_KEYS_LOCAL_CACHE.replace(project, allKeys);
+            } else {
+                RESOURCE_KEYS_LOCAL_CACHE.put(project, allKeys);
+            }
+
+            return CachedValueProvider.Result.create(new ArrayList<>(), PsiModificationTracker.MODIFICATION_COUNT);
+        }, false);
+        project.putUserData(RESOURCE_KEYS, cachedValue);
+
+        return RESOURCE_KEYS_LOCAL_CACHE.getOrDefault(project, cachedValue.getValue());
     }
 
     public static boolean projectContainsResourceDirectory(@NotNull Project project, @NotNull String resourceId) {
@@ -61,9 +94,9 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
         }, GlobalSearchScope.allScope(project));
 
         return elements
-                .stream()
-                .filter(Objects::nonNull)
-                .toArray(PsiElement[]::new);
+            .stream()
+            .filter(Objects::nonNull)
+            .toArray(PsiElement[]::new);
     }
 
     @NotNull

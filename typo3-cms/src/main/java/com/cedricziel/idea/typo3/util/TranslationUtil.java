@@ -4,28 +4,56 @@ import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.cedricziel.idea.typo3.translation.TranslationLookupElement;
 import com.cedricziel.idea.typo3.translation.TranslationReference;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import static com.intellij.psi.util.PsiModificationTracker.MODIFICATION_COUNT;
 
 public class TranslationUtil {
+    private static final Key<CachedValue<Collection<String>>> TRANSLATION_KEYS = new Key<>("TYPO3_CMS_TRANSLATION_KEYS");
+    private static final ConcurrentMap<Project, Collection<String>> TRANSLATION_KEYS_LOCAL_CACHE = new ConcurrentHashMap<>();
+
     public static boolean keyExists(@NotNull Project project, @NotNull String key) {
-        return FileBasedIndex
-                .getInstance()
-                .getAllKeys(TranslationIndex.KEY, project)
-                .contains(key);
+        return getAllKeys(project).contains(key);
+    }
+
+    @NotNull
+    private synchronized static Collection<String> getAllKeys(@NotNull Project project) {
+        CachedValue<Collection<String>> cachedValue = project.getUserData(TRANSLATION_KEYS);
+        if (cachedValue != null && cachedValue.hasUpToDateValue()) {
+            return TRANSLATION_KEYS_LOCAL_CACHE.getOrDefault(project, new ArrayList<>());
+        }
+
+        cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
+            Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, project);
+            if (TRANSLATION_KEYS_LOCAL_CACHE.containsKey(project)) {
+                TRANSLATION_KEYS_LOCAL_CACHE.replace(project, allKeys);
+            } else {
+                TRANSLATION_KEYS_LOCAL_CACHE.put(project, allKeys);
+            }
+
+            return CachedValueProvider.Result.create(new ArrayList<>(), MODIFICATION_COUNT);
+        }, false);
+
+        project.putUserData(TRANSLATION_KEYS, cachedValue);
+
+        return TRANSLATION_KEYS_LOCAL_CACHE.getOrDefault(project, cachedValue.getValue());
     }
 
     public static boolean isTranslationKeyString(@NotNull String possibleKey) {
@@ -60,10 +88,10 @@ public class TranslationUtil {
     @NotNull
     public static TranslationLookupElement[] createLookupElements(@NotNull Project project) {
         return TranslationIndex
-                .findAllTranslationStubs(project)
-                .parallelStream()
-                .map(TranslationLookupElement::new)
-                .toArray(TranslationLookupElement[]::new);
+            .findAllTranslationStubs(project)
+            .parallelStream()
+            .map(TranslationLookupElement::new)
+            .toArray(TranslationLookupElement[]::new);
     }
 
     public static PsiElement[] findDefinitionElements(@NotNull Project project, @NotNull String translationId) {
