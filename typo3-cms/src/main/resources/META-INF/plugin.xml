@@ -221,6 +221,10 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <!-- userFunc -->
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.userFunc.UserFuncReferenceContributor"/>
+
+        <!-- signal / slot -->
+        <psi.referenceContributor language="PHP"
+                                  implementation="com.cedricziel.idea.typo3.dispatcher.SignalDispatcherReferenceContributor"/>
     </extensions>
 
     <actions>
