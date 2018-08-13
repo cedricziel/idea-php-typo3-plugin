@@ -46,7 +46,7 @@ public class RouteAnnotator implements Annotator {
             annotation.setTextAttributes(DefaultLanguageHighlighterColors.STRING);
         } else {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
-            annotationHolder.createErrorAnnotation(range, "Unresolved route");
+            annotationHolder.createWeakWarningAnnotation(range, "Unresolved route");
         }
     }
 }
