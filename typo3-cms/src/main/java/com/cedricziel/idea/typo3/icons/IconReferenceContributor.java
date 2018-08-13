@@ -9,11 +9,9 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.elements.Variable;
-import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class IconReferenceContributor extends PsiReferenceContributor {
 
@@ -47,19 +45,16 @@ public class IconReferenceContributor extends PsiReferenceContributor {
 
                         if (methodReference.getFirstPsiChild() instanceof Variable) {
                             Variable variable = (Variable) methodReference.getFirstPsiChild();
-                            PhpType inferredType = variable.getInferredType();
-                            Set<String> types = inferredType.getTypes();
-                            for (String type : types) {
-                                try {
-                                    Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(element.getProject()).getBySignature(type);
-                                    for (PhpNamedElement el : bySignature) {
-                                        if (el.getFQN().equals(ICON_FACTORY) && methodName.equals("getIcon")) {
-                                            return new PsiReference[]{new IconReference(stringLiteralExpression)};
-                                        }
+                            String signature = variable.getSignature();
+                            Collection<? extends PhpNamedElement> bySignature = PhpIndex.getInstance(element.getProject()).getBySignature(signature);
+                            try {
+                                for (PhpNamedElement el : bySignature) {
+                                    if (el.getFQN().equals(ICON_FACTORY) && methodName.equals("getIcon")) {
+                                        return new PsiReference[]{new IconReference(stringLiteralExpression)};
                                     }
-                                } catch (RuntimeException e) {
-                                    // invalid index signature, skip
                                 }
+                            } catch (RuntimeException e) {
+                                // invalid index signature, skip
                             }
                         }
 
