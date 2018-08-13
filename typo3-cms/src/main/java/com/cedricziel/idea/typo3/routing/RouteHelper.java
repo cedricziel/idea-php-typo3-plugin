@@ -18,8 +18,13 @@ import java.util.*;
 public class RouteHelper {
     @NotNull
     public static Collection<RouteStub> routesFromRoutesPhp(@NotNull PsiFile psiFile) {
+        RouteParserVisitor visitor;
+        if (psiFile.getName().equals(RouteIndex.AJAX_ROUTES_PHP)) {
+            visitor = new RouteParserVisitor("ajax_");
+        } else {
+            visitor = new RouteParserVisitor();
+        }
 
-        RouteParserVisitor visitor = new RouteParserVisitor();
         visitor.visitElement(psiFile);
 
         return visitor.getRouteStubs();
@@ -56,7 +61,7 @@ public class RouteHelper {
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return results.toArray(new PsiElement[results.size()]);
+        return results.toArray(new PsiElement[0]);
     }
 
     @NotNull
@@ -76,7 +81,7 @@ public class RouteHelper {
             });
         }
 
-        return result.toArray(new PsiElement[result.size()]);
+        return result.toArray(new PsiElement[0]);
     }
 
     @NotNull

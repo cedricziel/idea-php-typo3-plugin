@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.icons;
 
+import com.cedricziel.idea.typo3.AbstractTestCase;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 
-public class IconReferenceProviderTest extends LightCodeInsightFixtureTestCase {
+public class IconReferenceProviderTest extends AbstractTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/icons";

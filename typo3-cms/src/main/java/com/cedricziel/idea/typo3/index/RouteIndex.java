@@ -20,6 +20,9 @@ import java.util.*;
 public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
 
     public static final ID<String, RouteStub> KEY = ID.create("com.cedricziel.idea.typo3.index.route");
+    public static final String AJAX_ROUTES_PHP = "AjaxRoutes.php";
+    public static final String ROUTES_PHP = "Routes.php";
+    public static final String EXT_TABLES_PHP = "ext_tables.php";
 
     @NotNull
     public static boolean hasRoute(@NotNull Project project, @NotNull String routeName) {
@@ -75,13 +78,13 @@ public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
 
     @Override
     public int getVersion() {
-        return 0;
+        return 1;
     }
 
     @NotNull
     @Override
     public FileBasedIndex.InputFilter getInputFilter() {
-        return file -> file.getName().equals("Routes.php") || file.getName().equals("AjaxRoutes.php") || file.getName().equals("ext_tables.php");
+        return file -> file.getName().equals(ROUTES_PHP) || file.getName().equals(AJAX_ROUTES_PHP) || file.getName().equals(EXT_TABLES_PHP);
     }
 
     @Override
@@ -107,12 +110,15 @@ public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
             PhpExpression classRefExpr = methodReference.getClassReference();
             if (!(classRefExpr instanceof ClassReference)) {
                 super.visitElement(element);
+
                 return;
             }
 
             ClassReference classReference = (ClassReference) classRefExpr;
 
-            if (classReference.getFQN().equals("\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility") && methodReference.getName().equals("addModule")) {
+            String fqn = classReference.getFQN();
+            String methodName = methodReference.getName();
+            if (fqn != null && fqn.equals("\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility") && methodName != null && methodName.equals("addModule")) {
                 RouteStub e = extractRouteStubFromMethodCall(methodReference);
                 if (e != null) {
                     routeStubs.add(e);
@@ -135,7 +141,7 @@ public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
             ArrayCreationExpression routeArray = (ArrayCreationExpression) psiElement;
             for (ArrayHashElement arrayHashElement : routeArray.getHashElements()) {
                 PhpPsiElement key = arrayHashElement.getKey();
-                if (key == null || !(key instanceof StringLiteralExpression)) {
+                if (!(key instanceof StringLiteralExpression)) {
                     continue;
                 }
 
