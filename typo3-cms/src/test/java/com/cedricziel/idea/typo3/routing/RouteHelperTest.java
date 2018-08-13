@@ -12,6 +12,7 @@ public class RouteHelperTest extends AbstractTestCase {
     }
 
     public void testCanCorrectlyIdentifyRoutesFromRoutesPhp() {
+        myFixture.copyFileToProject("classes.php");
         myFixture.copyFileToProject("AjaxRoutes.php");
         myFixture.copyFileToProject("Routes.php");
 
