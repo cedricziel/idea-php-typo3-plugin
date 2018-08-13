@@ -4,7 +4,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
+import com.jetbrains.php.lang.psi.elements.ArrayIndex;
+import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
@@ -56,6 +59,8 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider3 {
                 return new PhpType().add("#C\\TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication");
             case "LANG":
                 return new PhpType().add("#C\\TYPO3\\CMS\\Lang\\LanguageService");
+            case "TYPO3_REQUEST":
+                return new PhpType().add("#C\\Psr\\Http\\Message\\ServerRequestInterface");
             default:
                 return null;
         }
