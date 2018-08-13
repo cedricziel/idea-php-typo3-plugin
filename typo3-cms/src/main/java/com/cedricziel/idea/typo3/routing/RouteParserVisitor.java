@@ -14,10 +14,17 @@ import java.util.Collection;
  */
 public class RouteParserVisitor extends PsiRecursiveElementVisitor {
 
+    private final String prefix;
     private Collection<RouteStub> routeStubs;
 
     public RouteParserVisitor() {
-        routeStubs = new ArrayList<>();
+        this.prefix = "";
+        this.routeStubs = new ArrayList<>();
+    }
+
+    public RouteParserVisitor(String prefix) {
+        this.prefix = prefix;
+        this.routeStubs = new ArrayList<>();
     }
 
     @NotNull
@@ -60,7 +67,7 @@ public class RouteParserVisitor extends PsiRecursiveElementVisitor {
             if (valueMap instanceof ArrayCreationExpression) {
                 ArrayCreationExpression propertyArray = (ArrayCreationExpression) valueMap;
 
-                routeDefinition.setName(key);
+                routeDefinition.setName(prefix + key);
 
                 for (ArrayHashElement routePropertyHashElement : propertyArray.getHashElements()) {
                     visitProperty(routeDefinition, routePropertyHashElement);
