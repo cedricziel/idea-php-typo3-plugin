@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.translation.codeInspection;
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -45,7 +46,7 @@ public class TranslationMissingInspection extends LocalInspectionTool {
                     }
 
                     // new CreateMissingTranslationQuickFix(contents)
-                    problemsHolder.registerProblem(expression, MESSAGE);
+                    problemsHolder.registerProblem(expression, MESSAGE, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
                 }
             }
         };
