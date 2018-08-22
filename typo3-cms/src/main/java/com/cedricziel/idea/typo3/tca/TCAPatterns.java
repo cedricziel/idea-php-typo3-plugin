@@ -150,4 +150,20 @@ public class TCAPatterns {
 
         return arrayAssignmentIndexWithIndexPattern(targetParentIndex);
     }
+
+    public static ElementPattern<? extends PsiElement> tableNameAsArrayValue() {
+        return PlatformPatterns
+            .psiElement(StringLiteralExpression.class).withParent(
+                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_VALUE).withSuperParent(
+                    1,
+                    PlatformPatterns.or(
+                        PlatformPatterns.psiElement(ArrayHashElement.class).withChild(
+                            PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY).withChild(
+                                PlatformPatterns.psiElement(StringLiteralExpression.class)
+                            )
+                        )
+                    )
+                )
+            );
+    }
 }

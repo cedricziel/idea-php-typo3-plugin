@@ -22,7 +22,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
         // table name as string in PHP Code
         registrar.registerReferenceProvider(
-                PlatformPatterns.psiElement(StringLiteralExpression.class),
+            TCAPatterns.tableNameAsArrayValue(),
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
@@ -33,7 +33,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                             return new PsiReference[]{new TableReference((StringLiteralExpression) element)};
                         }
 
-                        return new PsiReference[0];
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );
@@ -56,7 +56,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                             return new PsiReference[]{new TableReference(stringElement)};
                         }
 
-                        return new PsiReference[0];
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );
@@ -84,7 +84,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                              }
                         }
 
-                        return new PsiReference[0];
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );
