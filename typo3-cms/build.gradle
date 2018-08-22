@@ -26,3 +26,11 @@ patchPluginXml {
     changeNotes = htmlFixer('src/main/resources/META-INF/change-notes.html')
     pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
 }
+
+sourceSets {
+    test {
+        resources {
+            srcDir 'testData'
+        }
+    }
+}

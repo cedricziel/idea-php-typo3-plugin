@@ -31,7 +31,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
         ProblemsHolder problemsHolder = new ProblemsHolder(InspectionManager.getInstance(getProject()), psiFile.getContainingFile(), false);
 
-        for (LocalInspectionEP localInspectionEP: LocalInspectionEP.LOCAL_INSPECTION.getExtensions()) {
+        for (LocalInspectionEP localInspectionEP : LocalInspectionEP.LOCAL_INSPECTION.getExtensions()) {
             Object object = localInspectionEP.getInstance();
             if (!(object instanceof LocalInspectionTool)) {
                 continue;
@@ -57,7 +57,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         Set<String> matches = new HashSet<>();
 
         Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
-        for (ProblemDescriptor result: localInspectionsAtCaret.getFirst()) {
+        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
             TextRange textRange = result.getPsiElement().getTextRange();
             if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().equals(contains)) {
                 return;
@@ -71,7 +71,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
     public void assertAnnotationContains(String filename, String content, String contains) {
         List<String> matches = new ArrayList<>();
-        for (Annotation annotation: getAnnotationsAtCaret(filename, content)) {
+        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
             matches.add(annotation.toString());
             if (annotation.getMessage().contains(contains)) {
                 return;
@@ -84,7 +84,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     public void assertLocalInspectionNotContains(String filename, String content, String contains) {
         Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
 
-        for (ProblemDescriptor result: localInspectionsAtCaret.getFirst()) {
+        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
             TextRange textRange = result.getPsiElement().getTextRange();
             if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().contains(contains)) {
                 fail(String.format("Fail inspection not contains '%s'", contains));
@@ -93,7 +93,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     }
 
     public void assertAnnotationNotContains(String filename, String content, String contains) {
-        for (Annotation annotation: getAnnotationsAtCaret(filename, content)) {
+        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
             if (annotation.getMessage() != null && annotation.getMessage().contains(contains)) {
                 fail(String.format("Fail not matching '%s' with '%s'", contains, annotation));
             }
@@ -107,7 +107,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
 
         AnnotationHolderImpl annotations = new AnnotationHolderImpl(new AnnotationSession(psiFile));
 
-        for (Annotator annotator: LanguageAnnotators.INSTANCE.allForLanguage(psiFile.getLanguage())) {
+        for (Annotator annotator : LanguageAnnotators.INSTANCE.allForLanguage(psiFile.getLanguage())) {
             annotator.annotate(psiElement, annotations);
         }
 
@@ -119,10 +119,10 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
         PsiReference[] references = elementAtCaret.getReferences();
-        for (PsiReference reference: references) {
+        for (PsiReference reference : references) {
             if (psiReferenceClass.isInstance(reference)) {
                 ResolveResult[] resolveResults = ((PsiPolyVariantReference) reference).multiResolve(false);
-                for (ResolveResult resolveResult: resolveResults) {
+                for (ResolveResult resolveResult : resolveResults) {
                     assertInstanceOf(resolveResult.getElement(), expectedClass);
 
                     return;
@@ -138,10 +138,10 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
         PsiReference[] references = elementAtCaret.getReferences();
-        for (PsiReference reference: references) {
+        for (PsiReference reference : references) {
             if (translationReferenceClass.isInstance(reference)) {
                 Object[] variants = reference.getVariants();
-                for (Object variant: variants) {
+                for (Object variant : variants) {
                     if (variant instanceof LookupElement) {
                         String lookupString = ((LookupElement) variant).getLookupString();
                         if (lookupString.equals(expectedLookupString)) {
@@ -162,10 +162,10 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
         PsiReference[] references = elementAtCaret.getReferences();
-        for (PsiReference reference: references) {
+        for (PsiReference reference : references) {
             if (translationReferenceClass.isInstance(reference)) {
                 Object[] variants = reference.getVariants();
-                for (Object variant: variants) {
+                for (Object variant : variants) {
                     if (variant instanceof LookupElement) {
                         String lookupString = ((LookupElement) variant).getLookupString();
                         if (lookupString.equals(expectedLookupString)) {
@@ -179,7 +179,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     }
 
     protected void assertContainsLookupElementWithText(LookupElement[] lookupElements, String title) {
-        for (LookupElement lookupElement: lookupElements) {
+        for (LookupElement lookupElement : lookupElements) {
             LookupElementPresentation presentation = new LookupElementPresentation();
             lookupElement.renderElement(presentation);
             if (presentation.getItemText().equals(title)) {
@@ -191,7 +191,7 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     }
 
     protected void assertContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title, @NotNull String tailText, @NotNull String typeText) {
-        for (LookupElement lookupElement: lookupElements) {
+        for (LookupElement lookupElement : lookupElements) {
             LookupElementPresentation presentation = new LookupElementPresentation();
             lookupElement.renderElement(presentation);
             if (presentation.getItemText().equals(title) && presentation.getTailText().equals(tailText) && presentation.getTypeText().contains(typeText)) {
@@ -203,12 +203,22 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     }
 
     protected void assertNotContainsLookupElementWithText(LookupElement[] lookupElements, @NotNull String title) {
-        for (LookupElement lookupElement: lookupElements) {
+        for (LookupElement lookupElement : lookupElements) {
             LookupElementPresentation presentation = new LookupElementPresentation();
             lookupElement.renderElement(presentation);
             if (presentation.getItemText().equals(title)) {
                 fail("Element shouldnt be present but is");
             }
         }
+    }
+
+    protected void assertContainsReference(@NotNull Class c, @NotNull PsiElement element) {
+        for (PsiReference reference : element.getReferences()) {
+            if (reference.getClass().equals(c)) {
+                return;
+            }
+        }
+
+        fail(String.format("Could not find reference of type %s", c.getName()));
     }
 }
