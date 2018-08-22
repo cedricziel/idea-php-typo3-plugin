@@ -3,6 +3,7 @@ package com.cedricziel.idea.fluid.viewHelpers;
 import com.cedricziel.idea.fluid.extensionPoints.ViewHelperProvider;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelperArgument;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
@@ -103,13 +104,23 @@ public class PhpViewHelpersProvider implements ViewHelperProvider {
             PsiElement[] parameters = parameterList.getParameters();
             for (int i = 0; i < parameters.length; i++) {
                 PsiElement p = parameters[i];
+                if (p == null) {
+                    continue;
+                }
+
                 // name
                 if (i == 0) {
                     if (!(p instanceof StringLiteralExpression)) {
-                        throw new IllegalArgumentException("Cant process variable arguments for now");
+                        throwWithMessage("Cant process variable arguments for now");
                     }
 
-                    argument = new ViewHelperArgument(((StringLiteralExpression) p).getContents());
+                    if (p instanceof StringLiteralExpression) {
+                        argument = new ViewHelperArgument(((StringLiteralExpression) p).getContents());
+                    }
+                }
+
+                if (argument == null) {
+                    continue;
                 }
 
                 if (i == 1) {
@@ -121,7 +132,7 @@ public class PhpViewHelpersProvider implements ViewHelperProvider {
                             argument.setType(fqn);
                         }
                     } else {
-                        throw new IllegalArgumentException("Can only compute strings and class constants for now");
+                        throwWithMessage("Can only compute strings and class constants for now");
                     }
                 }
 
@@ -129,7 +140,7 @@ public class PhpViewHelpersProvider implements ViewHelperProvider {
                     if (p instanceof StringLiteralExpression) {
                         argument.setDocumentation(((StringLiteralExpression) p).getContents());
                     } else {
-                        throw new IllegalArgumentException("Can only process strings as argument documentation");
+                        throwWithMessage("Can only process strings as argument documentation");
                     }
                 }
 
@@ -139,7 +150,7 @@ public class PhpViewHelpersProvider implements ViewHelperProvider {
                     } else if (p instanceof ConstantReference) {
                         argument.setRequired(StringUtils.equalsIgnoreCase(p.getText(), "true"));
                     } else {
-                        throw new IllegalArgumentException("Can only process booleans for now as required arguments");
+                        throwWithMessage("Can only process booleans for now as required arguments");
                     }
                 }
             }
@@ -149,6 +160,12 @@ public class PhpViewHelpersProvider implements ViewHelperProvider {
             }
 
             super.visitPhpMethodReference(reference);
+        }
+
+        private void throwWithMessage(String message) {
+            if (ApplicationManager.getApplication().isUnitTestMode()) {
+                throw new IllegalArgumentException(message);
+            }
         }
     }
 }
