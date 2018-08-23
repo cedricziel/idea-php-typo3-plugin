@@ -1,10 +1,7 @@
 package com.cedricziel.idea.fluid;
 
 import com.cedricziel.idea.fluid.lang.FluidLanguage;
-import com.cedricziel.idea.fluid.lang.psi.FluidChain;
-import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
-import com.cedricziel.idea.fluid.lang.psi.FluidInlineStatement;
-import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
+import com.cedricziel.idea.fluid.lang.psi.*;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
@@ -59,5 +56,28 @@ public class FluidPatterns {
                         PlatformPatterns.psiElement(FluidTypes.ARROW)
                     ))
             );
+    }
+
+    public static ElementPattern<? extends PsiElement> inlineArgumentName() {
+
+        return PlatformPatterns.or(
+            /*
+             * "{ f:foo(<caret>) }"
+             * "{ f:foo(u<caret>) }"
+             */
+            PlatformPatterns
+                .psiElement(FluidTypes.IDENTIFIER)
+                .withParent(
+                    PlatformPatterns.psiElement(FluidFieldChain.class).afterSibling(PlatformPatterns.psiElement(FluidViewHelperExpr.class))
+                ),
+            /*
+             * "{ f:foo(u<caret>:) }"
+             */
+            PlatformPatterns
+                .psiElement(FluidTypes.IDENTIFIER)
+                .withParent(
+                    PlatformPatterns.psiElement(FluidArgumentKey.class)
+                )
+        );
     }
 }
