@@ -2,6 +2,7 @@ package com.cedricziel.idea.fluid;
 
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -43,5 +44,20 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
         for (String completion : completions) {
             assertTrue(lookupElementStrings.contains(completion));
         }
+    }
+
+    protected void assertLookupStringOnFluidCaret(@NotNull String content, @NotNull String... lookupString) {
+        assertLookupStringOnCaret("foo.fluid", content, lookupString);
+    }
+
+    protected void assertLookupStringOnCaret(@NotNull String fileName, @NotNull String content, @NotNull String... lookupString) {
+        myFixture.configureByText(fileName, content);
+
+        myFixture.completeBasic();
+
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+
+        assertNotNull(lookupElementStrings);
+        assertContainsElements(lookupElementStrings, lookupString);
     }
 }

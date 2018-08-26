@@ -4,14 +4,15 @@ import com.cedricziel.idea.fluid.FluidViewHelperReferenceInsertHandler;
 import com.cedricziel.idea.fluid.extensionPoints.NamespaceProvider;
 import com.cedricziel.idea.fluid.extensionPoints.ViewHelperProvider;
 import com.cedricziel.idea.fluid.lang.FluidLanguage;
-import com.cedricziel.idea.fluid.lang.psi.FluidElement;
-import com.cedricziel.idea.fluid.lang.psi.FluidFile;
-import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
-import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
+import com.cedricziel.idea.fluid.lang.psi.*;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
 import com.cedricziel.idea.fluid.variables.FluidVariable;
+import com.cedricziel.idea.fluid.viewHelpers.ViewHelperUtil;
+import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
+import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelperArgument;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -20,11 +21,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import gnu.trove.THashMap;
+import icons.FluidIcons;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -162,7 +165,7 @@ public class FluidUtil {
     public static Collection<FluidFile> findTemplatesForControllerAction(Method method) {
         List<FluidFile> fluidFiles = new ArrayList<>();
 
-        String fileName = method.getName().substring(0,1).toUpperCase() + method.getName().substring(1, method.getName().length() - "Action".length());
+        String fileName = method.getName().substring(0, 1).toUpperCase() + method.getName().substring(1, method.getName().length() - "Action".length());
         PhpClass containingClass = method.getContainingClass();
         if (containingClass == null) {
             return fluidFiles;
@@ -176,6 +179,41 @@ public class FluidUtil {
         }
 
         return fluidFiles;
+    }
+
+    public static void completeViewHelperArguments(CompletionParameters parameters, CompletionResultSet result) {
+        PsiElement psiElement = parameters.getPosition();
+
+        FluidViewHelperExpr viewHelperExpr = (FluidViewHelperExpr) PsiTreeUtil.findFirstParent(psiElement, p -> p instanceof FluidViewHelperExpr);
+        if (viewHelperExpr == null) {
+            if (psiElement.getParent().getPrevSibling() instanceof FluidViewHelperExpr) {
+                viewHelperExpr = (FluidViewHelperExpr) psiElement.getParent().getPrevSibling();
+            } else if (psiElement.getParent().getParent() instanceof FluidFieldChainExpr && psiElement.getParent().getParent().getFirstChild() instanceof FluidViewHelperExpr) {
+                viewHelperExpr = (FluidViewHelperExpr) psiElement.getParent().getParent().getFirstChild();
+            } else {
+                return;
+            }
+        }
+
+        Map<String, ViewHelper> allViewHelpersInContextByName = ViewHelperUtil.findAllViewHelpersInContextByName(psiElement.getProject(), psiElement);
+        String viewHelperExprPresentableName = viewHelperExpr.getPresentableName();
+        if (!allViewHelpersInContextByName.containsKey(viewHelperExprPresentableName)) {
+            return;
+        }
+
+        allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> {
+            result.addElement(FluidUtil.viewHelperArgumentLookupElement(name, argument));
+        });
+    }
+
+    private static LookupElement viewHelperArgumentLookupElement(String name, ViewHelperArgument argument) {
+        return LookupElementBuilder
+            .create(name)
+            .withIcon(FluidIcons.VIEW_HELPER_ARGUMENT)
+            .withBoldness(argument.required)
+            .withTailText(argument.documentation, true)
+            .withTypeText(argument.type)
+            ;
     }
 
     private static class ControllerMethodWalkerVisitor extends PhpRecursiveElementVisitor {

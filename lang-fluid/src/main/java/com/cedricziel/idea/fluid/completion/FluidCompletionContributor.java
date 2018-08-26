@@ -108,6 +108,17 @@ public class FluidCompletionContributor extends CompletionContributor {
                 FluidUtil.completeViewHelpers(parameters, result);
             }
         });
-    }
 
+        /*
+         * {f:foo(<caret>)}
+         * {f:foo(u<caret>)}
+         * {f:foo(u<caret>:)}
+         */
+        extend(CompletionType.BASIC, FluidPatterns.inlineArgumentName(), new CompletionProvider<CompletionParameters>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                FluidUtil.completeViewHelperArguments(parameters, result);
+            }
+        });
+    }
 }
