@@ -183,7 +183,7 @@ public class FluidUtil {
 
     public static void completeViewHelperArguments(CompletionParameters parameters, CompletionResultSet result) {
         PsiElement psiElement = parameters.getPosition();
-        Map<String, ViewHelper> allViewHelpersInContextByName = ViewHelperUtil.findAllViewHelpersInContextByName(psiElement.getProject(), psiElement);
+
         FluidViewHelperExpr viewHelperExpr = (FluidViewHelperExpr) PsiTreeUtil.findFirstParent(psiElement, p -> p instanceof FluidViewHelperExpr);
         if (viewHelperExpr == null) {
             if (psiElement.getParent().getPrevSibling() instanceof FluidViewHelperExpr) {
@@ -195,6 +195,7 @@ public class FluidUtil {
             }
         }
 
+        Map<String, ViewHelper> allViewHelpersInContextByName = ViewHelperUtil.findAllViewHelpersInContextByName(psiElement.getProject(), psiElement);
         String viewHelperExprPresentableName = viewHelperExpr.getPresentableName();
         if (!allViewHelpersInContextByName.containsKey(viewHelperExprPresentableName)) {
             return;
