@@ -188,6 +188,8 @@ public class FluidUtil {
         if (viewHelperExpr == null) {
             if (psiElement.getParent().getPrevSibling() instanceof FluidViewHelperExpr) {
                 viewHelperExpr = (FluidViewHelperExpr) psiElement.getParent().getPrevSibling();
+            } else if (psiElement.getParent().getParent() instanceof FluidFieldChainExpr && psiElement.getParent().getParent().getFirstChild() instanceof FluidViewHelperExpr) {
+                viewHelperExpr = (FluidViewHelperExpr) psiElement.getParent().getParent().getFirstChild();
             } else {
                 return;
             }

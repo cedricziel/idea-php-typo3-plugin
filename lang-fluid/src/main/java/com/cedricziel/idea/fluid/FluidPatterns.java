@@ -70,6 +70,16 @@ public class FluidPatterns {
                 .withParent(
                     PlatformPatterns.psiElement(FluidFieldChain.class).afterSibling(PlatformPatterns.psiElement(FluidViewHelperExpr.class))
                 ),
+            /* 2018.1 fallback */
+            PlatformPatterns
+                .psiElement(FluidTypes.IDENTIFIER)
+                .withParent(
+                    PlatformPatterns.psiElement(FluidFieldChain.class).withParent(
+                        PlatformPatterns.psiElement(FluidFieldChainExpr.class).withFirstChild(
+                            PlatformPatterns.psiElement(FluidViewHelperExpr.class)
+                        )
+                    )
+                ),
             /*
              * "{ f:foo(u<caret>:) }"
              */
