@@ -13,6 +13,10 @@ public class FluidCompletionContributorTest extends AbstractFluidTest {
 
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ <caret> }", "f:alias", "f:base", "f:for");
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ <caret> }", "a:foo");
+    }
+
+    public void testInlineViewHelpersAreNotCompletedAtPlacesTheyDontBelong() {
+        myFixture.copyFileToProject("classes.php");
 
         assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(<caret>) }", "f:alias", "f:base", "f:for");
         assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(<caret>) }", "a:foo");

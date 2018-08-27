@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 public class FluidPatterns {
     /*
      * { f<caret>oo }
+     *
+     * not
+     *
+     * { foo.b<caret> }
      */
     public static ElementPattern<PsiElement> getFirstIdentifierPattern() {
 
@@ -18,7 +22,9 @@ public class FluidPatterns {
             .andNot(
                 PlatformPatterns.psiElement().afterLeaf(PlatformPatterns.psiElement(FluidTypes.DOT))
             )
-            .andNot(inlineArgumentNamePattern())
+            .andNot(
+                PlatformPatterns.psiElement().withParent(PlatformPatterns.psiElement(FluidInlineChain.class))
+            )
             .withLanguage(FluidLanguage.INSTANCE);
     }
 

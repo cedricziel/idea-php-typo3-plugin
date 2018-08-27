@@ -1,6 +1,7 @@
 package com.cedricziel.idea.fluid.completion;
 
 import com.cedricziel.idea.fluid.FluidPatterns;
+import com.cedricziel.idea.fluid.lang.psi.FluidArgumentValue;
 import com.cedricziel.idea.fluid.lang.psi.FluidBoundNamespace;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
@@ -52,7 +53,9 @@ public class FluidCompletionContributor extends CompletionContributor {
                     );
                 });
 
-                FluidUtil.completeViewHelpers(parameters, result);
+                if (!PlatformPatterns.psiElement().withSuperParent(2, FluidArgumentValue.class).accepts(psiElement)) {
+                    FluidUtil.completeViewHelpers(parameters, result);
+                }
             }
         });
 
