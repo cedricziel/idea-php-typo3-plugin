@@ -1,17 +1,14 @@
 package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
+import com.cedricziel.idea.fluid.FluidPatterns;
 import com.cedricziel.idea.fluid.codeInsight.template.LiveTemplateFactory;
-import com.cedricziel.idea.fluid.lang.psi.FluidFieldExpr;
 import com.cedricziel.idea.fluid.lang.psi.FluidInlineStatement;
-import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
-import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -25,18 +22,8 @@ public class DebugInlinePostfixTemplate extends PostfixTemplate {
 
     @Override
     public boolean isApplicable(@NotNull PsiElement context, @NotNull Document copyDocument, int newOffset) {
-        return PlatformPatterns
-            .or(
-                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
-                    PlatformPatterns.psiElement(FluidFieldExpr.class)
-                ),
-                PlatformPatterns.and(
-                    PlatformPatterns.psiElement().withParent(
-                        FluidViewHelperExpr.class
-                    ),
-                    PlatformPatterns.psiElement(FluidTypes.RIGHT_PARENTH)
-                )
-            )
+        return FluidPatterns
+            .inlinePostfixPositionPattern()
             .accepts(context);
     }
 

@@ -93,4 +93,24 @@ public class FluidPatterns {
                 )
         );
     }
+
+    /*
+     * {foo<caret>}
+     * {foo -> a:bar()<caret>}
+     */
+    public static ElementPattern<? extends PsiElement> inlinePostfixPositionPattern() {
+
+        return PlatformPatterns
+            .or(
+                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
+                    PlatformPatterns.psiElement(FluidFieldExpr.class)
+                ),
+                PlatformPatterns.and(
+                    PlatformPatterns.psiElement().withParent(
+                        FluidViewHelperExpr.class
+                    ),
+                    PlatformPatterns.psiElement(FluidTypes.RIGHT_PARENTH)
+                )
+            );
+    }
 }
