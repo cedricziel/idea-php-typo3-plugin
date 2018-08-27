@@ -13,6 +13,11 @@ public class FluidCompletionContributorTest extends AbstractFluidTest {
 
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ <caret> }", "f:alias", "f:base", "f:for");
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ <caret> }", "a:foo");
+
+        assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(<caret>) }", "f:alias", "f:base", "f:for");
+        assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(<caret>) }", "a:foo");
+        assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(id: <caret>) }", "f:alias", "f:base", "f:for");
+        assertLookupStringNotOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ f:translate(id: <caret>) }", "a:foo");
     }
 
     public void testInlineArgumentsAreCompleted() {

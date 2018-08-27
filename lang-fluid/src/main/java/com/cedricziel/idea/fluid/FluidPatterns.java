@@ -18,6 +18,7 @@ public class FluidPatterns {
             .andNot(
                 PlatformPatterns.psiElement().afterLeaf(PlatformPatterns.psiElement(FluidTypes.DOT))
             )
+            .andNot(inlineArgumentNamePattern())
             .withLanguage(FluidLanguage.INSTANCE);
     }
 
@@ -58,7 +59,7 @@ public class FluidPatterns {
             );
     }
 
-    public static ElementPattern<? extends PsiElement> inlineArgumentName() {
+    public static ElementPattern<? extends PsiElement> inlineArgumentNamePattern() {
 
         return PlatformPatterns.or(
             /*
@@ -68,7 +69,9 @@ public class FluidPatterns {
             PlatformPatterns
                 .psiElement(FluidTypes.IDENTIFIER)
                 .withParent(
-                    PlatformPatterns.psiElement(FluidFieldChain.class).afterSibling(PlatformPatterns.psiElement(FluidViewHelperExpr.class))
+                    PlatformPatterns.psiElement(FluidFieldExpr.class).afterSibling(
+                        PlatformPatterns.psiElement(FluidViewHelperExpr.class)
+                    )
                 ),
             /* 2018.1 fallback */
             PlatformPatterns

@@ -64,6 +64,9 @@
 
         <lang.inspectionSuppressor language="HTML" implementationClass="com.cedricziel.idea.fluid.tagMode.UnboundNamespaceSuppressor"/>
 
+        <psi.referenceContributor
+            implementation="com.cedricziel.idea.fluid.viewHelpers.ViewHelperReferenceContributor"/>
+
         <!-- built-in inspections -->
         <localInspection
             language="Fluid"

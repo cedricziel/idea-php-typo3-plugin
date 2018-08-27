@@ -133,8 +133,8 @@ literal ::= string_literal | number_literal | boolean_literal | null_literal {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidLiteralMixin"
 }
 
-FieldChain      ::= IDENTIFIER ('.' FieldChain)?
-FieldExpr       ::= FieldChain
+FieldChain      ::= '.' IDENTIFIER FieldChain?
+FieldExpr       ::= IDENTIFIER
 FieldChainExpr  ::= Expression FieldChain
 
 Expression ::=   OrExpr
@@ -191,6 +191,8 @@ argumentValue ::= literal | FieldExpr | ArrayCreationExpr
 
 StringExpr     ::= string_literal
 
+IdentifierExpr ::= IDENTIFIER
+
 NumberExpr     ::= NUMBER
 
 ParenthesesExpr     ::= '(' InlineChain ')' { pin=1 }
@@ -220,7 +222,7 @@ Chain          ::= '->' ViewHelperExpr Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr
-private PrimaryGroup ::= NumberExpr  | FieldExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
+private PrimaryGroup ::= NumberExpr | IdentifierExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
 
 InlineStatement ::= '{' InlineChain '}' {
   pin=2
