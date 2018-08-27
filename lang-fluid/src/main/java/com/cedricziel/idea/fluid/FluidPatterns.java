@@ -105,6 +105,9 @@ public class FluidPatterns {
                 PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
                     PlatformPatterns.psiElement(FluidFieldExpr.class)
                 ),
+                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
+                    PlatformPatterns.psiElement(FluidFieldChain.class)
+                ),
                 PlatformPatterns.and(
                     PlatformPatterns.psiElement().withParent(
                         FluidViewHelperExpr.class
