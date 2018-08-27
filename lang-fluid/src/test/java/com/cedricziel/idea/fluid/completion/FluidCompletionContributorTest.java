@@ -27,8 +27,8 @@ public class FluidCompletionContributorTest extends AbstractFluidTest {
     public void testInlineArgumentsAreCompleted() {
         myFixture.copyFileToProject("classes.php");
 
-        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(<caret>) }", "uid");
-        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n { a:foo(u<caret>) }", "uid");
-        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(u<caret>:) }", "uid");
+        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(<caret>) }", "uid", "uncle");
+        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(u<caret>) }", "uid", "uncle");
+        assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(u<caret>:) }", "uid", "uncle");
     }
 }

@@ -277,7 +277,12 @@ namespace App\ViewHelpers {
          */
         public function initializeArguments()
         {
+            /*
+             * we register two arguments starting with u, since lookup string
+             * is null when only one element is completed.
+             */
             $this->registerArgument('uid', 'integer', 'uid of the record', true);
+            $this->registerArgument('uncle', 'string', 'one uncle', true);
         }
 
         /**

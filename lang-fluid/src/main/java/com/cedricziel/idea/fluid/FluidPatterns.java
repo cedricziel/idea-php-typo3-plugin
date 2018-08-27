@@ -83,10 +83,8 @@ public class FluidPatterns {
             PlatformPatterns
                 .psiElement(FluidTypes.IDENTIFIER)
                 .withParent(
-                    PlatformPatterns.psiElement(FluidFieldChain.class).withParent(
-                        PlatformPatterns.psiElement(FluidFieldChainExpr.class).withFirstChild(
-                            PlatformPatterns.psiElement(FluidViewHelperExpr.class)
-                        )
+                    PlatformPatterns.psiElement(FluidInlineChain.class).withFirstChild(
+                        PlatformPatterns.psiElement(FluidViewHelperExpr.class)
                     )
                 ),
             /*
