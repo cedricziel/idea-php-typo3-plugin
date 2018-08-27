@@ -1,7 +1,7 @@
 package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
 import com.cedricziel.idea.fluid.codeInsight.template.LiveTemplateFactory;
-import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldExpr;
 import com.cedricziel.idea.fluid.lang.psi.FluidInlineStatement;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
@@ -28,7 +28,7 @@ public class DebugInlinePostfixTemplate extends PostfixTemplate {
         return PlatformPatterns
             .or(
                 PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
-                    PlatformPatterns.psiElement(FluidFieldChain.class)
+                    PlatformPatterns.psiElement(FluidFieldExpr.class)
                 ),
                 PlatformPatterns.and(
                     PlatformPatterns.psiElement().withParent(
