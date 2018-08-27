@@ -60,4 +60,25 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
         assertNotNull(lookupElementStrings);
         assertContainsElements(lookupElementStrings, lookupString);
     }
+
+    protected void assertLookupStringNotOnFluidCaret(@NotNull String content, @NotNull String... lookupString) {
+        assertLookupStringNotOnCaret("foo.fluid", content, lookupString);
+    }
+
+    protected void assertLookupStringNotOnCaret(@NotNull String fileName, @NotNull String content, @NotNull String... lookupString) {
+        myFixture.configureByText(fileName, content);
+
+        myFixture.completeBasic();
+
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+
+        assertNotNull(lookupElementStrings);
+        assertNotContainsElements(lookupElementStrings, lookupString);
+    }
+
+    protected void assertNotContainsElements(List<String> haystack, String... needles) {
+        for (String needle : needles) {
+            assertFalse(haystack.contains(needle));
+        }
+    }
 }

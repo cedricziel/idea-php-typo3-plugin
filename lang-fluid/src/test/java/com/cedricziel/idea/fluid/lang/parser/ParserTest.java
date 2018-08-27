@@ -7,8 +7,8 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 public class ParserTest extends LightCodeInsightFixtureTestCase {
     public void testCanDetectVariables() {
-        assertParentElementAtCaretMatchesType("{fo<caret>o}", FluidFieldChain.class);
-        assertParentElementAtCaretMatchesType("{fo<caret>o -> f:fo()}", FluidFieldChain.class);
+        assertParentElementAtCaretMatchesType("{fo<caret>o}", FluidFieldExpr.class);
+        assertParentElementAtCaretMatchesType("{fo<caret>o -> f:fo()}", FluidFieldExpr.class);
 
         assertParentElementAtCaretMatchesType("{foo -> f:fo(fo<caret>o: 'bar')}", FluidArgumentKey.class);
         assertParentElementAtCaretMatchesType("{foo -> f:fo(foo: 'ba<caret>r')}", FluidStringLiteral.class);
@@ -65,8 +65,8 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
         assertParentElementAtCaretMatchesType("{\"fo<caret>o\" : bar}", FluidStringLiteral.class);
 
         // array values can be literals or field chains
-        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidFieldChain.class);
-        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidArrayValue.class, 3);
+        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidFieldExpr.class);
+        assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidArrayCreationExpr.class, 3);
         assertParentElementAtCaretMatchesType("{foo : 'b<caret>ar'}", FluidArrayValue.class, 2);
         assertParentElementAtCaretMatchesType("{foo : \"b<caret>ar\"}", FluidArrayValue.class, 2);
     }

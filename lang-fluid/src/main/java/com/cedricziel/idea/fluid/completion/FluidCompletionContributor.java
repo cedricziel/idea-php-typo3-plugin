@@ -1,6 +1,7 @@
 package com.cedricziel.idea.fluid.completion;
 
 import com.cedricziel.idea.fluid.FluidPatterns;
+import com.cedricziel.idea.fluid.lang.psi.FluidArgumentValue;
 import com.cedricziel.idea.fluid.lang.psi.FluidBoundNamespace;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
@@ -31,7 +32,10 @@ public class FluidCompletionContributor extends CompletionContributor {
         });
 
         /*
+         * Initial pattern should complete only if nothing else or an identifier is completed.
+         *
          * { <caret> }
+         * { fo<caret> }
          */
         extend(CompletionType.BASIC, FluidPatterns.getFirstIdentifierPattern(), new CompletionProvider<CompletionParameters>() {
             @Override
@@ -49,7 +53,9 @@ public class FluidCompletionContributor extends CompletionContributor {
                     );
                 });
 
-                FluidUtil.completeViewHelpers(parameters, result);
+                if (!PlatformPatterns.psiElement().withSuperParent(2, FluidArgumentValue.class).accepts(psiElement)) {
+                    FluidUtil.completeViewHelpers(parameters, result);
+                }
             }
         });
 
@@ -114,7 +120,7 @@ public class FluidCompletionContributor extends CompletionContributor {
          * {f:foo(u<caret>)}
          * {f:foo(u<caret>:)}
          */
-        extend(CompletionType.BASIC, FluidPatterns.inlineArgumentName(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, FluidPatterns.inlineArgumentNamePattern(), new CompletionProvider<CompletionParameters>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 FluidUtil.completeViewHelperArguments(parameters, result);

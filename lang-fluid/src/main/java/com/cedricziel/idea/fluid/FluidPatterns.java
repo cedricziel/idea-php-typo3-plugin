@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 public class FluidPatterns {
     /*
      * { f<caret>oo }
+     *
+     * not
+     *
+     * { foo.b<caret> }
      */
     public static ElementPattern<PsiElement> getFirstIdentifierPattern() {
 
@@ -17,6 +21,9 @@ public class FluidPatterns {
             .psiElement(FluidTypes.IDENTIFIER)
             .andNot(
                 PlatformPatterns.psiElement().afterLeaf(PlatformPatterns.psiElement(FluidTypes.DOT))
+            )
+            .andNot(
+                PlatformPatterns.psiElement().withParent(PlatformPatterns.psiElement(FluidInlineChain.class))
             )
             .withLanguage(FluidLanguage.INSTANCE);
     }
@@ -58,7 +65,7 @@ public class FluidPatterns {
             );
     }
 
-    public static ElementPattern<? extends PsiElement> inlineArgumentName() {
+    public static ElementPattern<? extends PsiElement> inlineArgumentNamePattern() {
 
         return PlatformPatterns.or(
             /*
@@ -68,16 +75,16 @@ public class FluidPatterns {
             PlatformPatterns
                 .psiElement(FluidTypes.IDENTIFIER)
                 .withParent(
-                    PlatformPatterns.psiElement(FluidFieldChain.class).afterSibling(PlatformPatterns.psiElement(FluidViewHelperExpr.class))
+                    PlatformPatterns.psiElement(FluidFieldExpr.class).afterSibling(
+                        PlatformPatterns.psiElement(FluidViewHelperExpr.class)
+                    )
                 ),
             /* 2018.1 fallback */
             PlatformPatterns
                 .psiElement(FluidTypes.IDENTIFIER)
                 .withParent(
-                    PlatformPatterns.psiElement(FluidFieldChain.class).withParent(
-                        PlatformPatterns.psiElement(FluidFieldChainExpr.class).withFirstChild(
-                            PlatformPatterns.psiElement(FluidViewHelperExpr.class)
-                        )
+                    PlatformPatterns.psiElement(FluidInlineChain.class).withFirstChild(
+                        PlatformPatterns.psiElement(FluidViewHelperExpr.class)
                     )
                 ),
             /*
@@ -89,5 +96,28 @@ public class FluidPatterns {
                     PlatformPatterns.psiElement(FluidArgumentKey.class)
                 )
         );
+    }
+
+    /*
+     * {foo<caret>}
+     * {foo -> a:bar()<caret>}
+     */
+    public static ElementPattern<? extends PsiElement> inlinePostfixPositionPattern() {
+
+        return PlatformPatterns
+            .or(
+                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
+                    PlatformPatterns.psiElement(FluidFieldExpr.class)
+                ),
+                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
+                    PlatformPatterns.psiElement(FluidFieldChain.class)
+                ),
+                PlatformPatterns.and(
+                    PlatformPatterns.psiElement().withParent(
+                        FluidViewHelperExpr.class
+                    ),
+                    PlatformPatterns.psiElement(FluidTypes.RIGHT_PARENTH)
+                )
+            );
     }
 }
