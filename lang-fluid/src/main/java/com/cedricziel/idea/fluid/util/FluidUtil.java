@@ -7,6 +7,7 @@ import com.cedricziel.idea.fluid.lang.FluidLanguage;
 import com.cedricziel.idea.fluid.lang.psi.*;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
 import com.cedricziel.idea.fluid.variables.FluidVariable;
+import com.cedricziel.idea.fluid.viewHelpers.ViewHelperArgumentInsertHandler;
 import com.cedricziel.idea.fluid.viewHelpers.ViewHelperUtil;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelperArgument;
@@ -202,18 +203,19 @@ public class FluidUtil {
         }
 
         allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> {
-            result.addElement(FluidUtil.viewHelperArgumentLookupElement(name, argument));
+            result.addElement(FluidUtil.viewHelperArgumentLookupElement(psiElement, name, argument));
         });
     }
 
-    private static LookupElement viewHelperArgumentLookupElement(String name, ViewHelperArgument argument) {
+    private static LookupElement viewHelperArgumentLookupElement(PsiElement psiElement, String name, ViewHelperArgument argument) {
+
         return LookupElementBuilder
-            .create(name)
+            .createWithSmartPointer(name, psiElement)
             .withIcon(FluidIcons.VIEW_HELPER_ARGUMENT)
             .withBoldness(argument.required)
             .withTailText(argument.documentation, true)
             .withTypeText(argument.type)
-            ;
+            .withInsertHandler(ViewHelperArgumentInsertHandler.getInstance());
     }
 
     private static class ControllerMethodWalkerVisitor extends PhpRecursiveElementVisitor {
