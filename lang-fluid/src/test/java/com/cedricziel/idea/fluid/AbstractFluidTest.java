@@ -1,6 +1,12 @@
 package com.cedricziel.idea.fluid;
 
+import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
+import com.cedricziel.idea.fluid.viewHelpers.ViewHelperReference;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,5 +86,20 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
         for (String needle : needles) {
             assertFalse(haystack.contains(needle));
         }
+    }
+
+    protected void assertViewHelperReferenceOnCaret(String s) {
+        PsiFile psiFile = myFixture.configureByText("foo.fluid", s);
+
+        PsiElement elementAtCaret = psiFile.findElementAt(myFixture.getEditor().getCaretModel().getOffset());
+        FluidViewHelperExpr viewHelperExpr = (FluidViewHelperExpr) PsiTreeUtil.findFirstParent(elementAtCaret, e -> e instanceof FluidViewHelperExpr);
+        PsiReference[] references = viewHelperExpr.getReferences();
+        for (PsiReference reference : references) {
+            if (reference instanceof ViewHelperReference) {
+                return;
+            }
+        }
+
+        fail("No ViewHelperReference found on caret.");
     }
 }
