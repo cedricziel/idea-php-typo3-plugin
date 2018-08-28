@@ -105,4 +105,15 @@ public class ViewHelperUtil {
 
         return elements;
     }
+
+    public static @Nullable
+    ViewHelper getViewHelperByName(@NotNull PsiElement context, @NotNull String presentableName) {
+
+        Map<String, ViewHelper> allViewHelpersInContextByName = ViewHelperUtil.findAllViewHelpersInContextByName(context.getProject(), context);
+        if (allViewHelpersInContextByName.containsKey(presentableName)) {
+            return allViewHelpersInContextByName.get(presentableName);
+        }
+
+        return null;
+    }
 }
