@@ -1,17 +1,23 @@
 package com.cedricziel.idea.fluid.viewHelpers;
 
+import com.cedricziel.idea.fluid.lang.FluidReference;
+import com.cedricziel.idea.fluid.lang.psi.FluidElement;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.jetbrains.php.PhpIndex;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewHelperReference extends PsiPolyVariantReferenceBase<PsiElement> {
-    public ViewHelperReference(@NotNull PsiElement psiElement) {
+public class ViewHelperReference extends FluidReference {
+
+    public ViewHelperReference(@NotNull FluidElement psiElement) {
         super(psiElement);
+    }
+
+    public ViewHelperReference(FluidElement element, TextRange textRange) {
+        super(element, textRange);
     }
 
     @NotNull
