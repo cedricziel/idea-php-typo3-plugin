@@ -1,5 +1,6 @@
 package com.cedricziel.idea.fluid.viewHelpers;
 
+import com.cedricziel.idea.fluid.lang.psi.FluidElement;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
@@ -18,7 +19,7 @@ public class ViewHelperReferenceContributor extends PsiReferenceContributor {
                 @NotNull
                 @Override
                 public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-                    return new PsiReference[]{new ViewHelperReference(element)};
+                    return new PsiReference[]{new ViewHelperReference((FluidElement) element, element.getTextRange())};
                 }
             }
         );
