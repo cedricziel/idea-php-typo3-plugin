@@ -2,6 +2,8 @@ package com.cedricziel.idea.fluid.completion;
 
 import com.cedricziel.idea.fluid.AbstractFluidTest;
 
+import java.util.List;
+
 public class FluidCompletionContributorTest extends AbstractFluidTest {
     @Override
     protected String getTestDataPath() {
@@ -30,5 +32,17 @@ public class FluidCompletionContributorTest extends AbstractFluidTest {
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(<caret>) }", "uid", "uncle");
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(u<caret>) }", "uid", "uncle");
         assertLookupStringOnFluidCaret("{namespace a=App\\ViewHelpers}\n{ a:foo(u<caret>:) }", "uid", "uncle");
+    }
+
+    public void testVariablesFromControllerAndTypesAreCompleted() {
+        myFixture.copyFileToProject("classes.php");
+        myFixture.copyFileToProject("Index.fluid", "Book/Index.fluid");
+
+        myFixture.configureByFile("Book/Index.fluid");
+
+        myFixture.completeBasic();
+
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+        assertContainsElements(lookupElementStrings, "author");
     }
 }
