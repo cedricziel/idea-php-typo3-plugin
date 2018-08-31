@@ -1,7 +1,7 @@
 package com.cedricziel.idea.fluid.util;
 
 import com.cedricziel.idea.fluid.extensionPoints.VariableProvider;
-import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldExpr;
 import com.cedricziel.idea.fluid.lang.psi.FluidInlineChain;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.cedricziel.idea.fluid.variables.FluidTypeContainer;
@@ -72,7 +72,7 @@ public class FluidTypeResolver {
             }
         }
 
-        for (PsiElement parent = psiElement.getParent(); parent instanceof FluidFieldChain; parent = parent.getParent()) {
+        for (PsiElement parent = psiElement.getParent(); parent instanceof FluidFieldExpr; parent = parent.getParent()) {
             if (pattern.accepts(parent)) {
                 if (includeMatching) {
                     return parent.getText() + prevText;

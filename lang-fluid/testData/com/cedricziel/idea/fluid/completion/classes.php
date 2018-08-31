@@ -358,3 +358,33 @@ namespace App\ViewHelpers {
         }
     }
 }
+
+namespace My\App\Domain {
+    class Author
+    {
+    }
+
+    class Book
+    {
+        /**
+         * @return Author
+         */
+        public function getAuthor()
+        {
+
+        }
+    }
+}
+
+namespace My\App\Controller {
+
+    use My\App\Domain\Book;
+
+    class BookController
+    {
+        public function indexAction()
+        {
+            $this->view->assign('book', new Book());
+        }
+    }
+}
