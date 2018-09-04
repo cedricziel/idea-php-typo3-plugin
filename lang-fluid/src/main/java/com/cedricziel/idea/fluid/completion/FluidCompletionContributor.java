@@ -56,7 +56,7 @@ public class FluidCompletionContributor extends CompletionContributor {
         /*
          * {foo.<caret>}
          */
-        extend(CompletionType.BASIC, FluidPatterns.getAccessorInIdentifierPattern(), new FluidTypeCompletionProvider(false));
+        extend(CompletionType.BASIC, FluidPatterns.getAccessorAfterDotPattern(), new FluidTypeCompletionProvider(false));
 
         /*
          * {foo.ba<caret>}
