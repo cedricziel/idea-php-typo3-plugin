@@ -36,13 +36,13 @@ public class FluidCompletionContributorTest extends AbstractFluidTest {
 
     public void testVariablesFromControllerAndTypesAreCompleted() {
         myFixture.copyFileToProject("classes.php");
-        myFixture.copyFileToProject("Index.fluid", "Book/Index.fluid");
+        myFixture.copyFileToProject("Index_blank.fluid", "Book/Index.fluid");
 
         myFixture.configureByFile("Book/Index.fluid");
 
         myFixture.completeBasic();
 
         List<String> lookupElementStrings = myFixture.getLookupElementStrings();
-        assertContainsElements(lookupElementStrings, "author");
+        assertContainsElements(lookupElementStrings, "book");
     }
 }

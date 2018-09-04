@@ -133,8 +133,14 @@ literal ::= string_literal | number_literal | boolean_literal | null_literal {
   mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidLiteralMixin"
 }
 
-FieldChain      ::= '.' IDENTIFIER FieldChain?
-FieldExpr       ::= IDENTIFIER
+FieldChain      ::= '.' IDENTIFIER FieldChain? {
+  implements="com.cedricziel.idea.fluid.lang.psi.FluidNamedElement"
+  mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamedElementImpl"
+}
+FieldExpr       ::= IDENTIFIER {
+  implements="com.cedricziel.idea.fluid.lang.psi.FluidNamedElement"
+  mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamedElementImpl"
+}
 FieldChainExpr  ::= Expression FieldChain
 
 Expression ::=   OrExpr
@@ -170,7 +176,10 @@ ViewHelperExpr     ::=    boundNamespace ':' viewHelperReference '(' viewHelperA
   implements="com.cedricziel.idea.fluid.lang.psi.FluidPresentableName"
   pin=4
 }
-viewHelperReference ::= IDENTIFIER ('.' viewHelperPath)*
+viewHelperReference ::= IDENTIFIER ('.' viewHelperPath)* {
+  implements="com.cedricziel.idea.fluid.lang.psi.FluidNamedElement"
+  mixin="com.cedricziel.idea.fluid.lang.psi.impl.FluidNamedElementImpl"
+}
 private viewHelperPath ::= IDENTIFIER ( '.' viewHelperPath)*
 boundNamespace ::= IDENTIFIER
 

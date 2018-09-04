@@ -29,19 +29,45 @@ public class FluidPatterns {
     }
 
     /*
+     * {foo.<caret>}
      * {foo.b<caret>}
      */
     public static ElementPattern<PsiElement> getAccessorPattern() {
 
         return PlatformPatterns
             .or(
-                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).afterLeaf(
-                    PlatformPatterns.psiElement(FluidTypes.DOT)
-                ).withLanguage(FluidLanguage.INSTANCE),
-                PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidFieldChain.class).afterLeaf(
-                    PlatformPatterns.psiElement(FluidTypes.DOT)
-                ).withLanguage(FluidLanguage.INSTANCE)
+                getAccessorAfterDotPattern(),
+                getAccessorInIdentifierPattern()
             );
+    }
+
+    /*
+     * {foo.b<caret>}
+     */
+    @NotNull
+    public static ElementPattern<PsiElement> getAccessorInIdentifierPattern() {
+        return PlatformPatterns.psiElement(FluidTypes.IDENTIFIER)
+            .afterLeaf(
+                PlatformPatterns.psiElement(FluidTypes.DOT)
+            )
+            .withParent(
+                PlatformPatterns.psiElement(FluidFieldChain.class).afterSibling(PlatformPatterns.psiElement(FluidFieldExpr.class))
+            )
+            .withLanguage(FluidLanguage.INSTANCE);
+    }
+
+    /*
+     * {foo.<caret>}
+     */
+    @NotNull
+    public static ElementPattern<PsiElement> getAccessorAfterDotPattern() {
+
+        return PlatformPatterns
+            .psiElement(FluidTypes.IDENTIFIER)
+            .afterLeaf(
+                PlatformPatterns.psiElement(FluidTypes.DOT)
+            )
+            .withLanguage(FluidLanguage.INSTANCE);
     }
 
     /*

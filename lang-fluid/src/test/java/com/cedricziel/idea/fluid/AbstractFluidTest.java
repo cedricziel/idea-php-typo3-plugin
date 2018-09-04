@@ -1,6 +1,6 @@
 package com.cedricziel.idea.fluid;
 
-import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
+import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
 import com.cedricziel.idea.fluid.viewHelpers.ViewHelperReference;
 import com.intellij.psi.PsiElement;
@@ -92,8 +92,8 @@ abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase 
         PsiFile psiFile = myFixture.configureByText("foo.fluid", s);
 
         PsiElement elementAtCaret = psiFile.findElementAt(myFixture.getEditor().getCaretModel().getOffset());
-        FluidViewHelperExpr viewHelperExpr = (FluidViewHelperExpr) PsiTreeUtil.findFirstParent(elementAtCaret, e -> e instanceof FluidViewHelperExpr);
-        PsiReference[] references = viewHelperExpr.getReferences();
+        FluidViewHelperReference viewHelperReference = (FluidViewHelperReference) PsiTreeUtil.findFirstParent(elementAtCaret, e -> e instanceof FluidViewHelperReference);
+        PsiReference[] references = viewHelperReference.getReferences();
         for (PsiReference reference : references) {
             if (reference instanceof ViewHelperReference) {
                 return;

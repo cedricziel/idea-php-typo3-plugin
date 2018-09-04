@@ -1,7 +1,7 @@
 package com.cedricziel.idea.fluid.viewHelpers;
 
 import com.cedricziel.idea.fluid.lang.psi.FluidElement;
-import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperExpr;
+import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
@@ -14,7 +14,7 @@ public class ViewHelperReferenceContributor extends PsiReferenceContributor {
          * { f:foo<caret>() }
          */
         registrar.registerReferenceProvider(
-            PlatformPatterns.psiElement(FluidViewHelperExpr.class),
+            PlatformPatterns.psiElement(FluidViewHelperReference.class),
             new PsiReferenceProvider() {
                 @NotNull
                 @Override

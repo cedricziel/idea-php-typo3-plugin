@@ -1,20 +1,19 @@
 package com.cedricziel.idea.fluid.util;
 
 import com.cedricziel.idea.fluid.extensionPoints.VariableProvider;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldChain;
+import com.cedricziel.idea.fluid.lang.psi.FluidFieldChainExpr;
 import com.cedricziel.idea.fluid.lang.psi.FluidFieldExpr;
 import com.cedricziel.idea.fluid.lang.psi.FluidInlineChain;
-import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
 import com.cedricziel.idea.fluid.variables.FluidTypeContainer;
 import com.cedricziel.idea.fluid.variables.FluidVariable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.util.PairProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.Field;
@@ -33,63 +32,49 @@ import java.util.stream.Collectors;
 public class FluidTypeResolver {
     private static String[] PROPERTY_SHORTCUTS = new String[]{"get", "is", "has"};
 
-    @NotNull
     public static Collection<String> formatPsiTypeName(@NotNull PsiElement psiElement) {
-        String typeNames = getParentIdentifierAsTextUntil(
-            psiElement,
-            PlatformPatterns.or(
-                PlatformPatterns.psiElement(FluidTypes.EXPR_START),
-                PlatformPatterns.psiElement(PsiWhiteSpace.class)
-            )
-        );
+        return formatPsiTypeName(psiElement, false);
+    }
 
-        if (typeNames.trim().length() == 0) {
-            return Collections.emptyList();
+    public static Collection<String> formatPsiTypeName(@NotNull PsiElement psiElement, boolean removeLast) {
+        List<String> possibleTypes = new ArrayList<>();
+        if (psiElement.getPrevSibling() instanceof FluidInlineChain && psiElement.getPrevSibling().getFirstChild() != null && psiElement.getPrevSibling().getFirstChild() instanceof FluidFieldExpr) {
+            possibleTypes.add(((FluidFieldExpr) psiElement.getPrevSibling().getFirstChild()).getName());
+        } else if (psiElement.getPrevSibling() instanceof FluidInlineChain && psiElement.getPrevSibling().getFirstChild() instanceof FluidFieldChainExpr) {
+            psiElement = PsiTreeUtil.getDeepestLast(psiElement.getPrevSibling().getFirstChild());
         }
 
-        if (typeNames.endsWith(".")) {
-            typeNames = typeNames.substring(0, typeNames.length() - 1);
+        if (psiElement.getParent() instanceof FluidFieldChain) {
+            FluidFieldChainExpr fieldExpression = (FluidFieldChainExpr) PsiTreeUtil.findFirstParent(psiElement, e -> e instanceof FluidFieldChainExpr);
+            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, new PairProcessor<PsiElement, PsiElement>() {
+                @Override
+                public boolean process(PsiElement psiElement, PsiElement psiElement2) {
+                    if (psiElement instanceof FluidFieldChainExpr) {
+                        FluidFieldExpr childOfType = PsiTreeUtil.findChildOfType(psiElement, FluidFieldExpr.class);
+                        if (childOfType != null) {
+                            possibleTypes.add(childOfType.getName());
+                        }
+                        return false;
+                    } else {
+                        possibleTypes.add(((FluidFieldChain) psiElement).getName());
+                    }
+
+                    return true;
+                }
+            });
         }
 
-        Collection<String> possibleTypes = new ArrayList<>();
-        if (typeNames.contains(".")) {
-            possibleTypes.addAll(Arrays.asList(typeNames.split("\\.")));
-        } else {
-            possibleTypes.add(typeNames);
+        if (psiElement.getParent() instanceof FluidInlineChain) {
+            // TODO
+        }
+
+        possibleTypes.sort(Collections.reverseOrder());
+
+        if (removeLast && possibleTypes.size() > 0) {
+            possibleTypes.remove(possibleTypes.size() - 1);
         }
 
         return possibleTypes;
-    }
-
-    public static String getParentIdentifierAsTextUntil(PsiElement psiElement, ElementPattern pattern, boolean includeMatching) {
-        String prevText = "";
-
-        PsiElement prevSibling = psiElement.getPrevSibling();
-        if (prevSibling instanceof FluidInlineChain) {
-            PsiElement deepestFirst = PsiTreeUtil.getDeepestFirst(prevSibling);
-            if (PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).accepts(deepestFirst)) {
-                psiElement = deepestFirst;
-            }
-        }
-
-        for (PsiElement parent = psiElement.getParent(); parent instanceof FluidFieldExpr; parent = parent.getParent()) {
-            if (pattern.accepts(parent)) {
-                if (includeMatching) {
-                    return parent.getText() + prevText;
-                }
-
-                return prevText;
-            } else {
-                prevText = parent.getText() + prevText;
-            }
-        }
-
-        return prevText;
-    }
-
-    public static String getParentIdentifierAsTextUntil(PsiElement psiElement, ElementPattern pattern) {
-
-        return getParentIdentifierAsTextUntil(psiElement, pattern, false);
     }
 
     /**

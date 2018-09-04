@@ -11,4 +11,8 @@ public class FluidElementFactory {
 
     return (FluidFile) PsiFileFactory.getInstance(project).createFileFromText(name, FluidFileType.INSTANCE, text);
   }
+
+    public static FluidViewHelperReference createViewHelperReference(Project project, String newName) {
+        return (FluidViewHelperReference) createFile(project, "{foo:" + newName + "()}").findElementAt(5);
+    }
 }
