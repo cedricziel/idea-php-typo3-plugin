@@ -37,7 +37,7 @@ On PhpStorm or IntelliJ:
 * TypeProvider for `GeneralUtility::makeInstance`
 * TypeProvider for `GeneralUtility::makeInstanceService`
 * TypeProvider for `ObjectManager::get`
-* TypeProvider for `$GLOBALS['TYPO3_DB']`, `$GLOBALS['TSFE']` and `$GLOBALS['BE_USER']`
+* TypeProvider for `$GLOBALS['TYPO3_DB']`, `$GLOBALS['TSFE']`, `$GLOBALS['BE_USER']` and `$GLOBALS['TYPO3_REQUEST']`
 * CompletionContributor for `UriBuilder::buildUriFromRoute` and `BackendUtility::getAjaxUrl`
 * CompletionContributor for `IconFactory::getIcon`
 * Annotator for both valid and invalid route references to make them distinguishable from normal strings
