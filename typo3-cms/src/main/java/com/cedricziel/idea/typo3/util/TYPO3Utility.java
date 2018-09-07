@@ -16,6 +16,8 @@ import java.util.Set;
 
 public class TYPO3Utility {
 
+    public static final String CONTEXT_FQN = "\\TYPO3\\CMS\\Core\\Context\\Context";
+
     private static final Map<String, String> DEFAULT_ASPECTS = new HashMap<String, String>() {{
         put("date", "\\TYPO3\\CMS\\Core\\Context\\DateTimeAspect");
         put("visibility", "\\TYPO3\\CMS\\Core\\Context\\VisibilityAspect");
