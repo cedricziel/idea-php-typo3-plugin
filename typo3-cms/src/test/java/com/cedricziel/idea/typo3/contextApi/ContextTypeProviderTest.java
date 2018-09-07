@@ -17,7 +17,7 @@ public class ContextTypeProviderTest extends AbstractTestCase {
         myFixture.copyFileToProject("classes.php");
 
         PsiFile psiFile = myFixture.configureByText("foo.php", "<?php\n" +
-            "$userAspect = \\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\\TYPO3\\CMS\\Core\\Context\\Context::class)->getAspect('user');\n" +
+            "$userAspect = \\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\\TYPO3\\CMS\\Core\\Context\\Context::class)->getAspect('frontend.user');\n" +
             "$userAspect->getGroup<caret>Ids()");
 
 
