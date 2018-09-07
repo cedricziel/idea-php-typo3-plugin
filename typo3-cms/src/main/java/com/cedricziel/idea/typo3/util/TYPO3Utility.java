@@ -96,4 +96,23 @@ public class TYPO3Utility {
     public static boolean isMajorMinorCmsVersion(@NotNull Project project, String version) {
         return compareMajorMinorVersion(project, version).equals(0);
     }
+
+    @Nullable
+    public static String getFQNByAspectName(@NotNull String aspectName) {
+        switch (aspectName) {
+            case "date":
+                return "\\TYPO3\\CMS\\Core\\Context\\DateTimeAspect";
+            case "visibility":
+                return "\\TYPO3\\CMS\\Core\\Context\\VisibilityAspect";
+            case "backend.user":
+            case "frontend.user":
+                return "\\TYPO3\\CMS\\Core\\Context\\UserAspect";
+            case "workspace":
+                return "\\TYPO3\\CMS\\Core\\Context\\WorkspaceAspect";
+            case "language":
+                return "\\TYPO3\\CMS\\Core\\Context\\LanguageAspect";
+        }
+
+        return null;
+    }
 }
