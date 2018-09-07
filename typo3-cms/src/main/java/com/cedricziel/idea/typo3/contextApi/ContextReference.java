@@ -1,9 +1,20 @@
 package com.cedricziel.idea.typo3.contextApi;
 
+import com.cedricziel.idea.typo3.TYPO3CMSIcons;
+import com.cedricziel.idea.typo3.util.TYPO3Utility;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
+import com.jetbrains.php.PhpIcons;
+import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
     public ContextReference(@NotNull PsiElement psiElement) {
@@ -13,12 +24,31 @@ public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return new ResolveResult[0];
+        if (myElement instanceof StringLiteralExpression) {
+            String aspectFQN = TYPO3Utility.getFQNByAspectName(((StringLiteralExpression) myElement).getContents());
+            if (aspectFQN == null) {
+                return ResolveResult.EMPTY_ARRAY;
+            }
+
+            return PsiElementResolveResult.createResults(PhpIndex.getInstance(myElement.getProject()).getClassesByFQN(aspectFQN));
+        }
+
+        return ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
     @Override
     public Object[] getVariants() {
-        return new Object[0];
+        List<LookupElement> elements = new ArrayList<>();
+        for (String availableAspect : TYPO3Utility.getAvailableAspects()) {
+            elements.add(
+                LookupElementBuilder
+                    .create(availableAspect)
+                    .withIcon(TYPO3CMSIcons.CONTEXT_ASPECT_ICON)
+                    .withTypeText(TYPO3Utility.getFQNByAspectName(availableAspect), PhpIcons.CLASS_ICON, true)
+            );
+        }
+
+        return elements.toArray();
     }
 }
