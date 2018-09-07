@@ -9,9 +9,23 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class TYPO3Utility {
+
+    public static final String CONTEXT_FQN = "\\TYPO3\\CMS\\Core\\Context\\Context";
+
+    private static final Map<String, String> DEFAULT_ASPECTS = new HashMap<String, String>() {{
+        put("date", "\\TYPO3\\CMS\\Core\\Context\\DateTimeAspect");
+        put("visibility", "\\TYPO3\\CMS\\Core\\Context\\VisibilityAspect");
+        put("backend.user", "\\TYPO3\\CMS\\Core\\Context\\UserAspect");
+        put("frontend.user", "\\TYPO3\\CMS\\Core\\Context\\UserAspect");
+        put("workspace", "\\TYPO3\\CMS\\Core\\Context\\WorkspaceAspect");
+        put("language", "\\TYPO3\\CMS\\Core\\Context\\LanguageAspect");
+    }};
 
     @Nullable
     public static Constant getVersionConstant(@NotNull Project project) {
@@ -95,5 +109,20 @@ public class TYPO3Utility {
 
     public static boolean isMajorMinorCmsVersion(@NotNull Project project, String version) {
         return compareMajorMinorVersion(project, version).equals(0);
+    }
+
+    @Nullable
+    public static String getFQNByAspectName(@NotNull String aspectName) {
+        if (DEFAULT_ASPECTS.containsKey(aspectName)) {
+
+            return DEFAULT_ASPECTS.get(aspectName);
+        }
+
+        return null;
+    }
+
+    public static Set<String> getAvailableAspects() {
+
+        return DEFAULT_ASPECTS.keySet();
     }
 }
