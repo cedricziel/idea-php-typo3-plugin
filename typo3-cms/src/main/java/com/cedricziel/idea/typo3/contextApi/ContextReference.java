@@ -1,6 +1,5 @@
 package com.cedricziel.idea.typo3.contextApi;
 
-import com.cedricziel.idea.typo3.TYPO3CMSIcons;
 import com.cedricziel.idea.typo3.util.TYPO3Utility;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -44,8 +43,8 @@ public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
             elements.add(
                 LookupElementBuilder
                     .create(availableAspect)
-                    .withIcon(TYPO3CMSIcons.CONTEXT_ASPECT_ICON)
-                    .withTypeText(TYPO3Utility.getFQNByAspectName(availableAspect), PhpIcons.CLASS_ICON, true)
+                    .withIcon(PhpIcons.CLASS_ICON)
+                    .withTypeText(TYPO3Utility.getFQNByAspectName(availableAspect), true)
             );
         }
 
