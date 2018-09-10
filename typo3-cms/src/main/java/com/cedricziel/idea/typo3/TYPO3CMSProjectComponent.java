@@ -6,12 +6,17 @@ import com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedInd
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TYPO3CMSProjectComponent implements ProjectComponent {
 
@@ -43,6 +48,8 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectOpened() {
+        this.checkProject();
+
         TYPO3CMSSettings instance = TYPO3CMSSettings.getInstance(project);
         IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("com.cedricziel.idea.typo3"));
         if (plugin == null) {
@@ -68,5 +75,32 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
 
     @Override
     public void projectClosed() {
+    }
+
+    public void showInfoNotification(String content) {
+        Notification notification = new Notification("TYPO3 CMS Plugin", "TYPO3 CMS Plugin", content, NotificationType.INFORMATION);
+
+        Notifications.Bus.notify(notification, this.project);
+    }
+
+    public boolean isEnabled(@Nullable Project project) {
+
+        return project != null && TYPO3CMSProjectSettings.getInstance(project).pluginEnabled;
+    }
+
+    private void checkProject() {
+        if (!this.isEnabled(project) && !notificationIsDismissed() && containsTYPO3Libraries()) {
+            IdeHelper.notifyEnableMessage(project);
+        }
+    }
+
+    private boolean notificationIsDismissed() {
+
+        return TYPO3CMSProjectSettings.getInstance(project).dismissEnableNotification;
+    }
+
+    private boolean containsTYPO3Libraries() {
+
+        return VfsUtil.findRelativeFile(this.project.getBaseDir(), "vendor", "typo3") != null;
     }
 }

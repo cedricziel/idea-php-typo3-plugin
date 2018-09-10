@@ -19,7 +19,7 @@ public class TYPO3CMSSettings implements PersistentStateComponent<Element> {
      */
     private String version;
 
-    public static TYPO3CMSSettings getInstance(Project project) {
+    public static TYPO3CMSSettings getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, TYPO3CMSSettings.class);
     }
 
@@ -64,7 +64,7 @@ public class TYPO3CMSSettings implements PersistentStateComponent<Element> {
      * Settings keys.
      */
     public enum KEY {
-        ROOT("TYPO3CMSSettings"),
+        ROOT("TYPO3CMSSettingsForm"),
         VERSION("version");
 
         private final String key;
