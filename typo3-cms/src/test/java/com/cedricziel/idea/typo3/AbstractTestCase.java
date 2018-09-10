@@ -20,6 +20,21 @@ import java.util.List;
 import java.util.Set;
 
 abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        prepareSettings();
+    }
+
+    protected void prepareSettings() {
+        TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = true;
+    }
+
+    protected void disablePlugin() {
+        TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = false;
+    }
+
     private Pair<List<ProblemDescriptor>, Integer> getLocalInspectionsAtCaret(@NotNull String filename, @NotNull String content) {
 
         PsiElement psiFile = myFixture.configureByText(filename, content);
