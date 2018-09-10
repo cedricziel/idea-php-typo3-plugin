@@ -153,6 +153,13 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <extensions defaultExtensionNs="com.intellij">
 
         <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSSettings"/>
+        <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSProjectSettings"/>
+
+        <projectConfigurable displayName="TYPO3 CMS"
+                             id="TYPO3CMS.SettingsForm"
+                             parentId="reference.webide.settings.project.settings.php"
+                             nonDefaultProject="true"
+                             instance="com.cedricziel.idea.typo3.configuration.TYPO3CMSSettingsForm"/>
 
         <directoryProjectGenerator implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSClassicLayoutDirectoryProjectGenerator"/>
         <projectTemplatesFactory implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSProjectTemplatesFactory"/>
