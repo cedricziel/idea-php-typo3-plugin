@@ -17,11 +17,20 @@ public class IconAnnotatorTest extends AbstractTestCase {
         myFixture.checkHighlighting();
     }
 
+    public void testIconsAreNotAnnotatedWhenPluginEnabledButAnnotationDisabled() {
+        disablePlugin();
+
+        myFixture.copyFileToProject("IconRegistry9.php");
+        myFixture.configureByFiles("icon_not_available_disabled.php");
+
+        myFixture.checkHighlighting();
+    }
+
     public void testMissingIconsAreAnnotatedAsWarnings() {
         myFixture.copyFileToProject("IconRegistry9.php");
         myFixture.configureByFiles("icon_not_available.php");
 
-        myFixture.checkHighlighting(true, false, true, false);
+        myFixture.checkHighlighting();
     }
 
     public void testPresentIconsAreNotAnnotated() {

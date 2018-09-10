@@ -20,10 +20,14 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
 
     public boolean pluginEnabled;
     public boolean dismissEnableNotification;
+    public boolean iconAnnotatorEnabled;
 
     public TYPO3CMSProjectSettings() {
         this.pluginEnabled = false;
+
         this.dismissEnableNotification = false;
+
+        this.iconAnnotatorEnabled = true;
     }
 
     public static TYPO3CMSProjectSettings getInstance(@NotNull Project project) {

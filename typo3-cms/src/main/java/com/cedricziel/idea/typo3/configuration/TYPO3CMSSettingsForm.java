@@ -16,6 +16,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
 
     private JCheckBox enablePlugin;
     private JPanel panel;
+    private JCheckBox iconAnnotatorEnabled;
 
     public TYPO3CMSSettingsForm(@NotNull Project project) {
         this.project = project;
@@ -47,6 +48,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         getSettings().pluginEnabled = enablePlugin.isSelected();
+        getSettings().iconAnnotatorEnabled = iconAnnotatorEnabled.isSelected();
     }
 
     public TYPO3CMSProjectSettings getSettings() {
@@ -55,5 +57,6 @@ public class TYPO3CMSSettingsForm implements Configurable {
 
     private void updateUIFromSettings() {
         enablePlugin.setSelected(getSettings().pluginEnabled);
+        iconAnnotatorEnabled.setSelected(getSettings().iconAnnotatorEnabled);
     }
 }
