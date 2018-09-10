@@ -21,6 +21,11 @@ import java.util.Set;
 
 abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
     @Override
+    protected String getTestDataPath() {
+        return "testData/com/cedricziel/idea/typo3";
+    }
+
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
