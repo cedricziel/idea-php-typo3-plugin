@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.codeInsight.navigation;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -14,6 +15,10 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
     @Nullable
     @Override
     public PsiElement[] getGotoDeclarationTargets(@Nullable PsiElement sourceElement, int offset, Editor editor) {
+        if (!TYPO3CMSProjectSettings.isEnabled(sourceElement)) {
+            return PsiElement.EMPTY_ARRAY;
+        }
+
         if (!isExtResourcePath(sourceElement)) {
             return emptyPsiElementArray();
         }

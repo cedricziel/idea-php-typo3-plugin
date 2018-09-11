@@ -6,11 +6,13 @@ import com.intellij.codeInsight.daemon.LineMarkerProviders;
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -286,5 +288,54 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         PsiElement[] psiElements = PsiTreeUtil.collectElements(psiElement.getContainingFile(), e -> true);
 
         return Arrays.asList(psiElements);
+    }
+
+    protected void assertNavigationContainsFile(String targetShortcut) {
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        Set<String> targets = new HashSet<>();
+
+        collectGotoDeclarationTargets(psiElement, targets);
+
+        // its possible to have memory fields,
+        // so simple check for ending conditions
+        // temp:///src/interchange.en.xlf
+        for (String target : targets) {
+            if (target.endsWith(targetShortcut)) {
+                return;
+            }
+        }
+
+        fail(String.format("failed that PsiElement (%s) navigate to file %s", psiElement.toString(), targetShortcut));
+    }
+
+    protected void assertNavigationNotContainsFile(String path) {
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        Set<String> targets = new HashSet<>();
+
+        collectGotoDeclarationTargets(psiElement, targets);
+
+        // its possible to have memory fields,
+        // so simple check for ending conditions
+        // temp:///src/interchange.en.xlf
+        for (String target : targets) {
+            if (target.endsWith(path)) {
+                fail(String.format("failed because PsiElement (%s) navigates to file %s", psiElement.toString(), path));
+            }
+        }
+    }
+
+    private void collectGotoDeclarationTargets(PsiElement psiElement, Set<String> targets) {
+        for (GotoDeclarationHandler gotoDeclarationHandler : Extensions.getExtensions(GotoDeclarationHandler.EP_NAME)) {
+            PsiElement[] gotoDeclarationTargets = gotoDeclarationHandler.getGotoDeclarationTargets(psiElement, 0, myFixture.getEditor());
+            if (gotoDeclarationTargets != null && gotoDeclarationTargets.length > 0) {
+                for (PsiElement gotoDeclarationTarget : gotoDeclarationTargets) {
+                    if (gotoDeclarationTarget instanceof PsiFile) {
+                        targets.add(((PsiFile) gotoDeclarationTarget).getVirtualFile().getUrl());
+                    }
+                }
+            }
+        }
     }
 }
