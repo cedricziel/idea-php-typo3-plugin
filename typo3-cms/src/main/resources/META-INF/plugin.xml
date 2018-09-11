@@ -225,6 +225,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingColumnTypeInspection"/>
 
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingRenderTypeInspection" displayName="Missing render type definition"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingRenderTypeInspection"/>
+
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
