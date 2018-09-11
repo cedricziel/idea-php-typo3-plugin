@@ -213,10 +213,17 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
 
         <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="ExtbasePropertyInjectionInspection" displayName="Translation missing"
+                         shortName="ExtbasePropertyInjectionInspection"
+                         displayName="use method injection instead of field injection"
                          groupName="Extbase"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingColumnTypeInspection" displayName="Missing column type definition"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingColumnTypeInspection"/>
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
