@@ -34,14 +34,10 @@ script:
 - "./gradlew check"
 - "./gradlew buildPlugin"
 
-before_deploy:
-- export BODY=$(cat lang-fluid/src/main/resources/META-INF/change-notes.html)
-
 deploy:
   provider: releases
   api_key: "${GITHUB_KEY}"
   overwrite: true
-  body: ${BODY}
   file:
     - lang-fluid/build/distributions/TYPO3*.zip
     - lang-typoscript/build/distributions/TYPO3*.zip
