@@ -25,5 +25,6 @@ public class PhpGlobalsNamespaceProviderTest extends AbstractFluidTest {
         List<FluidNamespace> namespaces = FluidUtil.getFluidNamespaces(elementAtCaret);
 
         assertContainsNamespace(namespaces, "v", "FluidTYPO3/Vhs/ViewHelpers");
+        assertContainsNamespace(namespaces, "formvh", "TYPO3/CMS/Form/ViewHelpers");
     }
 }

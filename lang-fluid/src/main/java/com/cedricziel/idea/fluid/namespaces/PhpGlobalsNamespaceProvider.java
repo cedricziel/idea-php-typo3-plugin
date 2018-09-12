@@ -64,7 +64,42 @@ public class PhpGlobalsNamespaceProvider implements NamespaceProvider {
                 }
             }
 
+            if (getEmptyArrayKeyPattern().accepts(arrayIndex)) {
+                AssignmentExpression assignmentExpression = (AssignmentExpression) PsiTreeUtil.findFirstParent(arrayIndex, el -> el instanceof AssignmentExpression);
+                if (assignmentExpression != null && assignmentExpression.getValue() instanceof StringLiteralExpression) {
+                    String namespace = ((StringLiteralExpression) assignmentExpression.getValue()).getContents();
+                    if (arrayIndex.getFirstPsiChild() instanceof StringLiteralExpression) {
+                        String prefix = ((StringLiteralExpression) arrayIndex.getFirstPsiChild()).getContents();
+
+                        namespaces.add(new FluidNamespace(prefix, namespace.replace("\\\\", "/")));
+                    }
+                }
+            }
+
             super.visitPhpArrayIndex(arrayIndex);
+        }
+
+        @NotNull
+        private PsiElementPattern.Capture<ArrayIndex> getEmptyArrayKeyPattern() {
+            return PlatformPatterns.psiElement(ArrayIndex.class).withParent(
+                PlatformPatterns.psiElement(ArrayAccessExpression.class).withParent(
+                    PlatformPatterns.psiElement(ArrayAccessExpression.class).withParent(
+                        PlatformPatterns.psiElement(AssignmentExpression.class)
+                    )
+                ).withChild(
+                    PlatformPatterns.psiElement(ArrayAccessExpression.class)
+                        .withChild(
+                            PlatformPatterns.psiElement(ArrayIndex.class).withText(PlatformPatterns.string().oneOf("'namespaces'"))
+                        )
+                        .withChild(
+                            PlatformPatterns.psiElement(ArrayAccessExpression.class).withChild(PlatformPatterns.psiElement(ArrayIndex.class).withText(PlatformPatterns.string().oneOf("'fluid'"))).withChild(
+                                PlatformPatterns.psiElement(ArrayAccessExpression.class).withChild(PlatformPatterns.psiElement(ArrayIndex.class).withText(PlatformPatterns.string().oneOf("'SYS'"))).withChild(
+                                    PlatformPatterns.psiElement(ArrayAccessExpression.class).withChild(PlatformPatterns.psiElement(ArrayIndex.class).withText(PlatformPatterns.string().oneOf("'TYPO3_CONF_VARS'")))
+                                )
+                            )
+                        )
+                )
+            );
         }
 
         @NotNull
