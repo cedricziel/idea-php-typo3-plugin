@@ -212,6 +212,31 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          enabledByDefault="true"                   level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
 
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="ExtbasePropertyInjectionInspection"
+                         displayName="use method injection instead of field injection"
+                         groupName="Extbase"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingColumnTypeInspection" displayName="Missing column type definition"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingColumnTypeInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingRenderTypeInspection" displayName="Missing render type definition"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingRenderTypeInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingTableInspection" displayName="Missing table definition"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingTableInspection"/>
+
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>

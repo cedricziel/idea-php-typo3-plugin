@@ -9,6 +9,16 @@ public class RepositoryMagicMethodsCompletionContributorTest extends AbstractTes
         return "testData/com/cedricziel/idea/typo3/extbase/persistence";
     }
 
+    public void testCompletionIsNotAvailableIfPluginDisabled() {
+        disablePlugin();
+
+        myFixture.copyFileToProject("PersistenceMocks.php");
+
+        myFixture.configureByFile("RepositoryMagicFindMethodsCompletion.php");
+
+        assertNotContainsLookupElementWithText(myFixture.completeBasic(), "findByTitle");
+    }
+
     public void testCanCompleteExtbaseRepositoryMagicMethods() {
         myFixture.copyFileToProject("PersistenceMocks.php");
 

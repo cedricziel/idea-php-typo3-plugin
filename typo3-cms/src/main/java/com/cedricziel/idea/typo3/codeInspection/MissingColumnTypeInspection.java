@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.codeInspection;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.TCAUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -36,6 +37,11 @@ public class MissingColumnTypeInspection extends PhpInspection {
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+        if (!TYPO3CMSProjectSettings.getInstance(problemsHolder.getProject()).pluginEnabled) {
+            return new PhpElementVisitor() {
+            };
+        }
+
         return new PhpElementVisitor() {
             @Override
             public void visitPhpElement(PhpPsiElement element) {

@@ -24,7 +24,6 @@ public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
     public static final String ROUTES_PHP = "Routes.php";
     public static final String EXT_TABLES_PHP = "ext_tables.php";
 
-    @NotNull
     public static boolean hasRoute(@NotNull Project project, @NotNull String routeName) {
         return FileBasedIndex.getInstance().getAllKeys(KEY, project).contains(routeName);
     }

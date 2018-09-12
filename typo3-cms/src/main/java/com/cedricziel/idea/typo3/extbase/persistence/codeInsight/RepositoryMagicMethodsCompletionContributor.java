@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence.codeInsight;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.extbase.ExtbaseUtils;
 import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.codeInsight.completion.*;
@@ -27,6 +28,11 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
     public static class ExtbaseRepositoryMagicMethodsCompletionProvider extends CompletionProvider<CompletionParameters> {
 
         protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+            if (!TYPO3CMSProjectSettings.getInstance(parameters.getPosition().getProject()).pluginEnabled) {
+
+                return;
+            }
+
             PsiElement position = parameters.getPosition().getOriginalElement();
 
             if (!(position.getParent() instanceof FieldReference) && !(position.getParent() instanceof MethodReference)) {

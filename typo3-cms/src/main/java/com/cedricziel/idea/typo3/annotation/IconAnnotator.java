@@ -1,20 +1,32 @@
 package com.cedricziel.idea.typo3.annotation;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.IconIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
 public class IconAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
+        if (!TYPO3CMSProjectSettings.getInstance(psiElement.getProject()).pluginEnabled) {
+            return;
+        }
 
-        if (!(psiElement instanceof StringLiteralExpression)) {
+        if (!TYPO3CMSProjectSettings.getInstance(psiElement.getProject()).iconAnnotatorEnabled) {
+            return;
+        }
+
+        if (!stringParameterInMethodReference().accepts(psiElement)) {
             return;
         }
 
@@ -31,15 +43,15 @@ public class IconAnnotator implements Annotator {
         }
     }
 
-    private void annotateIconUsage(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
-        annotateIcon(psiElement, annotationHolder, value);
+    private PsiElementPattern.Capture<StringLiteralExpression> stringParameterInMethodReference() {
+        return PlatformPatterns.psiElement(StringLiteralExpression.class).withParent(ParameterList.class);
     }
 
-    private void annotateIcon(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
+    private void annotateIconUsage(PsiElement psiElement, AnnotationHolder annotationHolder, String value) {
         if (IconIndex.getAllAvailableIcons(psiElement.getProject()).contains(value)) {
-            annotationHolder.createInfoAnnotation(psiElement, null);
-        } else {
-            annotationHolder.createWarningAnnotation(psiElement, "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
+            return;
         }
+
+        annotationHolder.createWarningAnnotation(new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1), "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
     }
 }

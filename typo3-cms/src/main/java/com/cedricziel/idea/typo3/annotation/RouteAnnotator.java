@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.annotation;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.RouteIndex;
 import com.cedricziel.idea.typo3.routing.RouteReference;
 import com.intellij.lang.annotation.Annotation;
@@ -18,6 +19,13 @@ import java.util.Collection;
 public class RouteAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
+        if (!TYPO3CMSProjectSettings.getInstance(psiElement.getProject()).pluginEnabled) {
+            return;
+        }
+
+        if (!TYPO3CMSProjectSettings.getInstance(psiElement.getProject()).routeAnnotatorEnabled) {
+            return;
+        }
 
         if (!(psiElement instanceof StringLiteralExpression)) {
             return;
@@ -45,7 +53,7 @@ public class RouteAnnotator implements Annotator {
             Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
             annotation.setTextAttributes(DefaultLanguageHighlighterColors.STRING);
         } else {
-            TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
+            TextRange range = new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1);
             annotationHolder.createWeakWarningAnnotation(range, "Unresolved route");
         }
     }

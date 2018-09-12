@@ -1,25 +1,48 @@
 package com.cedricziel.idea.typo3;
 
+import com.intellij.codeInsight.daemon.LineMarkerInfo;
+import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.codeInsight.daemon.LineMarkerProviders;
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
+    @Override
+    protected String getTestDataPath() {
+        return "testData/com/cedricziel/idea/typo3";
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        prepareSettings();
+    }
+
+    protected void prepareSettings() {
+        TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = true;
+    }
+
+    protected void disablePlugin() {
+        TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = false;
+    }
+
     private Pair<List<ProblemDescriptor>, Integer> getLocalInspectionsAtCaret(@NotNull String filename, @NotNull String content) {
 
         PsiElement psiFile = myFixture.configureByText(filename, content);
@@ -220,5 +243,99 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         }
 
         fail(String.format("Could not find reference of type %s", c.getName()));
+    }
+
+    public void assertLineMarker(@NotNull PsiElement psiElement, @NotNull String markerTooltip) {
+
+        final List<PsiElement> elements = collectPsiElementsRecursive(psiElement);
+
+        for (LineMarkerProvider lineMarkerProvider : LineMarkerProviders.INSTANCE.allForLanguage(psiElement.getLanguage())) {
+            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<>();
+            lineMarkerProvider.collectSlowLineMarkers(elements, lineMarkerInfos);
+
+            if (lineMarkerInfos.size() == 0) {
+                continue;
+            }
+
+            for (LineMarkerInfo lineMarkerInfo : lineMarkerInfos) {
+                String lineMarkerTooltip = lineMarkerInfo.getLineMarkerTooltip();
+                if (lineMarkerTooltip.equals(String.format("<html><body>%s<br></body></html>", markerTooltip))) {
+                    return;
+                }
+            }
+        }
+
+        fail(String.format("Line marker %s not found", markerTooltip));
+    }
+
+    public void assertLineMarkerIsEmpty(@NotNull PsiElement psiElement) {
+
+        final List<PsiElement> elements = collectPsiElementsRecursive(psiElement);
+
+        for (LineMarkerProvider lineMarkerProvider : LineMarkerProviders.INSTANCE.allForLanguage(psiElement.getLanguage())) {
+            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<LineMarkerInfo>();
+            lineMarkerProvider.collectSlowLineMarkers(elements, lineMarkerInfos);
+
+            if (lineMarkerInfos.size() > 0) {
+                fail(String.format("Fail that line marker is empty because it matches '%s'", lineMarkerProvider.getClass()));
+            }
+        }
+    }
+
+    @NotNull
+    private List<PsiElement> collectPsiElementsRecursive(@NotNull PsiElement psiElement) {
+
+        PsiElement[] psiElements = PsiTreeUtil.collectElements(psiElement.getContainingFile(), e -> true);
+
+        return Arrays.asList(psiElements);
+    }
+
+    protected void assertNavigationContainsFile(String targetShortcut) {
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        Set<String> targets = new HashSet<>();
+
+        collectGotoDeclarationTargets(psiElement, targets);
+
+        // its possible to have memory fields,
+        // so simple check for ending conditions
+        // temp:///src/interchange.en.xlf
+        for (String target : targets) {
+            if (target.endsWith(targetShortcut)) {
+                return;
+            }
+        }
+
+        fail(String.format("failed that PsiElement (%s) navigate to file %s", psiElement.toString(), targetShortcut));
+    }
+
+    protected void assertNavigationNotContainsFile(String path) {
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        Set<String> targets = new HashSet<>();
+
+        collectGotoDeclarationTargets(psiElement, targets);
+
+        // its possible to have memory fields,
+        // so simple check for ending conditions
+        // temp:///src/interchange.en.xlf
+        for (String target : targets) {
+            if (target.endsWith(path)) {
+                fail(String.format("failed because PsiElement (%s) navigates to file %s", psiElement.toString(), path));
+            }
+        }
+    }
+
+    private void collectGotoDeclarationTargets(PsiElement psiElement, Set<String> targets) {
+        for (GotoDeclarationHandler gotoDeclarationHandler : Extensions.getExtensions(GotoDeclarationHandler.EP_NAME)) {
+            PsiElement[] gotoDeclarationTargets = gotoDeclarationHandler.getGotoDeclarationTargets(psiElement, 0, myFixture.getEditor());
+            if (gotoDeclarationTargets != null && gotoDeclarationTargets.length > 0) {
+                for (PsiElement gotoDeclarationTarget : gotoDeclarationTargets) {
+                    if (gotoDeclarationTarget instanceof PsiFile) {
+                        targets.add(((PsiFile) gotoDeclarationTarget).getVirtualFile().getUrl());
+                    }
+                }
+            }
+        }
     }
 }

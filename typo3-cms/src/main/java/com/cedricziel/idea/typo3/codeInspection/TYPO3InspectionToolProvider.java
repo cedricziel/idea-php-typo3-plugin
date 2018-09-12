@@ -10,10 +10,6 @@ public class TYPO3InspectionToolProvider implements InspectionToolProvider {
     public Class[] getInspectionClasses() {
 
         return new Class[]{
-                ExtbasePropertyInjectionInspection.class,
-                MissingColumnTypeInspection.class,
-                MissingRenderTypeInspection.class,
-                MissingTableInspection.class,
                 InvalidQuantityInspection.class,
                 // Code Migration
                 LegacyClassesForIDEInspection.class,

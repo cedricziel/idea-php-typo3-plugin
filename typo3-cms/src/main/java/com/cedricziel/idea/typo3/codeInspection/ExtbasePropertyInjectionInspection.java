@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.codeInspection;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.codeInspection.quickfix.CreateInjectorQuickFix;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -12,7 +13,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class ExtbasePropertyInjectionInspection extends PhpInspection {
-
     @Nls
     @NotNull
     @Override
@@ -33,6 +33,11 @@ public class ExtbasePropertyInjectionInspection extends PhpInspection {
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+        if (!TYPO3CMSProjectSettings.getInstance(problemsHolder.getProject()).pluginEnabled) {
+            return new PhpElementVisitor() {
+            };
+        }
+
         return new PhpElementVisitor() {
             @Override
             public void visitPhpElement(PhpPsiElement element) {
