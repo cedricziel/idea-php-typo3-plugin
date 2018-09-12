@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase {
+    @Override
+    protected String getTestDataPath() {
+        return "testData/com/cedricziel/idea/fluid";
+    }
+
     protected static void assertContainsNamespace(List<FluidNamespace> namespaces, String prefix, String namespace) {
         for (FluidNamespace fluidNamespace : namespaces) {
             if (fluidNamespace.prefix.equals(prefix) && fluidNamespace.namespace.equals(namespace)) {

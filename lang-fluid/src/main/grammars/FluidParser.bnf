@@ -196,7 +196,7 @@ viewHelperArgument ::= argumentKey ':' argumentValue {
 }
 argumentKey ::= IDENTIFIER
 
-argumentValue ::= literal | FieldExpr | ArrayCreationExpr
+argumentValue ::= literal | FieldChainExpr | FieldExpr | ArrayCreationExpr
 
 StringExpr     ::= string_literal
 
