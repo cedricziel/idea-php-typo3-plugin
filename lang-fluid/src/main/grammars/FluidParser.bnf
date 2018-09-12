@@ -200,8 +200,6 @@ argumentValue ::= literal | FieldChainExpr | FieldExpr | ArrayCreationExpr
 
 StringExpr     ::= string_literal
 
-IdentifierExpr ::= IDENTIFIER
-
 NumberExpr     ::= NUMBER
 
 ParenthesesExpr     ::= '(' InlineChain ')' { pin=1 }
@@ -231,7 +229,7 @@ Chain          ::= '->' ViewHelperExpr Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr
-private PrimaryGroup ::= NumberExpr | IdentifierExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
+private PrimaryGroup ::= NumberExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
 
 InlineStatement ::= '{' InlineChain '}' {
   pin=2
