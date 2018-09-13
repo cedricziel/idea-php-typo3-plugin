@@ -206,7 +206,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS,Translation"
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
                          shortName="TranslationMissingInspection"  displayName="Translation missing"
                          groupName="Translation"
                          enabledByDefault="true"                   level="WARNING"
