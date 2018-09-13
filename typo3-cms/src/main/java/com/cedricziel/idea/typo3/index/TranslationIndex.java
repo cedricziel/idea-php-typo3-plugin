@@ -11,8 +11,10 @@ import com.intellij.openapi.fileTypes.UnknownFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.XmlRecursiveElementVisitor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.psi.xml.XmlTag;
@@ -30,97 +32,43 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
 
     public static final ID<String, StubTranslation> KEY = ID.create("com.cedricziel.idea.typo3.index.translation_key");
 
-    private final DataIndexer<String, StubTranslation, FileContent> myIndexer = new DataIndexer<String, StubTranslation, FileContent>() {
-        @Override
-        @NotNull
-        public Map<String, StubTranslation> map(@NotNull FileContent inputData) {
-            // covers the case where no FileType association has been made yet
-            if (inputData.getFileType() instanceof UnknownFileType) {
-                return Collections.emptyMap();
-            }
-
-            Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
-            String extension = inputData.getFile().getExtension();
-
-            String extensionKeyFromFile = ExtensionUtility.findExtensionKeyFromFile(inputData.getFile());
-            if (extensionKeyFromFile == null) {
-                return Collections.emptyMap();
-            }
-
-            String languageKey = extractLanguageKeyFromFile(inputData);
-
-            if (language instanceof XMLLanguage && extension != null && extension.equals("xlf")) {
-                PsiFile psiFile = inputData.getPsiFile();
-                Map<String, StubTranslation> result = new HashMap<>();
-
-                for (PsiElement element : psiFile.getChildren()) {
-                    if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
-                        for (PsiElement xliffElement : element.getChildren()) {
-                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("xliff").accepts(xliffElement)) {
-                                for (PsiElement fileElement : xliffElement.getChildren()) {
-                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("file").accepts(fileElement)) {
-                                        for (PsiElement bodyElement : fileElement.getChildren()) {
-                                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("body").accepts(bodyElement)) {
-                                                for (PsiElement transUnitElement : bodyElement.getChildren()) {
-                                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("trans-unit").accepts(transUnitElement)) {
-                                                        if (transUnitElement instanceof XmlTag) {
-                                                            String id = ((XmlTag) transUnitElement).getAttributeValue("id");
-                                                            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
-                                                                StubTranslation v = createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, transUnitElement, id);
-                                                                result.put(calculatedId, v);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return result;
-            }
-
-            if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xml")) {
-                PsiFile psiFile = inputData.getPsiFile();
-                Map<String, StubTranslation> result = new HashMap<>();
-
-                for (PsiElement element : psiFile.getChildren()) {
-                    if (PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT).accepts(element)) {
-                        for (PsiElement xliffElement : element.getChildren()) {
-                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("T3locallang").accepts(xliffElement)) {
-                                for (PsiElement fileElement : xliffElement.getChildren()) {
-                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("data").accepts(fileElement)) {
-                                        for (PsiElement bodyElement : fileElement.getChildren()) {
-                                            if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("languageKey").accepts(bodyElement)) {
-                                                for (PsiElement transUnitElement : bodyElement.getChildren()) {
-                                                    if (PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("label").accepts(transUnitElement)) {
-                                                        if (transUnitElement instanceof XmlTag) {
-                                                            String id = ((XmlTag) transUnitElement).getAttributeValue("index");
-                                                            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
-                                                                StubTranslation v = createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, transUnitElement, id);
-                                                                result.put(calculatedId, v);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return result;
-            }
-
+    private final DataIndexer<String, StubTranslation, FileContent> myIndexer = inputData -> {
+        // covers the case where no FileType association has been made yet
+        if (inputData.getFileType() instanceof UnknownFileType) {
             return Collections.emptyMap();
         }
+
+        Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
+        String extension = inputData.getFile().getExtension();
+
+        String extensionKeyFromFile = ExtensionUtility.findExtensionKeyFromFile(inputData.getFile());
+        if (extensionKeyFromFile == null) {
+            return Collections.emptyMap();
+        }
+
+        String languageKey = extractLanguageKeyFromFile(inputData);
+
+        if (language instanceof XMLLanguage && extension != null && extension.equals("xlf")) {
+            PsiFile psiFile = inputData.getPsiFile();
+
+            XLIFFTranslationVisitor visitor = new XLIFFTranslationVisitor(languageKey, extensionKeyFromFile, inputData);
+
+            psiFile.accept(visitor);
+
+            return visitor.result;
+        }
+
+        if (language == XMLLanguage.INSTANCE && extension != null && extension.equals("xml")) {
+            PsiFile psiFile = inputData.getPsiFile();
+
+            XMLTranslationVisitor visitor = new XMLTranslationVisitor(languageKey, extensionKeyFromFile, inputData);
+
+            psiFile.accept(visitor);
+
+            return visitor.result;
+        }
+
+        return Collections.emptyMap();
     };
 
     @NotNull
@@ -233,5 +181,90 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
     @Override
     public int getVersion() {
         return 3;
+    }
+
+    abstract class AbstractTranslationVisitor extends XmlRecursiveElementVisitor {
+        String languageKey;
+        String extensionKeyFromFile;
+        FileContent inputData;
+
+        Map<String, StubTranslation> result = new HashMap<>();
+
+        AbstractTranslationVisitor(String languageKey, String extensionKey, FileContent inputData) {
+            this.languageKey = languageKey;
+            this.extensionKeyFromFile = extensionKey;
+            this.inputData = inputData;
+        }
+
+        @Override
+        public void visitXmlTag(XmlTag tag) {
+            if (getElementPattern().accepts(tag)) {
+                extractTranslationStub(tag);
+            }
+
+            super.visitXmlTag(tag);
+        }
+
+        abstract void extractTranslationStub(@NotNull XmlTag tag);
+
+        @NotNull
+        abstract PsiElementPattern.Capture<PsiElement> getElementPattern();
+    }
+
+    private class XLIFFTranslationVisitor extends AbstractTranslationVisitor {
+
+        XLIFFTranslationVisitor(String languageKey, String extensionKey, FileContent inputData) {
+            super(languageKey, extensionKey, inputData);
+        }
+
+        void extractTranslationStub(@NotNull XmlTag tag) {
+            String id = tag.getAttributeValue("id");
+            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
+                result.put(calculatedId, createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, tag, id));
+            }
+        }
+
+        @NotNull
+        PsiElementPattern.Capture<PsiElement> getElementPattern() {
+
+            return PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("trans-unit").withParent(
+                PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("body").withParent(
+                    PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("file").withParent(
+                        PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("xliff").withParent(
+                            PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT)
+                        )
+                    )
+                )
+            );
+        }
+    }
+
+    private class XMLTranslationVisitor extends AbstractTranslationVisitor {
+        XMLTranslationVisitor(String languageKey, String extensionKey, FileContent inputData) {
+            super(languageKey, extensionKey, inputData);
+        }
+
+        @Override
+        void extractTranslationStub(@NotNull XmlTag tag) {
+            String id = tag.getAttributeValue("index");
+            for (String calculatedId : compileIds(inputData, extensionKeyFromFile, id)) {
+                result.put(calculatedId, createStubTranslationFromIndex(inputData, extensionKeyFromFile, languageKey, tag, id));
+            }
+        }
+
+        @NotNull
+        @Override
+        PsiElementPattern.Capture<PsiElement> getElementPattern() {
+
+            return PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("label").withParent(
+                PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("languageKey").withParent(
+                    PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("data").withParent(
+                        PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("T3locallang").withParent(
+                            PlatformPatterns.psiElement(XmlElementType.XML_DOCUMENT)
+                        )
+                    )
+                )
+            );
+        }
     }
 }
