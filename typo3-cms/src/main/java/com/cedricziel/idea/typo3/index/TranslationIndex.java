@@ -16,17 +16,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.containers.HashMap;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -40,7 +36,7 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
         public Map<String, StubTranslation> map(@NotNull FileContent inputData) {
             // covers the case where no FileType association has been made yet
             if (inputData.getFileType() instanceof UnknownFileType) {
-                return new HashMap<>();
+                return Collections.emptyMap();
             }
 
             Language language = ((LanguageFileType) inputData.getFileType()).getLanguage();
@@ -48,7 +44,7 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
 
             String extensionKeyFromFile = ExtensionUtility.findExtensionKeyFromFile(inputData.getFile());
             if (extensionKeyFromFile == null) {
-                return new HashMap<>();
+                return Collections.emptyMap();
             }
 
             String languageKey = extractLanguageKeyFromFile(inputData);
@@ -224,11 +220,8 @@ public class TranslationIndex extends FileBasedIndexExtension<String, StubTransl
     public FileBasedIndex.InputFilter getInputFilter() {
         return file -> {
             String extension = file.getExtension();
-            if (file.isInLocalFileSystem() && extension != null && (extension.equalsIgnoreCase("xml") || extension.equalsIgnoreCase("xlf"))) {
-                return true;
-            }
 
-            return false;
+            return file.isInLocalFileSystem() && extension != null && (extension.equalsIgnoreCase("xml") || extension.equalsIgnoreCase("xlf"));
         };
     }
 
