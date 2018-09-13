@@ -1,11 +1,17 @@
 package com.cedricziel.idea.fluid.lang.parser;
 
+import com.cedricziel.idea.fluid.AbstractFluidTest;
 import com.cedricziel.idea.fluid.lang.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
-public class ParserTest extends LightCodeInsightFixtureTestCase {
+public class ParserTest extends AbstractFluidTest {
+
+    @Override
+    protected String getTestDataPath() {
+        return super.getTestDataPath() + "/lang/parser";
+    }
+
     public void testCanDetectVariables() {
         assertParentElementAtCaretMatchesType("{fo<caret>o}", FluidFieldExpr.class);
         assertParentElementAtCaretMatchesType("{fo<caret>o -> f:fo()}", FluidFieldExpr.class);
@@ -69,6 +75,12 @@ public class ParserTest extends LightCodeInsightFixtureTestCase {
         assertParentElementAtCaretMatchesType("{foo : b<caret>ar}", FluidArrayCreationExpr.class, 3);
         assertParentElementAtCaretMatchesType("{foo : 'b<caret>ar'}", FluidArrayValue.class, 2);
         assertParentElementAtCaretMatchesType("{foo : \"b<caret>ar\"}", FluidArrayValue.class, 2);
+    }
+
+    public void testArrayAccessExpressionCanBeUsedAsViewHelperArgument() {
+        myFixture.configureByFile("array_access_expression_argument.fluid");
+
+        myFixture.checkHighlighting();
     }
 
     private void assertParentElementAtCaretMatchesType(String content, Class expected) {

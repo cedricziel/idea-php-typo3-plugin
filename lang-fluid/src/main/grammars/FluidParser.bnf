@@ -196,11 +196,9 @@ viewHelperArgument ::= argumentKey ':' argumentValue {
 }
 argumentKey ::= IDENTIFIER
 
-argumentValue ::= literal | FieldExpr | ArrayCreationExpr
+argumentValue ::= literal | FieldChainExpr | FieldExpr | ArrayCreationExpr
 
 StringExpr     ::= string_literal
-
-IdentifierExpr ::= IDENTIFIER
 
 NumberExpr     ::= NUMBER
 
@@ -231,7 +229,7 @@ Chain          ::= '->' ViewHelperExpr Chain? { pin=1 }
 
 private ViewHelperGroup ::= ViewHelperExpr
 private FieldGroup ::=   FieldExpr   | FieldChainExpr
-private PrimaryGroup ::= NumberExpr | IdentifierExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
+private PrimaryGroup ::= NumberExpr | StringExpr | ParenthesesExpr | ArrayCreationExpr
 
 InlineStatement ::= '{' InlineChain '}' {
   pin=2
