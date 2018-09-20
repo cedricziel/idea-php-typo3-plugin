@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.icons;
 
 public interface IconInterface {
-    public String getExtension();
+    String getExtension();
 
-    public String getName();
+    String getName();
 
-    public String getExtensionKey();
+    String getExtensionKey();
 
-    public String getProvider();
+    String getProvider();
 }

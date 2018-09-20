@@ -29,7 +29,7 @@ public class ExtensionDefinitionFactory {
             }
         }
 
-        return extensionDefinition != null ? extensionDefinition : null;
+        return extensionDefinition;
     }
 
     /**

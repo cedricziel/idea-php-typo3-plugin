@@ -93,7 +93,7 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
 
         new WriteCommandAction(project) {
             @Override
-            protected void run(@NotNull Result result) throws Throwable {
+            protected void run(@NotNull Result result) {
                 StringBuffer textBuf = new StringBuffer();
                 textBuf.append("\n");
                 textBuf.append(injectorFunction.getText());

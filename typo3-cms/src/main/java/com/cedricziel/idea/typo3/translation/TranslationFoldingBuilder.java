@@ -81,7 +81,7 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
             }
         }
 
-        return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+        return descriptors.toArray(new FoldingDescriptor[0]);
     }
 
     private StubTranslation findDefaultTranslationFromVariants(List<StubTranslation> properties) {
