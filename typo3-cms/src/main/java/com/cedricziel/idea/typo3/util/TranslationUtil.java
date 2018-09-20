@@ -15,11 +15,15 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -95,37 +99,34 @@ public class TranslationUtil {
     }
 
     public static PsiElement[] findDefinitionElements(@NotNull Project project, @NotNull String translationId) {
-        Set<String> keys = new HashSet<>();
-        keys.add(translationId);
 
-        List<PsiElement> elements = new ArrayList<>();
-        FileBasedIndex.getInstance().getFilesWithKey(TranslationIndex.KEY, keys, virtualFile -> {
-            FileBasedIndex.getInstance().processValues(TranslationIndex.KEY, translationId, virtualFile, (file, value) -> {
-                PsiFile file1 = PsiManager.getInstance(project).findFile(file);
+        Set<PsiElement> elements = new HashSet<>();
+        FileBasedIndex.getInstance().getFilesWithKey(TranslationIndex.KEY, ContainerUtil.set(translationId), virtualFile -> {
+
+            TranslationIndex.findById(project, translationId).forEach(t -> {
+                PsiFile file1 = PsiManager.getInstance(project).findFile(virtualFile);
                 if (file1 != null) {
-                    PsiElement elementAt = file1.findElementAt(value.getTextRange().getStartOffset());
+                    PsiElement elementAt = file1.findElementAt(t.getTextRange().getStartOffset());
                     if (elementAt != null) {
                         if (elementAt.getParent() instanceof XmlTag) {
                             XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
                             if (id == null) {
-                                return true;
+                                return;
                             }
 
                             elements.add(id.getValueElement());
 
-                            return true;
+                            return;
                         }
                         elements.add(elementAt.getParent());
                     }
                 }
-
-                return true;
-            }, GlobalSearchScope.allScope(project));
+            });
 
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return elements.toArray(new PsiElement[elements.size()]);
+        return elements.toArray(new PsiElement[0]);
     }
 
     public static boolean hasTranslationReference(@NotNull PsiElement element) {

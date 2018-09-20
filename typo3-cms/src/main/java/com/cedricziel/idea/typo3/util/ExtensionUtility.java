@@ -167,7 +167,7 @@ public class ExtensionUtility {
             return null;
         }
 
-        String extensionKey = null;
+        String extensionKey;
         VirtualFile composerJsonFile = extensionRootFolder.findChild("composer.json");
         if (composerJsonFile != null) {
             String extensionKeyFromComposerJson = ComposerUtil.findExtensionKey(composerJsonFile);
