@@ -7,25 +7,18 @@ import com.cedricziel.idea.typo3.translation.TranslationReference;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -91,6 +84,16 @@ public class TranslationUtil {
         return null;
     }
 
+    public static String extractLocalKeyFromTranslationString(@NotNull String id) {
+        String[] split = id.split(":");
+
+        if (split.length == 0) {
+            return "";
+        }
+
+        return split[split.length -1];
+    }
+
     @NotNull
     public static TranslationLookupElement[] createLookupElements(@NotNull Project project) {
         return TranslationIndex
@@ -102,38 +105,41 @@ public class TranslationUtil {
 
     public static PsiElement[] findDefinitionElements(@NotNull Project project, @NotNull String translationId) {
 
+        List<StubTranslation> byId = TranslationIndex.findById(project, translationId);
+
         Set<PsiElement> elements = new HashSet<>();
-        FileBasedIndex.getInstance().getFilesWithKey(TranslationIndex.KEY, ContainerUtil.set(translationId), virtualFile -> {
+        byId.forEach(t -> {
+            if (t.getPsiElement() != null) {
+                PsiElement elementAt = t.getPsiElement();
+                if (elementAt instanceof XmlTag && ((XmlTag) elementAt).getName().equals("trans-unit")) {
+                    XmlAttribute id = ((XmlTag) elementAt).getAttribute("id");
+                    if (id != null) {
+                        elements.add(id.getValueElement());
 
-            TranslationIndex.findById(project, translationId).forEach(t -> {
-                PsiFile file1 = PsiManager.getInstance(project).findFile(virtualFile);
-                if (file1 != null) {
-                    PsiElement elementAt = file1.findElementAt(t.getTextRange().getStartOffset());
-                    if (elementAt != null) {
-                        if (elementAt.getParent() instanceof XmlTag) {
-                            XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
-                            if (id != null) {
-                                elements.add(id.getValueElement());
-
-                                return;
-                            }
-
-                            XmlAttribute index = ((XmlTag) elementAt.getParent()).getAttribute("index");
-                            if (index != null) {
-                                elements.add(index.getValueElement());
-
-                                return;
-                            }
-
-                            return;
-                        }
-                        elements.add(elementAt.getParent());
+                        return;
                     }
                 }
-            });
 
-            return true;
-        }, GlobalSearchScope.allScope(project));
+                if (elementAt.getParent() instanceof XmlTag) {
+                    XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
+                    if (id != null) {
+                        elements.add(id.getValueElement());
+
+                        return;
+                    }
+
+                    XmlAttribute index = ((XmlTag) elementAt.getParent()).getAttribute("index");
+                    if (index != null) {
+                        elements.add(index.getValueElement());
+
+                        return;
+                    }
+
+                    return;
+                }
+                elements.add(elementAt.getParent());
+            }
+        });
 
         return elements.toArray(new PsiElement[0]);
     }

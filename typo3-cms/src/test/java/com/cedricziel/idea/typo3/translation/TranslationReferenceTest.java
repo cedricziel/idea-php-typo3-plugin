@@ -25,7 +25,7 @@ public class TranslationReferenceTest extends AbtractTranslationTest {
             }
         }
 
-        fail("No TranslationReference found");
+        fail("TranslationReference could not be resolved");
     }
 
     public void testReferenceCanResolveVariants() {

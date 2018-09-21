@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.index;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.util.ExtensionUtility;
 import com.cedricziel.idea.typo3.util.FilesystemUtil;
+import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
@@ -116,7 +117,10 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
                 return true;
             },
-            GlobalSearchScope.allScope(project));
+            GlobalSearchScope.allScope(project)
+        );
+
+        stubSet.removeIf(s -> !s.getIndex().equals(TranslationUtil.extractLocalKeyFromTranslationString(id)));
 
         return new ArrayList<>(stubSet);
     }
@@ -260,13 +264,34 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
         void extractTranslationStub(@NotNull XmlTag tag) {
             String id = tag.getAttributeValue("id");
+            String languageKeyToUse = String.valueOf(languageKey);
+
+            XmlTag fileTag = (XmlTag) PsiTreeUtil.findFirstParent(tag, t -> PlatformPatterns.psiElement(XmlTag.class).withName("file").accepts(t));
+
+            String sourceValue = "";
+            String targetValue = "";
+            if (fileTag != null) {
+                if (fileTag.getAttributeValue("source-language") != null) {
+                    sourceValue = fileTag.getAttributeValue("source-language");
+                }
+
+                if (fileTag.getAttributeValue("target-language") != null) {
+                    targetValue = fileTag.getAttributeValue("target-language");
+                }
+            }
+
+            if (!sourceValue.isEmpty() && !targetValue.isEmpty()) {
+                languageKeyToUse = targetValue;
+            }
+
             for (String calculatedId : compileIds(file, extensionKeyFromFile, id)) {
                 if (result.containsKey(calculatedId)) {
-                    result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, String.valueOf(languageKey), tag, id));
+                    result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyToUse, tag, id));
                 } else {
-                    result.put(calculatedId, new ArrayList<StubTranslation>() {{
-                        add(createStubTranslationFromIndex(file, extensionKeyFromFile, String.valueOf(languageKey), tag, id));
-                    }});
+                    ArrayList<StubTranslation> v = new ArrayList<>();
+                    v.add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyToUse, tag, id));
+
+                    result.put(calculatedId, v);
                 }
             }
         }

@@ -54,4 +54,50 @@ public class TranslationFoldingBuilderTest extends AbstractTestCase {
 
         myFixture.testFolding(getTestDataPath() + "/no_folding_xml_result.php");
     }
+
+    public void testXLFTranslationsCanBeFolded() {
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+
+        myFixture.addFileToProject("foo/ext_emconf.php", "");
+        myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");
+
+        myFixture.configureByFile("folding_xlf_test.php");
+
+        myFixture.testFolding(getTestDataPath() + "/folding_xlf_result.php");
+    }
+
+    public void testXLFTranslationsCanBeFoldedInNonDefaultLanguage() {
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "de";
+
+        myFixture.addFileToProject("foo/ext_emconf.php", "");
+        myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");
+
+        myFixture.configureByFile("folding_nondefault_xlf_test.php");
+
+        myFixture.testFolding(getTestDataPath() + "/folding_nondefault_xlf_result.php");
+    }
+
+    public void testXLFTranslationsAreNotFoldedWhenPluginIsDisabled() {
+        disablePlugin();
+
+        myFixture.addFileToProject("foo/ext_emconf.php", "");
+        myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");
+
+        myFixture.configureByFile("no_folding_xlf_test.php");
+
+        myFixture.testFolding(getTestDataPath() + "/no_folding_xlf_result.php");
+    }
+
+    public void testXLFTranslationsAreNotFoldedWhenDisabledInPluginSettings() {
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = false;
+
+        myFixture.addFileToProject("foo/ext_emconf.php", "");
+        myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");
+
+        myFixture.configureByFile("no_folding_xlf_test.php");
+
+        myFixture.testFolding(getTestDataPath() + "/no_folding_xlf_result.php");
+    }
 }
