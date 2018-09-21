@@ -7,7 +7,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.jetbrains.php.lang.PhpFileType;
 
-public class TranslationReferenceTest extends AbtractTranslationTest {
+public class TranslationReferenceTest extends AbstractTranslationTest {
     public void testReferenceCanResolveDefinition() {
         PsiFile file = myFixture.configureByText(PhpFileType.INSTANCE, "<?php \n" +
                 "\"LLL:EXT:foo/sample.xlf:sys_<caret>language.language_isocode.ab\";");

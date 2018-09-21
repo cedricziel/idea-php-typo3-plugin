@@ -1,6 +1,6 @@
 package com.cedricziel.idea.typo3.index;
 
-import com.cedricziel.idea.typo3.translation.AbtractTranslationTest;
+import com.cedricziel.idea.typo3.translation.AbstractTranslationTest;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.util.indexing.FileBasedIndex;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TranslationIndexTest extends AbtractTranslationTest {
+public class TranslationIndexTest extends AbstractTranslationTest {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/index/translation";

@@ -1,8 +1,8 @@
 package com.cedricziel.idea.typo3.translation.codeInspection;
 
-import com.cedricziel.idea.typo3.translation.AbtractTranslationTest;
+import com.cedricziel.idea.typo3.translation.AbstractTranslationTest;
 
-public class TranslationMissingInspectionTest extends AbtractTranslationTest {
+public class TranslationMissingInspectionTest extends AbstractTranslationTest {
     public void testCorrectReferenceIsNotMarked() {
         assertLocalInspectionNotContains("foo.php", "<?php \n\"LLL:EXT:foo/sample.xlf<caret>:sys_language.language_isocode.ab\";", TranslationMissingInspection.MESSAGE);
     }
