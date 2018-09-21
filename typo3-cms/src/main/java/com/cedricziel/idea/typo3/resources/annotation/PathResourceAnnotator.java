@@ -26,7 +26,7 @@ public class PathResourceAnnotator implements Annotator {
             return;
         }
 
-        String resourceName = content.substring(4, content.length());
+        String resourceName = content.substring(4);
         if (resourceName.contains(":")) {
             // resource name points to a sub-resource such as a translation string, not here.
             return;

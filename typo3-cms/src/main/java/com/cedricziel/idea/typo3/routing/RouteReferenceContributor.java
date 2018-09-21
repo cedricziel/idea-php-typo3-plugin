@@ -53,9 +53,7 @@ public class RouteReferenceContributor extends PsiReferenceContributor {
     private boolean isClassMethodCombination(@NotNull Method method, @NotNull String className, @NotNull String methodName) {
         if (method.getName().equals(methodName)) {
             PhpClass containingClass = method.getContainingClass();
-            if (containingClass != null && containingClass.getFQN().equals(className)) {
-                return true;
-            }
+            return containingClass != null && containingClass.getFQN().equals(className);
         }
         return false;
     }

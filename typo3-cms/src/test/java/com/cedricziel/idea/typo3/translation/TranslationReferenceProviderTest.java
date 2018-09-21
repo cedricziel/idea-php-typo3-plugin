@@ -5,7 +5,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.jetbrains.php.lang.PhpFileType;
 
-public class TranslationReferenceProviderTest extends AbtractTranslationTest {
+public class TranslationReferenceProviderTest extends AbstractTranslationTest {
 
     public void testCanCreateTranslationReferencesOnPhpStrings() {
         PsiFile file = myFixture.configureByText(PhpFileType.INSTANCE, "<?php \n" +

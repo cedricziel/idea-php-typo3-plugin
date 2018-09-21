@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.extbase.controller;
 
 public interface ControllerActionInterface {
-    public String getName();
+    String getName();
 
-    public String getControllerName();
+    String getControllerName();
 
-    public String getExtensionName();
+    String getExtensionName();
 
-    public String getPluginName();
+    String getPluginName();
 }

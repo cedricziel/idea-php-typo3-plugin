@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<T3locallang>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="mylabel">English</label>
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="mylabel">Deutsch</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+            <label index="mylabel">Français</label>
+        </languageKey>
+        <languageKey index="nl" type="array">
+            <label index="mylabel">Nederlands</label>
+        </languageKey>
+        <languageKey index="es" type="array">
+            <label index="mylabel">Español</label>
+        </languageKey>
+    </data>
+</T3locallang>

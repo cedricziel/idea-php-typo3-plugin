@@ -1,16 +1,17 @@
 package com.cedricziel.idea.typo3.index;
 
-import com.cedricziel.idea.typo3.translation.AbtractTranslationTest;
+import com.cedricziel.idea.typo3.translation.AbstractTranslationTest;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.util.indexing.FileBasedIndex;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-public class TranslationIndexTest extends AbtractTranslationTest {
-
+public class TranslationIndexTest extends AbstractTranslationTest {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/index/translation";
@@ -35,22 +36,27 @@ public class TranslationIndexTest extends AbtractTranslationTest {
 
         assertSize(2, stubsById);
 
-        Iterator<StubTranslation> iterator = stubsById.iterator();
-        StubTranslation stubTranslation = iterator.next();
-
-        assertNotNull("A stub model is available from the index ", stubTranslation);
-        assertEquals("The extension key is correctly resolved when building the index", stubTranslation.getExtension(), "foo");
-        assertEquals("The id local index is resolved correctly", "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab", stubTranslation.getId());
-        assertEquals("The default language is resolved correctly", "en", stubTranslation.getLanguage());
-        assertNotNull("The text range is saved on the stub to resolve the element later", stubTranslation.getTextRange());
-
-        stubTranslation = iterator.next();
-
-        assertNotNull("A stub model is available from the index ", stubTranslation);
-        assertEquals("The extension key is correctly resolved when building the index", stubTranslation.getExtension(), "foo");
-        assertEquals("The id local index is resolved correctly", "LLL:EXT:foo/de.sample.xlf:sys_language.language_isocode.ab", stubTranslation.getId());
-        assertEquals("The default language is resolved correctly", "de", stubTranslation.getLanguage());
-        assertNotNull("The text range is saved on the stub to resolve the element later", stubTranslation.getTextRange());
+        stubsById.forEach(stubTranslation -> {
+            switch (stubTranslation.getId()) {
+                case "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab":
+                    assertNotNull("A stub model is available from the index ", stubTranslation);
+                    assertEquals("The extension key is correctly resolved when building the index", stubTranslation.getExtension(), "foo");
+                    assertEquals("The id local index is resolved correctly", "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab", stubTranslation.getId());
+                    assertEquals("The default language is resolved correctly", "en", stubTranslation.getLanguage());
+                    assertNotNull("The text range is saved on the stub to resolve the element later", stubTranslation.getTextRange());
+                    break;
+                case "LLL:EXT:foo/de.sample.xlf:sys_language.language_isocode.ab":
+                    assertNotNull("A stub model is available from the index ", stubTranslation);
+                    assertEquals("The extension key is correctly resolved when building the index", stubTranslation.getExtension(), "foo");
+                    assertEquals("The id local index is resolved correctly", "LLL:EXT:foo/de.sample.xlf:sys_language.language_isocode.ab", stubTranslation.getId());
+                    assertEquals("The default language is resolved correctly", "de", stubTranslation.getLanguage());
+                    assertNotNull("The text range is saved on the stub to resolve the element later", stubTranslation.getTextRange());
+                    break;
+                default:
+                    fail("Unexpected element.");
+                    break;
+            }
+        });
     }
 
     public void testCanFindAllTranslationStubs() {
@@ -58,13 +64,48 @@ public class TranslationIndexTest extends AbtractTranslationTest {
     }
 
     public void testCanFindAllTranslationIds() {
-        Collection<String> allTranslations = TranslationIndex.findAllTranslations(myFixture.getProject());
+        myFixture.copyFileToProject("multiple_languages.xml", "typo3conf/ext/foo/locallang.xml");
 
-        assertSize(2, allTranslations);
+        Collection<String> allTranslations = TranslationIndex.findAllKeys(myFixture.getProject());
+
+        assertSize(3, allTranslations);
         assertContainsElements(
                 allTranslations,
                 "LLL:EXT:foo/de.sample.xlf:sys_language.language_isocode.ab",
                 "LLL:EXT:foo/sample.xlf:sys_language.language_isocode.ab"
         );
+    }
+
+    public void testCanFindMultipleLanguagesPerXMLFile() {
+        myFixture.copyFileToProject("multiple_languages.xml", "typo3conf/ext/foo/locallang.xml");
+
+        List<Triple<String, String, String>> triples = new ArrayList<Triple<String, String, String>>() {{
+            add(new ImmutableTriple<>("default", "mylabel", "English"));
+            add(new ImmutableTriple<>("de", "mylabel", "Deutsch"));
+            add(new ImmutableTriple<>("fr", "mylabel", "Français"));
+            add(new ImmutableTriple<>("nl", "mylabel", "Nederlands"));
+            add(new ImmutableTriple<>("es", "mylabel", "Español"));
+        }};
+
+        Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, getProject());
+
+        // may fail until we can register the xlf file extension conditionally
+        assertContainsElements(allKeys, "LLL:EXT:foo/locallang.xml:mylabel");
+
+        List<StubTranslation> stubsById = TranslationIndex.findById(myFixture.getProject(), "LLL:EXT:foo/locallang.xml:mylabel");
+
+        for (Triple<String, String, String> triple : triples) {
+            assertTranslationStubExistsInList(stubsById, triple.getLeft(), triple.getMiddle(), triple.getRight());
+        }
+    }
+
+    private void assertTranslationStubExistsInList(List<StubTranslation> stubsById, String left, String middle, String right) {
+        for (StubTranslation stubTranslation : stubsById) {
+            if (stubTranslation.getLanguage().equals(left)) {
+                return;
+            }
+        }
+
+        fail("Could not find translation stub in list");
     }
 }

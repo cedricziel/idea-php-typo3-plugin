@@ -20,7 +20,7 @@ abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvi
         // Get FQN from parameter string.
         // Example (PhpStorm 8): #K#C\Foo\Bar::get()%#K#C\Bar\Baz. -> \Bar\Baz.
         // Example (PhpStorm 9): #K#C\Foo\Bar::get()%#K#C\Bar\Baz.class -> \Bar\Baz.class
-        String parameter = expression.substring(endIndex + 5, expression.length());
+        String parameter = expression.substring(endIndex + 5);
 
         if (parameter.contains(".class")) { // for PhpStorm 9
             parameter = parameter.replace(".class", "");

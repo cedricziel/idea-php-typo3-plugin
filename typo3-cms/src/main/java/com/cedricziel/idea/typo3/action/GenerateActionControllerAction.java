@@ -34,7 +34,7 @@ public class GenerateActionControllerAction extends NewExtensionFileAction {
         RunResult<PsiElement> elementRunResult = new WriteCommandAction<PsiElement>(project) {
 
             @Override
-            protected void run(@NotNull Result result) throws Throwable {
+            protected void run(@NotNull Result result) {
                 PsiElement extensionFile;
                 Map<String, String> context = new HashMap<>();
 

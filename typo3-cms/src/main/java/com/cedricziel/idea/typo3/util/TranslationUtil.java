@@ -1,19 +1,18 @@
 package com.cedricziel.idea.typo3.util;
 
 import com.cedricziel.idea.typo3.index.TranslationIndex;
+import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.translation.TranslationLookupElement;
 import com.cedricziel.idea.typo3.translation.TranslationReference;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.StringUtils;
@@ -85,6 +84,16 @@ public class TranslationUtil {
         return null;
     }
 
+    public static String extractLocalKeyFromTranslationString(@NotNull String id) {
+        String[] split = id.split(":");
+
+        if (split.length == 0) {
+            return "";
+        }
+
+        return split[split.length -1];
+    }
+
     @NotNull
     public static TranslationLookupElement[] createLookupElements(@NotNull Project project) {
         return TranslationIndex
@@ -95,37 +104,44 @@ public class TranslationUtil {
     }
 
     public static PsiElement[] findDefinitionElements(@NotNull Project project, @NotNull String translationId) {
-        Set<String> keys = new HashSet<>();
-        keys.add(translationId);
 
-        List<PsiElement> elements = new ArrayList<>();
-        FileBasedIndex.getInstance().getFilesWithKey(TranslationIndex.KEY, keys, virtualFile -> {
-            FileBasedIndex.getInstance().processValues(TranslationIndex.KEY, translationId, virtualFile, (file, value) -> {
-                PsiFile file1 = PsiManager.getInstance(project).findFile(file);
-                if (file1 != null) {
-                    PsiElement elementAt = file1.findElementAt(value.getTextRange().getStartOffset());
-                    if (elementAt != null) {
-                        if (elementAt.getParent() instanceof XmlTag) {
-                            XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
-                            if (id == null) {
-                                return true;
-                            }
+        List<StubTranslation> byId = TranslationIndex.findById(project, translationId);
 
-                            elements.add(id.getValueElement());
+        Set<PsiElement> elements = new HashSet<>();
+        byId.forEach(t -> {
+            if (t.getPsiElement() != null) {
+                PsiElement elementAt = t.getPsiElement();
+                if (elementAt instanceof XmlTag && ((XmlTag) elementAt).getName().equals("trans-unit")) {
+                    XmlAttribute id = ((XmlTag) elementAt).getAttribute("id");
+                    if (id != null) {
+                        elements.add(id.getValueElement());
 
-                            return true;
-                        }
-                        elements.add(elementAt.getParent());
+                        return;
                     }
                 }
 
-                return true;
-            }, GlobalSearchScope.allScope(project));
+                if (elementAt.getParent() instanceof XmlTag) {
+                    XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
+                    if (id != null) {
+                        elements.add(id.getValueElement());
 
-            return true;
-        }, GlobalSearchScope.allScope(project));
+                        return;
+                    }
 
-        return elements.toArray(new PsiElement[elements.size()]);
+                    XmlAttribute index = ((XmlTag) elementAt.getParent()).getAttribute("index");
+                    if (index != null) {
+                        elements.add(index.getValueElement());
+
+                        return;
+                    }
+
+                    return;
+                }
+                elements.add(elementAt.getParent());
+            }
+        });
+
+        return elements.toArray(new PsiElement[0]);
     }
 
     public static boolean hasTranslationReference(@NotNull PsiElement element) {
@@ -152,5 +168,35 @@ public class TranslationUtil {
 
     public static String keyFromReference(String key) {
         return StringUtils.substringAfterLast(key, ":");
+    }
+
+    public static String findPlaceholderTextFor(Project project, StubTranslation defaultTranslation) {
+        PsiElement definitionElement = defaultTranslation.getPsiElement();
+
+        if (definitionElement instanceof XmlTag) {
+            if (((XmlTag) definitionElement).getName().equals("label")) {
+                return ((XmlTag) definitionElement).getValue().getTrimmedText();
+            }
+
+            for (XmlTag xmlTag : ((XmlTag) definitionElement).getSubTags()) {
+                if (xmlTag.getName().equals("source")) {
+                    return xmlTag.getValue().getTrimmedText();
+                }
+            }
+        }
+
+        if (definitionElement instanceof XmlAttributeValue) {
+            if (((XmlTag) definitionElement.getParent().getParent()).getName().equals("label")) {
+                return ((XmlTag) definitionElement.getParent().getParent()).getValue().getTrimmedText();
+            }
+
+            for (XmlTag xmlTag : ((XmlTag) definitionElement.getParent().getParent()).getSubTags()) {
+                if (xmlTag.getName().equals("source")) {
+                    return xmlTag.getValue().getTrimmedText();
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -1,10 +1,10 @@
 package com.cedricziel.idea.typo3.util;
 
-import com.cedricziel.idea.typo3.translation.AbtractTranslationTest;
+import com.cedricziel.idea.typo3.translation.AbstractTranslationTest;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttributeValue;
 
-public class TranslationUtilTest extends AbtractTranslationTest {
+public class TranslationUtilTest extends AbstractTranslationTest {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/index/translation";

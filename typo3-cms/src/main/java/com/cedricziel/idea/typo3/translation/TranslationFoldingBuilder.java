@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.translation;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.lang.ASTNode;
@@ -11,8 +12,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlTag;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +24,10 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
     @NotNull
     @Override
     public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
+        if (!TYPO3CMSProjectSettings.isEnabled(root) || !TYPO3CMSProjectSettings.getInstance(root.getProject()).translationEnableTextFolding) {
+            return FoldingDescriptor.EMPTY;
+        }
+
         FoldingGroup group = FoldingGroup.newGroup("TYPO3Translation");
 
         List<FoldingDescriptor> descriptors = new ArrayList<>();
@@ -38,7 +41,7 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
 
                 final List<StubTranslation> properties = TranslationIndex.findById(project, value);
 
-                StubTranslation defaultTranslation = findDefaultTranslationFromVariants(properties);
+                StubTranslation defaultTranslation = findDefaultTranslationFromVariants(project, properties);
 
                 if (defaultTranslation != null) {
                     TextRange foldingRange = new TextRange(literalExpression.getTextRange().getStartOffset() + 1, literalExpression.getTextRange().getEndOffset() - 1);
@@ -47,50 +50,40 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
                         @Override
                         public String getPlaceholderText() {
 
-                            PsiElement[] definitionElements = TranslationUtil.findDefinitionElements(project, value);
-                            for (PsiElement definitionElement : definitionElements) {
-                                if (definitionElement instanceof XmlTag) {
-                                    if (((XmlTag) definitionElement).getName().equals("label")) {
-                                        return ((XmlTag) definitionElement).getValue().getTrimmedText();
-                                    }
-
-                                    for (XmlTag xmlTag : ((XmlTag) definitionElement).getSubTags()) {
-                                        if (xmlTag.getName().equals("source")) {
-                                            return xmlTag.getValue().getTrimmedText();
-                                        }
-                                    }
-                                }
-
-                                if (definitionElement instanceof XmlAttributeValue) {
-                                    if (((XmlTag) definitionElement.getParent().getParent()).getName().equals("label")) {
-                                        return ((XmlTag) definitionElement).getValue().getTrimmedText();
-                                    }
-
-                                    for (XmlTag xmlTag : ((XmlTag) definitionElement.getParent().getParent()).getSubTags()) {
-                                        if (xmlTag.getName().equals("source")) {
-                                            return xmlTag.getValue().getTrimmedText();
-                                        }
-                                    }
-                                }
-                            }
-
-                            return null;
+                            return TranslationUtil.findPlaceholderTextFor(project, defaultTranslation);
                         }
                     });
                 }
             }
         }
 
-        return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+        return descriptors.toArray(new FoldingDescriptor[0]);
     }
 
-    private StubTranslation findDefaultTranslationFromVariants(List<StubTranslation> properties) {
-        if (properties.size() == 1) {
-            return properties.iterator().next();
+    private StubTranslation findDefaultTranslationFromVariants(Project project, List<StubTranslation> stubs) {
+        if (stubs.size() == 1) {
+            return stubs.iterator().next();
         }
 
-        if (properties.size() > 1) {
-            for (StubTranslation property : properties) {
+        // Try to find the one with the selected favorite locale
+        String defaultLocale = (String) TYPO3CMSProjectSettings.getInstance(project).translationFavoriteLocale;
+        if (defaultLocale != null && !defaultLocale.isEmpty()) {
+            for (StubTranslation property : stubs) {
+                if (property.getLanguage().equals(defaultLocale)) {
+                    return property;
+                }
+            }
+        }
+
+        // if default locale is not matched, try to find the "default" locale
+        for (StubTranslation property : stubs) {
+            if (property.getLanguage().equals("default")) {
+                return property;
+            }
+        }
+
+        if (stubs.size() > 1) {
+            for (StubTranslation property : stubs) {
                 // TYPO3 CMS documentation suggests that every element has a mandatory english variant
                 if (property.getLanguage().equals("en")) {
                     return property;
@@ -98,7 +91,7 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
             }
 
             // default if no english element was found
-            return properties.iterator().next();
+            return stubs.iterator().next();
         }
 
         return null;

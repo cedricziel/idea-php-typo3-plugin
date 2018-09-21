@@ -46,7 +46,7 @@ public class PhpElementsUtil {
                 .map(e -> (ClassReference) e.getReference())
                 .collect(Collectors.toList());
 
-        return classReferences.contains((ClassReference) extendedClass.getReference());
+        return classReferences.contains(extendedClass.getReference());
     }
 
     public static List<PhpClass> allExtendedClasses(PhpClass phpClass) {

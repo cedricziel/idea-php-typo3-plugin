@@ -23,6 +23,8 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
     public boolean dismissEnableNotification;
     public boolean iconAnnotatorEnabled;
     public boolean routeAnnotatorEnabled;
+    public boolean translationEnableTextFolding;
+    public Object translationFavoriteLocale;
 
     public TYPO3CMSProjectSettings() {
         this.pluginEnabled = false;
@@ -31,6 +33,9 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
 
         this.iconAnnotatorEnabled = true;
         this.routeAnnotatorEnabled = true;
+
+        this.translationEnableTextFolding = true;
+        this.translationFavoriteLocale = "en";
     }
 
     public static TYPO3CMSProjectSettings getInstance(@NotNull Project project) {
@@ -45,6 +50,10 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
 
     public static void showSettings(@NotNull Project project) {
         ShowSettingsUtilImpl.showSettingsDialog(project, "TYPO3CMS.SettingsForm", null);
+    }
+
+    public static String[] getAvailableLocales() {
+        return new String[]{"en", "de"};
     }
 
     @Nullable
