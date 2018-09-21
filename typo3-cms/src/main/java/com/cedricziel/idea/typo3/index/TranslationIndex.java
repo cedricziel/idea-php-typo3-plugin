@@ -11,10 +11,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.XmlRecursiveElementVisitor;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlElementType;
@@ -160,7 +157,7 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
 
     @NotNull
     private static StubTranslation createStubTranslationFromIndex(@NotNull VirtualFile file, String extensionKeyFromFile, String languageKey, PsiElement transUnitElement, String id) {
-        StubTranslation v = new StubTranslation(compileId(file, extensionKeyFromFile, id));
+        StubTranslation v = new StubTranslation(SmartPointerManager.createPointer(transUnitElement), compileId(file, extensionKeyFromFile, id));
         v.setTextRange(transUnitElement.getTextRange());
         v.setIndex(id);
         v.setExtension(extensionKeyFromFile);

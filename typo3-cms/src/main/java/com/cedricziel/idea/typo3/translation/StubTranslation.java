@@ -1,18 +1,22 @@
 package com.cedricziel.idea.typo3.translation;
 
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.SmartPsiElementPointer;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public class StubTranslation implements TranslationInterface, Serializable {
+    private SmartPsiElementPointer<PsiElement> psiElement;
     private String id;
     private TextRange textRange;
     private String extension;
     private String index;
     private String language;
 
-    public StubTranslation(String id) {
+    public StubTranslation(SmartPsiElementPointer<PsiElement> pointer, String id) {
+        this.psiElement = pointer;
         this.id = id;
     }
 
@@ -69,5 +73,9 @@ public class StubTranslation implements TranslationInterface, Serializable {
 
     public String getLanguage() {
         return language;
+    }
+
+    public PsiElement getPsiElement() {
+        return psiElement.getElement();
     }
 }

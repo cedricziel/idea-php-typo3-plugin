@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3.util;
 
 import com.cedricziel.idea.typo3.index.TranslationIndex;
+import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.translation.TranslationLookupElement;
 import com.cedricziel.idea.typo3.translation.TranslationReference;
 import com.intellij.openapi.project.Project;
@@ -14,6 +15,7 @@ import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileBasedIndex;
@@ -110,11 +112,18 @@ public class TranslationUtil {
                     if (elementAt != null) {
                         if (elementAt.getParent() instanceof XmlTag) {
                             XmlAttribute id = ((XmlTag) elementAt.getParent()).getAttribute("id");
-                            if (id == null) {
+                            if (id != null) {
+                                elements.add(id.getValueElement());
+
                                 return;
                             }
 
-                            elements.add(id.getValueElement());
+                            XmlAttribute index = ((XmlTag) elementAt.getParent()).getAttribute("index");
+                            if (index != null) {
+                                elements.add(index.getValueElement());
+
+                                return;
+                            }
 
                             return;
                         }
@@ -153,5 +162,35 @@ public class TranslationUtil {
 
     public static String keyFromReference(String key) {
         return StringUtils.substringAfterLast(key, ":");
+    }
+
+    public static String findPlaceholderTextFor(Project project, StubTranslation defaultTranslation) {
+        PsiElement definitionElement = defaultTranslation.getPsiElement();
+
+        if (definitionElement instanceof XmlTag) {
+            if (((XmlTag) definitionElement).getName().equals("label")) {
+                return ((XmlTag) definitionElement).getValue().getTrimmedText();
+            }
+
+            for (XmlTag xmlTag : ((XmlTag) definitionElement).getSubTags()) {
+                if (xmlTag.getName().equals("source")) {
+                    return xmlTag.getValue().getTrimmedText();
+                }
+            }
+        }
+
+        if (definitionElement instanceof XmlAttributeValue) {
+            if (((XmlTag) definitionElement.getParent().getParent()).getName().equals("label")) {
+                return ((XmlTag) definitionElement.getParent().getParent()).getValue().getTrimmedText();
+            }
+
+            for (XmlTag xmlTag : ((XmlTag) definitionElement.getParent().getParent()).getSubTags()) {
+                if (xmlTag.getName().equals("source")) {
+                    return xmlTag.getValue().getTrimmedText();
+                }
+            }
+        }
+
+        return null;
     }
 }
