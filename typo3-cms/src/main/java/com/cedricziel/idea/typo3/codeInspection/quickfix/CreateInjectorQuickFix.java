@@ -16,7 +16,9 @@ import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
+import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.Method;
@@ -30,7 +32,7 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
 
     private SmartPsiElementPointer element;
 
-    public CreateInjectorQuickFix(@NotNull PsiElement element) {
+    public CreateInjectorQuickFix(@NotNull PhpDocTag element) {
         this.element = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
     }
 
@@ -72,9 +74,9 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
         final String methodName = "inject" + StringUtils.capitalize(fieldName);
         Method injectorFunction = PhpPsiElementFactory.createMethod(
                 project,
-                "public function " + methodName + " (" + type + " $" + fieldName + ") {" +
-                        "  $this->" + fieldName + " = $" + fieldName + ";" +
-                        "}"
+                "public function " + methodName + " (" + type + " $" + fieldName + ") {\n" +
+                        "  $this->" + fieldName + " = $" + fieldName + ";\n" +
+                        "}\n"
 
         );
 
@@ -101,7 +103,10 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
                 editor.getDocument().insertString(insertPos, textBuf);
                 final int endPos = insertPos + textBuf.length();
 
-                CodeStyleManager.getInstance(project).reformatText(containingClass.getContainingFile(), insertPos, endPos);
+                CodeStyleManager.getInstance(project).reformatText(containingClass.getContainingFile(), insertPos, endPos + 1);
+                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+
+                CodeStyleManager.getInstance(project).reformatText(docCommentElement.getContainingFile(), ContainerUtil.list(docCommentElement.getTextRange()));
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
                 Method insertedMethod = containingClass.findMethodByName(methodName);

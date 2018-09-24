@@ -27,7 +27,7 @@ public class ExtbasePropertyInjectionInspection extends PhpInspection {
 
     @NotNull
     public String getShortName() {
-        return "ExtbasePropertyInjection";
+        return "ExtbasePropertyInjectionInspection";
     }
 
     @NotNull
@@ -44,7 +44,7 @@ public class ExtbasePropertyInjectionInspection extends PhpInspection {
                 if (element instanceof PhpDocTag) {
                     PhpDocTag tag = (PhpDocTag) element;
                     if ("@inject".equals(tag.getName())) {
-                        problemsHolder.registerProblem(element, "Extbase property injection", new CreateInjectorQuickFix(element));
+                        problemsHolder.registerProblem(element, "Extbase property injection", new CreateInjectorQuickFix(tag));
                     }
                 }
             }
