@@ -1,7 +1,10 @@
 package com.cedricziel.idea.typo3.codeInspection;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.util.List;
 
 public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
     @Override
@@ -16,6 +19,15 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
         myFixture.configureFromExistingVirtualFile(virtualFile);
 
         myFixture.checkHighlighting();
+    }
+
+    public void testExtbasePropertyInjectionIsMarkedAndCanBeFixed() {
+        myFixture.enableInspections(ExtbasePropertyInjectionInspection.class);
+        List<IntentionAction> allQuickFixes = myFixture.getAllQuickFixes("ExtbasePropertyInjectionInspectionIsMarkedAndCanBeFixed.php");
+        for (IntentionAction action : allQuickFixes) {
+            myFixture.launchAction(action);
+        }
+        myFixture.checkResultByFile("ExtbasePropertyInjectionInspectionIsMarkedAndCanBeFixed_after.php", true);
     }
 
     public void testExtbasePropertyInjectionIsNotMarkedWhenPluginIsDisabled() {
