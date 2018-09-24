@@ -31,7 +31,7 @@ public class MissingRenderTypeInspection extends PhpInspection {
 
     @NotNull
     public String getShortName() {
-        return "MissingRenderType";
+        return "MissingRenderTypeInspection";
     }
 
     @NotNull
