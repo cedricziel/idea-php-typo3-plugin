@@ -32,7 +32,7 @@ public class MissingTableInspection extends PhpInspection {
 
     @NotNull
     public String getShortName() {
-        return "MissingTable";
+        return "MissingTableInspection";
     }
 
     @NotNull
