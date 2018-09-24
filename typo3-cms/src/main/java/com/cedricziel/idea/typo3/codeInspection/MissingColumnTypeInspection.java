@@ -31,7 +31,7 @@ public class MissingColumnTypeInspection extends PhpInspection {
 
     @NotNull
     public String getShortName() {
-        return "MisssingColumnTypeInspection";
+        return "MissingColumnTypeInspection";
     }
 
     @NotNull
