@@ -243,6 +243,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.InvalidQuantityInspection"/>
 
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="LegacyClassesForIDEInspection" displayName="Legacy class used"
+                         groupName="Code Migration"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.LegacyClassesForIDEInspection"/>
+
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.resources.ResourceReferenceContributor"/>
