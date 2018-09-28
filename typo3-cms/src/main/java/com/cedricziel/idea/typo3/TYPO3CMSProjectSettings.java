@@ -48,6 +48,11 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
         return getInstance(element.getProject()).pluginEnabled;
     }
 
+    public static boolean isEnabled(@NotNull Project project) {
+
+        return getInstance(project).pluginEnabled;
+    }
+
     public static void showSettings(@NotNull Project project) {
         ShowSettingsUtilImpl.showSettingsDialog(project, "TYPO3CMS.SettingsForm", null);
     }
