@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.codeInspection;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.codeInspection.quickfix.LegacyClassesForIdeQuickFix;
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.codeInsight.daemon.GroupNames;
@@ -31,12 +32,17 @@ public class LegacyClassesForIDEInspection extends PhpInspection {
     @NotNull
     @Override
     public String getShortName() {
-        return "LegacyClassesForIDE";
+        return "LegacyClassesForIDEInspection";
     }
 
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+        if (!TYPO3CMSProjectSettings.getInstance(problemsHolder.getProject()).pluginEnabled) {
+            return new PhpElementVisitor() {
+            };
+        }
+
         return new PhpElementVisitor() {
             @Override
             public void visitPhpClassReference(ClassReference classReference) {

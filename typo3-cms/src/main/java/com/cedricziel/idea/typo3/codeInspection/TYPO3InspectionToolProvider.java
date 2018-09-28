@@ -9,8 +9,6 @@ public class TYPO3InspectionToolProvider implements InspectionToolProvider {
     public Class[] getInspectionClasses() {
 
         return new Class[]{
-                // Code Migration
-                LegacyClassesForIDEInspection.class,
                 // Extension Scanner
                 ClassConstantMatcherInspection.class,
                 ClassNameMatcherInspection.class,
