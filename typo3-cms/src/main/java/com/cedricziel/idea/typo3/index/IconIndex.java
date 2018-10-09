@@ -107,31 +107,6 @@ public class IconIndex extends ScalarIndexExtension<String> {
         return iconExists.get();
     }
 
-    @NotNull
-    @Override
-    public ID<String, Void> getName() {
-        return KEY;
-    }
-
-    @NotNull
-    @Override
-    public DataIndexer<String, Void, FileContent> getIndexer() {
-        return inputData -> {
-            Map<String, IconStub> iconIdentifiers = new THashMap<>();
-
-            // index the icon registry
-            PsiFile psiFile = inputData.getPsiFile();
-            if (psiFile instanceof PhpFile) {
-                visitPhpFile(iconIdentifiers, (PhpFile) psiFile);
-            }
-
-            Map<String, Void> result = new THashMap<>();
-            iconIdentifiers.forEach((k, v) -> result.put(k, null));
-
-            return result;
-        };
-    }
-
     private static void visitPhpFile(Map<String, IconStub> iconIdentifiers, PhpFile psiFile) {
         CachedValue<Map<String, IconStub>> userData = psiFile.getUserData(TYPO3_CMS_ICON_USAGES);
         if (userData != null && userData.hasUpToDateValue()) {
@@ -167,6 +142,31 @@ public class IconIndex extends ScalarIndexExtension<String> {
         iconRegistryClass.accept(flagVisitor);
 
         flagVisitor.getMap().forEach(iconIdentifiers::put);
+    }
+
+    @NotNull
+    @Override
+    public ID<String, Void> getName() {
+        return KEY;
+    }
+
+    @NotNull
+    @Override
+    public DataIndexer<String, Void, FileContent> getIndexer() {
+        return inputData -> {
+            Map<String, IconStub> iconIdentifiers = new THashMap<>();
+
+            // index the icon registry
+            PsiFile psiFile = inputData.getPsiFile();
+            if (psiFile instanceof PhpFile) {
+                visitPhpFile(iconIdentifiers, (PhpFile) psiFile);
+            }
+
+            Map<String, Void> result = new THashMap<>();
+            iconIdentifiers.forEach((k, v) -> result.put(k, null));
+
+            return result;
+        };
     }
 
     @NotNull
