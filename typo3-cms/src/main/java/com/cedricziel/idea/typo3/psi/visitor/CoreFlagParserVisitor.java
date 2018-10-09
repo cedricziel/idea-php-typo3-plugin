@@ -2,16 +2,18 @@ package com.cedricziel.idea.typo3.psi.visitor;
 
 import com.cedricziel.idea.typo3.icons.IconStub;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Cedric Ziel <cedric@cedric-ziel.com>
  */
-public class CoreFlagParserVisitor extends PsiElementVisitor {
+public class CoreFlagParserVisitor extends PhpRecursiveElementVisitor {
 
     private final Map<String, IconStub> map;
 
@@ -24,7 +26,15 @@ public class CoreFlagParserVisitor extends PsiElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
+    public void visitPhpMethod(Method method) {
+        if ("registerFlags".equals(method.getName())) {
+            visitRegisterFlags(method);
+        }
+
+        super.visitPhpMethod(method);
+    }
+
+    private void visitRegisterFlags(Method element) {
         Variable iconFolder = PsiTreeUtil.findChildOfType(element, Variable.class);
         if (iconFolder == null || !iconFolder.getName().equals("iconFolder")) {
             // Something changed - dynamic parsing failed.

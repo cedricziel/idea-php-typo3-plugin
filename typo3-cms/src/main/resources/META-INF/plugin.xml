@@ -198,6 +198,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.extbase.EntityLineMarkerProvider"/>
         -->
+        <codeInsight.lineMarkerProvider language="PHP"
+                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
 
         <!-- goto handlers -->
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>

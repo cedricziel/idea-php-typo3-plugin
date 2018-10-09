@@ -25,6 +25,8 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
     public boolean routeAnnotatorEnabled;
     public boolean translationEnableTextFolding;
     public Object translationFavoriteLocale;
+    public boolean iconUsageGutterIconsEnabled;
+    public boolean iconDefinitionGutterIconsEnabled;
 
     public TYPO3CMSProjectSettings() {
         this.pluginEnabled = false;
@@ -36,6 +38,9 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
 
         this.translationEnableTextFolding = true;
         this.translationFavoriteLocale = "en";
+
+        this.iconUsageGutterIconsEnabled = true;
+        this.iconDefinitionGutterIconsEnabled = true;
     }
 
     public static TYPO3CMSProjectSettings getInstance(@NotNull Project project) {
@@ -43,7 +48,7 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
         return ServiceManager.getService(project, TYPO3CMSProjectSettings.class);
     }
 
-    public static boolean isEnabled(PsiElement element) {
+    public static boolean isEnabled(@NotNull PsiElement element) {
 
         return getInstance(element.getProject()).pluginEnabled;
     }
@@ -59,6 +64,10 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
 
     public static String[] getAvailableLocales() {
         return new String[]{"en", "de"};
+    }
+
+    public static TYPO3CMSProjectSettings getInstance(@NotNull PsiElement element) {
+        return getInstance(element.getProject());
     }
 
     @Nullable

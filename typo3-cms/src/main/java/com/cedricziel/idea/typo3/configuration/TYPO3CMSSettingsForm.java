@@ -19,6 +19,8 @@ public class TYPO3CMSSettingsForm implements Configurable {
     private JCheckBox routeAnnotatorEnabled;
     private JCheckBox translationEnableTextFolding;
     private JComboBox translationFavoriteLocale;
+    private JCheckBox iconUsageGutterIconsEnabled;
+    private JCheckBox iconDefinitionGutterIconsEnabled;
 
     public TYPO3CMSSettingsForm(@NotNull Project project) {
         this.project = project;
@@ -54,6 +56,8 @@ public class TYPO3CMSSettingsForm implements Configurable {
             || routeAnnotatorEnabled.isSelected() != getSettings().routeAnnotatorEnabled
             || translationEnableTextFolding.isSelected() != getSettings().translationEnableTextFolding
             || translationFavoriteLocale.getSelectedItem() != getSettings().translationFavoriteLocale
+            || iconUsageGutterIconsEnabled.isSelected() != getSettings().iconUsageGutterIconsEnabled
+            || iconDefinitionGutterIconsEnabled.isSelected() != getSettings().iconDefinitionGutterIconsEnabled
         ;
     }
 
@@ -62,6 +66,8 @@ public class TYPO3CMSSettingsForm implements Configurable {
         getSettings().pluginEnabled = enablePlugin.isSelected();
         getSettings().iconAnnotatorEnabled = iconAnnotatorEnabled.isSelected();
         getSettings().routeAnnotatorEnabled = routeAnnotatorEnabled.isSelected();
+        getSettings().iconUsageGutterIconsEnabled = iconUsageGutterIconsEnabled.isSelected();
+        getSettings().iconDefinitionGutterIconsEnabled = iconDefinitionGutterIconsEnabled.isSelected();
 
         getSettings().translationEnableTextFolding = translationEnableTextFolding.isSelected();
         getSettings().translationFavoriteLocale = translationFavoriteLocale.getSelectedItem();
@@ -75,6 +81,8 @@ public class TYPO3CMSSettingsForm implements Configurable {
         enablePlugin.setSelected(getSettings().pluginEnabled);
         iconAnnotatorEnabled.setSelected(getSettings().iconAnnotatorEnabled);
         routeAnnotatorEnabled.setSelected(getSettings().routeAnnotatorEnabled);
+        iconUsageGutterIconsEnabled.setSelected(getSettings().iconUsageGutterIconsEnabled);
+        iconDefinitionGutterIconsEnabled.setSelected(getSettings().iconDefinitionGutterIconsEnabled);
 
         translationEnableTextFolding.setSelected(getSettings().translationEnableTextFolding);
         translationFavoriteLocale.setSelectedItem(getSettings().translationFavoriteLocale);

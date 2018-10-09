@@ -1,38 +1,42 @@
 package com.cedricziel.idea.typo3.index;
 
 import com.cedricziel.idea.typo3.icons.IconStub;
-import com.cedricziel.idea.typo3.index.externalizer.ObjectStreamDataExternalizer;
 import com.cedricziel.idea.typo3.psi.visitor.CoreFlagParserVisitor;
 import com.cedricziel.idea.typo3.psi.visitor.CoreIconParserVisitor;
 import com.intellij.openapi.file.exclude.EnforcedPlainTextFileTypeManager;
-import com.intellij.openapi.file.exclude.ProjectPlainTextFileTypeManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.*;
-import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
-import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.PhpPsiUtil;
-import com.jetbrains.php.lang.psi.elements.Field;
-import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.cedricziel.idea.typo3.util.IconUtil.ICON_REGISTRY_CLASS;
 
-public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
+public class IconIndex extends ScalarIndexExtension<String> {
 
-    public static ID<String, IconStub> KEY = ID.create("com.cedricziel.idea.typo3.index.icon");
+    private static final Key<CachedValue<Map<String, IconStub>>> TYPO3_CMS_ICON_USAGES = new Key<>("TYPO3_CMS_ICON_USAGES");
+    private static final Key<CachedValue<IconStub[]>> TYPO3_CMS_PROJECT_ICONS = new Key<>("TYPO3_CMS_PROJECT_ICONS");
+
+    public static ID<String, Void> KEY = ID.create("com.cedricziel.idea.typo3.index.icon");
 
     @NotNull
     public static Collection<String> getAllAvailableIcons(@NotNull Project project) {
@@ -40,110 +44,129 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
         return FileBasedIndex.getInstance().getAllKeys(KEY, project);
     }
 
-    public static Map<VirtualFile, IconStub> getIconDefinitionByIdentifier(@NotNull Project project, String iconIdentifier) {
-        Set<String> identifiers = new HashSet<>();
-        identifiers.add(iconIdentifier);
+    public static Collection<IconStub> getIcon(@NotNull Project project, @NotNull String iconIdentifier) {
+        List<IconStub> icons = new ArrayList<>();
 
-        Map<VirtualFile, IconStub> icons = new THashMap<>();
-
-        FileBasedIndex.getInstance().getFilesWithKey(KEY, identifiers, virtualFile -> {
-            FileBasedIndex.getInstance().processValues(KEY, iconIdentifier, virtualFile, (file, value) -> {
-                icons.put(file, value);
-
-                return true;
-            }, GlobalSearchScope.allScope(project));
-
-            return true;
-        }, GlobalSearchScope.allScope(project));
+        for (IconStub icon : getAllIcons(project)) {
+            if (icon.getIdentifier().equals(iconIdentifier)) {
+                icons.add(icon);
+            }
+        }
 
         return icons;
     }
 
     @NotNull
-    public static PsiElement[] getIconDefinitionElements(@NotNull Project project, @NotNull String identifier) {
-        Map<VirtualFile, IconStub> iconDefinitionByIdentifier = getIconDefinitionByIdentifier(project, identifier);
-        if (iconDefinitionByIdentifier.size() > 0) {
-            return iconDefinitionByIdentifier
-                    .keySet()
-                    .stream()
-                    .map(virtualFile -> {
-                        IconStub iconStub = iconDefinitionByIdentifier.get(virtualFile);
-                        PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
-                        return file != null ? file.findElementAt(iconStub.getTextRange().getStartOffset()) : null;
-                    })
-                    .filter(Objects::nonNull)
-                    .toArray(PsiElement[]::new);
+    public static IconStub[] getAllIcons(@NotNull Project project) {
+
+        CachedValue<IconStub[]> value = project.getUserData(TYPO3_CMS_PROJECT_ICONS);
+        if (value != null && value.hasUpToDateValue()) {
+            return value.getValue();
         }
 
-        return new PsiElement[0];
+        CachedValue<IconStub[]> cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
+            return CachedValueProvider.Result.create(getAllIconsUncached(project), PsiModificationTracker.MODIFICATION_COUNT);
+        }, false);
+
+        project.putUserData(TYPO3_CMS_PROJECT_ICONS, cachedValue);
+
+        return cachedValue.getValue();
     }
 
     @NotNull
-    public static IconStub[] getAllIcons(@NotNull Project project) {
-        List<IconStub> iconStubs = new ArrayList<>();
+    private static IconStub[] getAllIconsUncached(@NotNull Project project) {
+        Map<String, IconStub> iconStubs = new THashMap<>();
+
         FileBasedIndex.getInstance().getAllKeys(IconIndex.KEY, project).forEach(k -> {
-            List<IconStub> values = FileBasedIndex.getInstance().getValues(IconIndex.KEY, k, GlobalSearchScope.allScope(project));
-            iconStubs.addAll(values);
+            FileBasedIndex.getInstance().getFilesWithKey(IconIndex.KEY, ContainerUtil.set(k), v -> {
+                PsiFile psiFile = PsiManager.getInstance(project).findFile(v);
+                if (psiFile instanceof PhpFile) {
+                    visitPhpFile(iconStubs, (PhpFile) psiFile);
+                }
+
+                return true;
+            }, GlobalSearchScope.allScope(project));
         });
 
-        return iconStubs.toArray(new IconStub[iconStubs.size()]);
+        return iconStubs.values().toArray(new IconStub[0]);
+    }
+
+    public static boolean hasIcon(@NotNull Project project, @NotNull String iconIdentifier) {
+        AtomicBoolean iconExists = new AtomicBoolean(false);
+
+        FileBasedIndex.getInstance().processAllKeys(IconIndex.KEY, s -> {
+            if (s.equals(iconIdentifier)) {
+                iconExists.set(true);
+
+                return false;
+            }
+
+            return true;
+        }, project);
+
+        return iconExists.get();
     }
 
     @NotNull
     @Override
-    public ID<String, IconStub> getName() {
+    public ID<String, Void> getName() {
         return KEY;
     }
 
     @NotNull
     @Override
-    public DataIndexer<String, IconStub, FileContent> getIndexer() {
+    public DataIndexer<String, Void, FileContent> getIndexer() {
         return inputData -> {
-            Map<String, IconStub> map = new THashMap<>();
+            Map<String, IconStub> iconIdentifiers = new THashMap<>();
 
             // index the icon registry
-            if (inputData.getPsiFile() instanceof PhpFile) {
-                PhpClass iconRegistry = PhpPsiUtil.findClass((PhpFile) inputData.getPsiFile(), phpClass -> {
-                    String presentableFQN = phpClass.getPresentableFQN();
-                    return presentableFQN.equals(ICON_REGISTRY_CLASS);
-                });
-
-                if (iconRegistry != null) {
-                    for (PsiElement element : iconRegistry.getChildren()) {
-                        if (PlatformPatterns.psiElement(PhpElementTypes.CLASS_FIELDS).accepts(element)) {
-                            for (PsiElement fieldsInner : element.getChildren()) {
-                                if (PlatformPatterns.psiElement(PhpElementTypes.CLASS_FIELD).accepts(fieldsInner)) {
-
-                                    Field field = (Field) fieldsInner;
-
-                                    // TYPO3 7 through 8 use icons, 9 uses dynamic icons and the "staticIcons" field
-                                    if (field.getName().equals("icons") || field.getName().equals("staticIcons")) {
-                                        CoreIconParserVisitor visitor = new CoreIconParserVisitor();
-                                        visitor.visitElement(field.getDefaultValue());
-
-                                        Map<String, IconStub> map1 = visitor.getMap();map1.forEach(map::put);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (PlatformPatterns.psiElement(PhpElementTypes.CLASS_METHOD).accepts(element)) {
-                            Method method = (Method) element;
-                            if ("registerFlags".equals(method.getName())) {
-                                CoreFlagParserVisitor visitor = new CoreFlagParserVisitor();
-                                method.accept(visitor);
-                                visitor.visitElement(method);
-
-                                Map<String, IconStub> map1 = visitor.getMap();
-                                map1.forEach(map::put);
-                            }
-                        }
-                    }
-                }
+            PsiFile psiFile = inputData.getPsiFile();
+            if (psiFile instanceof PhpFile) {
+                visitPhpFile(iconIdentifiers, (PhpFile) psiFile);
             }
 
-            return map;
+            Map<String, Void> result = new THashMap<>();
+            iconIdentifiers.forEach((k, v) -> result.put(k, null));
+
+            return result;
         };
+    }
+
+    private static void visitPhpFile(Map<String, IconStub> iconIdentifiers, PhpFile psiFile) {
+        CachedValue<Map<String, IconStub>> userData = psiFile.getUserData(TYPO3_CMS_ICON_USAGES);
+        if (userData != null && userData.hasUpToDateValue()) {
+            iconIdentifiers.putAll(userData.getValue());
+
+            return;
+        }
+
+        CachedValue<Map<String, IconStub>> cachedValue = CachedValuesManager.getManager(psiFile.getProject()).createCachedValue(() -> {
+            Map<String, IconStub> cacher = new THashMap<>();
+
+            visitIconRegistry(cacher, psiFile);
+
+            return CachedValueProvider.Result.create(cacher, PsiModificationTracker.MODIFICATION_COUNT);
+        }, false);
+
+        psiFile.putUserData(TYPO3_CMS_ICON_USAGES, cachedValue);
+        iconIdentifiers.putAll(cachedValue.getValue());
+    }
+
+    private static void visitIconRegistry(Map<String, IconStub> iconIdentifiers, PhpFile phpFile) {
+        PhpClass iconRegistryClass = PhpPsiUtil.findClass(phpFile, phpClass -> phpClass.getPresentableFQN().equals(ICON_REGISTRY_CLASS));
+        if (iconRegistryClass == null) {
+            return;
+        }
+
+        CoreIconParserVisitor iconVisitor = new CoreIconParserVisitor();
+        iconRegistryClass.accept(iconVisitor);
+
+        iconVisitor.getMap().forEach(iconIdentifiers::put);
+
+        CoreFlagParserVisitor flagVisitor = new CoreFlagParserVisitor();
+        iconRegistryClass.accept(flagVisitor);
+
+        flagVisitor.getMap().forEach(iconIdentifiers::put);
     }
 
     @NotNull
@@ -152,15 +175,9 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
         return EnumeratorStringDescriptor.INSTANCE;
     }
 
-    @NotNull
-    @Override
-    public DataExternalizer<IconStub> getValueExternalizer() {
-        return new ObjectStreamDataExternalizer<>();
-    }
-
     @Override
     public int getVersion() {
-        return 0;
+        return 1;
     }
 
     @NotNull
@@ -169,7 +186,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
         return file -> {
             String extension = file.getExtension();
 
-            Boolean isEnforcedPlaintext = EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(file);
+            boolean isEnforcedPlaintext = EnforcedPlainTextFileTypeManager.getInstance().isMarkedAsPlainText(file);
 
             return extension != null && extension.equalsIgnoreCase("php") && !isEnforcedPlaintext;
         };
