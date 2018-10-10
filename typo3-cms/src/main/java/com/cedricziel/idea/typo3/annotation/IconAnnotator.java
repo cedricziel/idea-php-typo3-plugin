@@ -52,6 +52,10 @@ public class IconAnnotator implements Annotator {
             return;
         }
 
+        if (IconIndex.getDeprecatedIconIdentifiers(psiElement.getProject()).containsKey(value)) {
+            return;
+        }
+
         annotationHolder.createWarningAnnotation(new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1), "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
     }
 }
