@@ -37,5 +37,6 @@ public class IconIndexTest extends LightCodeInsightFixtureTestCase {
         myFixture.configureByFile("IconRegistry9.php");
 
         assertTrue(IconIndex.getDeprecatedIconIdentifiers(myFixture.getProject()).containsKey("status-status-edit-read-only"));
+        assertEquals(IconIndex.getDeprecatedIconIdentifiers(myFixture.getProject()).get("status-status-edit-read-only"), "status-edit-read-only");
     }
 }
