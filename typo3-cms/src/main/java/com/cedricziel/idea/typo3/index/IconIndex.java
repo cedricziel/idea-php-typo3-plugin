@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.index;
 
+import com.cedricziel.idea.typo3.icons.DeprecatedIconsFromRegistryVisitor;
 import com.cedricziel.idea.typo3.icons.IconStub;
 import com.cedricziel.idea.typo3.psi.visitor.CoreFlagParserVisitor;
 import com.cedricziel.idea.typo3.psi.visitor.CoreIconParserVisitor;
@@ -17,16 +18,14 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
+import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.PhpPsiUtil;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.cedricziel.idea.typo3.util.IconUtil.ICON_REGISTRY_CLASS;
@@ -35,6 +34,7 @@ public class IconIndex extends ScalarIndexExtension<String> {
 
     private static final Key<CachedValue<Map<String, IconStub>>> TYPO3_CMS_ICON_USAGES = new Key<>("TYPO3_CMS_ICON_USAGES");
     private static final Key<CachedValue<IconStub[]>> TYPO3_CMS_PROJECT_ICONS = new Key<>("TYPO3_CMS_PROJECT_ICONS");
+    private static final Key<CachedValue<Map<String, String>>> TYPO3_CMS_PROJECT_DEPRECATED_ICONS = new Key<>("TYPO3_CMS_PROJECT_DEPRECATED_ICONS");
 
     public static ID<String, Void> KEY = ID.create("com.cedricziel.idea.typo3.index.icon");
 
@@ -105,6 +105,35 @@ public class IconIndex extends ScalarIndexExtension<String> {
         }, project);
 
         return iconExists.get();
+    }
+
+    public static Map<String, String> getDeprecatedIconIdentifiers(@NotNull Project project) {
+        CachedValue<Map<String, String>> value = project.getUserData(TYPO3_CMS_PROJECT_DEPRECATED_ICONS);
+        if (value != null && value.hasUpToDateValue()) {
+            return value.getValue();
+        }
+
+        CachedValue<Map<String, String>> cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
+            return CachedValueProvider.Result.create(getDeprecatedIconsUncached(project), PsiModificationTracker.MODIFICATION_COUNT);
+        }, false);
+
+        project.putUserData(TYPO3_CMS_PROJECT_DEPRECATED_ICONS, cachedValue);
+
+        return cachedValue.getValue();
+    }
+
+    @NotNull
+    private static Map<String, String> getDeprecatedIconsUncached(@NotNull Project project) {
+        Map<String, String> result = new HashMap<>();
+        for (PhpClass phpClass : PhpIndex.getInstance(project).getClassesByFQN(ICON_REGISTRY_CLASS)) {
+            DeprecatedIconsFromRegistryVisitor visitor = new DeprecatedIconsFromRegistryVisitor();
+
+            phpClass.accept(visitor);
+
+            visitor.result.forEach(result::putIfAbsent);
+        }
+
+        return result;
     }
 
     private static void visitPhpFile(Map<String, IconStub> iconIdentifiers, PhpFile psiFile) {
