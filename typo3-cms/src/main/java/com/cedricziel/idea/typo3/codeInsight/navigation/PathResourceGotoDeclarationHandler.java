@@ -15,7 +15,7 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
     @Nullable
     @Override
     public PsiElement[] getGotoDeclarationTargets(@Nullable PsiElement sourceElement, int offset, Editor editor) {
-        if (!TYPO3CMSProjectSettings.isEnabled(sourceElement)) {
+        if (sourceElement == null || !TYPO3CMSProjectSettings.isEnabled(sourceElement)) {
             return PsiElement.EMPTY_ARRAY;
         }
 
@@ -23,17 +23,13 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
             return emptyPsiElementArray();
         }
 
-        if (sourceElement != null) {
-            String identifier = sourceElement.getText();
-
-            if (ResourcePathIndex.projectContainsResourceDirectory(sourceElement.getProject(), identifier)) {
-                return emptyPsiElementArray();
-            }
-
-            return ResourcePathIndex.findElementsForKey(sourceElement.getProject(), identifier);
+        String identifier = sourceElement.getText();
+        if (ResourcePathIndex.projectContainsResourceDirectory(sourceElement.getProject(), identifier)) {
+            return emptyPsiElementArray();
         }
 
-        return emptyPsiElementArray();
+        return ResourcePathIndex.findElementsForKey(sourceElement.getProject(), identifier);
+
     }
 
     @NotNull

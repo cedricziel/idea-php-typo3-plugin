@@ -43,9 +43,14 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
         return ServiceManager.getService(project, TYPO3CMSProjectSettings.class);
     }
 
-    public static boolean isEnabled(PsiElement element) {
+    public static boolean isEnabled(@NotNull PsiElement element) {
 
-        return getInstance(element.getProject()).pluginEnabled;
+        TYPO3CMSProjectSettings instance = getInstance(element.getProject());
+        if (instance == null) {
+            return false;
+        }
+
+        return instance.pluginEnabled;
     }
 
     public static boolean isEnabled(@NotNull Project project) {
