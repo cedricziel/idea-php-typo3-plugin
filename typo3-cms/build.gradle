@@ -2,7 +2,7 @@ def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace(
 
 intellij {
     version ideaVersion
-    pluginName 'TYPO3 CMS Plugin'
+    pluginName 'TYPO3 CMS Support'
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
