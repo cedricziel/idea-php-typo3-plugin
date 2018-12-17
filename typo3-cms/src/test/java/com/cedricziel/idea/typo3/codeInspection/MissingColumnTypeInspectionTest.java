@@ -28,4 +28,22 @@ public class MissingColumnTypeInspectionTest extends AbstractTestCase {
 
         myFixture.checkHighlighting();
     }
+
+    public void testColumnTypeSlugIsNotAvailableForV8() {
+        myFixture.enableInspections(MissingColumnTypeInspection.class);
+
+        VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeSlugIsMarkedOnV8.php", "MyClass.php");
+        myFixture.configureFromExistingVirtualFile(virtualFile);
+
+        myFixture.checkHighlighting();
+    }
+
+    public void testColumnTypeSlugIsAvailableForV9() {
+        myFixture.enableInspections(MissingColumnTypeInspection.class);
+
+        VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeSlugIsNotMarkedOnV9.php", "MyClass.php");
+        myFixture.configureFromExistingVirtualFile(virtualFile);
+
+        myFixture.checkHighlighting();
+    }
 }
