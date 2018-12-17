@@ -26,7 +26,7 @@ public class TCAUtil {
         "allowed",
     };
 
-    public static final String[] TCA_CORE_TYPES = {
+    public static final String[] TCA_V8_CORE_TYPES = {
         "check",
         "flex",
         "group",
@@ -41,7 +41,11 @@ public class TCAUtil {
         "user",
     };
 
-    public static final String[] TCA_CORE_RENDER_TYPES = {
+    public static final String[] TCA_V9_CORE_TYPES = {
+        "slug"
+    };
+
+    public static final String[] TCA_V8_CORE_RENDER_TYPES = {
         "selectSingle",
         "selectSingleBox",
         "selectCheckBox",
@@ -66,7 +70,7 @@ public class TCAUtil {
         "rows",
     };
 
-    public static final String[] TCA_DEFAULT_EVALUATIONS = {
+    public static final String[] TCA_V8_DEFAULT_EVALUATIONS = {
         "alpha",
         "alphanum",
         "alphanum_x",
@@ -90,6 +94,11 @@ public class TCAUtil {
         "uniqueInPid",
         "upper",
         "year",
+    };
+
+    public static final String[] TCA_V9_DEFAULT_EVALUATIONS = {
+        "uniqueInSite",
+        "uniqueInPid",
     };
 
     public static final String[] TCA_CONFIG_SECTION_CHILDREN = {
@@ -192,6 +201,10 @@ public class TCAUtil {
         "validation",
         "wizards",
         "wrap",
+
+        // type slug
+        "generatorOptions",
+        "fallbackCharacter",
     };
 
     private static final String EXT_LOCALCONF_FILENAME = "ext_localconf.php";
@@ -222,7 +235,7 @@ public class TCAUtil {
             Set<PsiElement> elementsFromExtLocalConf = findAvailableRenderTypes(project);
 
             // add static list of render types
-            renderTypes.addAll(Arrays.asList(TCA_CORE_RENDER_TYPES));
+            renderTypes.addAll(Arrays.asList(TCA_V8_CORE_RENDER_TYPES));
 
             // add dynamic list of render types from nodeRegistry
             for (PsiElement el : elementsFromExtLocalConf) {
@@ -239,9 +252,16 @@ public class TCAUtil {
         return cachedValue.getValue();
     }
 
-    public static Set<String> getAvailableColumnTypes() {
+    public static Set<String> getAvailableColumnTypes(@NotNull Project project) {
 
-        return new HashSet<>(Arrays.asList(TCA_CORE_TYPES));
+        List<String> columnTypes = new ArrayList<>(Arrays.asList(TCA_V8_CORE_TYPES));
+
+        // add v9 column types if branch is higher than 8.7
+        if (TYPO3Utility.compareMajorMinorVersion(project, "8.7") > 0) {
+            columnTypes.addAll(Arrays.asList(TCA_V9_CORE_TYPES));
+        }
+
+        return new HashSet<>(columnTypes);
     }
 
     private static Set<PsiElement> findAvailableRenderTypes(Project project) {
@@ -306,9 +326,13 @@ public class TCAUtil {
     }
 
     @NotNull
-    public static Set<String> getAvailableEvaluations() {
+    public static Set<String> getAvailableEvaluations(@NotNull Project project) {
         Set<String> evaluations = new THashSet<>();
-        evaluations.addAll(Arrays.asList(TCA_DEFAULT_EVALUATIONS));
+        evaluations.addAll(Arrays.asList(TCA_V8_DEFAULT_EVALUATIONS));
+
+        if (TYPO3Utility.compareMajorMinorVersion(project, "8.7") > 0) {
+            evaluations.addAll(Arrays.asList(TCA_V9_DEFAULT_EVALUATIONS));
+        }
 
         return evaluations;
     }
