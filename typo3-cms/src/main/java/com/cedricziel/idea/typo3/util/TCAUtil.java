@@ -24,6 +24,7 @@ public class TCAUtil {
     public static final String[] TCA_TABLE_FIELDS = {
         "foreign_table",
         "allowed",
+        "MM",
     };
 
     public static final String[] TCA_V8_CORE_TYPES = {
