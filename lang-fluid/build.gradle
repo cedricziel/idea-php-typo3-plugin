@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:2018.1.2"
+        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:${grammarKitPluginVersion}"
     }
 }
 
