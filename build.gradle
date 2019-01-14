@@ -82,7 +82,7 @@ subprojects {
     }
 
     grammarKit {
-        grammarKitRelease = "2017.1.4"
+        grammarKitRelease = grammarKitRelease
         jflexRelease = jFlexRelease
     }
 
