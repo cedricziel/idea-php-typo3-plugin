@@ -244,6 +244,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.InvalidQuantityInspection"/>
 
         <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="InternalTypeFileInspection" displayName="Invalid Internal type"
+                         groupName="TCA"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.v10.InternalTypeFileInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
                          shortName="LegacyClassesForIDEInspection" displayName="Legacy class used"
                          groupName="Code Migration"
                          enabledByDefault="true" level="WARNING"
