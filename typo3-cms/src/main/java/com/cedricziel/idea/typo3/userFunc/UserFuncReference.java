@@ -1,11 +1,13 @@
 package com.cedricziel.idea.typo3.userFunc;
 
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlText;
+import com.intellij.psi.xml.XmlToken;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +22,7 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
     private final String className;
     private final String methodName;
 
-    public UserFuncReference(XmlText xmlText) {
+    public UserFuncReference(XmlToken xmlText) {
         super(xmlText);
 
         String text = xmlText.getText();

@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.userFunc;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.XmlText;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
@@ -21,7 +22,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
-                        return new PsiReference[]{new UserFuncReference((XmlText) element.getParent())};
+                        return new PsiReference[]{new UserFuncReference((XmlToken) element)};
                     }
                 }
         );
