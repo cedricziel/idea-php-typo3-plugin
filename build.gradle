@@ -31,9 +31,9 @@ allprojects {
     tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
     if (details.isCleanTag) {
-        version = "${details.lastTag}.$customSinceBuild"
+        version = "$customSinceBuild.${details.lastTag.substring(3)}"
     } else {
-        version = "${details.lastTag}.$customSinceBuild.${details.gitHash}-SNAPSHOT"
+        version = "$customSinceBuild.${details.lastTag.substring(3)}.${details.gitHash}-SNAPSHOT"
     }
 
     intellij {
