@@ -280,6 +280,10 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- context api -->
         <psi.referenceContributor language="PHP"
                                   implementation="com.cedricziel.idea.typo3.contextApi.ContextReferenceContributor"/>
+
+        <!-- site api -->
+        <completion.contributor language="yaml"
+                                implementationClass="com.cedricziel.idea.typo3.site.SiteConfigurationCompletionContributor"/>
     </extensions>
 
     <actions>
