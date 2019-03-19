@@ -64,7 +64,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
         getSettings().routeAnnotatorEnabled = routeAnnotatorEnabled.isSelected();
 
         getSettings().translationEnableTextFolding = translationEnableTextFolding.isSelected();
-        getSettings().translationFavoriteLocale = translationFavoriteLocale.getSelectedItem();
+        getSettings().translationFavoriteLocale = (String) translationFavoriteLocale.getSelectedItem();
     }
 
     public TYPO3CMSProjectSettings getSettings() {
