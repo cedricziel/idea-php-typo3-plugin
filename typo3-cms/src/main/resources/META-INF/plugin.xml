@@ -284,6 +284,10 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- site api -->
         <completion.contributor language="yaml"
                                 implementationClass="com.cedricziel.idea.typo3.site.SiteConfigurationCompletionContributor"/>
+
+        <!-- FlexForms -->
+        <completion.contributor language="XML"
+                                implementationClass="com.cedricziel.idea.typo3.flexform.FlexFormCompletionContributionProvider"/>
     </extensions>
 
     <actions>

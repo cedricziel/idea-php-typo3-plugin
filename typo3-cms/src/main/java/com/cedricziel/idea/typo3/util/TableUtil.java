@@ -65,7 +65,7 @@ public class TableUtil {
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return files.toArray(new PsiFile[files.size()]);
+        return files.toArray(new PsiFile[0]);
     }
 
     @NotNull
@@ -93,6 +93,6 @@ public class TableUtil {
             elements.add(new TableLookupElement(name));
         }
 
-        return elements.toArray(new LookupElement[elements.size()]);
+        return elements.toArray(new LookupElement[0]);
     }
 }
