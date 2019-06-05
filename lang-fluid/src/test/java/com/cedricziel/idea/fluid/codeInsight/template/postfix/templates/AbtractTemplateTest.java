@@ -11,7 +11,7 @@ import com.intellij.util.containers.ContainerUtil;
 
 abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
     @Override
-    public void setUp() {
+    public void setUp() throws Exception {
 
         super.setUp();
 
