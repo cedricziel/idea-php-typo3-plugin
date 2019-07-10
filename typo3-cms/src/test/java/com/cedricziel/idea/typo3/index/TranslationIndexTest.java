@@ -1,11 +1,10 @@
 package com.cedricziel.idea.typo3.index;
 
+import com.cedricziel.idea.typo3.Triple;
 import com.cedricziel.idea.typo3.translation.AbstractTranslationTest;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,11 +79,11 @@ public class TranslationIndexTest extends AbstractTranslationTest {
         myFixture.copyFileToProject("multiple_languages.xml", "typo3conf/ext/foo/locallang.xml");
 
         List<Triple<String, String, String>> triples = new ArrayList<Triple<String, String, String>>() {{
-            add(new ImmutableTriple<>("default", "mylabel", "English"));
-            add(new ImmutableTriple<>("de", "mylabel", "Deutsch"));
-            add(new ImmutableTriple<>("fr", "mylabel", "Français"));
-            add(new ImmutableTriple<>("nl", "mylabel", "Nederlands"));
-            add(new ImmutableTriple<>("es", "mylabel", "Español"));
+            add(new Triple<>("default", "mylabel", "English"));
+            add(new Triple<>("de", "mylabel", "Deutsch"));
+            add(new Triple<>("fr", "mylabel", "Français"));
+            add(new Triple<>("nl", "mylabel", "Nederlands"));
+            add(new Triple<>("es", "mylabel", "Español"));
         }};
 
         Collection<String> allKeys = FileBasedIndex.getInstance().getAllKeys(TranslationIndex.KEY, getProject());

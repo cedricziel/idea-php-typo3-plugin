@@ -1,8 +1,8 @@
 package com.cedricziel.idea.typo3.index.php;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-public class LegacyClassesForIDEIndexTest extends LightCodeInsightFixtureTestCase {
+public class LegacyClassesForIDEIndexTest extends BasePlatformTestCase {
 
     @Override
     protected String getTestDataPath() {

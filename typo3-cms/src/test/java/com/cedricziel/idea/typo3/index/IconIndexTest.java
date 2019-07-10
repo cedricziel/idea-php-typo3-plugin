@@ -1,8 +1,8 @@
 package com.cedricziel.idea.typo3.index;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-public class IconIndexTest extends LightCodeInsightFixtureTestCase {
+public class IconIndexTest extends BasePlatformTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/icons";

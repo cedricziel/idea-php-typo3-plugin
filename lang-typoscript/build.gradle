@@ -26,6 +26,7 @@ intellij {
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
+        'java',
         'java-i18n',
         'properties',
         'yaml',
@@ -53,7 +54,7 @@ publishPlugin {
 task generateTypoScriptLexer(type: GenerateLexer) {
     source = "src/main/grammars/TypoScriptLexer.flex"
     targetDir = "gen/com/cedricziel/idea/typoscript/lang/lexer"
-    targetClass = "TypoScriptLexer"
+    targetClass = "_TypoScriptLexer"
 }
 
 task generateTypoScriptParser(type: GenerateParser) {

@@ -5,11 +5,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.elements.Method;
 
-public class ControllerActionReferenceTest extends LightCodeInsightFixtureTestCase {
+public class ControllerActionReferenceTest extends BasePlatformTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();

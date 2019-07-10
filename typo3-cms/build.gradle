@@ -4,9 +4,11 @@ intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Support'
     plugins = [
+        'java',
+        'java-i18n',
+        'coverage',
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
-        'java-i18n',
         'properties',
         'yaml',
         "PsiViewer:${psiViewerPluginVersion}",

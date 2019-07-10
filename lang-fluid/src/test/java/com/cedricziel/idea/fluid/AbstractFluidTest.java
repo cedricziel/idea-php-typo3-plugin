@@ -3,16 +3,28 @@ package com.cedricziel.idea.fluid;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
 import com.cedricziel.idea.fluid.viewHelpers.ViewHelperReference;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-abstract public class AbstractFluidTest extends LightCodeInsightFixtureTestCase {
+abstract public class AbstractFluidTest extends BasePlatformTestCase {
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
+        final boolean pluginInstalled = PluginManager.isPluginInstalled(PluginId.getId("com.jetbrains.php"));
+        if (pluginInstalled) {
+
+        }
+    }
+
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/fluid";

@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.index;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.PhpFileType;
 
 import java.util.List;
 
-public class ResourcePathIndexTest extends LightCodeInsightFixtureTestCase {
+public class ResourcePathIndexTest extends BasePlatformTestCase {
     public void testResourcesAreIndexed() {
         myFixture.addFileToProject("typo3conf/ext/foo/bar.php", "");
         myFixture.addFileToProject("typo3/sysext/baz/bar.png", "");

@@ -6,10 +6,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.PhpFileType;
 
-public class ResourceReferenceContributorTest extends LightCodeInsightFixtureTestCase {
+public class ResourceReferenceContributorTest extends BasePlatformTestCase {
     public void testResourceReferencesAreCreated() {
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 

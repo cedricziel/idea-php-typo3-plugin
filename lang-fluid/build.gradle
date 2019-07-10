@@ -42,6 +42,7 @@ intellij {
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
+        'java',
         'java-i18n',
         'properties',
         "PsiViewer:${psiViewerPluginVersion}"

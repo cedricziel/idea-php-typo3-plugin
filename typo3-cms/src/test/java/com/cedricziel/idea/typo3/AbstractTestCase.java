@@ -17,12 +17,12 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
+abstract public class AbstractTestCase extends BasePlatformTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3";
@@ -217,7 +217,11 @@ abstract public class AbstractTestCase extends LightCodeInsightFixtureTestCase {
         for (LookupElement lookupElement : lookupElements) {
             LookupElementPresentation presentation = new LookupElementPresentation();
             lookupElement.renderElement(presentation);
-            if (presentation.getItemText().equals(title) && presentation.getTailText().equals(tailText) && presentation.getTypeText().contains(typeText)) {
+
+            final String actualItemText = presentation.getItemText();
+            final String actualTailText = presentation.getTailText();
+            final String actualTypeText = presentation.getTypeText();
+            if (actualItemText.equals(title) && actualTailText.equals(tailText) && actualTypeText.contains(typeText)) {
                 return;
             }
         }

@@ -51,9 +51,6 @@ public class ExtbaseUtils {
         }
 
         PhpClass repositoryClass = iterator.next();
-        if (repositoryClass == null) {
-            return null;
-        }
 
         return repositoryClass;
     }
@@ -68,7 +65,7 @@ public class ExtbaseUtils {
     }
 
     public static boolean isObjectStorage(@NotNull Field field) {
-        return field.getDeclaredType().toString().contains(OBJECT_STORAGE_FQN);
+        return field.getType().toString().contains(OBJECT_STORAGE_FQN);
     }
 
     public static boolean isNonQueryableField(@NotNull String name) {
