@@ -12,7 +12,6 @@ import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -331,7 +330,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
     }
 
     private void collectGotoDeclarationTargets(PsiElement psiElement, Set<String> targets) {
-        for (GotoDeclarationHandler gotoDeclarationHandler : Extensions.getExtensions(GotoDeclarationHandler.EP_NAME)) {
+        for (GotoDeclarationHandler gotoDeclarationHandler : GotoDeclarationHandler.EP_NAME.getExtensionList()) {
             PsiElement[] gotoDeclarationTargets = gotoDeclarationHandler.getGotoDeclarationTargets(psiElement, 0, myFixture.getEditor());
             if (gotoDeclarationTargets != null && gotoDeclarationTargets.length > 0) {
                 for (PsiElement gotoDeclarationTarget : gotoDeclarationTargets) {

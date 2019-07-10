@@ -7,7 +7,8 @@ import com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor;
 import com.intellij.codeInsight.template.postfix.completion.PostfixTemplateLookupElement;
 import com.intellij.codeInsight.template.postfix.settings.PostfixTemplatesSettings;
 import com.intellij.testFramework.EdtTestUtil;
-import com.intellij.util.containers.ContainerUtil;
+
+import java.util.HashMap;
 
 abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
     @Override
@@ -23,7 +24,7 @@ abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
         try {
             PostfixTemplatesSettings settings = PostfixTemplatesSettings.getInstance();
             assertNotNull(settings);
-            settings.setProviderToDisabledTemplates(ContainerUtil.newHashMap());
+            settings.setProviderToDisabledTemplates(new HashMap<>());
             settings.setPostfixTemplatesEnabled(true);
             settings.setTemplatesCompletionEnabled(true);
         } finally {
