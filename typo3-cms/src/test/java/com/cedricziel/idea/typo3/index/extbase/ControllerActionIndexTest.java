@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.index.extbase;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.intellij.util.indexing.FileBasedIndex;
 
 import java.util.Collection;
 
-public class ControllerActionIndexTest extends LightCodeInsightFixtureTestCase {
+public class ControllerActionIndexTest extends BasePlatformTestCase {
 
     @Override
     protected String getTestDataPath() {

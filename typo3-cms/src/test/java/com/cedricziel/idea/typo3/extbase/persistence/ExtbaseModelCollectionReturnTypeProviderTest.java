@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 
-public class ExtbaseModelCollectionReturnTypeProviderTest extends LightCodeInsightFixtureTestCase {
+public class ExtbaseModelCollectionReturnTypeProviderTest extends BasePlatformTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/extbase/persistence";

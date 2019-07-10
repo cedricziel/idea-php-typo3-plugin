@@ -1,10 +1,10 @@
 package com.cedricziel.idea.typo3.psi;
 
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
-public class PhpElementsUtilTest extends LightCodeInsightFixtureTestCase {
+public class PhpElementsUtilTest extends BasePlatformTestCase {
     public void testCanDetectSuperClass() {
         myFixture.addFileToProject("A.php", "<?php\n" +
                 "namespace Foo;\n" +

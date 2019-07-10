@@ -3,10 +3,10 @@ package com.cedricziel.idea.typo3.extbase.controller;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.PhpFileType;
 
-public class ControllerActionReferenceProviderTest extends LightCodeInsightFixtureTestCase {
+public class ControllerActionReferenceProviderTest extends BasePlatformTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
