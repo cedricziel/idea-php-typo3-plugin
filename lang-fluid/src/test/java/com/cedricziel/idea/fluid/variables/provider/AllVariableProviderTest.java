@@ -1,11 +1,11 @@
 package com.cedricziel.idea.fluid.variables.provider;
 
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
 import java.util.List;
 
-public class AllVariableProviderTest extends LightCodeInsightFixtureTestCase {
+public class AllVariableProviderTest extends BasePlatformTestCase {
     public void testAllVariableIsInCompletion() {
         myFixture.configureByText(
             "foo.fluid",

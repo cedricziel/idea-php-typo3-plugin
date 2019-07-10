@@ -1,9 +1,9 @@
 package com.cedricziel.idea.typo3.index.php;
 
 import com.cedricziel.idea.typo3.util.ExtensionScannerUtil;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-public class MethodArgumentDroppedMatcherIndexTest extends LightCodeInsightFixtureTestCase {
+public class MethodArgumentDroppedMatcherIndexTest extends BasePlatformTestCase {
 
     @Override
     protected String getTestDataPath() {

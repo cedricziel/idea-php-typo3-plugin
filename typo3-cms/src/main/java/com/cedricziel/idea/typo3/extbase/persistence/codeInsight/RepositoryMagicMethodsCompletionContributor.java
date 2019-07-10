@@ -27,7 +27,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
 
     public static class ExtbaseRepositoryMagicMethodsCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+        protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
             if (!TYPO3CMSProjectSettings.getInstance(parameters.getPosition().getProject()).pluginEnabled) {
 
                 return;
@@ -81,7 +81,8 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
                             presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
                             presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
                             presentation.setIcon(PhpIcons.METHOD_ICON);
-                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+
+                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                             presentation.setTypeText(c.getName() + "[]|" + ExtbaseUtils.QUERY_RESULT_INTERFACE);
                         }
                     });
@@ -101,7 +102,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
                             presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
                             presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
                             presentation.setIcon(PhpIcons.METHOD_ICON);
-                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                             presentation.setTypeText("int");
                         }
                     });
@@ -121,7 +122,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
                             presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
                             presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
                             presentation.setIcon(PhpIcons.METHOD_ICON);
-                            presentation.setTailText("(" + f.getName() + " : " + f.getDeclaredType() + ")", true);
+                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                             presentation.setTypeText("null|" + c.getName());
                         }
                     });

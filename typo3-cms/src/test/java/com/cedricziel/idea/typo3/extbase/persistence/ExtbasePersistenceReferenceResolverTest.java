@@ -2,7 +2,7 @@ package com.cedricziel.idea.typo3.extbase.persistence;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
@@ -11,7 +11,7 @@ import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver;
 
 import java.util.Collection;
 
-public class ExtbasePersistenceReferenceResolverTest extends LightCodeInsightFixtureTestCase {
+public class ExtbasePersistenceReferenceResolverTest extends BasePlatformTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/extbase/persistence";

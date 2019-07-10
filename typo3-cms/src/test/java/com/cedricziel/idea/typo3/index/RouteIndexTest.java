@@ -1,9 +1,9 @@
 package com.cedricziel.idea.typo3.index;
 
 import com.cedricziel.idea.typo3.routing.RouteStub;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-public class RouteIndexTest extends LightCodeInsightFixtureTestCase {
+public class RouteIndexTest extends BasePlatformTestCase {
     @Override
     protected String getTestDataPath() {
         return "testData/com/cedricziel/idea/typo3/index/route";
