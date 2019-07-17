@@ -198,6 +198,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.extbase.EntityLineMarkerProvider"/>
         -->
+        <codeInsight.lineMarkerProvider language="PHP"
+                                        implementationClass="com.cedricziel.idea.typo3.codeInsight.IconLineMarkerProvider"/>
 
         <!-- goto handlers -->
         <gotoDeclarationHandler implementation="com.cedricziel.idea.typo3.codeInsight.navigation.PathResourceGotoDeclarationHandler"/>
@@ -254,6 +256,12 @@ It is a great inspiration for possible solutions and parts of the code.</p>
                          groupName="Code Migration"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.LegacyClassesForIDEInspection"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="DeprecatedIconUsageInspection" displayName="Deprecated icon usage"
+                         groupName="Code Migration"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.DeprecatedIconUsageInspection"/>
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>

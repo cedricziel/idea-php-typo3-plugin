@@ -9,19 +9,23 @@ import com.intellij.psi.ResolveResult;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.stream.Collectors;
+
 public class IconReference extends PsiPolyVariantReferenceBase<PsiElement> {
-    private final String iconName;
+    private final String iconIdentifier;
 
     public IconReference(StringLiteralExpression psiElement) {
         super(psiElement);
 
-        iconName = psiElement.getContents();
+        iconIdentifier = psiElement.getContents();
     }
 
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return PsiElementResolveResult.createResults(IconIndex.getIconDefinitionElements(myElement.getProject(), iconName));
+        return PsiElementResolveResult.createResults(
+            IconIndex.getIcon(myElement.getProject(), iconIdentifier).stream().map(IconStub::getElement).collect(Collectors.toList())
+        );
     }
 
     @NotNull

@@ -1,9 +1,9 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
 import com.cedricziel.idea.typo3.icons.IconStub;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Walks a psiFile recursively and parses the service definitions.
  */
-public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
+public class CoreIconParserVisitor extends PhpRecursiveElementVisitor {
 
     private Map<String, IconStub> map;
 
@@ -26,11 +26,16 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
-        if ((element instanceof ArrayCreationExpression)) {
-            visitIconDefinition((ArrayCreationExpression) element);
+    public void visitPhpField(Field field) {
+        // TYPO3 7 through 8 use icons, 9 uses dynamic icons and the "staticIcons" field
+        if (field.getName().equals("icons") || field.getName().equals("staticIcons")) {
+            ArrayCreationExpression arrayCreation = PsiTreeUtil.findChildOfType(field, ArrayCreationExpression.class);
+            if (arrayCreation != null) {
+                visitIconDefinition(arrayCreation);
+            }
         }
-        super.visitElement(element);
+
+        super.visitPhpField(field);
     }
 
     private void visitIconDefinition(ArrayCreationExpression element) {
