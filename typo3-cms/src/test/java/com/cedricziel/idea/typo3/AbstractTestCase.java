@@ -341,4 +341,15 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
             }
         }
     }
+
+    protected static void assertPsiElementHasReferenceOfType(PsiElement elementAtCaret, Class referenceClass) {
+        PsiReference[] references = elementAtCaret.getReferences();
+        for (PsiReference reference : references) {
+            if (referenceClass.isInstance(reference)) {
+                return;
+            }
+        }
+
+        fail("No ControllerActionReference found");
+    }
 }

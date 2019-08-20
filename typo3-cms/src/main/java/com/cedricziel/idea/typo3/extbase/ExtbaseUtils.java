@@ -82,6 +82,10 @@ public class ExtbaseUtils {
         return containingClass != null && containingClass.getPresentableFQN().equals(className);
     }
 
+    public static boolean isDirectingActionName(@NotNull String methodName) {
+        return methodName.equals("forward") || methodName.equals("redirect");
+    }
+
     private boolean isEntityClass(PsiElement psiElement) {
         PhpClass containingClass = ((PhpClassMember) psiElement).getContainingClass();
         if (containingClass == null) {

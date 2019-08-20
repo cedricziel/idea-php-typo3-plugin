@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase;
 
+import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
@@ -19,5 +20,11 @@ public class ExtbasePatterns {
                                 )
                         )
                 );
+    }
+
+    @NotNull
+    public static ElementPattern<StringLiteralExpression> configurePluginActionPattern() {
+        return PlatformPatterns.psiElement(StringLiteralExpression.class)
+            .withSuperParent(5, PlatformPatterns.psiElement(MethodReference.class));
     }
 }
