@@ -20,7 +20,7 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
 
                         StringLiteralExpression stringLiteralExpression = (StringLiteralExpression)element;
                         if (!stringLiteralExpression.getContents().startsWith("EXT:") && !stringLiteralExpression.getContents().startsWith("LLL:EXT:")) {
-                            return new PsiReference[0];
+                            return PsiReference.EMPTY_ARRAY;
                         }
 
                         return new PsiReference[]{new ResourceReference(stringLiteralExpression)};
@@ -38,7 +38,7 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
 
                         YAMLQuotedText yamlQuotedText = (YAMLQuotedText)element;
                         if (!yamlQuotedText.getTextValue().startsWith("EXT:") && !yamlQuotedText.getTextValue().startsWith("LLL:EXT:")) {
-                            return new PsiReference[0];
+                            return PsiReference.EMPTY_ARRAY;
                         }
 
                         return new PsiReference[]{new ResourceReference(yamlQuotedText)};

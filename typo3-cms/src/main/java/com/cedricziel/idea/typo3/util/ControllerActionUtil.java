@@ -1,8 +1,6 @@
 package com.cedricziel.idea.typo3.util;
 
 import com.cedricziel.idea.typo3.extbase.controller.ControllerActionLookupElement;
-import com.cedricziel.idea.typo3.extbase.controller.StubControllerAction;
-import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.cedricziel.idea.typo3.index.extbase.ControllerActionIndex;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -45,6 +43,6 @@ public class ControllerActionUtil {
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return elements.toArray(new PsiElement[elements.size()]);
+        return elements.toArray(new PsiElement[0]);
     }
 }

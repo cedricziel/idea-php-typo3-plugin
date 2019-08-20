@@ -14,12 +14,12 @@ public class TranslationReferenceContributor extends PsiReferenceContributor {
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                 if (!(element instanceof StringLiteralExpression)) {
-                    return new PsiReference[0];
+                    return PsiReference.EMPTY_ARRAY;
                 }
 
                 StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) element;
                 if (!stringLiteralExpression.getContents().startsWith("LLL:")) {
-                    return new PsiReference[0];
+                    return PsiReference.EMPTY_ARRAY;
                 }
 
                 return new PsiReference[]{new TranslationReference(stringLiteralExpression)};

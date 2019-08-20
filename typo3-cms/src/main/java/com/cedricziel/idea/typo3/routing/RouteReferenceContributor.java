@@ -19,7 +19,7 @@ public class RouteReferenceContributor extends PsiReferenceContributor {
                             return new PsiReference[]{new RouteReference((StringLiteralExpression) element)};
                         }
 
-                        return new PsiReference[0];
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );
