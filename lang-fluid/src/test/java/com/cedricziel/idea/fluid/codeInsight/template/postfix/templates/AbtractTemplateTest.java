@@ -1,6 +1,6 @@
 package com.cedricziel.idea.fluid.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.completion.CompletionAutoPopupTestCase;
+import com.cedricziel.idea.fluid.FluidCompletionAutoPopupTestCase;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.codeInsight.template.impl.LiveTemplateCompletionContributor;
@@ -10,7 +10,7 @@ import com.intellij.testFramework.EdtTestUtil;
 
 import java.util.HashMap;
 
-abstract public class AbtractTemplateTest extends CompletionAutoPopupTestCase {
+abstract public class AbtractTemplateTest extends FluidCompletionAutoPopupTestCase {
     @Override
     public void setUp() throws Exception {
 
