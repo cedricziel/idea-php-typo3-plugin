@@ -6,7 +6,7 @@ import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
-import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver;
+import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver2;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -14,9 +14,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver {
+@SuppressWarnings("UnstableApiUsage")
+public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver2 {
     @Override
-    public Collection<? extends PhpNamedElement> resolve(PhpReference phpReference) {
+    public Collection<? extends PhpNamedElement> resolve(PhpReference phpReference, Collection<? extends PhpNamedElement> candidates) {
         List<PhpNamedElement> elements = new ArrayList<>();
 
         if (!(phpReference instanceof MethodReference)) {
