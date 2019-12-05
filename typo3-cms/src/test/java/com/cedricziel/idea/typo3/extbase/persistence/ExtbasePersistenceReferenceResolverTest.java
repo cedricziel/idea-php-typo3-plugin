@@ -22,10 +22,26 @@ public class ExtbasePersistenceReferenceResolverTest extends BasePlatformTestCas
         myFixture.copyFileToProject("PersistenceMocks.php");
         myFixture.configureByFile("RepositoryMagicMethodNavigation.php");
 
-        PsiElement elementAtCaret = myFixture.getElementAtCaret();
+        int caretOffset = myFixture.getCaretOffset();
+        PsiElement elementAtCaret = myFixture.getFile().findElementAt(caretOffset).getParent();
 
-        assertInstanceOf(elementAtCaret, Field.class);
-        assertEquals("author", ((Field) elementAtCaret).getName());
+        assertInstanceOf(elementAtCaret, MethodReference.class);
+
+        for (PsiReference ref: elementAtCaret.getReferences()) {
+            if (ref instanceof PhpReference) {
+                for (PhpReferenceResolver2 resolver: PhpReferenceResolver2.EP_NAME.getExtensions()) {
+                    Collection<? extends PhpNamedElement> resolve = resolver.resolve((PhpReference) ref, Collections.emptyList());
+
+                    for (PhpNamedElement phpNamedElement: resolve) {
+                        if (phpNamedElement.getName().equals("author") && phpNamedElement instanceof Field) {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        fail("Could not resolve to correct object");
     }
 
     public void testCanNavigateToPropertiesFromMagicMethodsOnMembers() {
