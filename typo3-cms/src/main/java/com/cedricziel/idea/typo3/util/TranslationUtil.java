@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.util;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.TranslationIndex;
 import com.cedricziel.idea.typo3.translation.StubTranslation;
 import com.cedricziel.idea.typo3.translation.TranslationLookupElement;
@@ -170,7 +171,7 @@ public class TranslationUtil {
         return StringUtils.substringAfterLast(key, ":");
     }
 
-    public static String findPlaceholderTextFor(Project project, StubTranslation defaultTranslation) {
+    public static String findPlaceholderTextFor(@NotNull StubTranslation defaultTranslation) {
         PsiElement definitionElement = defaultTranslation.getPsiElement();
 
         if (definitionElement instanceof XmlTag) {
@@ -195,6 +196,43 @@ public class TranslationUtil {
                     return xmlTag.getValue().getTrimmedText();
                 }
             }
+        }
+
+        return null;
+    }
+
+    public static StubTranslation findDefaultTranslationFromVariants(Project project, List<StubTranslation> stubs) {
+        if (stubs.size() == 1) {
+            return stubs.iterator().next();
+        }
+
+        // Try to find the one with the selected favorite locale
+        String defaultLocale = (String) TYPO3CMSProjectSettings.getInstance(project).translationFavoriteLocale;
+        if (defaultLocale != null && !defaultLocale.isEmpty()) {
+            for (StubTranslation property : stubs) {
+                if (property.getLanguage().equals(defaultLocale)) {
+                    return property;
+                }
+            }
+        }
+
+        // if default locale is not matched, try to find the "default" locale
+        for (StubTranslation property : stubs) {
+            if (property.getLanguage().equals("default")) {
+                return property;
+            }
+        }
+
+        if (stubs.size() > 1) {
+            for (StubTranslation property : stubs) {
+                // TYPO3 CMS documentation suggests that every element has a mandatory english variant
+                if (property.getLanguage().equals("en")) {
+                    return property;
+                }
+            }
+
+            // default if no english element was found
+            return stubs.iterator().next();
         }
 
         return null;

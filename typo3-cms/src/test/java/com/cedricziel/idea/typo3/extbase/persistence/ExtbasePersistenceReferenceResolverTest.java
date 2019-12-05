@@ -7,9 +7,10 @@ import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
 import com.jetbrains.php.lang.psi.elements.PhpReference;
-import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver;
+import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver2;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class ExtbasePersistenceReferenceResolverTest extends BasePlatformTestCase {
     @Override
@@ -21,10 +22,26 @@ public class ExtbasePersistenceReferenceResolverTest extends BasePlatformTestCas
         myFixture.copyFileToProject("PersistenceMocks.php");
         myFixture.configureByFile("RepositoryMagicMethodNavigation.php");
 
-        PsiElement elementAtCaret = myFixture.getElementAtCaret();
+        int caretOffset = myFixture.getCaretOffset();
+        PsiElement elementAtCaret = myFixture.getFile().findElementAt(caretOffset).getParent();
 
-        assertInstanceOf(elementAtCaret, Field.class);
-        assertEquals("author", ((Field) elementAtCaret).getName());
+        assertInstanceOf(elementAtCaret, MethodReference.class);
+
+        for (PsiReference ref: elementAtCaret.getReferences()) {
+            if (ref instanceof PhpReference) {
+                for (PhpReferenceResolver2 resolver: PhpReferenceResolver2.EP_NAME.getExtensions()) {
+                    Collection<? extends PhpNamedElement> resolve = resolver.resolve((PhpReference) ref, Collections.emptyList());
+
+                    for (PhpNamedElement phpNamedElement: resolve) {
+                        if (phpNamedElement.getName().equals("author") && phpNamedElement instanceof Field) {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        fail("Could not resolve to correct object");
     }
 
     public void testCanNavigateToPropertiesFromMagicMethodsOnMembers() {
@@ -38,8 +55,8 @@ public class ExtbasePersistenceReferenceResolverTest extends BasePlatformTestCas
 
         for (PsiReference ref: elementAtCaret.getReferences()) {
             if (ref instanceof PhpReference) {
-                for (PhpReferenceResolver resolver: PhpReferenceResolver.EP_NAME.getExtensions()) {
-                    Collection<? extends PhpNamedElement> resolve = resolver.resolve((PhpReference) ref);
+                for (PhpReferenceResolver2 resolver: PhpReferenceResolver2.EP_NAME.getExtensions()) {
+                    Collection<? extends PhpNamedElement> resolve = resolver.resolve((PhpReference) ref, Collections.emptyList());
 
                     for (PhpNamedElement phpNamedElement: resolve) {
                         if (phpNamedElement.getName().equals("author") && phpNamedElement instanceof Field) {
