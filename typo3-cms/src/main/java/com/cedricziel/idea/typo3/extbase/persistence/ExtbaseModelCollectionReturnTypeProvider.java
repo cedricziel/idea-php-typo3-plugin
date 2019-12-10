@@ -10,7 +10,7 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,9 +21,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider3 {
-
-
+public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider4 {
     @Nullable
     private static PhpType inferTypeFromClassMember(PhpClassMember classMember) {
         if (classMember == null) {
@@ -79,6 +77,12 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
             return new PhpType().add("#" + this.getKey() + signature);
         }
 
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public PhpType complete(String s, Project project) {
         return null;
     }
 

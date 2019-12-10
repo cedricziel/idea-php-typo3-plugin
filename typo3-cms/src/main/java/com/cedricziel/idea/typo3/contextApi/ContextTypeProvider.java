@@ -11,7 +11,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class ContextTypeProvider implements PhpTypeProvider3 {
+public class ContextTypeProvider implements PhpTypeProvider4 {
     @Override
     public char getKey() {
         return '\u2636';
@@ -49,6 +49,12 @@ public class ContextTypeProvider implements PhpTypeProvider3 {
             }
         }
 
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public PhpType complete(String s, Project project) {
         return null;
     }
 

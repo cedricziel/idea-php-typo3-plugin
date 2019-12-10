@@ -3,13 +3,21 @@ package com.cedricziel.idea.typo3.provider;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
+import com.jetbrains.php.lang.psi.resolve.types.PhpType;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider3 {
+abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider4 {
+
+    @Nullable
+    @Override
+    public PhpType complete(String s, Project project) {
+        return null;
+    }
 
     public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
         int endIndex = expression.lastIndexOf("%");
