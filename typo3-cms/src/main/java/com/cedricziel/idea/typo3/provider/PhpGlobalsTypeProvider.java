@@ -11,7 +11,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider3;
+import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * TypeProvider for `$GLOBALS`
  */
-public class PhpGlobalsTypeProvider implements PhpTypeProvider3 {
+public class PhpGlobalsTypeProvider implements PhpTypeProvider4 {
 
     @Override
     public char getKey() {
@@ -64,6 +64,12 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider3 {
             default:
                 return null;
         }
+    }
+
+    @Nullable
+    @Override
+    public PhpType complete(String s, Project project) {
+        return null;
     }
 
     @Override
