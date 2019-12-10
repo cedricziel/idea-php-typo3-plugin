@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.extbase.ExtbaseUtils;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.ExtbaseUtility;
@@ -17,6 +18,10 @@ import java.util.Collection;
 public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver2 {
     @Override
     public Collection<? extends PhpNamedElement> resolve(PhpReference phpReference, Collection<? extends PhpNamedElement> candidates) {
+        if (!TYPO3CMSProjectSettings.isEnabled(phpReference)) {
+            return candidates;
+        }
+
         if (!(phpReference instanceof MethodReference)) {
             return candidates;
         }
