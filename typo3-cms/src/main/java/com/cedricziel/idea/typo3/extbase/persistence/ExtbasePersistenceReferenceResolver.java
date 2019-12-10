@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.extbase.ExtbaseUtils;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.ExtbaseUtility;
@@ -7,33 +8,35 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.PhpReferenceResolver2;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver2 {
     @Override
     public Collection<? extends PhpNamedElement> resolve(PhpReference phpReference, Collection<? extends PhpNamedElement> candidates) {
-        List<PhpNamedElement> elements = new ArrayList<>();
+        if (!TYPO3CMSProjectSettings.isEnabled(phpReference)) {
+            return candidates;
+        }
 
         if (!(phpReference instanceof MethodReference)) {
-            return Collections.emptyList();
+            return candidates;
         }
 
         String methodName = phpReference.getName();
         if (methodName == null || (!methodName.startsWith("countBy") && !methodName.startsWith("findOneBy") && !methodName.startsWith("findBy"))) {
-            return Collections.emptyList();
+            return candidates;
         }
 
         PhpTypedElement variable = PsiTreeUtil.findChildOfType(phpReference, PhpTypedElement.class);
         if (variable == null) {
-            return Collections.emptyList();
+            return candidates;
         }
 
+        Collection<PhpNamedElement> elements = new ArrayList<>();
         Collection<PhpClass> classesByFQN = new ArrayList<>();
 
         for (String s: variable.getType().getTypes()) {
@@ -41,7 +44,7 @@ public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver
         }
 
         if (classesByFQN.isEmpty()) {
-            return Collections.emptyList();
+            return candidates;
         }
 
         classesByFQN.forEach(repositoryClass -> {
@@ -81,6 +84,6 @@ public class ExtbasePersistenceReferenceResolver implements PhpReferenceResolver
             });
         });
 
-        return elements;
+        return (Collection<? extends PhpNamedElement>) CollectionUtils.union(candidates, elements);
     }
 }
