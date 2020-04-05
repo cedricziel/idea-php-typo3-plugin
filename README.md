@@ -1,6 +1,7 @@
 # TYPO3 Plugins for IntelliJ IDEA / PhpStorm
 
 [![Build Status](https://travis-ci.org/cedricziel/idea-php-typo3-plugin.svg?branch=master)](https://travis-ci.org/cedricziel/idea-php-typo3-plugin)
+[![Donate to this project using GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on-Github-green.svg)](https://github.com/sponsors/cedricziel)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/ziel)
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-red.svg)](https://www.patreon.com/cedricziel)
 
