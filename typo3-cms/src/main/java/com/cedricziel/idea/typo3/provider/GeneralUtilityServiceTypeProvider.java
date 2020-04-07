@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.provider;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.container.CoreServiceParser;
 import com.cedricziel.idea.typo3.domain.TYPO3ServiceDefinition;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
@@ -32,7 +33,7 @@ public class GeneralUtilityServiceTypeProvider extends AbstractServiceLocatorTyp
     @Nullable
     @Override
     public PhpType getType(PsiElement psiElement) {
-        if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
+        if (DumbService.getInstance(psiElement.getProject()).isDumb() || !TYPO3CMSProjectSettings.isEnabled(psiElement)) {
             return null;
         }
 
