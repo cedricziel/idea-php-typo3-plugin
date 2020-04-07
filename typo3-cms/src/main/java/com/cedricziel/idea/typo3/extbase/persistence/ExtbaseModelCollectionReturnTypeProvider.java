@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extbase.persistence;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
@@ -63,7 +64,7 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
     @Nullable
     @Override
     public PhpType getType(PsiElement psiElement) {
-        if (DumbService.getInstance(psiElement.getProject()).isDumb()) {
+        if (DumbService.getInstance(psiElement.getProject()).isDumb() || !TYPO3CMSProjectSettings.isEnabled(psiElement)) {
             return null;
         }
 

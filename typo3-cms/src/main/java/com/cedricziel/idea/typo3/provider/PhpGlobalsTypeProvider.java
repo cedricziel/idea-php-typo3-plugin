@@ -1,5 +1,7 @@
 package com.cedricziel.idea.typo3.provider;
 
+import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -30,6 +32,10 @@ public class PhpGlobalsTypeProvider implements PhpTypeProvider4 {
     @Nullable
     @Override
     public PhpType getType(PsiElement psiElement) {
+        if (DumbService.getInstance(psiElement.getProject()).isDumb() || !TYPO3CMSProjectSettings.isEnabled(psiElement)) {
+            return null;
+        }
+
         // $GLOBALS['TYPO3_DB']
         if (!(psiElement instanceof ArrayAccessExpression)) {
             return null;
