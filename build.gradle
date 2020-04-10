@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.16"
+    id "org.jetbrains.intellij" version "0.4.18"
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}"
     id 'com.palantir.git-version' version "0.11.0"
 }
