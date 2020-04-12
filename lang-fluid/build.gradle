@@ -1,18 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-
-        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
-    }
-
-    dependencies {
-        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:${grammarKitPluginVersion}"
-    }
-}
-
 import org.jetbrains.grammarkit.tasks.GenerateLexer
 import org.jetbrains.grammarkit.tasks.GenerateParser
 

@@ -12,11 +12,14 @@ import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
+import com.jetbrains.php.lang.psi.elements.PhpReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -340,5 +343,40 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
                 }
             }
         }
+    }
+
+    public void assertPhpReferenceSignatureContains(LanguageFileType languageFileType, String configureByText, String typeSignature) {
+        PsiElement psiElement = assertGetPhpReference(languageFileType, configureByText);
+        assertTrue(((PhpReference) psiElement).getSignature().contains(typeSignature));
+    }
+
+    @NotNull
+    private PsiElement assertGetPhpReference(LanguageFileType languageFileType, String configureByText) {
+        myFixture.configureByText(languageFileType, configureByText);
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        psiElement = PsiTreeUtil.getParentOfType(psiElement, PhpReference.class);
+        if (psiElement == null) {
+            fail("Element is not PhpReference.");
+        }
+
+        return psiElement;
+    }
+
+    public void assertPhpReferenceResolveTo(LanguageFileType languageFileType, String configureByText, ElementPattern<?> pattern) {
+        myFixture.configureByText(languageFileType, configureByText);
+        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+
+        psiElement = PsiTreeUtil.getParentOfType(psiElement, PhpReference.class);
+        if (psiElement == null) {
+            fail("Element is not PhpReference.");
+        }
+
+        PsiElement resolve = ((PhpReference) psiElement).resolve();
+        if(!pattern.accepts(resolve)) {
+            fail(String.format("failed pattern matches element of '%s'", resolve == null ? "null" : resolve.toString()));
+        }
+
+        assertTrue(pattern.accepts(resolve));
     }
 }

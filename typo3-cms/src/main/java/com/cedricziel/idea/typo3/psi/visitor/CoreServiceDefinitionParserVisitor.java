@@ -1,15 +1,14 @@
 package com.cedricziel.idea.typo3.psi.visitor;
 
 import com.cedricziel.idea.typo3.domain.TYPO3ServiceDefinition;
-import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.patterns.PhpPatterns;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,8 +23,8 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
     }
 
     @Override
-    public void visitElement(PsiElement element) {
-        if ((element instanceof MethodReference) && PhpElementsUtil.isMethodWithFirstStringOrFieldReference(element, "addService")) {
+    public void visitElement(@NotNull PsiElement element) {
+        if (element instanceof MethodReference) {
             visitServiceCreation(element);
         }
         super.visitElement(element);
@@ -34,13 +33,13 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
     private void visitServiceCreation(PsiElement element) {
         MethodReference methodReference = (MethodReference) element;
         // A service definition should contain at least 4 arguments
-        if (methodReference.getParameters().length < 4) {
+        if (methodReference.getName() == null || !methodReference.getName().equals("addService") || methodReference.getParameters().length < 4) {
             return;
         }
 
         PsiElement extensionNameParam = methodReference.getParameters()[0]; // Extension name
         PsiElement serviceNameParam = methodReference.getParameters()[1]; // Service name
-        PsiElement classNameParam = methodReference.getParameters()[2]; // Implementing Class (may be short name)
+        // PsiElement serviceKeyParam = methodReference.getParameters()[2]; // Implementing Class (may be short name)
         PsiElement optionsArrayParam = methodReference.getParameters()[3]; // Array parameters
 
         String serviceId;
@@ -60,22 +59,13 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
 
         TYPO3ServiceDefinition serviceDefinition = new TYPO3ServiceDefinition(serviceId);
         serviceDefinition.setExtensionName(extensionNameParam.getText());
-        if (classNameParam instanceof ClassConstantReference) {
-            PhpExpression classReference = ((ClassConstantReference) classNameParam).getClassReference();
-            if (classReference instanceof PhpReference) {
-                serviceDefinition.setClass(((PhpReference) classReference).getFQN());
 
-                PhpReference ref = (PhpReference) classReference;
-                serviceDefinition.setSignature(ref.getSignature());
-            }
-
-            if (optionsArrayParam instanceof ArrayCreationExpression) {
-                ArrayCreationExpression arrayExpression = (ArrayCreationExpression) optionsArrayParam;
-                mapOptionsArrayParam(serviceDefinition, arrayExpression.getHashElements());
-            }
-
-            serviceMap.add(serviceDefinition);
+        if (optionsArrayParam instanceof ArrayCreationExpression) {
+            ArrayCreationExpression arrayExpression = (ArrayCreationExpression) optionsArrayParam;
+            mapOptionsArrayParam(serviceDefinition, arrayExpression.getHashElements());
         }
+
+        serviceMap.add(serviceDefinition);
 
         map.put(serviceId, serviceMap);
     }
@@ -87,6 +77,22 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
             }
 
             String key = ((StringLiteralExpression) element.getKey()).getContents();
+            if (null != element.getValue() && element.getValue() instanceof ClassConstantReference) {
+                ClassConstantReference value = (ClassConstantReference) element.getValue();
+                switch (key) {
+                    case "className":
+                        PhpExpression classReference = value.getClassReference();
+                        if (classReference instanceof PhpReference) {
+                            PhpReference ref = (PhpReference) classReference;
+                            serviceDefinition.setClass(ref.getFQN());
+                            serviceDefinition.setClassName(ref.getFQN());
+                            serviceDefinition.setSignature(ref.getSignature());
+                        }
+
+                        break;
+                }
+            }
+
             // Assign string properties of the service definition options
             if (null != element.getValue() && element.getValue() instanceof StringLiteralExpression) {
                 String value = ((StringLiteralExpression) element.getValue()).getContents();
@@ -106,6 +112,10 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
                     case "exec":
                         serviceDefinition.setExec(value);
                         break;
+                    case "className":
+                        serviceDefinition.setClassName(value);
+                        serviceDefinition.setClass(value);
+                        break;
                 }
             }
 
@@ -121,5 +131,9 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
                 }
             }
         }
+    }
+
+    public Map<? extends String, ? extends ArrayList<TYPO3ServiceDefinition>> getServiceMap() {
+        return map;
     }
 }

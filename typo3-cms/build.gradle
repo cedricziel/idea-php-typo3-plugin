@@ -36,3 +36,11 @@ sourceSets {
         }
     }
 }
+
+test {
+    if (ideaVersion.contains("201.") || ideaVersion.contains("2020")) {
+        exclude '**/TranslationFoldingBuilderTest_193.class'
+    } else if (ideaVersion.contains("193.") || ideaVersion.contains("2019")) {
+        exclude '**/TranslationFoldingBuilderTest.class'
+    }
+}

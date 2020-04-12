@@ -9,14 +9,11 @@ buildscript {
         maven { url 'https://jitpack.io' }
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
     }
-
-    dependencies {
-        classpath "com.github.JetBrains:gradle-grammar-kit-plugin:${grammarKitPluginVersion}"
-    }
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.14"
+    id "org.jetbrains.intellij" version "0.4.18"
+    id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}"
     id 'com.palantir.git-version' version "0.11.0"
 }
 
@@ -89,7 +86,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion '4.8'
+    gradleVersion '6.2'
 }
 
 test.testLogging.exceptionFormat = TestExceptionFormat.FULL

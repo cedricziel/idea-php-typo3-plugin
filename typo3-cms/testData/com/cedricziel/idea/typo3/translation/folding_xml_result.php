@@ -1,3 +1,3 @@
 <?php
 
-echo "<fold text='...'>LLL:EXT:foo/Resources/Private/Language/locallang.xml:mylabel</fold>";
+echo "<fold text='English'>LLL:EXT:foo/Resources/Private/Language/locallang.xml:mylabel</fold>";

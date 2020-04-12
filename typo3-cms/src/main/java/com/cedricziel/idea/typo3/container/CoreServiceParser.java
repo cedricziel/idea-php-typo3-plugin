@@ -37,7 +37,10 @@ public class CoreServiceParser {
         for (VirtualFile projectFile : containingFiles) {
             PsiFile psiFile = PsiManager.getInstance(project).findFile(projectFile);
             if (psiFile != null) {
-                psiFile.accept(new CoreServiceDefinitionParserVisitor(serviceMap));
+                CoreServiceDefinitionParserVisitor visitor = new CoreServiceDefinitionParserVisitor(serviceMap);
+                psiFile.accept(visitor);
+
+                serviceMap.putAll(visitor.getServiceMap());
             }
         }
     }

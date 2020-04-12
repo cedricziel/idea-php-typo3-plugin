@@ -3,7 +3,10 @@
 namespace TYPO3\CMS\Core\Imaging {
     class IconFactory
     {
+        public function getIcon($icon)
+        {
 
+        }
     }
 }
 
