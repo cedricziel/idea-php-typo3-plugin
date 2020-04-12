@@ -76,7 +76,7 @@ public class TranslationFoldingBuilderTest_193 extends AbstractTestCase {
 
         myFixture.configureByFile("folding_nondefault_xlf_test.php");
 
-        myFixture.testFolding(getTestDataPath() + "/folding_nondefault_xlf_result.php");
+        myFixture.testFolding(getTestDataPath() + "/folding_nondefault_xlf_result_193.php");
     }
 
     public void testXLFTranslationsAreNotFoldedWhenPluginIsDisabled() {
