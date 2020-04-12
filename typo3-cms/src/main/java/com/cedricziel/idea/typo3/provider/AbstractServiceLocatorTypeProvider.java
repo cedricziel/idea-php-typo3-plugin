@@ -13,6 +13,8 @@ import java.util.Set;
 
 abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider4 {
 
+    public static final char TRIM_KEY = '%';
+
     @Nullable
     @Override
     public PhpType complete(String s, Project project) {
