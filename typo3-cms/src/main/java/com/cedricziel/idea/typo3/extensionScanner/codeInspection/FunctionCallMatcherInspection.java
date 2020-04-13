@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3.extensionScanner.codeInspection;
 
 import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
+import com.cedricziel.idea.typo3.util.DeprecationUtility;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
@@ -42,9 +43,8 @@ public class FunctionCallMatcherInspection extends PluginEnabledPhpInspection {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpFunctionCall(FunctionReference reference) {
-                Set<String> constants = getRemovedGlobalFuntions(reference);
-                if (constants.contains(reference.getFQN())) {
-                    problemsHolder.registerProblem(reference, "Global function removed with TYPO3 9, consider using an alternative");
+                if (DeprecationUtility.isDeprecated(problemsHolder.getProject(), reference)) {
+                    problemsHolder.registerProblem(reference, "Global function scheduled for removal in upcoming TYPO3 version, consider using an alternative");
                 }
 
                 super.visitPhpFunctionCall(reference);
@@ -52,29 +52,5 @@ public class FunctionCallMatcherInspection extends PluginEnabledPhpInspection {
         };
     }
 
-    private Set<String> getRemovedGlobalFuntions(PhpPsiElement element) {
-        Set<PsiElement> elements = new HashSet<>();
-        PsiFile[] constantMatcherFiles = FilenameIndex.getFilesByName(element.getProject(), "FunctionCallMatcher.php", GlobalSearchScope.allScope(element.getProject()));
-        for (PsiFile file : constantMatcherFiles) {
 
-            Collections.addAll(
-                elements,
-                PsiTreeUtil.collectElements(file, el -> PlatformPatterns
-                    .psiElement(StringLiteralExpression.class)
-                    .withParent(
-                        PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
-                            .withAncestor(
-                                4,
-                                PlatformPatterns.psiElement(PhpElementTypes.RETURN)
-                            )
-                    )
-                    .accepts(el)
-                )
-            );
-        }
-
-        return elements.stream()
-            .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
-            .collect(Collectors.toSet());
-    }
 }

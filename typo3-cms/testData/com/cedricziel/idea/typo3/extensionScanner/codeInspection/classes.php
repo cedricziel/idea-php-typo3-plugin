@@ -1,6 +1,8 @@
 <?php
 namespace {
     define('TYPO3_ERROR_DLOG', 'foo');
+
+    function debugEnd() {}
 }
 
 namespace TYPO3\CMS\Backend\Template {

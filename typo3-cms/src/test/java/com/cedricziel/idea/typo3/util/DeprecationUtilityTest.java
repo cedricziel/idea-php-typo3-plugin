@@ -61,4 +61,22 @@ public class DeprecationUtilityTest extends AbstractTestCase {
                 myFixture.getProject()).contains("\\BAR")
         );
     }
+
+    public void testDeprecatedFunctionCallsCanBeFound() {
+        myFixture.copyFileToProject("FunctionCallMatcher.php", "foo/FunctionCallMatcher.php");
+        myFixture.copyFileToProject("FunctionCallMatcher2.php", "bar/FunctionCallMatcher.php");
+
+        assertTrue(
+            DeprecationUtility.getDeprecatedGlobalFunctionCalls(
+                myFixture.getProject()).contains("\\debugEnd")
+        );
+        assertTrue(
+            DeprecationUtility.getDeprecatedGlobalFunctionCalls(
+                myFixture.getProject()).contains("\\debug")
+        );
+        assertFalse(
+            DeprecationUtility.getDeprecatedGlobalFunctionCalls(
+                myFixture.getProject()).contains("\\file_get_contents")
+        );
+    }
 }

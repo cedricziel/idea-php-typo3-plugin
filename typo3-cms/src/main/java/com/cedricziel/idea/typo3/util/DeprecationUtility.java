@@ -9,9 +9,7 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
-import com.jetbrains.php.lang.psi.elements.ClassConstantReference;
-import com.jetbrains.php.lang.psi.elements.ConstantReference;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.ClassConstImpl;
 import com.jetbrains.php.lang.psi.elements.impl.PhpDefineImpl;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +24,7 @@ public class DeprecationUtility {
     private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASS_CONSTANTS = new Key<>("TYPO3_DEPRECATED_CLASS_CONSTANTS");
     private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASSES = new Key<>("TYPO3_DEPRECATED_CLASSES");
     private static final Key<CachedValue<Collection<String>>> DEPRECATED_CONSTANTS = new Key<>("TYPO3_DEPRECATED_CONSTANTS");
+    private static final Key<CachedValue<Collection<String>>> DEPRECATED_FUNCTION_CALLS = new Key<>("TYPO3_DEPRECATED_FUNCTION_CALLS");
 
     public static boolean isDeprecated(@NotNull Project project, @NotNull ClassConstantReference constantReference) {
 
@@ -136,6 +135,50 @@ public class DeprecationUtility {
     }
 
     private static Set<String> getDeprecatedConstantNamesFromFile(PsiFile file) {
+        PsiElement[] elements = PsiTreeUtil.collectElements(file, el -> PlatformPatterns
+            .psiElement(StringLiteralExpression.class)
+            .withParent(
+                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
+                    .withAncestor(
+                        4,
+                        PlatformPatterns.psiElement(PhpElementTypes.RETURN)
+                    )
+            )
+            .accepts(el)
+        );
+
+        return Arrays.stream(elements)
+            .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
+            .collect(Collectors.toSet());
+    }
+
+    public static boolean isDeprecated(@NotNull Project project, @NotNull FunctionReference functionReference) {
+        Function definition = (Function) functionReference.resolve();
+        if (definition == null) {
+            return false;
+        }
+
+        String fqn = definition.getFQN();
+        return getDeprecatedGlobalFunctionCalls(project).contains(fqn);
+    }
+
+    public static Set<String> getDeprecatedGlobalFunctionCalls(@NotNull Project project) {
+        Set<String> functionCallNames = new HashSet<>();
+        PsiFile[] constantMatcherFiles = FilenameIndex.getFilesByName(project, "FunctionCallMatcher.php", GlobalSearchScope.allScope(project));
+        for (PsiFile file : constantMatcherFiles) {
+
+            functionCallNames.addAll(CachedValuesManager.getManager(project).getCachedValue(
+                file,
+                DEPRECATED_FUNCTION_CALLS,
+                () -> CachedValueProvider.Result.create(getDeprecatedGlobalFunctionCallsFromFile(file), PsiModificationTracker.MODIFICATION_COUNT),
+                false
+            ));
+        }
+
+        return functionCallNames;
+    }
+
+    private static Set<String> getDeprecatedGlobalFunctionCallsFromFile(PsiFile file) {
         PsiElement[] elements = PsiTreeUtil.collectElements(file, el -> PlatformPatterns
             .psiElement(StringLiteralExpression.class)
             .withParent(
