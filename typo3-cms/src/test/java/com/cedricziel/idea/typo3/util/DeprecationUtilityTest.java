@@ -25,4 +25,22 @@ public class DeprecationUtilityTest extends AbstractTestCase {
                 myFixture.getProject()).contains("\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate.GOOD_CATCH")
         );
     }
+
+    public void testDeprecatedClassNamesCanBeFound() {
+        myFixture.copyFileToProject("ClassNameMatcher.php", "foo/ClassNameMatcher.php");
+        myFixture.copyFileToProject("ClassNameMatcher2.php", "bar/ClassNameMatcher.php");
+
+        assertTrue(
+            DeprecationUtility.getDeprecatedClassNames(
+                myFixture.getProject()).contains("\\RemoveXSS")
+        );
+        assertTrue(
+            DeprecationUtility.getDeprecatedClassNames(
+                myFixture.getProject()).contains("\\TYPO3\\CMS\\Backend\\Console\\CliRequestHandler")
+        );
+        assertFalse(
+            DeprecationUtility.getDeprecatedClassNames(
+                myFixture.getProject()).contains("\\App\\Apple")
+        );
+    }
 }
