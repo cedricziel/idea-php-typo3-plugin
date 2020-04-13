@@ -1,5 +1,7 @@
 package com.cedricziel.idea.typo3.extensionScanner.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
+import com.cedricziel.idea.typo3.util.DeprecationUtility;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
@@ -9,7 +11,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FunctionCallMatcherInspection extends PhpInspection {
+public class FunctionCallMatcherInspection extends PluginEnabledPhpInspection {
     @Nls
     @NotNull
     @Override
@@ -38,47 +39,18 @@ public class FunctionCallMatcherInspection extends PhpInspection {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
-            public void visitPhpElement(PhpPsiElement element) {
-
-                if (!PlatformPatterns.psiElement(PhpElementTypes.FUNCTION_CALL).accepts(element)) {
-                    return;
+            public void visitPhpFunctionCall(FunctionReference reference) {
+                if (DeprecationUtility.isDeprecated(problemsHolder.getProject(), reference)) {
+                    problemsHolder.registerProblem(reference, "Global function scheduled for removal in upcoming TYPO3 version, consider using an alternative");
                 }
 
-                Set<String> constants = getRemovedGlobalFuntions(element);
-                FunctionReference constantReference = (FunctionReference) element;
-                if (constants.contains(constantReference.getFQN())) {
-                    problemsHolder.registerProblem(element, "Global function removed with TYPO3 9, consider using an alternative");
-                }
+                super.visitPhpFunctionCall(reference);
             }
         };
     }
 
-    private Set<String> getRemovedGlobalFuntions(PhpPsiElement element) {
-        Set<PsiElement> elements = new HashSet<>();
-        PsiFile[] constantMatcherFiles = FilenameIndex.getFilesByName(element.getProject(), "FunctionCallMatcher.php", GlobalSearchScope.allScope(element.getProject()));
-        for (PsiFile file : constantMatcherFiles) {
 
-            Collections.addAll(
-                    elements,
-                    PsiTreeUtil.collectElements(file, el -> PlatformPatterns
-                            .psiElement(StringLiteralExpression.class)
-                            .withParent(
-                                    PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
-                                            .withAncestor(
-                                                    4,
-                                                    PlatformPatterns.psiElement(PhpElementTypes.RETURN)
-                                            )
-                            )
-                            .accepts(el)
-                    )
-            );
-        }
-
-        return elements.stream()
-                .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
-                .collect(Collectors.toSet());
-    }
 }

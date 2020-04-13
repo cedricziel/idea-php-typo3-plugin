@@ -1,12 +1,10 @@
 package com.cedricziel.idea.typo3.codeInspection;
 
-import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.TableUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
-import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
@@ -17,7 +15,7 @@ import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFro
 import static com.cedricziel.idea.typo3.util.TCAUtil.arrayIndexIsTCATableNameField;
 import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
-public class MissingTableInspection extends PhpInspection {
+public class MissingTableInspection extends PluginEnabledPhpInspection {
     @Nls
     @NotNull
     @Override
@@ -37,12 +35,7 @@ public class MissingTableInspection extends PhpInspection {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
-        if (!TYPO3CMSProjectSettings.getInstance(problemsHolder.getProject()).pluginEnabled) {
-            return new PhpElementVisitor() {
-            };
-        }
-
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpElement(PhpPsiElement element) {
