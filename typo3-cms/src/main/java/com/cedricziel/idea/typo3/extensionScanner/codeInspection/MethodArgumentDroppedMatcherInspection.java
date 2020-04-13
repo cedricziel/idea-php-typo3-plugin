@@ -41,7 +41,7 @@ public class MethodArgumentDroppedMatcherInspection extends PluginEnabledPhpInsp
                         int maximumNumberOfArguments = ExtensionScannerUtil.getMaximumNumberOfArguments(reference.getProject(), compiledClassMethodKey);
 
                         if (parameterList != null && maximumNumberOfArguments != -1 && parameterList.getParameters().length != maximumNumberOfArguments) {
-                            problemsHolder.registerProblem(reference, "Number of arguments changed with TYPO3 9, consider refactoring");
+                            problemsHolder.registerProblem(reference, "Number of arguments changes with upcoming TYPO3 version, consider refactoring");
                         }
                     }
                 }
