@@ -11,6 +11,7 @@ import com.intellij.psi.util.*;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.ClassConstantReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.impl.ClassConstImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -22,8 +23,15 @@ import java.util.stream.Collectors;
 public class DeprecationUtility {
     private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASS_CONSTANTS = new Key<>("TYPO3_DEPRECATED_CLASS_CONSTANTS");
 
-    public static boolean isDeprecated(Project project, ClassConstantReference constantReference) {
-        return getDeprecatedClassConstants(project).contains(constantReference.getText());
+    public static boolean isDeprecated(@NotNull Project project, @NotNull ClassConstantReference constantReference) {
+
+        ClassConstImpl classConst = (ClassConstImpl) constantReference.resolve();
+        if (classConst == null) {
+            return false;
+        }
+
+        String fqn = classConst.getFQN();
+        return getDeprecatedClassConstants(project).contains(fqn);
     }
 
     public static Set<String> getDeprecatedClassConstants(@NotNull Project project) {
@@ -56,6 +64,8 @@ public class DeprecationUtility {
 
         return Arrays.stream(elements)
             .map(stringLiteral -> ((StringLiteralExpression) stringLiteral).getContents())
+            .map(s -> "\\" + s)
+            .map(s -> s.replace("::", "."))
             .collect(Collectors.toSet());
     }
 }

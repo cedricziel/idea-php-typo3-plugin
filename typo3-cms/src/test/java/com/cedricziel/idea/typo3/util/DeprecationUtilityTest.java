@@ -14,15 +14,15 @@ public class DeprecationUtilityTest extends AbstractTestCase {
 
         assertTrue(
             DeprecationUtility.getDeprecatedClassConstants(
-                myFixture.getProject()).contains("TYPO3\\CMS\\Backend\\Template\\DocumentTemplate::STATUS_ICON_ERROR")
+                myFixture.getProject()).contains("\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate.STATUS_ICON_ERROR")
         );
         assertTrue(
             DeprecationUtility.getDeprecatedClassConstants(
-                myFixture.getProject()).contains("TYPO3\\CMS\\Backend\\Template\\DocumentTemplate::STATUS_ICON_OK")
+                myFixture.getProject()).contains("\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate.STATUS_ICON_OK")
         );
         assertFalse(
             DeprecationUtility.getDeprecatedClassConstants(
-                myFixture.getProject()).contains("TYPO3\\CMS\\Backend\\Template\\DocumentTemplate::GOOD_CATCH")
+                myFixture.getProject()).contains("\\TYPO3\\CMS\\Backend\\Template\\DocumentTemplate.GOOD_CATCH")
         );
     }
 }
