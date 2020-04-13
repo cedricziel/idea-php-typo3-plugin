@@ -43,4 +43,22 @@ public class DeprecationUtilityTest extends AbstractTestCase {
                 myFixture.getProject()).contains("\\App\\Apple")
         );
     }
+
+    public void testDeprecatedConstantsCanBeFound() {
+        myFixture.copyFileToProject("ConstantMatcher.php", "foo/ConstantMatcher.php");
+        myFixture.copyFileToProject("ConstantMatcher2.php", "bar/ConstantMatcher.php");
+
+        assertTrue(
+            DeprecationUtility.getDeprecatedConstantNames(
+                myFixture.getProject()).contains("\\TYPO3_DLOG")
+        );
+        assertTrue(
+            DeprecationUtility.getDeprecatedConstantNames(
+                myFixture.getProject()).contains("\\TYPO3_user_agent")
+        );
+        assertFalse(
+            DeprecationUtility.getDeprecatedConstantNames(
+                myFixture.getProject()).contains("\\BAR")
+        );
+    }
 }

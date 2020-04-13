@@ -1,3 +1,5 @@
 <?php
 
-<warning descr="Deprecated class constant">\TYPO3\CMS\Backend\Template\DocumentTemplate::STATUS_ICON_OK</warning>;
+if (<warning descr="Constant scheduled for removal in upcoming TYPO3 version, consider using an alternative">TYPO3_ERROR_DLOG</warning>) {
+    echo "foo";
+}

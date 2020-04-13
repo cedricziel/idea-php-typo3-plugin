@@ -15,6 +15,6 @@ public class ClassConstantMatcherInspectionTest extends AbstractTestCase {
         myFixture.copyFileToProject("ClassConstantMatcher.php", "foo/ClassConstantMatcher.php");
         myFixture.copyFileToProject("ClassConstantMatcher2.php", "bar/ClassConstantMatcher.php");
 
-        myFixture.testHighlighting("deprecated_constant_usage.php");
+        myFixture.testHighlighting("deprecated_class_constant_usage.php");
     }
 }

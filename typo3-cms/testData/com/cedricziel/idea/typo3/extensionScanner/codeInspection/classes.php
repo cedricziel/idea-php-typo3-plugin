@@ -1,4 +1,7 @@
 <?php
+namespace {
+    define('TYPO3_ERROR_DLOG', 'foo');
+}
 
 namespace TYPO3\CMS\Backend\Template {
     class DocumentTemplate {

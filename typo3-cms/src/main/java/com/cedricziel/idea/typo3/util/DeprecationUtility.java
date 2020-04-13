@@ -10,17 +10,22 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.ClassConstantReference;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.ConstantReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.elements.impl.ClassConstImpl;
+import com.jetbrains.php.lang.psi.elements.impl.PhpDefineImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DeprecationUtility {
     private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASS_CONSTANTS = new Key<>("TYPO3_DEPRECATED_CLASS_CONSTANTS");
-    private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASSES = new Key<>("TYPO3_DEPRECATED_CLASSESS");
+    private static final Key<CachedValue<Collection<String>>> DEPRECATED_CLASSES = new Key<>("TYPO3_DEPRECATED_CLASSES");
+    private static final Key<CachedValue<Collection<String>>> DEPRECATED_CONSTANTS = new Key<>("TYPO3_DEPRECATED_CONSTANTS");
 
     public static boolean isDeprecated(@NotNull Project project, @NotNull ClassConstantReference constantReference) {
 
@@ -31,6 +36,17 @@ public class DeprecationUtility {
 
         String fqn = classConst.getFQN();
         return getDeprecatedClassConstants(project).contains(fqn);
+    }
+
+    public static boolean isDeprecated(@NotNull Project project, @NotNull ConstantReference constantReference) {
+
+        PhpDefineImpl definition = (PhpDefineImpl) constantReference.resolve();
+        if (definition == null) {
+            return false;
+        }
+
+        String fqn = definition.getFQN();
+        return getDeprecatedConstantNames(project).contains(fqn);
     }
 
     public static Set<String> getDeprecatedClassConstants(@NotNull Project project) {
@@ -95,6 +111,42 @@ public class DeprecationUtility {
                     )
             )
             .accepts(el));
+
+        return Arrays.stream(elements)
+            .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
+            .collect(Collectors.toSet());
+    }
+
+    public static Set<String> getDeprecatedConstantNames(@NotNull Project project) {
+        Set<String> deprecatedConstants = new HashSet<>();
+
+        PsiFile[] constantMatcherFiles = FilenameIndex.getFilesByName(project, "ConstantMatcher.php", GlobalSearchScope.allScope(project));
+        for (PsiFile file : constantMatcherFiles) {
+
+            deprecatedConstants.addAll(CachedValuesManager.getManager(project).getCachedValue(
+                file,
+                DEPRECATED_CONSTANTS,
+                () -> CachedValueProvider.Result.create(getDeprecatedConstantNamesFromFile(file), PsiModificationTracker.MODIFICATION_COUNT),
+                false
+            ));
+
+        }
+
+        return deprecatedConstants;
+    }
+
+    private static Set<String> getDeprecatedConstantNamesFromFile(PsiFile file) {
+        PsiElement[] elements = PsiTreeUtil.collectElements(file, el -> PlatformPatterns
+            .psiElement(StringLiteralExpression.class)
+            .withParent(
+                PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
+                    .withAncestor(
+                        4,
+                        PlatformPatterns.psiElement(PhpElementTypes.RETURN)
+                    )
+            )
+            .accepts(el)
+        );
 
         return Arrays.stream(elements)
             .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
