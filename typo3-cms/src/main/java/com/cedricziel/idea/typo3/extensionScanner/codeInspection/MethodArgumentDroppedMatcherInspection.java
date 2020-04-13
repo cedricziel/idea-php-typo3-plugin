@@ -1,11 +1,11 @@
 package com.cedricziel.idea.typo3.extensionScanner.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
 import com.cedricziel.idea.typo3.util.ExtensionScannerUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElementVisitor;
-import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
@@ -16,7 +16,7 @@ import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class MethodArgumentDroppedMatcherInspection extends PhpInspection {
+public class MethodArgumentDroppedMatcherInspection extends PluginEnabledPhpInspection {
     @Nls
     @NotNull
     @Override
@@ -31,7 +31,7 @@ public class MethodArgumentDroppedMatcherInspection extends PhpInspection {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpElement(PhpPsiElement element) {

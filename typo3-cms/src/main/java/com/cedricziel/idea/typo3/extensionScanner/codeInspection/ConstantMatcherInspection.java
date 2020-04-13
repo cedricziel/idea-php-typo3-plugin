@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.extensionScanner.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
@@ -9,7 +10,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.ConstantReference;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ConstantMatcherInspection extends PhpInspection {
+public class ConstantMatcherInspection extends PluginEnabledPhpInspection {
     @Nls
     @NotNull
     @Override
@@ -38,7 +38,7 @@ public class ConstantMatcherInspection extends PhpInspection {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpElement(PhpPsiElement element) {
@@ -62,23 +62,23 @@ public class ConstantMatcherInspection extends PhpInspection {
         for (PsiFile file : constantMatcherFiles) {
 
             Collections.addAll(
-                    elements,
-                    PsiTreeUtil.collectElements(file, el -> PlatformPatterns
-                            .psiElement(StringLiteralExpression.class)
-                            .withParent(
-                                    PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
-                                            .withAncestor(
-                                                    4,
-                                                    PlatformPatterns.psiElement(PhpElementTypes.RETURN)
-                                            )
+                elements,
+                PsiTreeUtil.collectElements(file, el -> PlatformPatterns
+                    .psiElement(StringLiteralExpression.class)
+                    .withParent(
+                        PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY)
+                            .withAncestor(
+                                4,
+                                PlatformPatterns.psiElement(PhpElementTypes.RETURN)
                             )
-                            .accepts(el)
                     )
+                    .accepts(el)
+                )
             );
         }
 
         return elements.stream()
-                .map(stringLiteral -> "\\" + ((StringLiteralExpression)stringLiteral).getContents())
-                .collect(Collectors.toSet());
+            .map(stringLiteral -> "\\" + ((StringLiteralExpression) stringLiteral).getContents())
+            .collect(Collectors.toSet());
     }
 }
