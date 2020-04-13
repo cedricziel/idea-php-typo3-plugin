@@ -12,7 +12,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.elements.ConstantReference;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
@@ -41,17 +40,13 @@ public class ConstantMatcherInspection extends PluginEnabledPhpInspection {
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
-            public void visitPhpElement(PhpPsiElement element) {
-
-                if (!PlatformPatterns.psiElement(PhpElementTypes.CONSTANT_REF).accepts(element)) {
-                    return;
+            public void visitPhpConstantReference(ConstantReference reference) {
+                Set<String> constants = getRemovedConstantsFQNs(reference);
+                if (constants.contains(reference.getFQN())) {
+                    problemsHolder.registerProblem(reference, "Constant removed with TYPO3 9, consider using an alternative");
                 }
 
-                ConstantReference constantReference = (ConstantReference) element;
-                Set<String> constants = getRemovedConstantsFQNs(constantReference);
-                if (constants.contains(constantReference.getFQN())) {
-                    problemsHolder.registerProblem(element, "Constant removed with TYPO3 9, consider using an alternative");
-                }
+                super.visitPhpConstantReference(reference);
             }
         };
     }
