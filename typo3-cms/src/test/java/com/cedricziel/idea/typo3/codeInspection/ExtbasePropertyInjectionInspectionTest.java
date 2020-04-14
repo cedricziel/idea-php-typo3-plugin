@@ -13,7 +13,7 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
     }
 
     public void testExtbasePropertyInjectionIsMarked() {
-        myFixture.enableInspections(ExtbasePropertyInjectionInspection.class);
+        myFixture.enableInspections(new ExtbasePropertyInjectionInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("ExtbasePropertyInjectionInspectionIsMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
@@ -22,7 +22,7 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
     }
 
     public void testExtbasePropertyInjectionIsMarkedAndCanBeFixed() {
-        myFixture.enableInspections(ExtbasePropertyInjectionInspection.class);
+        myFixture.enableInspections(new ExtbasePropertyInjectionInspection());
         List<IntentionAction> allQuickFixes = myFixture.getAllQuickFixes("ExtbasePropertyInjectionInspectionIsMarkedAndCanBeFixed.php");
         for (IntentionAction action : allQuickFixes) {
             myFixture.launchAction(action);
@@ -33,7 +33,7 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
     public void testExtbasePropertyInjectionIsNotMarkedWhenPluginIsDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(ExtbasePropertyInjectionInspection.class);
+        myFixture.enableInspections(new ExtbasePropertyInjectionInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("ExtbasePropertyInjectionInspectionIsNotMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);

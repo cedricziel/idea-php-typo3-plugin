@@ -10,7 +10,7 @@ public class MissingColumnTypeInspectionTest extends AbstractTestCase {
     }
 
     public void testMissingColumnTypeIsMarked() {
-        myFixture.enableInspections(MissingColumnTypeInspection.class);
+        myFixture.enableInspections(new MissingColumnTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeInspectionIsMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
@@ -21,7 +21,7 @@ public class MissingColumnTypeInspectionTest extends AbstractTestCase {
     public void testMissingColumnTypeIsNotMarkedWhenPluginDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(MissingColumnTypeInspection.class);
+        myFixture.enableInspections(new MissingColumnTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeInspectionIsNotMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
@@ -30,7 +30,7 @@ public class MissingColumnTypeInspectionTest extends AbstractTestCase {
     }
 
     public void testColumnTypeSlugIsNotAvailableForV8() {
-        myFixture.enableInspections(MissingColumnTypeInspection.class);
+        myFixture.enableInspections(new MissingColumnTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeSlugIsMarkedOnV8.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
@@ -39,7 +39,7 @@ public class MissingColumnTypeInspectionTest extends AbstractTestCase {
     }
 
     public void testColumnTypeSlugIsAvailableForV9() {
-        myFixture.enableInspections(MissingColumnTypeInspection.class);
+        myFixture.enableInspections(new MissingColumnTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingColumnTypeSlugIsNotMarkedOnV9.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);

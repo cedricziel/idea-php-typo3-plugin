@@ -10,7 +10,7 @@ public class MissingRenderTypeInspectionTest extends AbstractTestCase {
     }
 
     public void testMissingRenderTypeIsMarked() {
-        myFixture.enableInspections(MissingRenderTypeInspection.class);
+        myFixture.enableInspections(new MissingRenderTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingRenderTypeInspectionIsMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
@@ -21,7 +21,7 @@ public class MissingRenderTypeInspectionTest extends AbstractTestCase {
     public void testMissingRenderTypeIsNotMarkedWhenPluginDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(MissingRenderTypeInspection.class);
+        myFixture.enableInspections(new MissingRenderTypeInspection());
 
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingRenderTypeInspectionIsNotMarked.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);

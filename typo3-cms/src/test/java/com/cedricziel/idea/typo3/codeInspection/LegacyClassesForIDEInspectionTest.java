@@ -14,7 +14,7 @@ public class LegacyClassesForIDEInspectionTest extends AbstractTestCase {
     public void testLegacyClassUsagesAreNotMarkedWhenPluginDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(LegacyClassesForIDEInspection.class);
+        myFixture.enableInspections(new LegacyClassesForIDEInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("LegacyClassesForIDE_classes.php");
@@ -26,7 +26,7 @@ public class LegacyClassesForIDEInspectionTest extends AbstractTestCase {
     }
 
     public void testLegacyClassUsagesAreMarkedAndCanBeFixed() {
-        myFixture.enableInspections(LegacyClassesForIDEInspection.class);
+        myFixture.enableInspections(new LegacyClassesForIDEInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("LegacyClassesForIDE_classes.php");
