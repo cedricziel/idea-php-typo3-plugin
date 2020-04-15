@@ -22,4 +22,33 @@ public class ObjectManagerTypeProviderTest extends AbstractTestCase {
             PlatformPatterns.psiElement(Method.class).withName("tree")
         );
     }
+
+    public void testIssue305() {
+        myFixture.copyFileToProject("classes.php");
+
+        assertPhpReferenceResolveTo(PhpFileType.INSTANCE,
+            "<?php\n" +
+                "/** @var $objectManager \\TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface */\n" +
+                "$dataMapper = $objectManager->get(\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Mapper\\DataMapper::class);\n" +
+                "$dataMapper->ma<caret>p();",
+            PlatformPatterns.psiElement(Method.class).withName("map")
+        );
+    }
+
+    public void testIssue305_class() {
+        myFixture.copyFileToProject("classes.php");
+
+        assertPhpReferenceResolveTo(PhpFileType.INSTANCE,
+            "<?php\n" +
+                "class Foo {\n" +
+                "  /** @var \\TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface */" +
+                "  protected $objectManager;\n" +
+                "  public function foo() {\n" +
+                "    $dataMapper = $this->objectManager->get(\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Mapper\\DataMapper::class);\n" +
+                "    $dataMapper->ma<caret>p();" +
+                "  }\n" +
+                "}",
+            PlatformPatterns.psiElement(Method.class).withName("map")
+        );
+    }
 }

@@ -26,6 +26,14 @@ namespace TYPO3\CMS\Core\Utility {
     }
 }
 
+namespace TYPO3\CMS\Extbase\Persistence\Generic\Mapper {
+    class DataMapper {
+        public function map()
+        {
+        }
+    }
+}
+
 namespace TYPO3\CMS\Extbase\Object {
     interface ObjectManagerInterface extends \TYPO3\CMS\Core\SingletonInterface
     {
