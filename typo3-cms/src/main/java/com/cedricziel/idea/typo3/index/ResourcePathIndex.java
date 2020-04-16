@@ -63,23 +63,11 @@ public class ResourcePathIndex extends ScalarIndexExtension<String> {
     }
 
     public static boolean projectContainsResourceDirectory(@NotNull Project project, @NotNull String resourceId) {
-        Set<String> keys = new HashSet<>();
-        keys.add(StringUtils.strip(resourceId, "/"));
+        String interpolatedKey = StringUtils.strip(resourceId, "/") + "/";
 
-        Set<VirtualFile> matches = new HashSet<>();
-
-        FileBasedIndex.getInstance().getFilesWithKey(ResourcePathIndex.KEY, keys, file -> {
-            if (file.isDirectory()) {
-
-                matches.add(file);
-
-                return false;
-            }
-
-            return true;
-        }, GlobalSearchScope.allScope(project));
-
-        return matches.size() > 0;
+        return FileBasedIndex.getInstance().getAllKeys(ResourcePathIndex.KEY, project)
+            .parallelStream()
+            .anyMatch(x -> x.startsWith(interpolatedKey));
     }
 
     public static PsiElement[] findElementsForKey(@NotNull Project project, @NotNull String identifier) {

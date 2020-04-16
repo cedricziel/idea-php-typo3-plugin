@@ -9,9 +9,14 @@ public class ResourcePathIndexTest extends BasePlatformTestCase {
     public void testResourcesAreIndexed() {
         myFixture.addFileToProject("typo3conf/ext/foo/bar.php", "");
         myFixture.addFileToProject("typo3/sysext/baz/bar.png", "");
+        myFixture.addFileToProject("typo3/sysext/baz/bingo/bar.png", "");
 
         assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "EXT:foo/bar.php"));
         assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "EXT:baz/bar.png"));
+
+        assertTrue(ResourcePathIndex.projectContainsResourceDirectory(myFixture.getProject(), "EXT:baz/bingo"));
+        assertTrue(ResourcePathIndex.projectContainsResourceDirectory(myFixture.getProject(), "EXT:baz/bingo/"));
+        assertTrue(ResourcePathIndex.projectContainsResourceFile(myFixture.getProject(), "EXT:baz/bingo/bar.png"));
     }
 
     public void testInstallerNameUnconventionalResourcePathsAreDetected() {
