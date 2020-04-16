@@ -142,9 +142,6 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
 
-        <!-- extbase persistence -->
-        <referenceResolver2 implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbasePersistenceReferenceResolver"/>
-
         <typeProvider4 implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbaseModelCollectionReturnTypeProvider"/>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.contextApi.ContextTypeProvider"/>
     </extensions>
@@ -256,6 +253,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
 
         <lang.inspectionSuppressor language="PHP"
                                    implementationClass="com.cedricziel.idea.typo3.codeInspection.UnusedActionControllerMethodInspectionSuppressor"/>
+
+        <lang.inspectionSuppressor language="PHP"
+                                   implementationClass="com.cedricziel.idea.typo3.codeInspection.ExtbaseRepositoryMethodsInspectionSuppressor"/>
 
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.icons.IconReferenceContributor"/>
         <psi.referenceContributor implementation="com.cedricziel.idea.typo3.routing.RouteReferenceContributor"/>

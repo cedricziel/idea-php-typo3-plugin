@@ -92,6 +92,16 @@ namespace TYPO3\CMS\Extbase\Mvc\Controller {
     }
 }
 
+namespace TYPO3\CMS\Extbase\Persistence {
+    interface RepositoryInterface {}
+
+    class Repository implements RepositoryInterface {
+        public function __call($methodName, $arguments)
+        {
+        }
+    }
+}
+
 namespace App {
     class Apple {
         public function tree() : ?Tree
