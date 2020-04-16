@@ -166,9 +166,17 @@ public class FluidUtil {
     public static Collection<FluidFile> findTemplatesForControllerAction(Method method) {
         List<FluidFile> fluidFiles = new ArrayList<>();
 
+        if (!method.getName().endsWith("Action") && !method.getName().equals("Action")) {
+            return fluidFiles;
+        }
+
         String fileName = method.getName().substring(0, 1).toUpperCase() + method.getName().substring(1, method.getName().length() - "Action".length());
         PhpClass containingClass = method.getContainingClass();
         if (containingClass == null) {
+            return fluidFiles;
+        }
+
+        if (!containingClass.getName().endsWith("Controller") && !containingClass.getName().equals("Controller")) {
             return fluidFiles;
         }
 
