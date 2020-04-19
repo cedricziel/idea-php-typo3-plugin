@@ -98,6 +98,10 @@ public class TranslationIndexTest extends AbstractTranslationTest {
         }
     }
 
+    public void testIssue285NullPointerIsAvoided() {
+        myFixture.copyFileToProject("locallang_be.xlf", "typo3conf/ext/news/Resources/Private/Language/locallang_be.xlf");
+    }
+
     private void assertTranslationStubExistsInList(List<StubTranslation> stubsById, String left, String middle, String right) {
         for (StubTranslation stubTranslation : stubsById) {
             if (stubTranslation.getLanguage().equals(left)) {

@@ -125,10 +125,13 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         return new ArrayList<>(stubSet);
     }
 
-    private static String[] compileIds(VirtualFile file, String extensionKeyFromFile, String id) {
+    private static String[] compileIds(VirtualFile file, String extensionKeyFromFile, String id) throws Exception {
         String languageKey = extractLanguageKeyFromFile(file);
 
         VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(file);
+        if (extensionRootFolder == null) {
+            throw new Exception("Extension root folder could not be extracted for file " + file.getPath());
+        }
 
         String path = file.getPath();
         String filePosition = extensionKeyFromFile + path.split(extensionRootFolder.getPath())[1];
@@ -284,7 +287,14 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                 languageKeyToUse = targetValue;
             }
 
-            for (String calculatedId : compileIds(file, extensionKeyFromFile, id)) {
+            String[] compileIds;
+            try {
+                compileIds = compileIds(file, extensionKeyFromFile, id);
+            } catch (Exception e) {
+                return;
+            }
+
+            for (String calculatedId : compileIds) {
                 if (result.containsKey(calculatedId)) {
                     result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyToUse, tag, id));
                 } else {
