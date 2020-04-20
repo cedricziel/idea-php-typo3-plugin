@@ -41,6 +41,17 @@ public class RouteIndexTest extends BasePlatformTestCase {
         assertRouteStubEquals("web_list", null, "\\TYPO3\\CMS\\Recordlist\\RecordList", "mainAction", "user,group");
     }
 
+    public void testIssue288AjaxRoutesAreIndexed() {
+        myFixture.copyFileToProject("AjaxRoutes.php", "typo3conf/ext/foo/Configuration/Backend/AjaxRoutes.php");
+
+        assertRouteExists("ajax_core_requirejs");
+
+        myFixture.configureByFile("ajax_route_usage.php");
+        myFixture.checkHighlighting();
+
+        assertRouteStubEquals("ajax_core_requirejs","/core/requirejs", "\\TYPO3\\CMS\\Core\\Controller\\RequireJsController", "retrieveConfiguration", "public" );
+    }
+
     private void assertRouteStubEquals(String name, String path, String controllerClass, String action, String access) {
         RouteStub stub = RouteIndex.getRoute(myFixture.getProject(), name).iterator().next();
 
