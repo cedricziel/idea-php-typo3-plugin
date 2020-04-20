@@ -23,6 +23,7 @@ import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -125,10 +126,13 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         return new ArrayList<>(stubSet);
     }
 
-    private static String[] compileIds(VirtualFile file, String extensionKeyFromFile, String id) {
+    private static String[] compileIds(VirtualFile file, String extensionKeyFromFile, String id) throws FileNotFoundException {
         String languageKey = extractLanguageKeyFromFile(file);
 
         VirtualFile extensionRootFolder = FilesystemUtil.findExtensionRootFolder(file);
+        if (extensionRootFolder == null) {
+            throw new FileNotFoundException("Extension root folder could not be extracted for file " + file.getPath());
+        }
 
         String path = file.getPath();
         String filePosition = extensionKeyFromFile + path.split(extensionRootFolder.getPath())[1];
@@ -284,7 +288,14 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                 languageKeyToUse = targetValue;
             }
 
-            for (String calculatedId : compileIds(file, extensionKeyFromFile, id)) {
+            String[] compileIds;
+            try {
+                compileIds = compileIds(file, extensionKeyFromFile, id);
+            } catch (FileNotFoundException e) {
+                return;
+            }
+
+            for (String calculatedId : compileIds) {
                 if (result.containsKey(calculatedId)) {
                     result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyToUse, tag, id));
                 } else {
@@ -319,7 +330,15 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         @Override
         void extractTranslationStub(@NotNull XmlTag tag) {
             String id = tag.getAttributeValue("index");
-            for (String calculatedId : compileIds(file, extensionKeyFromFile, id)) {
+
+            String[] compiledIds;
+            try {
+                compiledIds = compileIds(file, extensionKeyFromFile, id);
+            } catch (FileNotFoundException e) {
+                return;
+            }
+
+            for (String calculatedId : compiledIds) {
                 XmlTag languageKeyTag = (XmlTag) PsiTreeUtil.findFirstParent(tag, t -> PlatformPatterns.psiElement(XmlElementType.XML_TAG).withName("languageKey").accepts(t));
                 if (languageKeyTag != null && languageKeyTag.getAttributeValue("index") != null) {
                     if (result.containsKey(calculatedId)) {
