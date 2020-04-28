@@ -7,13 +7,11 @@ import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
-import com.intellij.codeInspection.*;
 import com.intellij.lang.LanguageAnnotators;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.util.Pair;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -42,39 +40,6 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
 
     protected void disablePlugin() {
         TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = false;
-    }
-
-    private Pair<List<ProblemDescriptor>, Integer> getLocalInspectionsAtCaret(@NotNull String filename, @NotNull String content) {
-
-        PsiElement psiFile = myFixture.configureByText(filename, content);
-
-        int caretOffset = myFixture.getCaretOffset();
-        if (caretOffset <= 0) {
-            fail("Please provide <caret> tag");
-        }
-
-        ProblemsHolder problemsHolder = new ProblemsHolder(InspectionManager.getInstance(getProject()), psiFile.getContainingFile(), false);
-
-        for (LocalInspectionEP localInspectionEP : LocalInspectionEP.LOCAL_INSPECTION.getExtensions()) {
-            Object object = localInspectionEP.getInstance();
-            if (!(object instanceof LocalInspectionTool)) {
-                continue;
-            }
-
-            final PsiElementVisitor psiElementVisitor = ((LocalInspectionTool) object).buildVisitor(problemsHolder, false);
-
-            psiFile.acceptChildren(new PsiRecursiveElementVisitor() {
-                @Override
-                public void visitElement(PsiElement element) {
-                    psiElementVisitor.visitElement(element);
-                    super.visitElement(element);
-                }
-            });
-
-            psiElementVisitor.visitFile(psiFile.getContainingFile());
-        }
-
-        return Pair.create(problemsHolder.getResults(), caretOffset);
     }
 
     public void assertAnnotationContains(String filename, String content, String contains) {

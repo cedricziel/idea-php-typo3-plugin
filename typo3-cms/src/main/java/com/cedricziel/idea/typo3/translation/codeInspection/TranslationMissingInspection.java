@@ -1,23 +1,31 @@
 package com.cedricziel.idea.typo3.translation.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
-import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class TranslationMissingInspection extends LocalInspectionTool {
+public class TranslationMissingInspection extends PluginEnabledPhpInspection {
 
     public static final String MESSAGE = "Missing translation key";
 
+    @Nls(capitalization = Nls.Capitalization.Sentence)
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+    public String getDisplayName() {
+        return "Translation missing";
+    }
+
+    @NotNull
+    @Override
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
                 if (expression == null || expression.getParent() instanceof ConcatenationExpression) {
