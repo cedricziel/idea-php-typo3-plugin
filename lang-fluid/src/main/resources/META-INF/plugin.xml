@@ -1,11 +1,18 @@
 <idea-plugin>
     <id>com.cedricziel.idea.fluid</id>
-    <name>TYPO3 Fluid FOSS Plugin</name>
+    <name>TYPO3 Fluid FOSS Support</name>
     <vendor email="mail@cedric-ziel.com" url="https://github.com/cedricziel/idea-php-typo3-plugin">Cedric Ziel</vendor>
 
     <description><![CDATA[
-    Support for the TYPO3 Fluid Templating Language
+<h1>TYPO3 Fluid FOSS Support</h1>
+
+<p>This text is replaced with the contents of resources/META-INF/description.html</p>
     ]]></description>
+
+    <change-notes><![CDATA[
+<p>This text is replaced with the contents of resources/META-INF/change-notes.html</p>
+    ]]>
+    </change-notes>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.xml</depends>

@@ -1,128 +1,17 @@
 <idea-plugin url="https://github.com/cedricziel/idea-php-typo3-plugin">
     <id>com.cedricziel.idea.typo3</id>
-    <name>TYPO3 CMS Plugin</name>
+    <name>TYPO3 CMS Support</name>
     <version>0.2.47</version>
     <vendor email="cedric@cedric-ziel.com" url="https://www.cedric-ziel.com">Cedric Ziel</vendor>
 
     <description><![CDATA[
 <h1>TYPO3 CMS Plugin</h1>
 
-<a href="https://github.com/cedricziel/idea-php-typo3-plugin">GitHub Repository</a>
-<br/>
-
-<strong>beta quality</strong>
-
-<br/>
-
-<h2>Features:</h2>
-
-<br/>
-
-<h3>Autocompletion enhancements</h3>
-
-<p>
-  The plugin reads the local project and tries to parse out usage of well-known APIs
-  and provides you with autocompletion on points it knows for example possible parameter names.
-</p>
-
-<ul>
-  <li>Autocompletion for calls to IconFactory::getIcon with available Icons and preview</li>
-  <li>Line marker for Icon-Api usages with jump-to-definition and preview</li>
-  <li>TypeProvider for `$GLOBALS['TYPO3_DB']`, `$GLOBALS['TSFE']` and `$GLOBALS['BE_USER']`</li>
-  <li>Line marker for extbase entities</li>
-</ul>
-
-<br/>
-
-<h3>Service Locator & Extbase Dependency Injection Container</h3>
-
-<p>
-  The plugin provides you with greater code stability, since the return types of
-  instance creations are inferred, giving you stable auto-completion and insight
-  into the written code.
-</p>
-
-<ul>
-  <li>infer return type of GeneralUtility::makeInstance() calls without meta file</li>
-  <li>infer return type of GeneralUtility::makeInstanceService() calls without meta file</li>
-  <li>infer return type of ObjectManager::get() calls without meta file</li>
-</ul>
-
-<h3>Routing</h3>
-
-<br/>
-
-<h4>Backend</h4>
-
-<br/>
-
-<p>
-  The plugin parses the available route names in the core and extensions. More precisely
-  it parses the `Configuration/Backend/(Ajax)Routes.php` files.
-</p>
-
-<ul>
-  <li>completion for backend route names on BackendUtility::getAjaxUrl()</li>
-  <li>completion for backend route names on UriBuilder::buildUriFromRoute()</li>
-  <li>annotations for both valid and invalid route references</li>
-  <li>line marker to allow quick navigation to the route definition</li>
-</ul>
-
-<br/>
-
-<h3>TCA</h3>
-<ul>
-  <li>completion for built-in TCA render types</li>
-  <li>completion for built-in TCA column types</li>
-</ul>
-
-<br/>
-
-<h3>Code inspections</h3>
-
-<br/>
-
-<ul>
-  <li>Extbase property injection (@inject) performance inspection</li>
-  <li>TCA renderTypes (+ inspections)</li>
-  <li>TCA column types (+ inspections)</li>
-</ul>
-
-<br/>
-
-<h3>Code generation</h3>
-
-<br/>
-
-<ul>
-  <li>Extbase ActionController</li>
-  <li>Extbase ActionController action</li>
-  <li>Extbase Entity class</li>
-  <li>Fluid ViewHelper</li>
-  <li>Fluid Styled Content Element (experimental)</li>
-</ul>
-
-<br/>
-
-<h2>Credits</h2>
-<p>Thank you to <a href="https://github.com/Haehnchen">Daniel Espendiller</a> and <a href="https://github.com/adrienbrault">Adrien Brault</a>
-for providing their <a href="https://github.com/Haehnchen/idea-php-symfony2-plugin">Symfony2 Plugin</a> in the first place.
-It is a great inspiration for possible solutions and parts of the code.</p>
-
-
-<h2><a href="https://github.com/cedricziel/idea-php-typo3-plugin/graphs/contributors">Contributors</a></h2>
-<ul>
-    <li><a href="https://github.com/cedricziel">Cedric Ziel</a></li>
-    <li><a href="https://github.com/cedricziel/idea-php-typo3-plugin/graphs/contributors">GitHub Contributors</a></li>
-</ul>
+<p>This text is replaced with the contents of resources/META-INF/description.html</p>
     ]]></description>
 
     <change-notes><![CDATA[
-
-<ul>
-  <li>Fix error with incomplete methods in TypeProvider</li>
-</ul>
-
+<p>This text is replaced with the contents of resources/META-INF/change-notes.html</p>
     ]]>
     </change-notes>
 
