@@ -32,7 +32,7 @@ before_install:
 script:
 - |
   if [[ ${SINCE_BUILD} == "193" ]]; then
-    sed '136d' typo3-cms/src/main/resources/META-INF/plugin.xml
+    sed -i '136d' typo3-cms/src/main/resources/META-INF/plugin.xml
   fi
 
 - "./gradlew check"
