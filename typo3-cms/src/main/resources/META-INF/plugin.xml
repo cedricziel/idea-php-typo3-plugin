@@ -133,6 +133,8 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.xml</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.css</depends>
+    <depends>JavaScript</depends>
     <depends optional="true" config-file="fluid-support.xml">com.cedricziel.idea.fluid</depends>
     <depends optional="true" config-file="typoscript-support.xml">com.cedricziel.idea.typoscript</depends>
 
@@ -290,6 +292,9 @@ It is a great inspiration for possible solutions and parts of the code.</p>
         <!-- FlexForms -->
         <completion.contributor language="XML"
                                 implementationClass="com.cedricziel.idea.typo3.flexform.FlexFormCompletionContributionProvider"/>
+
+        <!-- Language Injections -->
+        <languageInjector implementation="com.cedricziel.idea.typo3.languageInjection.CssInjector"/>
     </extensions>
 
     <actions>

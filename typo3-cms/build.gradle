@@ -9,6 +9,7 @@ intellij {
         'coverage',
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
+        'JavaScriptLanguage',
         'properties',
         'yaml',
         "PsiViewer:${psiViewerPluginVersion}",
