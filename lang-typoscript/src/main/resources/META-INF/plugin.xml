@@ -1,17 +1,18 @@
 <idea-plugin>
     <id>com.cedricziel.idea.typoscript</id>
-    <name>TypoScript FOSS Plugin</name>
+    <name>TypoScript FOSS Support</name>
     <vendor email="cedric@cedric-ziel.com" url="https://github.com/cedricziel/idea-php-typo3-plugin">Cedric Ziel</vendor>
 
     <description><![CDATA[
-    TypoScript Language support
+<h1>TypoScript FOSS Support</h1>
+
+<p>This text is replaced with the contents of resources/META-INF/description.html</p>
     ]]></description>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
+    <change-notes><![CDATA[
+<p>This text is replaced with the contents of resources/META-INF/change-notes.html</p>
+    ]]>
+    </change-notes>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.cedricziel.idea.typoscript.lang.TypoScriptFileTypeFactory"/>

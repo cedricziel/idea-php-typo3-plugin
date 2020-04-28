@@ -1,34 +1,33 @@
 package com.cedricziel.idea.typo3.translation.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
 import com.cedricziel.idea.typo3.util.TranslationUtil;
-import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class TranslationMissingInspection extends LocalInspectionTool {
+public class TranslationMissingInspection extends PluginEnabledPhpInspection {
 
     public static final String MESSAGE = "Missing translation key";
 
+    @Nls(capitalization = Nls.Capitalization.Sentence)
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
-        return new PsiElementVisitor() {
-            @Override
-            public void visitElement(PsiElement element) {
-                if (element instanceof StringLiteralExpression) {
-                    visitPhpStringLiteralExpression((StringLiteralExpression) element);
-                }
+    public String getDisplayName() {
+        return "Translation missing";
+    }
 
-                super.visitElement(element);
-            }
-
-            private void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
+    @NotNull
+    @Override
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+        return new PhpElementVisitor() {
+            public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
                 if (expression == null || expression.getParent() instanceof ConcatenationExpression) {
                     return;
                 }
@@ -46,7 +45,7 @@ public class TranslationMissingInspection extends LocalInspectionTool {
                     }
 
                     // new CreateMissingTranslationQuickFix(contents)
-                    problemsHolder.registerProblem(expression, MESSAGE, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+                    problemsHolder.registerProblem(expression, MESSAGE, ProblemHighlightType.WEAK_WARNING);
                 }
             }
         };

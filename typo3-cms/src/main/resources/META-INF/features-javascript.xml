@@ -1,0 +1,6 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Language Injections -->
+        <languageInjector implementation="com.cedricziel.idea.typo3.languageInjection.JavaScriptInjector"/>
+    </extensions>
+</idea-plugin>
