@@ -1,2 +1,2 @@
 <?php
-<weak_warning descr="Unresolved translation - this may occur if you defined the translation key only in TypoScript"><weak_warning descr="Unresolved translation - this may occur if you defined the translation key only in TypoScript">"</weak_warning><weak_warning descr="Unresolved translation - this may occur if you defined the translation key only in TypoScript">LLL:EXT:foo/sample.xlf:sys_language.language_isocode.abc</weak_warning><weak_warning descr="Unresolved translation - this may occur if you defined the translation key only in TypoScript">"</weak_warning></weak_warning>;
+<weak_warning descr="Missing translation key">"LLL:EXT:foo/sample.xlf:sys_language.language_isocode.abc"</weak_warning>;

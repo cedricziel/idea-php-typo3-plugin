@@ -77,8 +77,6 @@
         <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.resources.annotation.PathResourceAnnotator"/>
         <annotator language="yaml" implementationClass="com.cedricziel.idea.typo3.resources.annotation.PathResourceAnnotator"/>
 
-        <annotator language="PHP" implementationClass="com.cedricziel.idea.typo3.translation.annotation.TranslationAnnotator"/>
-
         <!-- marker -->
         <codeInsight.lineMarkerProvider language="PHP"
                                         implementationClass="com.cedricziel.idea.typo3.codeInsight.RouteLineMarkerProvider"/>
