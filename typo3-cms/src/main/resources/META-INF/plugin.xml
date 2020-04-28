@@ -133,6 +133,7 @@ It is a great inspiration for possible solutions and parts of the code.</p>
     <depends>com.jetbrains.php</depends>
     <depends>com.intellij.modules.xml</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.platform.images</depends>
     <depends>com.intellij.css</depends>
     <depends>JavaScript</depends>
     <depends optional="true" config-file="fluid-support.xml">com.cedricziel.idea.fluid</depends>

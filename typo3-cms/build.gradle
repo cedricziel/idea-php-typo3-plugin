@@ -1,21 +1,27 @@
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
 
+def requiredPlugins = [
+    'java',
+    'java-i18n',
+    'coverage',
+    "com.jetbrains.php:${phpPluginVersion}",
+    'CSS',
+    'JavaScriptLanguage',
+    'properties',
+    'yaml',
+    "PsiViewer:${psiViewerPluginVersion}",
+    project(':lang-fluid'),
+    project(':lang-typoscript'),
+]
+
+if (ideaVersion.contains("201.") || ideaVersion.contains("2020")) {
+    requiredPlugins.add('platform-images')
+}
+
 intellij {
     version ideaVersion
     pluginName 'TYPO3 CMS Support'
-    plugins = [
-        'java',
-        'java-i18n',
-        'coverage',
-        "com.jetbrains.php:${phpPluginVersion}",
-        'CSS',
-        'JavaScriptLanguage',
-        'properties',
-        'yaml',
-        "PsiViewer:${psiViewerPluginVersion}",
-        project(':lang-fluid'),
-        project(':lang-typoscript'),
-    ]
+    plugins = requiredPlugins
 }
 
 patchPluginXml {

@@ -14,7 +14,6 @@ import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -78,22 +77,6 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         return Pair.create(problemsHolder.getResults(), caretOffset);
     }
 
-    public void assertLocalInspectionContains(String filename, String content, String contains) {
-        Set<String> matches = new HashSet<>();
-
-        Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
-        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
-            TextRange textRange = result.getPsiElement().getTextRange();
-            if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().equals(contains)) {
-                return;
-            }
-
-            matches.add(result.toString());
-        }
-
-        fail(String.format("Fail matches '%s' with one of %s", contains, matches));
-    }
-
     public void assertAnnotationContains(String filename, String content, String contains) {
         List<String> matches = new ArrayList<>();
         for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
@@ -104,17 +87,6 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         }
 
         fail(String.format("Fail matches '%s' with one of %s", contains, matches));
-    }
-
-    public void assertLocalInspectionNotContains(String filename, String content, String contains) {
-        Pair<List<ProblemDescriptor>, Integer> localInspectionsAtCaret = getLocalInspectionsAtCaret(filename, content);
-
-        for (ProblemDescriptor result : localInspectionsAtCaret.getFirst()) {
-            TextRange textRange = result.getPsiElement().getTextRange();
-            if (textRange.contains(localInspectionsAtCaret.getSecond()) && result.toString().contains(contains)) {
-                fail(String.format("Fail inspection not contains '%s'", contains));
-            }
-        }
     }
 
     public void assertAnnotationNotContains(String filename, String content, String contains) {
