@@ -2,6 +2,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Language Injections -->
         <languageInjector implementation="com.cedricziel.idea.typo3.languageInjection.JavaScriptInjector"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingModulePHPInspection" displayName="Missing JavaScript module"
+                         groupName="JavaScript"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.javaScript.codeInspection.MissingModulePHPInspection"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <moduleReferenceContributor implementation="com.cedricziel.idea.typo3.javaScript.ModuleProvider"/>

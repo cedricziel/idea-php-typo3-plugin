@@ -5,6 +5,7 @@ import com.intellij.lang.javascript.frameworks.modules.JSResolvableModuleReferen
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult;
 import com.intellij.lang.javascript.psi.resolve.JSResolveUtil;
 import com.intellij.lang.javascript.psi.util.JSUtils;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
@@ -16,7 +17,7 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     @NotNull
     @Override
     protected ResolveResult[] resolveElement(@NotNull PsiElement psiElement, @NotNull String s) {
-        if (s.startsWith(JavaScriptUtil.MODULE_PREFIX)) {
+        if (!s.startsWith(JavaScriptUtil.MODULE_PREFIX)) {
             return ResolveResult.EMPTY_ARRAY;
         }
 
@@ -32,5 +33,10 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     @Override
     public int getDefaultWeight() {
         return 25;
+    }
+
+    public boolean isApplicable(@NotNull PsiElement host) {
+
+        return !DumbService.isDumb(host.getProject());
     }
 }
