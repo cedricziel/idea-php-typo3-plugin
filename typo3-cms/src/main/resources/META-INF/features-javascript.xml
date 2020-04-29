@@ -3,4 +3,7 @@
         <!-- Language Injections -->
         <languageInjector implementation="com.cedricziel.idea.typo3.languageInjection.JavaScriptInjector"/>
     </extensions>
+    <extensions defaultExtensionNs="JavaScript">
+        <moduleReferenceContributor implementation="com.cedricziel.idea.typo3.javaScript.ModuleProvider"/>
+    </extensions>
 </idea-plugin>

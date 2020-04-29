@@ -114,7 +114,7 @@ public class ExtensionUtility {
         private List<String> ns;
 
         @Override
-        public void visitElement(PsiElement element) {
+        public void visitElement(@NotNull PsiElement element) {
 
             if (PlatformPatterns.psiElement(StringLiteralExpression.class).withParent(
                     PlatformPatterns.psiElement(PhpElementTypes.ARRAY_KEY).withParent(
@@ -158,6 +158,11 @@ public class ExtensionUtility {
 
             return ns.toArray(new String[ns.size()]);
         }
+    }
+
+    @Nullable
+    public static String findExtensionKeyFromFile(@NotNull PsiFile file) {
+        return findExtensionKeyFromFile(file.getVirtualFile());
     }
 
     @Nullable
