@@ -8,6 +8,12 @@
                          groupName="JavaScript"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.javaScript.codeInspection.MissingModulePHPInspection"/>
+
+        <localInspection language="JavaScript" groupPath="TYPO3 CMS"
+                         shortName="MissingModuleJSInspection" displayName="Missing JavaScript module"
+                         groupName="JavaScript"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.javaScript.codeInspection.MissingModuleJSInspection"/>
     </extensions>
     <extensions defaultExtensionNs="JavaScript">
         <moduleReferenceContributor implementation="com.cedricziel.idea.typo3.javaScript.ModuleProvider"/>
