@@ -24,6 +24,12 @@ public class MissingModulePHPInspection extends PluginEnabledPhpInspection {
 
     @NotNull
     @Override
+    public String getShortName() {
+        return "MissingModulePHP";
+    }
+
+    @NotNull
+    @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
