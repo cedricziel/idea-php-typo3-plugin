@@ -2,5 +2,20 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Language Injections -->
         <languageInjector implementation="com.cedricziel.idea.typo3.languageInjection.JavaScriptInjector"/>
+
+        <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         shortName="MissingModulePHP" displayName="Missing JavaScript module"
+                         groupName="JavaScript"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.javaScript.codeInspection.MissingModulePHPInspection"/>
+
+        <localInspection language="JavaScript" groupPath="TYPO3 CMS"
+                         shortName="MissingModuleJS" displayName="Missing JavaScript module"
+                         groupName="JavaScript"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.javaScript.codeInspection.MissingModuleJSInspection"/>
+    </extensions>
+    <extensions defaultExtensionNs="JavaScript">
+        <moduleReferenceContributor implementation="com.cedricziel.idea.typo3.javaScript.ModuleProvider"/>
     </extensions>
 </idea-plugin>

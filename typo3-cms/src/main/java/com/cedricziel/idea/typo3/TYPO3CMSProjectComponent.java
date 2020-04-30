@@ -14,6 +14,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,7 +91,7 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
     }
 
     private void checkProject() {
-        if (!this.isEnabled(project) && !notificationIsDismissed() && containsTYPO3Libraries()) {
+        if (!this.isEnabled(project) && !notificationIsDismissed() && containsPluginRelatedFiles()) {
             IdeHelper.notifyEnableMessage(project);
         }
     }
@@ -99,8 +101,8 @@ public class TYPO3CMSProjectComponent implements ProjectComponent {
         return TYPO3CMSProjectSettings.getInstance(project).dismissEnableNotification;
     }
 
-    private boolean containsTYPO3Libraries() {
-
-        return VfsUtil.findRelativeFile(this.project.getBaseDir(), "vendor", "typo3") != null;
+    private boolean containsPluginRelatedFiles() {
+        return (VfsUtil.findRelativeFile(this.project.getBaseDir(), "vendor", "typo3") != null)
+            || FilenameIndex.getFilesByName(project, "ext_emconf.php", GlobalSearchScope.allScope(project)).length > 0;
     }
 }
