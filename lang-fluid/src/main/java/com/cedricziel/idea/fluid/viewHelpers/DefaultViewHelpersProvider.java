@@ -12,12 +12,9 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlText;
 import gnu.trove.THashMap;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Map;
 
 public class DefaultViewHelpersProvider implements ViewHelperProvider {
@@ -55,14 +52,14 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
 
     private String readSchema(String schemaLocation) {
         InputStream resourceAsStream = DefaultViewHelpersProvider.class.getResourceAsStream(schemaLocation);
-        StringWriter writer = new StringWriter();
+        String schema = "";
         try {
-            IOUtils.copy(resourceAsStream, writer);
+            schema = readFromInputStream(resourceAsStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return writer.toString();
+        return schema;
     }
 
     private class ViewHelperSchemaRecursiveElementVisitor extends XmlRecursiveElementVisitor {
@@ -136,5 +133,26 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
 
             return attributeDocumentation.toString();
         }
+    }
+
+    private String readFromInputStream(InputStream inputStream)
+        throws IOException {
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return resultStringBuilder.toString();
     }
 }
