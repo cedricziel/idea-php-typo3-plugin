@@ -1,6 +1,6 @@
 package com.cedricziel.idea.typo3.javaScript.codeInspection;
 
-import com.cedricziel.idea.fluid.lang.psi.ArgumentList;
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledPhpInspection;
 import com.cedricziel.idea.typo3.util.JavaScriptUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
@@ -8,14 +8,13 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class MissingModulePHPInspection extends PhpInspection {
+public class MissingModulePHPInspection extends PluginEnabledPhpInspection {
     @Nls(capitalization = Nls.Capitalization.Sentence)
     @NotNull
     @Override
@@ -25,7 +24,7 @@ public class MissingModulePHPInspection extends PhpInspection {
 
     @NotNull
     @Override
-    public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {
             @Override
             public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {

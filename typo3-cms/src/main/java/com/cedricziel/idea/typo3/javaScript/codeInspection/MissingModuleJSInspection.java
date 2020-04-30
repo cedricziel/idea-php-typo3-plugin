@@ -1,10 +1,10 @@
 package com.cedricziel.idea.typo3.javaScript.codeInspection;
 
+import com.cedricziel.idea.typo3.codeInspection.PluginEnabledJsInspection;
 import com.cedricziel.idea.typo3.util.JavaScriptUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.lang.javascript.frameworks.modules.JSResolvableModuleReference;
-import com.intellij.lang.javascript.inspections.JSInspection;
 import com.intellij.lang.javascript.psi.JSElementVisitor;
 import com.intellij.lang.javascript.psi.JSLiteralExpression;
 import com.intellij.psi.PsiElementVisitor;
@@ -12,7 +12,7 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class MissingModuleJSInspection extends JSInspection {
+public class MissingModuleJSInspection extends PluginEnabledJsInspection {
     @Nls(capitalization = Nls.Capitalization.Sentence)
     @NotNull
     @Override
@@ -22,7 +22,7 @@ public class MissingModuleJSInspection extends JSInspection {
 
     @NotNull
     @Override
-    protected PsiElementVisitor createVisitor(@NotNull ProblemsHolder problemsHolder, @NotNull LocalInspectionToolSession localInspectionToolSession) {
+    public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, @NotNull LocalInspectionToolSession localInspectionToolSession) {
         return new JSElementVisitor() {
             @Override
             public void visitJSLiteralExpression(JSLiteralExpression node) {
