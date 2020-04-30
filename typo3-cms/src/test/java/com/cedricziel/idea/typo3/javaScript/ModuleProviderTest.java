@@ -6,7 +6,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +29,22 @@ public class ModuleProviderTest extends AbstractTestCase {
 
         List<PsiElement> collected = new ArrayList<>();
         for (PsiReference reference : references) {
-            if (reference instanceof JSResolvableModuleReference && reference.resolve() != null){
+            if (reference instanceof JSResolvableModuleReference && reference.resolve() != null) {
                 JSResolvableModuleReference reference1 = (JSResolvableModuleReference) reference;
                 collected.add(reference1.resolve());
             }
         }
 
         assertSize(1, collected);
-        assertEquals("MyMagicModule.js", ((PsiFile)collected.get(0)).getName());
+        assertEquals("MyMagicModule.js", ((PsiFile) collected.get(0)).getName());
+    }
+
+    public void testModuleNameCompletionIsProvided() {
+        myFixture.addFileToProject("foo_bar/ext_emconf.php", "");
+        myFixture.copyFileToProject("define_reference.js", "foo_bar/Resources/Public/JavaScript/MyMagicModule.js");
+        myFixture.copyFileToProject("define_reference.js", "foo_bar/Resources/Public/JavaScript/MyOtherModule.js");
+        myFixture.configureByFile("use_reference_completion.js");
+
+        myFixture.testCompletionVariants("use_reference_completion.js", "TYPO3/CMS/FooBar/MyMagicModule", "TYPO3/CMS/FooBar/MyOtherModule");
     }
 }

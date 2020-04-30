@@ -1,17 +1,20 @@
 package com.cedricziel.idea.typo3.javaScript;
 
 import com.cedricziel.idea.typo3.util.JavaScriptUtil;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.lang.javascript.completion.JSLookupPriority;
+import com.intellij.lang.javascript.completion.JSLookupUtilImpl;
 import com.intellij.lang.javascript.frameworks.modules.JSResolvableModuleReferenceContributor;
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult;
-import com.intellij.lang.javascript.psi.resolve.JSResolveUtil;
-import com.intellij.lang.javascript.psi.util.JSUtils;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     @NotNull
@@ -28,6 +31,23 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
         }
 
         return JSResolveResult.toResolveResults(moduleFilesFor);
+    }
+
+    @NotNull
+    @Override
+    protected Object[] getVariants(@NotNull PsiElement element) {
+        Set<LookupElement> result = new HashSet<>();
+
+        JavaScriptUtil.getModuleMap(element.getProject()).forEach((name, file) -> {
+            for (PsiFile psiFile : file) {
+                LookupElement lookupItem = JSLookupUtilImpl.createPrioritizedLookupItem(psiFile, name, JSLookupPriority.MAX_PRIORITY);
+                if (lookupItem != null) {
+                    result.add(lookupItem);
+                }
+            }
+        });
+
+        return result.toArray();
     }
 
     @Override
