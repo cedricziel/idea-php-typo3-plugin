@@ -1,6 +1,7 @@
 package com.cedricziel.idea.typo3.util;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -8,6 +9,7 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,13 +18,21 @@ public class JavaScriptUtil {
 
     public static final String MODULE_PREFIX = "TYPO3/CMS/";
     public static final String SIGNIFICANT_PATH = "Resources/Public/JavaScript/";
+    public static final Key<String> MODULE_NAME_DATA_KEY = Key.create("t3module");
 
     @NotNull
     public static Map<String, List<PsiFile>> getModuleMap(@NotNull Project project) {
         Map<String, List<PsiFile>> map = new HashMap<>();
         for (PsiFile psiFile : findModuleFiles(project)) {
+            if (psiFile.getUserData(MODULE_NAME_DATA_KEY) != null) {
+                map.put(psiFile.getUserData(MODULE_NAME_DATA_KEY), Collections.singletonList(psiFile));
+
+                continue;
+            }
+
             String name = calculateModuleName(psiFile);
             if (name != null) {
+                psiFile.putUserData(MODULE_NAME_DATA_KEY, name);
                 map.put(name, Collections.singletonList(psiFile));
             }
         }
@@ -48,6 +58,7 @@ public class JavaScriptUtil {
             .collect(Collectors.toList());
     }
 
+    @Nullable
     public static String calculateModuleName(@NotNull PsiFile file) {
         String extensionKey = ExtensionUtility.findExtensionKeyFromFile(file);
         if (extensionKey == null) {

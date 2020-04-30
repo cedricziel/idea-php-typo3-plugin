@@ -22,4 +22,16 @@ public class JavaScriptUtilTest extends AbstractTestCase {
 
         assertEquals("TYPO3/CMS/MyMagicThing/Ding/Dong/Bar", JavaScriptUtil.calculateModuleName(jsFile));
     }
+
+    public void testModuleNameUserDataKeyIsPersisted() {
+        myFixture.addFileToProject("my_magic_thing/ext_emconf.php", "");
+        PsiFile jsFile = myFixture.addFileToProject("my_magic_thing/" + JavaScriptUtil.SIGNIFICANT_PATH + "/Ding/Dong/Bar.js", "");
+
+        assertNull(jsFile.getUserData(JavaScriptUtil.MODULE_NAME_DATA_KEY));
+
+        // trigger building the map, persisting user data
+        JavaScriptUtil.getModuleMap(myFixture.getProject());
+
+        assertEquals("TYPO3/CMS/MyMagicThing/Ding/Dong/Bar", jsFile.getUserData(JavaScriptUtil.MODULE_NAME_DATA_KEY));
+    }
 }
