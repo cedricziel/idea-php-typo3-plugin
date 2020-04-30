@@ -7,6 +7,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,9 +23,20 @@ public class JavaScriptUtil {
     public static final String MODULE_PREFIX = "TYPO3/CMS/";
     public static final String SIGNIFICANT_PATH = "Resources/Public/JavaScript/";
     public static final Key<String> MODULE_NAME_DATA_KEY = Key.create("t3module");
+    public static final Key<CachedValue<Map<String, List<PsiFile>>>> MODULE_MAP = Key.create("t3modulemap");
 
     @NotNull
     public static Map<String, List<PsiFile>> getModuleMap(@NotNull Project project) {
+        return CachedValuesManager.getManager(project).getCachedValue(
+            project,
+            MODULE_MAP,
+            () -> CachedValueProvider.Result.create(doGetModuleMap(project), PsiModificationTracker.MODIFICATION_COUNT),
+            false
+        );
+    }
+
+    @NotNull
+    public static Map<String, List<PsiFile>> doGetModuleMap(@NotNull Project project) {
         Map<String, List<PsiFile>> map = new HashMap<>();
         for (PsiFile psiFile : findModuleFiles(project)) {
             if (psiFile.getUserData(MODULE_NAME_DATA_KEY) != null) {
