@@ -12,9 +12,17 @@ import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class MissingModulePHPInspection extends PhpInspection {
+    @Nls(capitalization = Nls.Capitalization.Sentence)
+    @NotNull
+    @Override
+    public String getDisplayName() {
+        return "Missing JavaScript module";
+    }
+
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
