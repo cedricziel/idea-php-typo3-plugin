@@ -22,7 +22,7 @@ abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvi
     }
 
     public Collection<? extends PhpNamedElement> getBySignature(String expression, Set<String> visited, int depth, Project project) {
-        int endIndex = expression.lastIndexOf("%");
+        int endIndex = expression.lastIndexOf(TRIM_KEY);
         if (endIndex == -1) {
             return Collections.emptySet();
         }
