@@ -23,6 +23,20 @@ public class JavaScriptUtilTest extends AbstractTestCase {
         assertEquals("TYPO3/CMS/MyMagicThing/Ding/Dong/Bar", JavaScriptUtil.calculateModuleName(jsFile));
     }
 
+    public void testModuleNameCanBeResolved() {
+        myFixture.addFileToProject("my_magic_thing/ext_emconf.php", "");
+        myFixture.addFileToProject("my_magic_thing/" + JavaScriptUtil.SIGNIFICANT_PATH + "/Ding/Dong/Bar.js", "");
+
+        assertInstanceOf(JavaScriptUtil.findModuleFilesFor(getProject(), "TYPO3/CMS/MyMagicThing/Ding/Dong/Bar").get(0), PsiFile.class);
+    }
+
+    public void testModuleMapIsCreated() {
+        myFixture.addFileToProject("my_magic_thing/ext_emconf.php", "");
+        myFixture.addFileToProject("my_magic_thing/" + JavaScriptUtil.SIGNIFICANT_PATH + "/Ding/Dong/Bar.js", "");
+
+        assertTrue(JavaScriptUtil.getModuleMap(getProject()).containsKey("TYPO3/CMS/MyMagicThing/Ding/Dong/Bar"));
+    }
+
     public void testModuleNameUserDataKeyIsPersisted() {
         myFixture.addFileToProject("my_magic_thing/ext_emconf.php", "");
         PsiFile jsFile = myFixture.addFileToProject("my_magic_thing/" + JavaScriptUtil.SIGNIFICANT_PATH + "/Ding/Dong/Bar.js", "");

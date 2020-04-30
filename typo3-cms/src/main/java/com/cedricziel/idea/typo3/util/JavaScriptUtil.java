@@ -36,7 +36,7 @@ public class JavaScriptUtil {
     }
 
     @NotNull
-    public static Map<String, List<PsiFile>> doGetModuleMap(@NotNull Project project) {
+    private static Map<String, List<PsiFile>> doGetModuleMap(@NotNull Project project) {
         Map<String, List<PsiFile>> map = new HashMap<>();
         for (PsiFile psiFile : findModuleFiles(project)) {
             if (psiFile.getUserData(MODULE_NAME_DATA_KEY) != null) {
