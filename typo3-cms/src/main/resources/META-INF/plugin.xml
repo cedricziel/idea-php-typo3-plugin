@@ -54,6 +54,8 @@
                              nonDefaultProject="true"
                              instance="com.cedricziel.idea.typo3.configuration.TYPO3CMSSettingsForm"/>
 
+        <spellchecker.bundledDictionaryProvider implementation="com.cedricziel.idea.typo3.TYPO3DictionaryProvider"/>
+
         <directoryProjectGenerator implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSClassicLayoutDirectoryProjectGenerator"/>
         <projectTemplatesFactory implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSProjectTemplatesFactory"/>
 
