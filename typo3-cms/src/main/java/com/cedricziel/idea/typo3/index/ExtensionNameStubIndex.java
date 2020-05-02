@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ExtensionNameStubIndex extends FileBasedIndexExtension<String, String> {
 
-    private static ObjectStreamDataExternalizer<String> EXTERNALIZER = new ObjectStreamDataExternalizer<>();
+    private static final ObjectStreamDataExternalizer<String> EXTERNALIZER = new ObjectStreamDataExternalizer<>();
 
     public static final ID<String, String> KEY = ID.create("com.cedricziel.idea.typo3.index.extension_name");
 

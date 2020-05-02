@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisitor {
 
-    private Map<String, ArrayList<TYPO3ServiceDefinition>> map;
+    private final Map<String, ArrayList<TYPO3ServiceDefinition>> map;
 
     public CoreServiceDefinitionParserVisitor(Map<String, ArrayList<TYPO3ServiceDefinition>> map) {
         this.map = map;

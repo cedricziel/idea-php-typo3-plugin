@@ -3,6 +3,7 @@ package com.cedricziel.idea.typo3.domain;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class TYPO3ServiceDefinition implements Serializable {
 
@@ -129,18 +130,18 @@ public class TYPO3ServiceDefinition implements Serializable {
         TYPO3ServiceDefinition that = (TYPO3ServiceDefinition) o;
 
         if (!id.equals(that.id)) return false;
-        if (extensionName != null ? !extensionName.equals(that.extensionName) : that.extensionName != null)
+        if (!Objects.equals(extensionName, that.extensionName))
             return false;
-        if (className != null ? !className.equals(that.className) : that.className != null) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (subType != null ? !subType.equals(that.subType) : that.subType != null) return false;
-        if (available != null ? !available.equals(that.available) : that.available != null) return false;
-        if (priority != null ? !priority.equals(that.priority) : that.priority != null) return false;
-        if (quality != null ? !quality.equals(that.quality) : that.quality != null) return false;
-        if (os != null ? !os.equals(that.os) : that.os != null) return false;
-        if (exec != null ? !exec.equals(that.exec) : that.exec != null) return false;
-        return signature != null ? signature.equals(that.signature) : that.signature == null;
+        if (!Objects.equals(className, that.className)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        if (!Objects.equals(subType, that.subType)) return false;
+        if (!Objects.equals(available, that.available)) return false;
+        if (!Objects.equals(priority, that.priority)) return false;
+        if (!Objects.equals(quality, that.quality)) return false;
+        if (!Objects.equals(os, that.os)) return false;
+        if (!Objects.equals(exec, that.exec)) return false;
+        return Objects.equals(signature, that.signature);
     }
 
     @Override

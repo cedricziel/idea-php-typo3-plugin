@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
 
-    private Map<String, IconStub> map;
+    private final Map<String, IconStub> map;
 
     public CoreIconParserVisitor() {
         this.map = new HashMap<>();

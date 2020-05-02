@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CreateInjectorQuickFix implements LocalQuickFix {
 
-    private SmartPsiElementPointer element;
+    private final SmartPsiElementPointer<PhpDocTag> element;
 
     public CreateInjectorQuickFix(@NotNull PhpDocTag element) {
         this.element = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);

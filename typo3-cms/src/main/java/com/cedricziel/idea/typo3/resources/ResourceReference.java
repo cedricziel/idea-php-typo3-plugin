@@ -24,29 +24,12 @@ public class ResourceReference extends PsiPolyVariantReferenceBase<PsiElement> {
         this.resourceName = psiElement.getTextValue();
     }
 
-    /**
-     * Returns the results of resolving the reference.
-     *
-     * @param incompleteCode if true, the code in the context of which the reference is
-     *                       being resolved is considered incomplete, and the method may return additional
-     *                       invalid results.
-     * @return the array of results for resolving the reference.
-     */
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(ResourceUtil.getResourceDefinitionElements(myElement.getProject(), resourceName));
     }
 
-    /**
-     * Returns the array of String, {@link PsiElement} and/or {@link LookupElement}
-     * instances representing all identifiers that are visible at the location of the reference. The contents
-     * of the returned array is used to build the lookup list for basic code completion. (The list
-     * of visible identifiers may not be filtered by the completion prefix string - the
-     * filtering is performed later by IDEA core.)
-     *
-     * @return the array of available identifiers.
-     */
     @NotNull
     @Override
     public Object[] getVariants() {

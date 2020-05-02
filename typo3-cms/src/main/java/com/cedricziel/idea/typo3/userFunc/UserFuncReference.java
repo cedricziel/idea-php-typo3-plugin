@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
@@ -130,19 +129,12 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
         PhpIndex phpIndex = PhpIndex.getInstance(myElement.getProject());
 
         if (className == null) {
-            Iterator<String> globalFunctions = phpIndex.getAllFunctionNames(null).iterator();
-            while (true) {
-                while (globalFunctions.hasNext()) {
-                    String functionName = globalFunctions.next();
-
-                    phpIndex
-                            .getFunctionsByName(functionName)
-                            .stream()
-                            .map(UserFuncLookupElement::new)
-                            .forEach(list::add);
-                }
-
-                break;
+            for (String functionName : phpIndex.getAllFunctionNames(null)) {
+                phpIndex
+                    .getFunctionsByName(functionName)
+                    .stream()
+                    .map(UserFuncLookupElement::new)
+                    .forEach(list::add);
             }
         }
 

@@ -98,7 +98,8 @@ public class PhpLangUtil {
         }
 
         Variable variableBeingCalledOn = PsiTreeUtil.findChildOfType(methodReference, Variable.class);
-        if (variableBeingCalledOn != null && variableBeingCalledOn.getInferredType() != null) {
+        if (variableBeingCalledOn != null) {
+            variableBeingCalledOn.getInferredType();
             PhpType inferredType = variableBeingCalledOn.getInferredType();
             return inferredType.toString();
         }
