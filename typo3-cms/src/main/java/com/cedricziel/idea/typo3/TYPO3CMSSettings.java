@@ -1,9 +1,6 @@
 package com.cedricziel.idea.typo3;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 @State(
         name = "TYPO3Settings",
-        storages = {@Storage("$WORKSPACE_FILE$")}
+        storages = {@Storage(value = "$WORKSPACE_FILE$", roamingType = RoamingType.DISABLED)}
 )
 public class TYPO3CMSSettings implements PersistentStateComponent<Element> {
     /**
