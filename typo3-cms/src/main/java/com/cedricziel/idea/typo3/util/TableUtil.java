@@ -48,7 +48,7 @@ public class TableUtil {
             }, GlobalSearchScope.allScope(project));
         }
 
-        return elements.toArray(new PsiElement[elements.size()]);
+        return elements.toArray(new PsiElement[0]);
     }
 
     private static PsiFile[] getExtTablesSqlFilesInProjectContainingTable(@NotNull String tableName, @NotNull Project project) {

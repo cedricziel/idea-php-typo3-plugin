@@ -134,7 +134,7 @@ public class ExtensionDefinitionFactory {
      * Guesses an extension key from the composer package name.
      *
      * @param packageName The package name to analyze
-     * @return
+     * @return The extension key
      */
     private static String extensionKeyFromPackageName(String packageName) {
 

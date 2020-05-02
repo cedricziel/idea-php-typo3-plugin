@@ -39,7 +39,7 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
 
     @Nullable
     @Override
-    public String getActionText(DataContext context) {
+    public String getActionText(@NotNull DataContext context) {
         return null;
     }
 }

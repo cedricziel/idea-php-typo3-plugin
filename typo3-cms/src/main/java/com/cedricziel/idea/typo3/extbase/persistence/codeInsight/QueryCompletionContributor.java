@@ -26,7 +26,7 @@ public class QueryCompletionContributor extends CompletionContributor {
     public static class QueryCompletionProvider extends CompletionProvider<CompletionParameters> {
 
         @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+        protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
             PsiElement element = parameters.getOriginalPosition();
 
             Method containingMethod = (Method) PsiTreeUtil.findFirstParent(element, x -> PlatformPatterns.psiElement(Method.class).accepts(x));

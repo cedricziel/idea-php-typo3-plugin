@@ -16,7 +16,7 @@ public class Slugify {
 	private final static Pattern PATTERN_NORMALIZE_SEPARATOR = Pattern.compile("[\\W\\s+]+");
 	private final static Pattern PATTERN_NORMALIZE_TRIM_DASH = Pattern.compile("^-|-$");
 
-	private final Map<String, String> customReplacements = new HashMap<String, String>();
+	private final Map<String, String> customReplacements = new HashMap<>();
 
 	private boolean underscoreSeparator = false;
 	private boolean lowerCase = true;

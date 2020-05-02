@@ -60,7 +60,7 @@ public class MethodArgumentDroppedIndex extends AbstractScalarExtensionScannerIn
                 if (parent instanceof ArrayHashElement) {
                     ArrayHashElement arr = (ArrayHashElement) parent;
                     PhpPsiElement value = arr.getValue();
-                    if (value != null && value instanceof ArrayCreationExpression) {
+                    if (value instanceof ArrayCreationExpression) {
                         ArrayCreationExpression creationExpression = (ArrayCreationExpression) value;
                         creationExpression.getHashElements().forEach(x -> {
                             PhpPsiElement key = x.getKey();

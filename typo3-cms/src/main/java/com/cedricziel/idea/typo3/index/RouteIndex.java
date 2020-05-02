@@ -99,7 +99,7 @@ public class RouteIndex extends FileBasedIndexExtension<String, RouteStub> {
         }
 
         @Override
-        public void visitElement(PsiElement element) {
+        public void visitElement(@NotNull PsiElement element) {
             if (!(element instanceof MethodReference)) {
                 super.visitElement(element);
                 return;

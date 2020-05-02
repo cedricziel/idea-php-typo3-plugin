@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class CoreFlagParserVisitor extends PsiElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
+    public void visitElement(@NotNull PsiElement element) {
         Variable iconFolder = PsiTreeUtil.findChildOfType(element, Variable.class);
         if (iconFolder == null || !iconFolder.getName().equals("iconFolder")) {
             // Something changed - dynamic parsing failed.

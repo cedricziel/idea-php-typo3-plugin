@@ -42,7 +42,7 @@ public class RouteFoldingBuilder extends FoldingBuilderEx {
 
         }
 
-        return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+        return descriptors.toArray(new FoldingDescriptor[0]);
     }
 
     @Nullable

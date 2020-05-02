@@ -25,7 +25,7 @@ public class UserFuncLookupElement extends PhpLookupElement {
     }
 
     @Override
-    public void handleInsert(InsertionContext context) {
+    public void handleInsert(@NotNull InsertionContext context) {
         UserFuncInsertHandler.getInstance().handleInsert(context, this);
     }
 }

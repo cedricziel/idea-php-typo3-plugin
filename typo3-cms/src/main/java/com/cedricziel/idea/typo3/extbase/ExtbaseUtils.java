@@ -18,9 +18,9 @@ import java.util.Iterator;
 public class ExtbaseUtils {
     public static final String EXTBASE_ABSTRACT_ENTITY_FQN = "TYPO3\\CMS\\Extbase\\DomainObject\\AbstractEntity";
 
-    public static String EXTBASE_QUERY_INTERFACE_FQN = "TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface";
+    public static final String EXTBASE_QUERY_INTERFACE_FQN = "TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface";
 
-    public static String[] EXTBASE_QUERY_BUILDER_METHODS = {
+    public static final String[] EXTBASE_QUERY_BUILDER_METHODS = {
             "equals",
             "like",
             "contains",
@@ -50,9 +50,7 @@ public class ExtbaseUtils {
             return null;
         }
 
-        PhpClass repositoryClass = iterator.next();
-
-        return repositoryClass;
+        return iterator.next();
     }
 
     public static boolean isRepositoryClass(@NotNull PhpClass phpClass) {

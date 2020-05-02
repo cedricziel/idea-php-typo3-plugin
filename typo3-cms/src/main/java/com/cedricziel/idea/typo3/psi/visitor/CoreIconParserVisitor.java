@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
 
-    private Map<String, IconStub> map;
+    private final Map<String, IconStub> map;
 
     public CoreIconParserVisitor() {
         this.map = new HashMap<>();
@@ -26,7 +26,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
+    public void visitElement(@NotNull PsiElement element) {
         if ((element instanceof ArrayCreationExpression)) {
             visitIconDefinition((ArrayCreationExpression) element);
         }

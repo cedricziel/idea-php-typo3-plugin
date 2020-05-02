@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class CoreServiceParser {
 
-    private HashMap<String, ArrayList<TYPO3ServiceDefinition>> serviceMap;
+    private final HashMap<String, ArrayList<TYPO3ServiceDefinition>> serviceMap;
 
     public CoreServiceParser() {
         this.serviceMap = new HashMap<>();

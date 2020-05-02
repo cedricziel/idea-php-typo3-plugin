@@ -2,6 +2,7 @@ package com.cedricziel.idea.typo3.index.extbase;
 
 import com.cedricziel.idea.typo3.extbase.controller.StubControllerAction;
 import com.cedricziel.idea.typo3.index.externalizer.ObjectStreamDataExternalizer;
+import com.cedricziel.idea.typo3.util.ExtbaseUtility;
 import com.cedricziel.idea.typo3.util.ExtensionUtility;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
@@ -15,13 +16,11 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ControllerActionIndex extends FileBasedIndexExtension<String, StubControllerAction> {
 
-    public static ID<String, StubControllerAction> KEY = ID.create("com.cedricziel.idea.typo3.extbase.controller_action");
+    public static final ID<String, StubControllerAction> KEY = ID.create("com.cedricziel.idea.typo3.extbase.controller_action");
 
     @NotNull
     @Override
@@ -78,7 +77,7 @@ public class ControllerActionIndex extends FileBasedIndexExtension<String, StubC
     }
 
     static class ControllerActionRecursiveVisitor extends PsiRecursiveElementVisitor {
-        Map<String, StubControllerAction> map;
+        final Map<String, StubControllerAction> map;
 
         ControllerActionRecursiveVisitor() {
             this.map = new THashMap<>();
@@ -89,7 +88,7 @@ public class ControllerActionIndex extends FileBasedIndexExtension<String, StubC
         }
 
         @Override
-        public void visitElement(PsiElement element) {
+        public void visitElement(@NotNull PsiElement element) {
             if (element instanceof Method) {
                 Method m = (Method) element;
                 if (!m.getName().endsWith("Action") || !m.getModifier().isPublic()) {
@@ -106,7 +105,7 @@ public class ControllerActionIndex extends FileBasedIndexExtension<String, StubC
                     return;
                 }
 
-                if (!isActionController(containingClass)) {
+                if (!ExtbaseUtility.isActionController(containingClass)) {
                     super.visitElement(element);
 
                     return;
@@ -122,16 +121,6 @@ public class ControllerActionIndex extends FileBasedIndexExtension<String, StubC
             }
 
             super.visitElement(element);
-        }
-
-        private boolean isActionController(@NotNull PhpClass containingClass) {
-            List<String> fqns = new ArrayList<>();
-
-            if (containingClass.getSuperFQN() != null) {
-                fqns.add(containingClass.getSuperFQN());
-            }
-
-            return fqns.contains("\\TYPO3\\CMS\\Extbase\\Mvc\\Controller\\ActionController");
         }
     }
 }

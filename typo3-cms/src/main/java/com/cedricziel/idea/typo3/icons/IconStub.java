@@ -4,6 +4,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class IconStub implements IconInterface, Serializable {
 
@@ -77,10 +78,10 @@ public class IconStub implements IconInterface, Serializable {
         IconStub iconStub = (IconStub) o;
 
         if (!identifier.equals(iconStub.identifier)) return false;
-        if (extension != null ? !extension.equals(iconStub.extension) : iconStub.extension != null) return false;
-        if (filename != null ? !filename.equals(iconStub.filename) : iconStub.filename != null) return false;
-        if (provider != null ? !provider.equals(iconStub.provider) : iconStub.provider != null) return false;
-        if (source != null ? !source.equals(iconStub.source) : iconStub.source != null) return false;
+        if (!Objects.equals(extension, iconStub.extension)) return false;
+        if (!Objects.equals(filename, iconStub.filename)) return false;
+        if (!Objects.equals(provider, iconStub.provider)) return false;
+        if (!Objects.equals(source, iconStub.source)) return false;
         return textRange.equals(iconStub.textRange);
     }
 

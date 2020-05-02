@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ResourceUtil {
     public static boolean isExtResourcePath(PsiElement element) {
         // must be a string element
@@ -33,11 +30,9 @@ public class ResourceUtil {
 
     public static Object[] getResourceLookupElements(@NotNull Project project) {
 
-        List<ResourceLookupElement> result = new ArrayList<>();
-        ResourcePathIndex.getAvailableExtensionResourceFiles(project).forEach(identifier -> {
-            result.add(new ResourceLookupElement(identifier));
-        });
-
-        return result.toArray();
+        return ResourcePathIndex.getAvailableExtensionResourceFiles(project)
+            .stream()
+            .map(ResourceLookupElement::new)
+            .toArray();
     }
 }

@@ -211,7 +211,7 @@ public class TCAUtil {
     private static final String EXT_LOCALCONF_FILENAME = "ext_localconf.php";
     private static final String NODE_FACTORY_CLASS = "TYPO3\\CMS\\Backend\\Form\\NodeFactory";
 
-    private static Key<CachedValue<Set<String>>> RENDER_TYPES_KEY = new Key<>("TYPO3_CMS_RENDER_TYPES");
+    private static final Key<CachedValue<Set<String>>> RENDER_TYPES_KEY = new Key<>("TYPO3_CMS_RENDER_TYPES");
 
     public static boolean arrayIndexIsTCATableNameField(PsiElement element) {
         String arrayIndex = extractArrayIndexFromValue(element);
@@ -232,11 +232,10 @@ public class TCAUtil {
         }
 
         CachedValue<Set<String>> cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
-            Set<String> renderTypes = new HashSet<>();
             Set<PsiElement> elementsFromExtLocalConf = findAvailableRenderTypes(project);
 
             // add static list of render types
-            renderTypes.addAll(Arrays.asList(TCA_V8_CORE_RENDER_TYPES));
+            Set<String> renderTypes = new HashSet<>(Arrays.asList(TCA_V8_CORE_RENDER_TYPES));
 
             // add dynamic list of render types from nodeRegistry
             for (PsiElement el : elementsFromExtLocalConf) {
