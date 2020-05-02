@@ -70,7 +70,7 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
      * @param event Carries information on the invocation place
      */
     @Override
-    public void actionPerformed(AnActionEvent event) {
+    public void actionPerformed(@NotNull AnActionEvent event) {
         final Project project = getEventProject(event);
         if (project == null) {
             this.setStatus(event, false);
@@ -113,11 +113,10 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
 
             @Override
             protected void run(@NotNull Result result) {
-                final String methodName = actionName;
 
                 Method actionMethod = PhpPsiElementFactory.createMethod(
                         project,
-                        "public function " + methodName + " () { \n" +
+                        "public function " + actionName + " () { \n" +
                                 "}\n"
 
                 );
@@ -130,7 +129,7 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
                 PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
-                final int insertPos = CodeUtil.getMethodInsertPosition(phpClass, methodName);
+                final int insertPos = CodeUtil.getMethodInsertPosition(phpClass, actionName);
                 if (insertPos == -1) {
                     return;
                 }
@@ -145,7 +144,7 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
                 CodeStyleManager.getInstance(project).reformatText(phpClass.getContainingFile(), insertPos, endPos);
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
-                Method insertedMethod = phpClass.findMethodByName(methodName);
+                Method insertedMethod = phpClass.findMethodByName(actionName);
                 if (insertedMethod != null) {
                     editor.getCaretModel().moveToOffset(insertedMethod.getTextRange().getStartOffset());
                     editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);

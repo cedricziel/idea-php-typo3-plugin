@@ -125,7 +125,6 @@ public class PhpLangUtil {
         return fqn;
     }
 
-    @NotNull
     public static int getParameterPosition(@NotNull PsiElement element) {
         ParameterList parameterList = PsiTreeUtil.getParentOfType(element, ParameterList.class);
         if (parameterList == null) {

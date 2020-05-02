@@ -85,7 +85,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
             iconStubs.addAll(values);
         });
 
-        return iconStubs.toArray(new IconStub[iconStubs.size()]);
+        return iconStubs.toArray(new IconStub[0]);
     }
 
     @NotNull

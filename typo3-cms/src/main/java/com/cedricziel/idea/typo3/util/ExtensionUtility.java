@@ -156,7 +156,7 @@ public class ExtensionUtility {
                 return new String[0];
             }
 
-            return ns.toArray(new String[ns.size()]);
+            return ns.toArray(new String[0]);
         }
     }
 

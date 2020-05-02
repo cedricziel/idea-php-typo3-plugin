@@ -26,7 +26,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
+    public void visitElement(@NotNull PsiElement element) {
         if ((element instanceof ArrayCreationExpression)) {
             visitIconDefinition((ArrayCreationExpression) element);
         }

@@ -17,7 +17,7 @@ public class JavaScriptInjector implements LanguageInjector {
     public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost host, @NotNull InjectedLanguagePlaces injectionPlacesRegistrar) {
         if (getXmlFAssetJsContentPattern().accepts(host)) {
             injectionPlacesRegistrar.addPlace(JavascriptLanguage.INSTANCE, new TextRange(0, host.getTextLength()-1), null, null);
-        };
+        }
     }
 
     @NotNull

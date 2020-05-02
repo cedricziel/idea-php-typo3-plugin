@@ -50,9 +50,7 @@ public class ExtbaseUtils {
             return null;
         }
 
-        PhpClass repositoryClass = iterator.next();
-
-        return repositoryClass;
+        return iterator.next();
     }
 
     public static boolean isRepositoryClass(@NotNull PhpClass phpClass) {

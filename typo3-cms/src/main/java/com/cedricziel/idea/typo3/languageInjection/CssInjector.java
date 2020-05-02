@@ -1,7 +1,6 @@
 package com.cedricziel.idea.typo3.languageInjection;
 
 import com.intellij.lang.css.CSSLanguage;
-import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
@@ -18,7 +17,7 @@ public class CssInjector implements LanguageInjector {
     public void getLanguagesToInject(@NotNull PsiLanguageInjectionHost host, @NotNull InjectedLanguagePlaces injectionPlacesRegistrar) {
         if (getXmlFAssetCssContentPattern().accepts(host)) {
             injectionPlacesRegistrar.addPlace(CSSLanguage.INSTANCE, new TextRange(0, host.getTextLength()-1), null, null);
-        };
+        }
     }
 
     @NotNull

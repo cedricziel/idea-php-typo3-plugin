@@ -21,7 +21,7 @@ public class TCACompletionContributor extends CompletionContributor {
                 TCAPatterns.arrayAssignmentValueWithIndexPattern("renderType"),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                    protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                         for (String renderType: TCAUtil.getAvailableRenderTypes(parameters.getPosition())) {
                             result.addElement(LookupElementBuilder.create(renderType).withIcon(TYPO3CMSIcons.TYPO3_ICON));
                         }
@@ -37,7 +37,7 @@ public class TCACompletionContributor extends CompletionContributor {
                 TCAPatterns.arrayAssignmentValueWithIndexPattern("type"),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                    protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                         for (String columnType: TCAUtil.getAvailableColumnTypes(parameters.getPosition().getProject())) {
                             result.addElement(LookupElementBuilder.create(columnType).withIcon(TYPO3CMSIcons.TYPO3_ICON));
                         }
@@ -53,7 +53,7 @@ public class TCACompletionContributor extends CompletionContributor {
                 TCAPatterns.isEvalColumnValue(),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                    protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
 
                         StringLiteralExpression literalExpression = (StringLiteralExpression) parameters.getOriginalPosition().getParent();
                         if (literalExpression == null) {
@@ -97,7 +97,7 @@ public class TCACompletionContributor extends CompletionContributor {
                 TCAPatterns.isIndexInParentIndex("config"),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
-                    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+                    protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                         for (String evaluationName: TCAUtil.getConfigSectionChildren()) {
                             result.addElement(LookupElementBuilder.create(evaluationName).withIcon(TYPO3CMSIcons.TYPO3_ICON));
                         }

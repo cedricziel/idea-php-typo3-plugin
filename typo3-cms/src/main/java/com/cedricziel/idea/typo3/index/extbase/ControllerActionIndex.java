@@ -89,7 +89,7 @@ public class ControllerActionIndex extends FileBasedIndexExtension<String, StubC
         }
 
         @Override
-        public void visitElement(PsiElement element) {
+        public void visitElement(@NotNull PsiElement element) {
             if (element instanceof Method) {
                 Method m = (Method) element;
                 if (!m.getName().endsWith("Action") || !m.getModifier().isPublic()) {

@@ -13,6 +13,7 @@ import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider4;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -180,7 +181,7 @@ public class ExtbaseModelCollectionReturnTypeProvider implements PhpTypeProvider
         }
 
         @Override
-        public void visitElement(PsiElement element) {
+        public void visitElement(@NotNull PsiElement element) {
             super.visitElement(element);
 
             if (PlatformPatterns.psiElement(FieldReference.class).withParent(PhpReturn.class).accepts(element)) {

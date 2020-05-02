@@ -22,7 +22,7 @@ public class ContextReferenceContributor extends PsiReferenceContributor {
         );
     }
 
-    private class ContextReferenceProvider extends PsiReferenceProvider {
+    private static class ContextReferenceProvider extends PsiReferenceProvider {
         @NotNull
         @Override
         public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {

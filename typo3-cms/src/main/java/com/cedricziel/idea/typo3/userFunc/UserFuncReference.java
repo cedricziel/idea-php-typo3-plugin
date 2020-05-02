@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReferenceBase;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlText;
 import com.intellij.psi.xml.XmlToken;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
@@ -18,7 +17,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class UserFuncReference extends PsiPolyVariantReferenceBase {
+public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
     private final String className;
     private final String methodName;
 
@@ -30,10 +29,6 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
             String[] split = StringUtils.split(text, "->");
 
             switch (split.length) {
-                case 0:
-                    className = null;
-                    methodName = null;
-                    break;
                 case 1:
                     className = split[0].trim();
                     methodName = null;
@@ -64,10 +59,6 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase {
             String[] split = StringUtils.split(text, "->");
 
             switch (split.length) {
-                case 0:
-                    className = null;
-                    methodName = null;
-                    break;
                 case 1:
                     className = split[0].trim();
                     methodName = null;

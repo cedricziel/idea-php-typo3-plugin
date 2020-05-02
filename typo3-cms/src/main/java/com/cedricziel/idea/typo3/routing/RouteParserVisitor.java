@@ -33,7 +33,7 @@ public class RouteParserVisitor extends PsiRecursiveElementVisitor {
     }
 
     @Override
-    public void visitElement(PsiElement element) {
+    public void visitElement(@NotNull PsiElement element) {
         if (isRouteElement(element)) {
             ArrayHashElement arrayCreationExpression = (ArrayHashElement) element;
             visitRouteCreation(arrayCreationExpression);

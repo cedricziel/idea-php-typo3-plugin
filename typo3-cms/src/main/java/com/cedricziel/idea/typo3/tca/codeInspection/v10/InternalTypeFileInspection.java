@@ -2,7 +2,6 @@ package com.cedricziel.idea.typo3.tca.codeInspection.v10;
 
 import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
-import com.cedricziel.idea.typo3.util.TCAUtil;
 import com.cedricziel.idea.typo3.util.TYPO3Utility;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemHighlightType;

@@ -232,11 +232,10 @@ public class TCAUtil {
         }
 
         CachedValue<Set<String>> cachedValue = CachedValuesManager.getManager(project).createCachedValue(() -> {
-            Set<String> renderTypes = new HashSet<>();
             Set<PsiElement> elementsFromExtLocalConf = findAvailableRenderTypes(project);
 
             // add static list of render types
-            renderTypes.addAll(Arrays.asList(TCA_V8_CORE_RENDER_TYPES));
+            Set<String> renderTypes = new HashSet<>(Arrays.asList(TCA_V8_CORE_RENDER_TYPES));
 
             // add dynamic list of render types from nodeRegistry
             for (PsiElement el : elementsFromExtLocalConf) {
