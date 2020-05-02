@@ -16,7 +16,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="173"/>
+    <idea-version since-build="193"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.jetbrains.php</depends>
@@ -37,6 +37,11 @@
         <typeProvider4 implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbaseModelCollectionReturnTypeProvider"/>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.contextApi.ContextTypeProvider"/>
     </extensions>
+
+    <projectListeners>
+        <listener class="com.cedricziel.idea.typo3.listener.TYPO3DetectionListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+        <listener class="com.cedricziel.idea.typo3.listener.XLFFileTypeListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
 
@@ -213,13 +218,4 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
     </actions>
-
-    <project-components>
-        <component>
-            <implementation-class>com.cedricziel.idea.typo3.TYPO3CMSProjectComponent</implementation-class>
-        </component>
-        <component>
-            <implementation-class>com.cedricziel.idea.typo3.XLFFileTypeApplicationComponent</implementation-class>
-        </component>
-    </project-components>
 </idea-plugin>
