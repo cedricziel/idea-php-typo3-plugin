@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public class ControllerLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (!PlatformPatterns.psiElement(PhpTokenTypes.IDENTIFIER).withParent(PlatformPatterns.psiElement(Method.class).withName(PlatformPatterns.string().endsWith("Action"))).accepts(element)) {
             return;
         }

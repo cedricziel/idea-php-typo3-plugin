@@ -22,7 +22,7 @@ import java.util.Collection;
 
 public class RouteLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (!TYPO3CMSProjectSettings.isEnabled(element)) {
             return;
         }
