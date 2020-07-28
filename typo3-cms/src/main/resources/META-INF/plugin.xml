@@ -34,7 +34,6 @@
         <typeProvider4 implementation="com.cedricziel.idea.typo3.provider.ObjectManagerTypeProvider"/>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.provider.PhpGlobalsTypeProvider"/>
 
-        <typeProvider4 implementation="com.cedricziel.idea.typo3.extbase.persistence.ExtbaseModelCollectionReturnTypeProvider"/>
         <typeProvider4 implementation="com.cedricziel.idea.typo3.contextApi.ContextTypeProvider"/>
     </extensions>
 
@@ -186,7 +185,6 @@
 
         <!-- FlexForms -->
         <completion.contributor language="XML"
-                                implementationClass="com.cedricziel.idea.typo3.flexform.FlexFormCompletionContributionProvider"/>
     </extensions>
 
     <actions>
