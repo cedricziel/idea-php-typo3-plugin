@@ -185,6 +185,7 @@
 
         <!-- FlexForms -->
         <completion.contributor language="XML"
+                                implementationClass="com.cedricziel.idea.typo3.flexform.FlexFormCompletionContributionProvider"/>
     </extensions>
 
     <actions>
