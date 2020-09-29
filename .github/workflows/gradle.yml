@@ -1,0 +1,43 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    env:
+      ORG_GRADLE_PROJECT_ideaVersion: "${{ matrix.idea_version }}"
+      ORG_GRADLE_PROJECT_phpPluginVersion: "${{ matrix.php_plugin_version }}"
+      ORG_GRADLE_PROJECT_psiViewerPluginVersion: "${{ matrix.psi_viewer_plugin_version }}"
+      ORG_GRADLE_PROJECT_grammarKitPluginVersion: "${{ matrix.grammar_kit_plugin_version }}"
+      ORG_GRADLE_PROJECT_customSinceBuild: "${{ matrix.since_build }}"
+      ORG_GRADLE_PROJECT_customUntilBuild: "${{ matrix.until_build }}"
+
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix: 
+        include:
+        - idea_version: "IU-2020.2"
+          php_plugin_version: "202.6397.94"
+          psi_viewer_plugin_version: "202-SNAPSHOT"
+          grammar_kit_plugin_version: "2020.2.1"
+          since_build: "202"
+          until_build: "202.*"
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
