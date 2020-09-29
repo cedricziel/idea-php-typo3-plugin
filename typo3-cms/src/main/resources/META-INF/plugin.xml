@@ -186,6 +186,14 @@
         <!-- FlexForms -->
         <completion.contributor language="XML"
                                 implementationClass="com.cedricziel.idea.typo3.flexform.FlexFormCompletionContributionProvider"/>
+
+        <!-- Fluid -->
+        <lang.inspectionSuppressor language="XML"
+                                   implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
+        <lang.inspectionSuppressor language="HTML"
+                                   implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
+        <lang.inspectionSuppressor language="XHTML"
+                                   implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
     </extensions>
 
     <actions>
