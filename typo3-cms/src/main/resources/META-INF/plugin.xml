@@ -194,6 +194,7 @@
                                    implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
         <lang.inspectionSuppressor language="XHTML"
                                    implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
+        <implicitUsageProvider implementation="com.cedricziel.idea.typo3.codeInspection.daemon.XmlNamespaceImplicitUsageProvider"/>
     </extensions>
 
     <actions>
