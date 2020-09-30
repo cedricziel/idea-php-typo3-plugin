@@ -16,7 +16,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="193"/>
+    <idea-version since-build="202"/>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.jetbrains.php</depends>
@@ -195,6 +195,12 @@
         <lang.inspectionSuppressor language="XHTML"
                                    implementationClass="com.cedricziel.idea.typo3.codeInspection.XmlUnusedNamespaceDeclarationSuppressor"/>
         <implicitUsageProvider implementation="com.cedricziel.idea.typo3.codeInspection.daemon.XmlNamespaceImplicitUsageProvider"/>
+        <localInspection implementationClass="com.cedricziel.idea.typo3.codeInspection.FluidNamespaceWithoutDataAttributeInspection"
+                         shortName="FluidNamespaceWithoutDataAttribute"
+                         displayName="Fluid namespace declaration without data attribute"
+                         groupPath="TYPO3 CMS"
+                         groupName="Fluid templating"
+                         enabledByDefault="true" level="WARNING"/>
     </extensions>
 
     <actions>
