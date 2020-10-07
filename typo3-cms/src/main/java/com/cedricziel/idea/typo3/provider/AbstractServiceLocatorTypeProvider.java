@@ -1,5 +1,6 @@
 package com.cedricziel.idea.typo3.provider;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
@@ -12,6 +13,8 @@ import java.util.Collections;
 import java.util.Set;
 
 abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvider4 {
+
+    private static final Logger LOG = Logger.getInstance(AbstractServiceLocatorTypeProvider.class);
 
     public static final char TRIM_KEY = '%';
 
@@ -30,16 +33,22 @@ abstract public class AbstractServiceLocatorTypeProvider implements PhpTypeProvi
         // Get FQN from parameter string.
         // Example (PhpStorm 8): #K#C\Foo\Bar::get()%#K#C\Bar\Baz. -> \Bar\Baz.
         // Example (PhpStorm 9): #K#C\Foo\Bar::get()%#K#C\Bar\Baz.class -> \Bar\Baz.class
-        String parameter = expression.substring(endIndex + 5);
+        try {
+            String parameter = expression.substring(endIndex + 5);
 
-        if (parameter.contains(".class")) { // for PhpStorm 9
-            parameter = parameter.replace(".class", "");
+            if (parameter.contains(".class")) { // for PhpStorm 9
+                parameter = parameter.replace(".class", "");
+            }
+
+            if (parameter.contains(".")) {
+                parameter = parameter.replace(".", "");
+            }
+
+            return PhpIndex.getInstance(project).getAnyByFQN(parameter);
+        } catch (StringIndexOutOfBoundsException e) {
+            LOG.warn("Unable to find PhpNamedElement by signature from \"" + expression + "\"");
+
+            return Collections.emptySet();
         }
-
-        if (parameter.contains(".")) {
-            parameter = parameter.replace(".", "");
-        }
-
-        return PhpIndex.getInstance(project).getAnyByFQN(parameter);
     }
 }
