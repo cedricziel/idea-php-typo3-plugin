@@ -30,6 +30,12 @@ jobs:
           grammar_kit_plugin_version: "2020.2.1"
           since_build: "202"
           until_build: "202.*"
+        - idea_version: "IU-203.4818.26-EAP-SNAPSHOT"
+          php_plugin_version: "203.4818.52"
+          psi_viewer_plugin_version: "203-SNAPSHOT"
+          grammar_kit_plugin_version: "2020.2.1"
+          since_build: "203"
+          until_build: "203.*"
 
     steps:
     - uses: actions/checkout@v2
