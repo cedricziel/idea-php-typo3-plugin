@@ -23,11 +23,6 @@ abstract public class FluidCompletionAutoPopupTestCase extends BasePlatformTestC
         return false;
     }
 
-    @Override
-    protected void invokeTestRunnable(@NotNull Runnable runnable) {
-        myTester.runWithAutoPopupEnabled(runnable);
-    }
-
     public LookupImpl getLookup() {
         return (LookupImpl)myFixture.getLookup();
     }
