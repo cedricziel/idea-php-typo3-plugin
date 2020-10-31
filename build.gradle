@@ -44,7 +44,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'idea'
-    apply plugin: 'org.jetbrains.grammarkit'
     apply plugin: 'org.jetbrains.intellij'
     apply plugin: 'java'
 
