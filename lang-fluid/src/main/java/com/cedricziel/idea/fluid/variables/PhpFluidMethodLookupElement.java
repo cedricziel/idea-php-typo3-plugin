@@ -15,7 +15,7 @@ public class PhpFluidMethodLookupElement extends PhpLookupElement {
     }
 
     @Override
-    public void handleInsert(InsertionContext context) {
+    public void handleInsert(@NotNull InsertionContext context) {
         FluidTypeInsertHandler.getInstance().handleInsert(context, this);
     }
 

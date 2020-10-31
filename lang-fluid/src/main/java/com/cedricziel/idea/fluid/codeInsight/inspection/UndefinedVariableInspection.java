@@ -21,7 +21,7 @@ public class UndefinedVariableInspection extends LocalInspectionTool {
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new PsiElementVisitor() {
             @Override
-            public void visitElement(PsiElement element) {
+            public void visitElement(@NotNull PsiElement element) {
                 if (!PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(
                     PlatformPatterns.psiElement(FluidFieldChain.class).withParent(FluidFieldExpr.class))
                     .accepts(element)) {

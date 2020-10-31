@@ -1,6 +1,7 @@
 package com.cedricziel.idea.fluid.lang.psi;
 
 import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,12 +19,12 @@ public class FluidRecursiveWalkingVisitor extends FluidVisitor implements PsiRec
     }
 
     @Override
-    public void visitElement(final PsiElement element) {
+    public void visitElement(final @NotNull PsiElement element) {
         myWalkingState.elementStarted(element);
     }
 
     @Override
-    public void visitFile(final PsiFile file) {
+    public void visitFile(final @NotNull PsiFile file) {
         if (myVisitAllFileRoots) {
             final FileViewProvider viewProvider = file.getViewProvider();
             final List<PsiFile> allFiles = viewProvider.getAllFiles();

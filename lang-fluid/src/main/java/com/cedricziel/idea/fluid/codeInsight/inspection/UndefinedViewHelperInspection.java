@@ -21,7 +21,7 @@ public class UndefinedViewHelperInspection extends LocalInspectionTool {
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new PsiElementVisitor() {
             @Override
-            public void visitElement(PsiElement element) {
+            public void visitElement(@NotNull PsiElement element) {
                 if (!(element instanceof FluidViewHelperReference)) {
                     super.visitElement(element);
 
