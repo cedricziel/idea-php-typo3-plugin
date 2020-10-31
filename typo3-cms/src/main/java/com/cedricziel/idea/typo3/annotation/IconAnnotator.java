@@ -5,6 +5,7 @@ import com.cedricziel.idea.typo3.index.IconIndex;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
@@ -52,6 +53,9 @@ public class IconAnnotator implements Annotator {
             return;
         }
 
-        annotationHolder.createWarningAnnotation(new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1), "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.");
+        annotationHolder
+            .newAnnotation(HighlightSeverity.WARNING, "Unresolved icon - this may also occur if the icon is defined in your extension, but not in the global icon registry.")
+            .range(new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1))
+            .create();
     }
 }

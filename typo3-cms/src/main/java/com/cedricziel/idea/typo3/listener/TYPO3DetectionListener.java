@@ -8,7 +8,7 @@ import com.cedricziel.idea.typo3.index.extbase.ControllerActionIndex;
 import com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedIndex;
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
@@ -25,7 +25,7 @@ public class TYPO3DetectionListener implements ProjectManagerListener {
         this.checkProject(project);
 
         TYPO3CMSSettings instance = TYPO3CMSSettings.getInstance(project);
-        IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId("com.cedricziel.idea.typo3"));
+        IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PluginId.getId("com.cedricziel.idea.typo3"));
         if (plugin == null) {
             return;
         }
