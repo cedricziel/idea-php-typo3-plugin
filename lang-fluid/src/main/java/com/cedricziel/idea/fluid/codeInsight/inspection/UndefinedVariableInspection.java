@@ -10,7 +10,6 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class UndefinedVariableInspection extends LocalInspectionTool {

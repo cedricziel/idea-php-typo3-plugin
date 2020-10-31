@@ -3,7 +3,6 @@ package com.cedricziel.idea.fluid;
 import com.intellij.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.intellij.testFramework.fixtures.CompletionAutoPopupTester;
-import org.jetbrains.annotations.NotNull;
 
 abstract public class FluidCompletionAutoPopupTestCase extends BasePlatformTestCase {
     protected CompletionAutoPopupTester myTester;
