@@ -53,7 +53,7 @@
         <fileIndentOptionsProvider implementation="com.cedricziel.idea.fluid.lang.psi.codeStyle.FluidFileIndentOptionsProvider"/>
 
         <!-- live templates -->
-        <defaultLiveTemplatesProvider implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidLiveTemplateProvider"/>
+        <defaultLiveTemplates file="/liveTemplates/Fluid.xml"/>
         <liveTemplateContext implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidTemplateContext"/>
 
         <!-- postfix completion -->
