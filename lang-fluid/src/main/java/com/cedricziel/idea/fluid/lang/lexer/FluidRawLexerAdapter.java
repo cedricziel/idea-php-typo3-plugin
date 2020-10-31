@@ -6,6 +6,7 @@ import java.io.Reader;
 
 public class FluidRawLexerAdapter extends FlexAdapter {
     public FluidRawLexerAdapter() {
+        //noinspection RedundantCast
         super(new _FluidLexer((Reader) null));
     }
 }

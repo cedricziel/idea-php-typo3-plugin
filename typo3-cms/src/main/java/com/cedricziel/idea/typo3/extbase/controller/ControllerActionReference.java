@@ -10,13 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ControllerActionReference extends PsiPolyVariantReferenceBase<PsiElement> {
     private final String actionName;
-    private final String fullActionName;
 
     public ControllerActionReference(StringLiteralExpression psiElement) {
         super(psiElement);
 
         this.actionName = psiElement.getContents();
-        this.fullActionName = (psiElement.getContents() + "Action");
     }
 
     @NotNull

@@ -79,17 +79,14 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
             String key = ((StringLiteralExpression) element.getKey()).getContents();
             if (null != element.getValue() && element.getValue() instanceof ClassConstantReference) {
                 ClassConstantReference value = (ClassConstantReference) element.getValue();
-                switch (key) {
-                    case "className":
-                        PhpExpression classReference = value.getClassReference();
-                        if (classReference instanceof PhpReference) {
-                            PhpReference ref = (PhpReference) classReference;
-                            serviceDefinition.setClass(ref.getFQN());
-                            serviceDefinition.setClassName(ref.getFQN());
-                            serviceDefinition.setSignature(ref.getSignature());
-                        }
-
-                        break;
+                if (key.equals("className")) {
+                    PhpExpression classReference = value.getClassReference();
+                    if (classReference instanceof PhpReference) {
+                        PhpReference ref = (PhpReference) classReference;
+                        serviceDefinition.setClass(ref.getFQN());
+                        serviceDefinition.setClassName(ref.getFQN());
+                        serviceDefinition.setSignature(ref.getSignature());
+                    }
                 }
             }
 
@@ -123,10 +120,10 @@ public class CoreServiceDefinitionParserVisitor extends PsiRecursiveElementVisit
             if (null != element.getValue() && PhpPatterns.psiElement(PhpElementTypes.NUMBER).accepts(element.getValue())) {
                 switch (key) {
                     case "priority":
-                        serviceDefinition.setPriority(new Integer(element.getValue().getText()));
+                        serviceDefinition.setPriority(Integer.valueOf(element.getValue().getText()));
                         break;
                     case "quality":
-                        serviceDefinition.setQuality(new Integer(element.getValue().getText()));
+                        serviceDefinition.setQuality(Integer.valueOf(element.getValue().getText()));
                         break;
                 }
             }

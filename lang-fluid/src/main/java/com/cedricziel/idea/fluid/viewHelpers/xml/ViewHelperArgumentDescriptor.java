@@ -13,11 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ViewHelperArgumentDescriptor implements XmlAttributeDescriptor, NamespaceAwareXmlAttributeDescriptor {
 
-    private final ViewHelper viewHelper;
     private final ViewHelperArgument viewHelperArgument;
 
     public ViewHelperArgumentDescriptor(ViewHelper viewHelper, ViewHelperArgument viewHelperArgument) {
-        this.viewHelper = viewHelper;
         this.viewHelperArgument = viewHelperArgument;
     }
 
