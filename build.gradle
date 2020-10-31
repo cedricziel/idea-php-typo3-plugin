@@ -1,20 +1,14 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
-buildscript {
-    repositories {
-        mavenCentral()
-
-        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
-    }
-}
-
 plugins {
-    id "org.jetbrains.intellij" version "0.5.0"
+    id "org.jetbrains.intellij" version "0.6.1"
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}"
     id 'com.palantir.git-version' version "0.12.3"
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
 }
 
 def details = versionDetails()
@@ -62,6 +56,12 @@ subprojects {
         version ideaVersion
         sameSinceUntilBuild Boolean.valueOf(isEAP)
         updateSinceUntilBuild true
+
+        tasks {
+            "buildSearchableOptions" {
+                enabled = false
+            }
+        }
     }
 
     publishPlugin {
