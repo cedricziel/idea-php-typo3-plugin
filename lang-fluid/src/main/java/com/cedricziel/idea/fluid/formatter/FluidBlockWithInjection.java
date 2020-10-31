@@ -45,7 +45,7 @@ public class FluidBlockWithInjection extends FluidBlock {
 
     @NotNull
     public List<Block> getSubBlocks() {
-        List<Block> result = ContainerUtil.newArrayList();
+        List<Block> result = new ArrayList<>();
         this.myInjectedBlockBuilder.addInjectedBlocks(result, this.myNode, this.myWrap, this.myAlignment, Indent.getNoneIndent());
 
         return result;
@@ -87,10 +87,10 @@ public class FluidBlockWithInjection extends FluidBlock {
                 return AbstractBlock.EMPTY;
             } else {
                 ArrayList<Block> result = new ArrayList<>(list.size());
-                Iterator var3 = list.iterator();
+                Iterator<Block> var3 = list.iterator();
 
                 while(var3.hasNext()) {
-                    Block block = (Block)var3.next();
+                    Block block = var3.next();
                     if (block.getTextRange().intersects(this.myRange)) {
                         result.add(new InjectedLanguageBlockWrapper(block, this.myOffset, this.myRange, null, this.getLanguage()));
                     }
