@@ -22,7 +22,7 @@
         <xml.xmlExtension implementation="com.cedricziel.idea.fluid.codeInsight.FluidHtmlExtension" order="first" id="Fluid"/>
 
         <!-- inner expression language -->
-        <fileTypeFactory implementation="com.cedricziel.idea.fluid.lang.FluidFileTypeFactory"/>
+        <fileType name="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidFileType" fieldName="INSTANCE" language="Fluid"/>
         <lang.parserDefinition language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidParserDefinition"/>
         <lang.ast.factory language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidAstFactory"/>
         <lang.braceMatcher language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidBraceMatcher"/>
