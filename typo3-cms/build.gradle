@@ -7,16 +7,13 @@ def requiredPlugins = [
     "com.jetbrains.php:${phpPluginVersion}",
     'CSS',
     'JavaScriptLanguage',
+    'platform-images',
     'properties',
     'yaml',
     "PsiViewer:${psiViewerPluginVersion}",
     project(':lang-fluid'),
     project(':lang-typoscript'),
 ]
-
-if (ideaVersion.contains("201.") || ideaVersion.contains("2020")) {
-    requiredPlugins.add('platform-images')
-}
 
 intellij {
     version ideaVersion
@@ -41,13 +38,5 @@ sourceSets {
         resources {
             srcDir 'testData'
         }
-    }
-}
-
-test {
-    if (ideaVersion.contains("201.") || ideaVersion.contains("2020")) {
-        exclude '**/TranslationFoldingBuilderTest_193.class'
-    } else if (ideaVersion.contains("193.") || ideaVersion.contains("2019")) {
-        exclude '**/TranslationFoldingBuilderTest.class'
     }
 }
