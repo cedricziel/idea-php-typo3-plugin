@@ -232,7 +232,7 @@ public class FluidUtil {
         @Override
         public void visitPhpMethodReference(MethodReference reference) {
             String name = reference.getName();
-            if (!name.equals("assign") && !name.equals("assignMultiple")) {
+            if (name ==null || !name.equals("assign") && !name.equals("assignMultiple")) {
                 super.visitPhpMethodReference(reference);
                 return;
             }
