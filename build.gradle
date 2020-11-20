@@ -1,8 +1,8 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id "org.jetbrains.intellij" version "0.6.3"
-    id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}"
+    id "org.jetbrains.intellij" version "0.6.4"
+    id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}" apply false
     id 'com.palantir.git-version' version "0.12.3"
 }
 
@@ -46,9 +46,11 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'org.jetbrains.intellij'
     apply plugin: 'java'
+    apply plugin: "org.jetbrains.grammarkit"
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     intellij {
@@ -77,7 +79,7 @@ subprojects {
     }
 
     grammarKit {
-        grammarKitRelease = grammarKitRelease
+        grammarKitRelease = 2020.1
         jflexRelease = jFlexRelease
     }
 
