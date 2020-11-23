@@ -79,7 +79,6 @@ subprojects {
     }
 
     grammarKit {
-        grammarKitRelease = 2020.1
         jflexRelease = jFlexRelease
     }
 
