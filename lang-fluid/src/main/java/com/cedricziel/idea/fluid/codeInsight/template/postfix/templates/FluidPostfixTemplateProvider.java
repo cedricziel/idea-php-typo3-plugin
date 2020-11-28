@@ -14,9 +14,9 @@ public class FluidPostfixTemplateProvider implements PostfixTemplateProvider {
     @Override
     public Set<PostfixTemplate> getTemplates() {
         return ContainerUtil.set(
-            new AliasPostfixTemplate(),
-            new ForEachPostfixTemplate(),
-            new DebugInlinePostfixTemplate()
+            new AliasPostfixTemplate(this),
+            new ForEachPostfixTemplate(this),
+            new DebugInlinePostfixTemplate(this)
         );
     }
 

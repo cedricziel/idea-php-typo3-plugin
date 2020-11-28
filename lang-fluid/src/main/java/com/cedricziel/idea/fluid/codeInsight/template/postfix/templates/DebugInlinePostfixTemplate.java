@@ -15,9 +15,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class DebugInlinePostfixTemplate extends PostfixTemplate {
-
-    protected DebugInlinePostfixTemplate() {
-        super("f:debug", "Pipes the expression result into a debug statement");
+    protected DebugInlinePostfixTemplate(FluidPostfixTemplateProvider fluidPostfixTemplateProvider) {
+        super("f:debug", "deb", "Pipes the expression result into a debug statement", fluidPostfixTemplateProvider);
     }
 
     @Override

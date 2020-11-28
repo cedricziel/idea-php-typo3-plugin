@@ -18,9 +18,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class AliasPostfixTemplate extends PostfixTemplate {
-
-    protected AliasPostfixTemplate() {
-        super("f:alias", "Alias the current expression");
+    protected AliasPostfixTemplate(FluidPostfixTemplateProvider fluidPostfixTemplateProvider) {
+        super("f:alias", "alias","Alias the current expression", fluidPostfixTemplateProvider);
     }
 
     @Override
