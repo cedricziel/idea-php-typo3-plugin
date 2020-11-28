@@ -17,7 +17,7 @@ public class TypoScriptFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "TypoScript file";
+        return "TypoScript";
     }
 
     @NotNull
