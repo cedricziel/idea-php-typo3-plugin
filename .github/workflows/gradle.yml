@@ -35,7 +35,7 @@ jobs:
           java_version: "1.11"
           php_plugin_version: "203.5981.43"
           psi_viewer_plugin_version: "203-SNAPSHOT"
-          grammar_kit_plugin_version: "2020.3"
+          grammar_kit_plugin_version: "2020.2.1"
           since_build: "203"
           until_build: "203.*"
 
