@@ -26,7 +26,7 @@ public class FluidViewHelperReferenceInsertHandler implements InsertHandler<Look
     public static final InsertHandler<LookupElement> INSTANCE = new FluidViewHelperReferenceInsertHandler();
 
     @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
+    public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
         Editor editor = context.getEditor();
         if (context.getCompletionChar() == '(') {
             context.setAddCompletionChar(false);

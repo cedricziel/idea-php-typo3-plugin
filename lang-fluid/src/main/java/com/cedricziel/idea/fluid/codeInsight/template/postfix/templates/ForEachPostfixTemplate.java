@@ -15,9 +15,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class ForEachPostfixTemplate extends PostfixTemplate {
-
-    protected ForEachPostfixTemplate() {
-        super("f:for", "Wrap element in f:for loop");
+    protected ForEachPostfixTemplate(FluidPostfixTemplateProvider fluidPostfixTemplateProvider) {
+        super("f:for", "for", "Wrap element in f:for loop", fluidPostfixTemplateProvider);
     }
 
     @Override

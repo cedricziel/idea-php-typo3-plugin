@@ -5,6 +5,7 @@ import com.cedricziel.idea.typo3.index.IconIndex;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.ui.ImageUtil;
 import com.intellij.util.ui.UIUtil;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -87,7 +88,7 @@ public class IconUtil {
         private BufferedImage image = null;
 
         public BufferedImage createImage(int w, int h) {
-            image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+            image = ImageUtil.createImage(w, h, BufferedImage.TYPE_INT_ARGB);
             return image;
         }
 

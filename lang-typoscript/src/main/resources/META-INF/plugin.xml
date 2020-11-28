@@ -15,7 +15,7 @@
     </change-notes>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileTypeFactory implementation="com.cedricziel.idea.typoscript.lang.TypoScriptFileTypeFactory"/>
+        <fileType name="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.TypoScriptFileType" fieldName="INSTANCE" language="TypoScript" extensions="typoscript"/>
         <lang.parserDefinition language="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.parser.TypoScriptParserDefinition"/>
         <lang.syntaxHighlighterFactory language="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.TypoScriptSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.cedricziel.idea.typoscript.lang.TypoScriptColorSettingsPage"/>

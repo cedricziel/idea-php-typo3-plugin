@@ -22,8 +22,9 @@
         <xml.xmlExtension implementation="com.cedricziel.idea.fluid.codeInsight.FluidHtmlExtension" order="first" id="Fluid"/>
 
         <!-- inner expression language -->
-        <fileTypeFactory implementation="com.cedricziel.idea.fluid.lang.FluidFileTypeFactory"/>
+        <fileType name="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidFileType" fieldName="INSTANCE" language="Fluid" extensions="fluid"/>
         <lang.parserDefinition language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidParserDefinition"/>
+        <lang.ast.factory language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidAstFactory"/>
         <lang.braceMatcher language="Fluid" implementationClass="com.cedricziel.idea.fluid.lang.FluidBraceMatcher"/>
         <lang.fileViewProviderFactory language="Fluid" implementationClass="com.cedricziel.idea.fluid.file.FluidFileViewProviderFactory"/>
         <editorHighlighterProvider filetype="Fluid" implementationClass="com.cedricziel.idea.fluid.editor.highlighter.FluidEditorHighlighterFactory"/>
@@ -52,7 +53,7 @@
         <fileIndentOptionsProvider implementation="com.cedricziel.idea.fluid.lang.psi.codeStyle.FluidFileIndentOptionsProvider"/>
 
         <!-- live templates -->
-        <defaultLiveTemplatesProvider implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidLiveTemplateProvider"/>
+        <defaultLiveTemplates file="/liveTemplates/Fluid.xml"/>
         <liveTemplateContext implementation="com.cedricziel.idea.fluid.codeInsight.template.FluidTemplateContext"/>
 
         <!-- postfix completion -->

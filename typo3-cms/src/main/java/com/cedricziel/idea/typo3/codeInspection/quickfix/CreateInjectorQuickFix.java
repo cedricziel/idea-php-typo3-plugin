@@ -16,7 +16,6 @@ import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
@@ -27,6 +26,8 @@ import com.jetbrains.php.lang.psi.resolve.types.PhpType;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 public class CreateInjectorQuickFix implements LocalQuickFix {
 
@@ -93,7 +94,7 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
             return;
         }
 
-        new WriteCommandAction(project) {
+        new WriteCommandAction(project, element.getContainingFile()) {
             @Override
             protected void run(@NotNull Result result) {
                 StringBuffer textBuf = new StringBuffer();
@@ -106,7 +107,7 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
                 CodeStyleManager.getInstance(project).reformatText(containingClass.getContainingFile(), insertPos, endPos + 1);
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
-                CodeStyleManager.getInstance(project).reformatText(docCommentElement.getContainingFile(), ContainerUtil.list(docCommentElement.getTextRange()));
+                CodeStyleManager.getInstance(project).reformatText(docCommentElement.getContainingFile(), Collections.singletonList(docCommentElement.getTextRange()));
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
                 Method insertedMethod = containingClass.findMethodByName(methodName);

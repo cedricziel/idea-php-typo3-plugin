@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FluidQuoteHandler extends SimpleTokenSetQuoteHandler {
     public FluidQuoteHandler() {
-        super(new IElementType[]{FluidTypes.DOUBLE_QUOTED_STRING, FluidTypes.SINGLE_QUOTED_STRING});
+        super(FluidTypes.DOUBLE_QUOTED_STRING, FluidTypes.SINGLE_QUOTED_STRING);
     }
 
     public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {

@@ -25,7 +25,7 @@ public class FluidTypeCompletionProvider extends CompletionProvider<CompletionPa
     }
 
     @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+    protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
         PsiElement psiElement = parameters.getOriginalPosition();
         if (psiElement == null) {
             return;

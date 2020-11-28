@@ -21,8 +21,8 @@ public class FluidLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSet
 
     public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
         if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
-            consumer.showStandardOptions(new String[]{"RIGHT_MARGIN"});
-            consumer.showStandardOptions(new String[]{"WRAP_ON_TYPING"});
+            consumer.showStandardOptions("RIGHT_MARGIN");
+            consumer.showStandardOptions("WRAP_ON_TYPING");
         }
     }
 
@@ -36,6 +36,8 @@ public class FluidLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSet
         return new SmartIndentOptionsEditor();
     }
 
+    @Override
+    @NotNull
     public CommonCodeStyleSettings getDefaultCommonSettings() {
         CommonCodeStyleSettings styleSettings = new CommonCodeStyleSettings(this.getLanguage());
         styleSettings.initIndentOptions();

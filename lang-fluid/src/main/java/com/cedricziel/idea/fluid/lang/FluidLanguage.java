@@ -1,8 +1,8 @@
 package com.cedricziel.idea.fluid.lang;
 
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.psi.templateLanguages.TemplateLanguage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ public class FluidLanguage extends Language implements TemplateLanguage {
 
     @SuppressWarnings("SameReturnValue")
     public static LanguageFileType getDefaultTemplateLang() {
-        return StdFileTypes.HTML;
+        return HtmlFileType.INSTANCE;
     }
 
     private FluidLanguage() {

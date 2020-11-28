@@ -4,7 +4,6 @@ import com.cedricziel.idea.fluid.extensionPoints.NamespaceProvider;
 import com.cedricziel.idea.fluid.extensionPoints.ViewHelperProvider;
 import com.cedricziel.idea.fluid.lang.psi.FluidViewHelperReference;
 import com.cedricziel.idea.fluid.tagMode.FluidNamespace;
-import com.cedricziel.idea.fluid.util.FluidUtil;
 import com.cedricziel.idea.fluid.viewHelpers.model.ViewHelper;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -22,7 +21,7 @@ public class UndefinedViewHelperInspection extends LocalInspectionTool {
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly) {
         return new PsiElementVisitor() {
             @Override
-            public void visitElement(PsiElement element) {
+            public void visitElement(@NotNull PsiElement element) {
                 if (!(element instanceof FluidViewHelperReference)) {
                     super.visitElement(element);
 
