@@ -207,7 +207,7 @@ public class TranslationUtil {
         }
 
         // Try to find the one with the selected favorite locale
-        String defaultLocale = (String) TYPO3CMSProjectSettings.getInstance(project).translationFavoriteLocale;
+        String defaultLocale = (String) TYPO3CMSProjectSettings.getInstance(project).translationFoldingLocale;
         if (defaultLocale != null && !defaultLocale.isEmpty()) {
             for (StubTranslation property : stubs) {
                 if (property.getLanguage().equals(defaultLocale)) {

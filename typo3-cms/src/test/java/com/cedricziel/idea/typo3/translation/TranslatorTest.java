@@ -29,7 +29,7 @@ public class TranslatorTest extends AbstractTestCase {
 
     public void testWillReturnNullOnEmptyResult() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "en";
 
         myFixture.copyFileToProject("folding_xml.xml", "typo3conf/ext/foo/Resources/Private/Language/locallang.xml");
 
@@ -38,7 +38,7 @@ public class TranslatorTest extends AbstractTestCase {
 
     public void testCanTranslateLLLString() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "en";
 
         myFixture.copyFileToProject("folding_xml.xml", "typo3conf/ext/foo/Resources/Private/Language/locallang.xml");
 
@@ -47,7 +47,7 @@ public class TranslatorTest extends AbstractTestCase {
 
     public void testCanTranslateLLLStringInNonDefaultXMLLanguage() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "de";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "de";
 
         myFixture.copyFileToProject("folding_xml.xml", "typo3conf/ext/foo/Resources/Private/Language/locallang.xml");
 
@@ -58,7 +58,7 @@ public class TranslatorTest extends AbstractTestCase {
 
     public void testCanTranslateLLLStringXLF() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "en";
 
         myFixture.copyFileToProject("folding_xlf.xlf", "typo3conf/ext/foo/Resources/Private/Language/locallang.xlf");
 
@@ -67,7 +67,7 @@ public class TranslatorTest extends AbstractTestCase {
 
     public void testCanTranslateLLLStringXLFNonDefaultLanguage() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "de";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "de";
 
         myFixture.copyFileToProject("folding_xlf.xlf", "typo3conf/ext/foo/Resources/Private/Language/locallang.xlf");
 

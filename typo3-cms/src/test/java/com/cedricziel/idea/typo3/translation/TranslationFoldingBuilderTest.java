@@ -11,7 +11,7 @@ public class TranslationFoldingBuilderTest extends AbstractTestCase {
 
     public void testXMLTranslationsCanBeFolded() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "en";
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("folding_xml.xml", "foo/Resources/Private/Language/locallang.xml");
@@ -23,7 +23,7 @@ public class TranslationFoldingBuilderTest extends AbstractTestCase {
 
     public void testXMLTranslationsCanBeFoldedInNonDefaultLanguage() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "de";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "de";
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("folding_xml.xml", "foo/Resources/Private/Language/locallang.xml");
@@ -57,7 +57,7 @@ public class TranslationFoldingBuilderTest extends AbstractTestCase {
 
     public void testXLFTranslationsCanBeFolded() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "en";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "en";
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");
@@ -69,7 +69,7 @@ public class TranslationFoldingBuilderTest extends AbstractTestCase {
 
     public void testXLFTranslationsCanBeFoldedInNonDefaultLanguage() {
         TYPO3CMSProjectSettings.getInstance(getProject()).translationEnableTextFolding = true;
-        TYPO3CMSProjectSettings.getInstance(getProject()).translationFavoriteLocale = "de";
+        TYPO3CMSProjectSettings.getInstance(getProject()).translationFoldingLocale = "de";
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
         myFixture.copyFileToProject("folding_xlf.xlf", "foo/Resources/Private/Language/locallang.xlf");

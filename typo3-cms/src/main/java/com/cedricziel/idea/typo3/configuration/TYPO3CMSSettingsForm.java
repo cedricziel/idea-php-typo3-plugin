@@ -18,7 +18,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
     private JCheckBox iconAnnotatorEnabled;
     private JCheckBox routeAnnotatorEnabled;
     private JCheckBox translationEnableTextFolding;
-    private JComboBox translationFavoriteLocale;
+    private JComboBox<String> translationFavoriteLocale;
 
     public TYPO3CMSSettingsForm(@NotNull Project project) {
         this.project = project;
@@ -53,7 +53,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
             || iconAnnotatorEnabled.isSelected() != getSettings().iconAnnotatorEnabled
             || routeAnnotatorEnabled.isSelected() != getSettings().routeAnnotatorEnabled
             || translationEnableTextFolding.isSelected() != getSettings().translationEnableTextFolding
-            || translationFavoriteLocale.getSelectedItem() != getSettings().translationFavoriteLocale
+            || translationFavoriteLocale.getSelectedItem() != getSettings().translationFoldingLocale
         ;
     }
 
@@ -64,7 +64,7 @@ public class TYPO3CMSSettingsForm implements Configurable {
         getSettings().routeAnnotatorEnabled = routeAnnotatorEnabled.isSelected();
 
         getSettings().translationEnableTextFolding = translationEnableTextFolding.isSelected();
-        getSettings().translationFavoriteLocale = translationFavoriteLocale.getSelectedItem();
+        getSettings().translationFoldingLocale = (String) translationFavoriteLocale.getSelectedItem();
     }
 
     public TYPO3CMSProjectSettings getSettings() {
@@ -77,6 +77,6 @@ public class TYPO3CMSSettingsForm implements Configurable {
         routeAnnotatorEnabled.setSelected(getSettings().routeAnnotatorEnabled);
 
         translationEnableTextFolding.setSelected(getSettings().translationEnableTextFolding);
-        translationFavoriteLocale.setSelectedItem(getSettings().translationFavoriteLocale);
+        translationFavoriteLocale.setSelectedItem(getSettings().translationFoldingLocale);
     }
 }

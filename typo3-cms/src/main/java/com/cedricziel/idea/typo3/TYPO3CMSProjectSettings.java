@@ -21,7 +21,7 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
     public boolean iconAnnotatorEnabled;
     public boolean routeAnnotatorEnabled;
     public boolean translationEnableTextFolding;
-    public Object translationFavoriteLocale;
+    public String translationFoldingLocale;
 
     public TYPO3CMSProjectSettings() {
         this.pluginEnabled = false;
@@ -32,7 +32,7 @@ public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CM
         this.routeAnnotatorEnabled = true;
 
         this.translationEnableTextFolding = true;
-        this.translationFavoriteLocale = "en";
+        this.translationFoldingLocale = "en";
     }
 
     public static TYPO3CMSProjectSettings getInstance(@NotNull Project project) {
