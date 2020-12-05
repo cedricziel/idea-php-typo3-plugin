@@ -135,7 +135,12 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
         }
 
         String path = file.getPath();
-        String filePosition = extensionKeyFromFile + path.split(extensionRootFolder.getPath())[1];
+        final String[] splitByExtensionFolder = path.split(extensionRootFolder.getPath());
+        if (splitByExtensionFolder.length < 2) {
+            throw new FileNotFoundException("The path given does not match the path expected.");
+        }
+
+        String filePosition = extensionKeyFromFile + splitByExtensionFolder[1];
 
         if (!languageKey.equals("en")) {
             filePosition = filePosition.replace(languageKey + ".", "");
