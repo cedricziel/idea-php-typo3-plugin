@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 @State(
     name = "typo3cmsproject",
     storages = {
-        @Storage(value = "/typo3-cms.xml", roamingType = RoamingType.DISABLED)
+        @Storage("typo3-cms.xml")
     }
 )
 public class TYPO3CMSProjectSettings implements PersistentStateComponent<TYPO3CMSProjectSettings> {
