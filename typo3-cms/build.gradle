@@ -34,6 +34,7 @@ patchPluginXml {
 }
 
 sourceSets {
+    main.resources.srcDirs += [ "src/main/java" ]
     test {
         resources {
             srcDir 'testData'
