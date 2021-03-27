@@ -32,6 +32,8 @@ public class MissingTableInspectionTest extends AbstractTestCase {
     public void testAllowedKeyCanContainCSVOfTables() {
         myFixture.enableInspections(new MissingTableInspection());
 
+        myFixture.addFileToProject("ext_tables.sql", "CREATE TABLE tt_content; CREATE TABLE pages;");
+
         VirtualFile virtualFile = myFixture.copyFileToProject("MissingTableInspectionIsNotMarkedForAllowed.php", "MyClass.php");
         myFixture.configureFromExistingVirtualFile(virtualFile);
 
