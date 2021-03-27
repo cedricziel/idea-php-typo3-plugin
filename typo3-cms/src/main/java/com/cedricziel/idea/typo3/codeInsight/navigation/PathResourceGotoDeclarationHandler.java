@@ -34,7 +34,7 @@ public class PathResourceGotoDeclarationHandler implements GotoDeclarationHandle
 
     @NotNull
     private PsiElement[] emptyPsiElementArray() {
-        return new PsiElement[0];
+        return PsiElement.EMPTY_ARRAY;
     }
 
     @Nullable

@@ -49,7 +49,7 @@ public class TranslationFoldingBuilder extends FoldingBuilderEx {
             }
         }
 
-        return descriptors.toArray(new FoldingDescriptor[0]);
+        return descriptors.toArray(FoldingDescriptor.EMPTY);
     }
 
     @Nullable

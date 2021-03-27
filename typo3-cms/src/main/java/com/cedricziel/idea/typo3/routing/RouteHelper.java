@@ -61,7 +61,7 @@ public class RouteHelper {
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return results.toArray(new PsiElement[0]);
+        return results.toArray(PsiElement.EMPTY_ARRAY);
     }
 
     @NotNull
@@ -81,7 +81,7 @@ public class RouteHelper {
             });
         }
 
-        return result.toArray(new PsiElement[0]);
+        return result.toArray(PsiElement.EMPTY_ARRAY);
     }
 
     @NotNull

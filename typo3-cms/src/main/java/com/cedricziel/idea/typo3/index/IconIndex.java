@@ -74,7 +74,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
                     .toArray(PsiElement[]::new);
         }
 
-        return new PsiElement[0];
+        return PsiElement.EMPTY_ARRAY;
     }
 
     @NotNull

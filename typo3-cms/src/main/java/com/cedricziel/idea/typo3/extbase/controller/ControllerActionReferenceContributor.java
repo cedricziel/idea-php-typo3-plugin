@@ -18,7 +18,7 @@ public class ControllerActionReferenceContributor extends PsiReferenceContributo
                     @Override
                     public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (!(element instanceof StringLiteralExpression)) {
-                            return new PsiReference[0];
+                            return PsiReference.EMPTY_ARRAY;
                         }
 
                         StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) element;
@@ -29,7 +29,7 @@ public class ControllerActionReferenceContributor extends PsiReferenceContributo
                             return new PsiReference[]{new ControllerActionReference(stringLiteralExpression)};
                         }
 
-                        return new PsiReference[0];
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 }
         );

@@ -43,6 +43,6 @@ public class ControllerActionUtil {
             return true;
         }, GlobalSearchScope.allScope(project));
 
-        return elements.toArray(new PsiElement[0]);
+        return elements.toArray(PsiElement.EMPTY_ARRAY);
     }
 }
