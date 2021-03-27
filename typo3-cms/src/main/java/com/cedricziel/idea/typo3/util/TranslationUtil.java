@@ -142,7 +142,7 @@ public class TranslationUtil {
             }
         });
 
-        return elements.toArray(new PsiElement[0]);
+        return elements.toArray(PsiElement.EMPTY_ARRAY);
     }
 
     public static boolean hasTranslationReference(@NotNull PsiElement element) {

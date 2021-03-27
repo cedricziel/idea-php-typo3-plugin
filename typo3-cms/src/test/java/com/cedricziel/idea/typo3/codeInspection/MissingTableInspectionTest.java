@@ -28,4 +28,24 @@ public class MissingTableInspectionTest extends AbstractTestCase {
 
         myFixture.checkHighlighting();
     }
+
+    public void testAllowedKeyCanContainCSVOfTables() {
+        myFixture.enableInspections(new MissingTableInspection());
+
+        myFixture.addFileToProject("ext_tables.sql", "CREATE TABLE tt_content; CREATE TABLE pages;");
+
+        VirtualFile virtualFile = myFixture.copyFileToProject("MissingTableInspectionIsNotMarkedForAllowed.php", "MyClass.php");
+        myFixture.configureFromExistingVirtualFile(virtualFile);
+
+        myFixture.checkHighlighting();
+    }
+
+    public void testAllowedKeyCanContainCSVOfTablesNotExistent() {
+        myFixture.enableInspections(new MissingTableInspection());
+
+        VirtualFile virtualFile = myFixture.copyFileToProject("MissingTableInspectionIsMarkedForAllowed.php", "MyClass.php");
+        myFixture.configureFromExistingVirtualFile(virtualFile);
+
+        myFixture.checkHighlighting();
+    }
 }

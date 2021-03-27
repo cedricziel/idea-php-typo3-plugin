@@ -23,7 +23,7 @@ public class SignalSlotDispatcherUtil {
             }
         });
 
-        return foundElements.toArray(new PsiElement[0]);
+        return foundElements.toArray(PsiElement.EMPTY_ARRAY);
     }
 
     public static LookupElement[] getPossibleSlotMethodLookupElements(@NotNull Project project, @NotNull String fqn) {
@@ -36,6 +36,6 @@ public class SignalSlotDispatcherUtil {
             }
         });
 
-        return lookupElements.toArray(new LookupElement[0]);
+        return lookupElements.toArray(LookupElement.EMPTY_ARRAY);
     }
 }

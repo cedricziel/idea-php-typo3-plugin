@@ -80,7 +80,7 @@ public class SignalSlotMethodReference extends PsiPolyVariantReferenceBase<PsiEl
             results.add(new PsiElementResolveResult(psiElement));
         }
 
-        return results.toArray(new ResolveResult[0]);
+        return results.toArray(ResolveResult.EMPTY_ARRAY);
     }
 
     @NotNull
