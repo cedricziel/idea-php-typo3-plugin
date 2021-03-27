@@ -72,7 +72,7 @@ public class FluidFileType extends LanguageFileType implements TemplateLanguageF
     }
 
     @Override
-    public String getCharset(@NotNull VirtualFile file, @NotNull byte[] content) {
+    public String getCharset(@NotNull VirtualFile file, @NotNull byte @NotNull [] content) {
         return CharsetToolkit.UTF8;
     }
 

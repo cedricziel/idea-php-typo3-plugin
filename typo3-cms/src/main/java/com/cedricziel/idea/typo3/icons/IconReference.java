@@ -20,13 +20,13 @@ public class IconReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(IconIndex.getIconDefinitionElements(myElement.getProject(), iconName));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return IconUtil.createIconLookupElements(myElement.getProject());
     }
 }

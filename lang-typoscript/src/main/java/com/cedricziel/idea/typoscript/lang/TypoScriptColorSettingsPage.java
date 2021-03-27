@@ -1,6 +1,5 @@
 package com.cedricziel.idea.typoscript.lang;
 
-import com.cedricziel.idea.typoscript.lang.psi.TypoScriptFile;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
@@ -78,13 +77,13 @@ public class TypoScriptColorSettingsPage implements ColorSettingsPage {
 
   @NotNull
   @Override
-  public AttributesDescriptor[] getAttributeDescriptors() {
+  public AttributesDescriptor @NotNull [] getAttributeDescriptors() {
     return DESCRIPTORS;
   }
 
   @NotNull
   @Override
-  public ColorDescriptor[] getColorDescriptors() {
+  public ColorDescriptor @NotNull [] getColorDescriptors() {
     return ColorDescriptor.EMPTY_ARRAY;
   }
 

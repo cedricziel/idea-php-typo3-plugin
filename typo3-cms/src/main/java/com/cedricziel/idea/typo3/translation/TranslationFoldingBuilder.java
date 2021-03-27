@@ -20,7 +20,7 @@ import java.util.List;
 public class TranslationFoldingBuilder extends FoldingBuilderEx {
     @NotNull
     @Override
-    public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
+    public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
         if (!TYPO3CMSProjectSettings.isEnabled(root) || !TYPO3CMSProjectSettings.getInstance(root.getProject()).translationEnableTextFolding) {
             return FoldingDescriptor.EMPTY;
         }

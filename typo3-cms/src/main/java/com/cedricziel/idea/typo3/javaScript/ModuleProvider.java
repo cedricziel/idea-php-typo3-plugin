@@ -19,7 +19,7 @@ import java.util.Set;
 public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     @NotNull
     @Override
-    protected ResolveResult[] resolveElement(@NotNull PsiElement psiElement, @NotNull String s) {
+    protected ResolveResult @NotNull [] resolveElement(@NotNull PsiElement psiElement, @NotNull String s) {
         if (!s.startsWith(JavaScriptUtil.MODULE_PREFIX)) {
             return ResolveResult.EMPTY_ARRAY;
         }
@@ -35,7 +35,7 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
 
     @NotNull
     @Override
-    protected Object[] getVariants(@NotNull PsiElement element) {
+    protected Object @NotNull [] getVariants(@NotNull PsiElement element) {
         Set<LookupElement> result = new HashSet<>();
 
         JavaScriptUtil.getModuleMap(element.getProject()).forEach((name, file) -> {

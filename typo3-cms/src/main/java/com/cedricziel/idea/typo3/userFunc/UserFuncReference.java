@@ -103,7 +103,7 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         if (this.methodName == null) {
 
             return ResolveResult.EMPTY_ARRAY;
@@ -123,7 +123,7 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
 
         List<Object> list = new ArrayList<>();
         PhpIndex phpIndex = PhpIndex.getInstance(myElement.getProject());

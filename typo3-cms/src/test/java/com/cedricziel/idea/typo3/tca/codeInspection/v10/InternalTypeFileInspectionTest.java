@@ -1,7 +1,6 @@
 package com.cedricziel.idea.typo3.tca.codeInspection.v10;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
-import com.cedricziel.idea.typo3.tca.codeInspection.InvalidQuantityInspection;
 import com.intellij.openapi.vfs.VirtualFile;
 
 public class InternalTypeFileInspectionTest extends AbstractTestCase {

@@ -80,7 +80,7 @@ public class CoreFlagParserVisitor extends PsiElementVisitor {
 
         IconStub icon = new IconStub(iconIdentifier, element);
         icon.setSource(iconSource);
-        icon.setProvider(iconProvider.getFQN());
+        icon.setProvider(iconProvider.getSignature());
 
         map.put(iconIdentifier, icon);
     }

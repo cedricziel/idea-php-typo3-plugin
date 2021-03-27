@@ -1,7 +1,6 @@
 package com.cedricziel.idea.typo3.javaScript.codeInspection;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
-import junit.framework.TestCase;
 
 public class MissingModulePHPInspectionTest extends AbstractTestCase {
     @Override

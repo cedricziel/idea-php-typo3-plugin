@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class FluidBraceMatcher implements PairedBraceMatcher {
     @NotNull
     @Override
-    public BracePair[] getPairs() {
+    public BracePair @NotNull [] getPairs() {
         return new BracePair[]{
             new BracePair(FluidTypes.LEFT_PARENTH, FluidTypes.RIGHT_PARENTH, false),
             new BracePair(FluidTypes.EXPR_START, FluidTypes.EXPR_END, true),

@@ -24,20 +24,20 @@ jobs:
     strategy:
       matrix:
         include:
-#        - idea_version: "IU-2020.2"
-#          java_version: "1.8"
-#          php_plugin_version: "202.6397.94"
-#          psi_viewer_plugin_version: "202-SNAPSHOT"
-#          grammar_kit_plugin_version: "2020.2.1"
-#          since_build: "202"
-#          until_build: "202.*"
-        - idea_version: "IU-203.5981.41-EAP-SNAPSHOT"
+        - idea_version: "IU-2020.3.3"
           java_version: "1.11"
-          php_plugin_version: "203.5981.43"
+          php_plugin_version: "203.7148.15"
           psi_viewer_plugin_version: "203-SNAPSHOT"
           grammar_kit_plugin_version: "2020.2.1"
           since_build: "203"
           until_build: "203.*"
+        - idea_version: "IU-211.6693.14-EAP-SNAPSHOT"
+          java_version: "1.11"
+          php_plugin_version: "211.6693.25"
+          psi_viewer_plugin_version: "211-SNAPSHOT"
+          grammar_kit_plugin_version: "2020.2.1"
+          since_build: "211"
+          until_build: "211.*"
 
     steps:
     - uses: actions/checkout@v2

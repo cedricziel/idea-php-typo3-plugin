@@ -9,13 +9,13 @@ import org.jetbrains.annotations.Nullable;
 public class TYPO3CMSProjectTemplatesFactory extends ProjectTemplatesFactory {
     @NotNull
     @Override
-    public String[] getGroups() {
+    public String @NotNull [] getGroups() {
         return new String[]{"PHP"};
     }
 
     @NotNull
     @Override
-    public ProjectTemplate[] createTemplates(@Nullable String group, WizardContext context) {
+    public ProjectTemplate @NotNull [] createTemplates(@Nullable String group, WizardContext context) {
         return new ProjectTemplate[]{
                 new TYPO3CMSClassicLayoutDirectoryProjectGenerator(),
                 new TYPO3CMSComposerLayoutDirectoryProjectGenerator()

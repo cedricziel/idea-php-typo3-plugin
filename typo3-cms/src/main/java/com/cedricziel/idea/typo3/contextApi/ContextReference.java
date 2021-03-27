@@ -22,7 +22,7 @@ public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         if (myElement instanceof StringLiteralExpression) {
             String aspectFQN = TYPO3Utility.getFQNByAspectName(((StringLiteralExpression) myElement).getContents());
             if (aspectFQN == null) {
@@ -37,7 +37,7 @@ public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         List<LookupElement> elements = new ArrayList<>();
         for (String availableAspect : TYPO3Utility.getAvailableAspects()) {
             elements.add(

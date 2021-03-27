@@ -56,7 +56,7 @@ public class CoreIconParserVisitor extends PsiRecursiveElementVisitor {
                                 continue;
                             }
 
-                            iconDefinition.setProvider(((ClassConstantReference) iconPropertyHashElement.getValue()).getFQN());
+                            iconDefinition.setProvider(((ClassConstantReference) iconPropertyHashElement.getValue()).getSignature());
                         }
                         if ("options".equals(propertyName)) {
                             if (!(iconPropertyHashElement.getValue() instanceof ArrayCreationExpression)) {

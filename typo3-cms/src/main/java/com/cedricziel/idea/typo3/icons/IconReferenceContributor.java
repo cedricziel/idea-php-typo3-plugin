@@ -32,7 +32,7 @@ public class IconReferenceContributor extends PsiReferenceContributor {
             new PsiReferenceProvider() {
                 @NotNull
                 @Override
-                public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                     StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) element;
                     MethodReference methodReference = (MethodReference) PsiTreeUtil.findFirstParent(stringLiteralExpression, p -> p instanceof MethodReference);
 

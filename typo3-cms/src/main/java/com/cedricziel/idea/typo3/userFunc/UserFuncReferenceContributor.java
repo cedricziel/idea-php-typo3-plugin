@@ -19,7 +19,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         return new PsiReference[]{new UserFuncReference((XmlToken) element)};
                     }
@@ -34,7 +34,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression element1 = (StringLiteralExpression) element;
                         if (element1.getContents().contains("->")) {
@@ -58,7 +58,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression element1 = (StringLiteralExpression) element;
                         if (element1.getContents().contains("->")) {
@@ -82,7 +82,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         ConcatenationExpression parent = (ConcatenationExpression) element.getParent();
                         StringLiteralExpression element1 = (StringLiteralExpression) element;
@@ -107,7 +107,7 @@ public class UserFuncReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         ConcatenationExpression parent = (ConcatenationExpression) element.getParent();
                         StringLiteralExpression element1 = (StringLiteralExpression) element;

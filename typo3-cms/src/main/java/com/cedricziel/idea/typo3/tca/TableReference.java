@@ -21,13 +21,13 @@ public class TableReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(getTableDefinitionElements(tablename, myElement.getProject()));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return TableUtil.createAvailableTableNamesLookupElements(myElement.getProject());
     }
 }

@@ -50,7 +50,7 @@ public class ViewHelperXmlElementDescriptor implements XmlElementDescriptor {
 
     @NotNull
     @Override
-    public Object[] getDependences() {
+    public Object @NotNull [] getDependences() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 

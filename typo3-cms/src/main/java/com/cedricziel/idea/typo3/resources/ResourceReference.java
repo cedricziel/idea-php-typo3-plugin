@@ -26,13 +26,13 @@ public class ResourceReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(ResourceUtil.getResourceDefinitionElements(myElement.getProject(), resourceName));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return ResourceUtil.getResourceLookupElements(myElement.getProject());
     }
 }

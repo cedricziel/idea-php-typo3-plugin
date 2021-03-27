@@ -14,7 +14,7 @@ public class RouteReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (isGenerator(element)) {
                             return new PsiReference[]{new RouteReference((StringLiteralExpression) element)};
                         }

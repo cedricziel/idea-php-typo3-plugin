@@ -26,7 +26,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         // known array hashes in TCA definitions
                         if (TCAUtil.arrayIndexIsTCATableNameField(element)) {
@@ -44,7 +44,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression stringElement = (StringLiteralExpression) element;
                         String argumentName = PhpLangUtil.getParameterName(stringElement);
@@ -67,7 +67,7 @@ public class TableReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression stringElement = (StringLiteralExpression) element;
                         String methodName = PhpLangUtil.getMethodName(element);

@@ -68,7 +68,7 @@ public class SignalSlotMethodReference extends PsiPolyVariantReferenceBase<PsiEl
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         if (classFqn.isEmpty()) {
             return ResolveResult.EMPTY_ARRAY;
         }
@@ -85,7 +85,7 @@ public class SignalSlotMethodReference extends PsiPolyVariantReferenceBase<PsiEl
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         if (classFqn.isEmpty()) {
             return LookupElement.EMPTY_ARRAY;
         }

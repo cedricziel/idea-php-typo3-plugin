@@ -22,7 +22,7 @@ public class SignalDispatcherReferenceContributor extends PsiReferenceContributo
             new PsiReferenceProvider() {
                 @NotNull
                 @Override
-                public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                     StringLiteralExpression subject = (StringLiteralExpression) element;
                     ParameterList parameterList = (ParameterList) PsiTreeUtil.findFirstParent(subject, e -> e instanceof ParameterList);
                     if (parameterList == null) {
