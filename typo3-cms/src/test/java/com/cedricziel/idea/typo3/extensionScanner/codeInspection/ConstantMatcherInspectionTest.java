@@ -1,7 +1,6 @@
 package com.cedricziel.idea.typo3.extensionScanner.codeInspection;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
-import junit.framework.TestCase;
 
 public class ConstantMatcherInspectionTest extends AbstractTestCase {
     @Override

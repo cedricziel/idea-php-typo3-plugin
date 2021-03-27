@@ -10,7 +10,6 @@ import com.intellij.psi.formatter.common.DefaultInjectedLanguageBlockBuilder;
 import com.intellij.psi.formatter.common.InjectedLanguageBlockBuilder;
 import com.intellij.psi.formatter.common.InjectedLanguageBlockWrapper;
 import com.intellij.psi.formatter.xml.XmlFormattingPolicy;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.template.formatter.AbstractXmlTemplateFormattingModelBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

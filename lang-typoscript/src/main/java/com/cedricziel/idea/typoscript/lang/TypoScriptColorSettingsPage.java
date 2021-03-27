@@ -1,6 +1,5 @@
 package com.cedricziel.idea.typoscript.lang;
 
-import com.cedricziel.idea.typoscript.lang.psi.TypoScriptFile;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
