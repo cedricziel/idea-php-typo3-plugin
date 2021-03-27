@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TYPO3InspectionToolProvider implements InspectionToolProvider {
     @NotNull
-    public Class[] getInspectionClasses() {
+    public Class @NotNull [] getInspectionClasses() {
 
         return new Class[]{
                 // Extension Scanner

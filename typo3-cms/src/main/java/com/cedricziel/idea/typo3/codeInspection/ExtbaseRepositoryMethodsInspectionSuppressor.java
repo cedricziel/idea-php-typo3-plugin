@@ -64,7 +64,7 @@ public class ExtbaseRepositoryMethodsInspectionSuppressor implements InspectionS
 
     @NotNull
     @Override
-    public SuppressQuickFix[] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
+    public SuppressQuickFix @NotNull [] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
         return SuppressQuickFix.EMPTY_ARRAY;
     }
 }

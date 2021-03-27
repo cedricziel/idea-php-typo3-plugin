@@ -21,7 +21,7 @@ import java.util.List;
 public class RouteFoldingBuilder extends FoldingBuilderEx {
     @NotNull
     @Override
-    public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
+    public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
         FoldingGroup group = FoldingGroup.newGroup("TYPO3Route");
 
         List<FoldingDescriptor> descriptors = new ArrayList<>();

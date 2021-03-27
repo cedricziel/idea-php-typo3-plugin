@@ -19,13 +19,13 @@ public class ControllerActionReference extends PsiPolyVariantReferenceBase<PsiEl
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(ControllerActionUtil.getDefinitionElements(myElement.getProject(), actionName));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return ControllerActionUtil.createLookupElements(myElement.getProject());
     }
 }

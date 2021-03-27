@@ -21,13 +21,13 @@ public class RouteReference extends PsiPolyVariantReferenceBase<PsiElement> {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(RouteHelper.getRouteDefinitionElements(myElement.getProject(), routeName));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         Collection<LookupElement> routesLookupElements = RouteHelper.getRoutesLookupElements(myElement.getProject());
         return routesLookupElements.toArray();
     }

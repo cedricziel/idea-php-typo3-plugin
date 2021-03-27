@@ -40,7 +40,7 @@ public class TypoScriptSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @NotNull
     @Override
-    public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+    public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         if (tokenType.equals(TypoScriptTypes.DOT)) {
             return SEPARATOR_KEYS;
         } else if (tokenType.equals(TypoScriptTypes.IDENTIFIER)) {

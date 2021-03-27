@@ -16,7 +16,7 @@ public class ControllerActionReferenceContributor extends PsiReferenceContributo
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (!(element instanceof StringLiteralExpression)) {
                             return new PsiReference[0];
                         }

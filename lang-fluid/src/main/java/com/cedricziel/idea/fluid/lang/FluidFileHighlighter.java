@@ -98,7 +98,7 @@ public class FluidFileHighlighter extends SyntaxHighlighterBase {
     }
 
     @NotNull
-    public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+    public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         if (tokenType.equals(FluidTypes.FIELD_CHAIN) || tokenType.equals(FluidTypes.IDENTIFIER) || tokenType.equals(FluidTypes.NAMESPACE)) {
             return IDENTIFIER_KEYS;
         } else if (tokenType.equals(FluidTypes.EXPR_END) || tokenType.equals(FluidTypes.EXPR_START)) {

@@ -30,7 +30,7 @@ public class XmlUnusedNamespaceDeclarationSuppressor implements InspectionSuppre
 
     @NotNull
     @Override
-    public SuppressQuickFix[] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
+    public SuppressQuickFix @NotNull [] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
         return SuppressQuickFix.EMPTY_ARRAY;
     }
 }

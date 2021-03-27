@@ -16,7 +16,7 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         StringLiteralExpression stringLiteralExpression = (StringLiteralExpression)element;
                         if (!stringLiteralExpression.getContents().startsWith("EXT:") && !stringLiteralExpression.getContents().startsWith("LLL:EXT:")) {
@@ -34,7 +34,7 @@ public class ResourceReferenceContributor extends PsiReferenceContributor {
                 new PsiReferenceProvider() {
                     @NotNull
                     @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
 
                         YAMLQuotedText yamlQuotedText = (YAMLQuotedText)element;
                         if (!yamlQuotedText.getTextValue().startsWith("EXT:") && !yamlQuotedText.getTextValue().startsWith("LLL:EXT:")) {

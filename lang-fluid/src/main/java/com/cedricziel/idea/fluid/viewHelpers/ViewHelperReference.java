@@ -24,7 +24,7 @@ public class ViewHelperReference extends FluidReference {
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         if (myElement instanceof FluidViewHelperReference) {
             FluidViewHelperExpr viewHelperExpr = (FluidViewHelperExpr) PsiTreeUtil.findFirstParent(myElement, e -> e instanceof FluidViewHelperExpr);
             String presentableName = viewHelperExpr.getPresentableName();
@@ -42,7 +42,7 @@ public class ViewHelperReference extends FluidReference {
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return new Object[0];
     }
 }

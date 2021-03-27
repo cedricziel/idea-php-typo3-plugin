@@ -25,7 +25,7 @@ public class ContextReferenceContributor extends PsiReferenceContributor {
     private static class ContextReferenceProvider extends PsiReferenceProvider {
         @NotNull
         @Override
-        public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+        public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
             MethodReference methodReference = (MethodReference) PsiTreeUtil.findFirstParent(element, m -> m instanceof MethodReference);
             if (methodReference == null || methodReference.getName() == null || !methodReference.getName().equals("getAspect")) {
                 return PsiReference.EMPTY_ARRAY;

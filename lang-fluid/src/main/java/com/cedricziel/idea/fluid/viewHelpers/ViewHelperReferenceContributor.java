@@ -18,7 +18,7 @@ public class ViewHelperReferenceContributor extends PsiReferenceContributor {
             new PsiReferenceProvider() {
                 @NotNull
                 @Override
-                public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                     return new PsiReference[]{new ViewHelperReference((FluidElement) element, element.getTextRange())};
                 }
             }

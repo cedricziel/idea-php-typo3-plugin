@@ -20,13 +20,13 @@ public class TranslationReference extends PsiPolyVariantReferenceBase<PsiElement
 
     @NotNull
     @Override
-    public ResolveResult[] multiResolve(boolean incompleteCode) {
+    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
         return PsiElementResolveResult.createResults(TranslationUtil.findDefinitionElements(myElement.getProject(), translationId));
     }
 
     @NotNull
     @Override
-    public Object[] getVariants() {
+    public Object @NotNull [] getVariants() {
         return TranslationUtil.createLookupElements(myElement.getProject());
     }
 }

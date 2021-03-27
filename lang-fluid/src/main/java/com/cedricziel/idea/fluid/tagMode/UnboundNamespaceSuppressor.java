@@ -43,7 +43,7 @@ public class UnboundNamespaceSuppressor implements InspectionSuppressor {
 
     @NotNull
     @Override
-    public SuppressQuickFix[] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
+    public SuppressQuickFix @NotNull [] getSuppressActions(@Nullable PsiElement element, @NotNull String toolId) {
         return new SuppressQuickFix[0];
     }
 }
