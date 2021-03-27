@@ -1,13 +1,9 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Build
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
@@ -58,7 +54,6 @@ jobs:
 
     steps:
 
-      # Setup Java 1.8 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -91,6 +86,9 @@ jobs:
         run: ./gradlew verifyPlugin
 
   build:
+    name: Build
+    needs: test
+
     env:
       ORG_GRADLE_PROJECT_ideaVersion: "${{ matrix.idea_version }}"
       ORG_GRADLE_PROJECT_phpPluginVersion: "${{ matrix.php_plugin_version }}"
