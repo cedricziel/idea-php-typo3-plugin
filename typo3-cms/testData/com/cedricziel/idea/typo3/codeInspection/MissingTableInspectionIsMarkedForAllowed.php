@@ -9,7 +9,7 @@ return [
                 'size' => 25,
                 'max' => 255,
                 'eval' => 'required',
-                'allowed' => 'tt_content,pages',
+                'allowed' => '<warning descr="Table 'foo' is not defined">foo</warning>,<warning descr="Table 'bar' is not defined">bar</warning>',
             ]
         ],
     ],

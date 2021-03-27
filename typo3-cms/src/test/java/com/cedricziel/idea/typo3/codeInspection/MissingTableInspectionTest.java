@@ -37,4 +37,13 @@ public class MissingTableInspectionTest extends AbstractTestCase {
 
         myFixture.checkHighlighting();
     }
+
+    public void testAllowedKeyCanContainCSVOfTablesNotExistent() {
+        myFixture.enableInspections(new MissingTableInspection());
+
+        VirtualFile virtualFile = myFixture.copyFileToProject("MissingTableInspectionIsMarkedForAllowed.php", "MyClass.php");
+        myFixture.configureFromExistingVirtualFile(virtualFile);
+
+        myFixture.checkHighlighting();
+    }
 }

@@ -4,12 +4,17 @@ import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.TableUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFromValue;
 import static com.cedricziel.idea.typo3.util.TCAUtil.arrayIndexIsTCATableNameField;
@@ -51,13 +56,26 @@ public class MissingTableInspection extends PluginEnabledPhpInspection {
                 }
 
                 boolean valueIsTableNameFieldValue = arrayIndexIsTCATableNameField(element);
-                if (valueIsTableNameFieldValue) {
-                    if (element instanceof StringLiteralExpression) {
-                        String tableName = ((StringLiteralExpression) element).getContents();
-                        boolean isValidTableName = TableUtil.getAvailableTableNames(element.getProject()).contains(tableName);
+                if (!valueIsTableNameFieldValue) {
+                    return;
+                }
 
+                if (element instanceof StringLiteralExpression) {
+                    List<String> tableNames = new ArrayList<>();
+
+                    String content = ((StringLiteralExpression) element).getContents();
+
+                    if (arrayKey != null && arrayKey.equals("allowed")) {
+                        tableNames = Arrays.asList(content.trim().split("\\s*,\\s*"));
+                    } else {
+                        tableNames.add(content);
+                    }
+
+                    for (String tableName : tableNames) {
+                        boolean isValidTableName = TableUtil.getAvailableTableNames(element.getProject()).contains(tableName);
                         if (!isValidTableName) {
-                            problemsHolder.registerProblem(element, "Missing table definition");
+                            int i = content.indexOf(tableName);
+                            problemsHolder.registerProblem(element, new TextRange(i + 1, i + 1 + tableName.length()), String.format("Table '%s' is not defined", tableName));
                         }
                     }
                 }
