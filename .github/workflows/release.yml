@@ -1,0 +1,96 @@
+# GitHub Actions Workflow created for handling the release process based on the draft release prepared
+# with the Build workflow. Running the publishPlugin task requires the PUBLISH_TOKEN secret provided.
+
+name: Release
+on:
+  release:
+    types: [ prereleased, released ]
+
+jobs:
+
+  # Prepare and publish the plugin to the Marketplace repository
+  release:
+    name: Publish Plugin
+    runs-on: ubuntu-latest
+
+    env:
+      ORG_GRADLE_PROJECT_ideaVersion: "${{ matrix.idea_version }}"
+      ORG_GRADLE_PROJECT_phpPluginVersion: "${{ matrix.php_plugin_version }}"
+      ORG_GRADLE_PROJECT_psiViewerPluginVersion: "${{ matrix.psi_viewer_plugin_version }}"
+      ORG_GRADLE_PROJECT_grammarKitPluginVersion: "${{ matrix.grammar_kit_plugin_version }}"
+      ORG_GRADLE_PROJECT_customSinceBuild: "${{ matrix.since_build }}"
+      ORG_GRADLE_PROJECT_customUntilBuild: "${{ matrix.until_build }}"
+
+    strategy:
+      matrix:
+        include:
+          - idea_version: "IU-2020.3.3"
+            java_version: "1.11"
+            php_plugin_version: "203.7148.15"
+            psi_viewer_plugin_version: "203-SNAPSHOT"
+            grammar_kit_plugin_version: "2020.2.1"
+            since_build: "203"
+            until_build: "203.*"
+          - idea_version: "IU-211.6693.14-EAP-SNAPSHOT"
+            java_version: "1.11"
+            php_plugin_version: "211.6693.25"
+            psi_viewer_plugin_version: "211-SNAPSHOT"
+            grammar_kit_plugin_version: "2020.2.1"
+            since_build: "211"
+            until_build: "211.*"
+
+    steps:
+
+      # Setup Java 1.8 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      # Publish the plugin to the Marketplace
+      - name: Publish Plugin
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: ./gradlew publishPlugin
+
+  # Patch changelog, commit and push to the current repository
+  changelog:
+    name: Update Changelog
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+
+      # Setup Java 1.8 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      # Update Unreleased section with the current version
+      - name: Patch Changelog
+        run: ./gradlew patchChangelog
+
+      # Commit patched Changelog
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update changelog" -a
+      # Push changes
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
