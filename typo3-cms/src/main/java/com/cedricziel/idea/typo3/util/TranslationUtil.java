@@ -207,7 +207,7 @@ public class TranslationUtil {
         }
 
         // Try to find the one with the selected favorite locale
-        String defaultLocale = (String) TYPO3CMSProjectSettings.getInstance(project).translationFoldingLocale;
+        String defaultLocale = getTranslationFoldingLocale(project);
         if (defaultLocale != null && !defaultLocale.isEmpty()) {
             for (StubTranslation property : stubs) {
                 if (property.getLanguage().equals(defaultLocale)) {
@@ -236,5 +236,11 @@ public class TranslationUtil {
         }
 
         return null;
+    }
+
+    private static String getTranslationFoldingLocale(Project project) {
+        String localeFromSettings = TYPO3CMSProjectSettings.getInstance(project).translationFoldingLocale;
+
+        return (String) localeFromSettings;
     }
 }
