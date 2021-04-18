@@ -2,8 +2,6 @@ import org.jetbrains.grammarkit.tasks.*
 
 apply plugin: 'org.jetbrains.grammarkit'
 
-def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
-
 def genRoot = file('gen')
 sourceSets {
     main {
@@ -24,7 +22,7 @@ idea {
 
 intellij {
     version ideaVersion
-    pluginName 'TYPO3 Fluid Support'
+    pluginName pluginNameFluid
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',
@@ -33,22 +31,6 @@ intellij {
         'properties',
         "PsiViewer:${psiViewerPluginVersion}"
     ]
-}
-
-patchPluginXml {
-    if (customSinceBuild) {
-        sinceBuild customSinceBuild
-    }
-    if (customUntilBuild) {
-        untilBuild customUntilBuild
-    }
-
-    changeNotes = htmlFixer('src/main/resources/META-INF/change-notes.html')
-    pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
-}
-
-publishPlugin {
-    channels 'nightly'
 }
 
 task generateFluidLexer(type: GenerateLexer) {

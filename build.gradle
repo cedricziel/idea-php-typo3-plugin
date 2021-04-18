@@ -1,9 +1,9 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id "org.jetbrains.intellij" version "0.6.5"
+    id "org.jetbrains.intellij" version "0.7.2" apply false
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}" apply false
-    id 'com.palantir.git-version' version "0.12.3"
+    id 'org.jetbrains.changelog' version '1.1.1'
 }
 
 repositories {
@@ -11,35 +11,24 @@ repositories {
     jcenter()
 }
 
-def details = versionDetails()
+def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd')
+    return formattedDate
+}
 
-group 'com.cedricziel.idea'
+group pluginGroup
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'org.jetbrains.changelog'
+
     sourceCompatibility = javaVersion
     targetCompatibility = javaTargetVersion
     tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
-    if (details.isCleanTag) {
-        version = "$customSinceBuild.${details.lastTag.substring(3)}"
-    } else {
-        version = "$customSinceBuild.${details.lastTag.substring(3)}.${details.gitHash}-SNAPSHOT"
-    }
-
-    intellij {
-        version ideaVersion
-        updateSinceUntilBuild true
-    }
-
-    patchPluginXml {
-        if (customSinceBuild) {
-            sinceBuild customSinceBuild
-        }
-        if (customUntilBuild) {
-            untilBuild customUntilBuild
-        }
-    }
+    version = pluginVersion
 }
 
 subprojects {
@@ -53,9 +42,19 @@ subprojects {
         jcenter()
     }
 
+    changelog {
+        version = pluginVersion
+        path = "${project.rootProject.projectDir}/CHANGELOG.md"
+        header = { "[$version] - ${getDate()}" }
+        headerParserRegex = ~/\d+\.\d+/
+        itemPrefix = "-"
+        keepUnreleasedSection = true
+        unreleasedTerm = "[Unreleased]"
+        groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+    }
+
     intellij {
         version ideaVersion
-        sameSinceUntilBuild Boolean.valueOf(isEAP)
         updateSinceUntilBuild true
 
         tasks {
@@ -66,6 +65,7 @@ subprojects {
     }
 
     publishPlugin {
+        channels 'nightly'
         token System.getenv('IJ_REPO_TOKEN')
     }
 
@@ -76,10 +76,17 @@ subprojects {
         if (customUntilBuild) {
             untilBuild customUntilBuild
         }
+
+        changeNotes({ changelog.getUnreleased().toHTML() })
+        pluginDescription htmlFixer("${project.projectDir}/src/main/resources/META-INF/description.html")
     }
 
     grammarKit {
         jflexRelease = jFlexRelease
+    }
+
+    runPluginVerifier {
+        ideVersions pluginVerifierIdeVersions
     }
 
     test.testLogging.exceptionFormat = TestExceptionFormat.FULL

@@ -14,6 +14,8 @@
     ]]>
     </change-notes>
 
+    <depends>com.intellij.modules.platform</depends>
+
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.TypoScriptFileType" fieldName="INSTANCE" language="TypoScript" extensions="typoscript"/>
         <lang.parserDefinition language="TypoScript" implementationClass="com.cedricziel.idea.typoscript.lang.parser.TypoScriptParserDefinition"/>
