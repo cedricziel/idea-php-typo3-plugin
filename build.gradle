@@ -38,7 +38,7 @@ subprojects {
     }
 
     changelog {
-        version = "1.0.0"
+        version = pluginVersion
         path = "${project.rootProject.projectDir}/CHANGELOG.md"
         header = { "[$version] - ${ExtensionsKt.date()}" }
         headerParserRegex = ~/\d+\.\d+/
