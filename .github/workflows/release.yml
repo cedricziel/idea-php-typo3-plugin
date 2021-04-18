@@ -76,7 +76,7 @@ jobs:
           # Set output from previous step
           export "ORG_GRADLE_PROJECT_pluginVersion=${{ steps.properties.outputs.prefixed-version }}"
 
-          ./gradlew publishPlugin
+          ./gradlew :typo3-cms:patchChangelog :typo3-cms:publishPlugin :lang-fluid:publishPlugin :lang-typoscript:publishPlugin
 
   # Patch changelog, commit and push to the current repository
   changelog:

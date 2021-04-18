@@ -33,6 +33,11 @@ intellij {
     ]
 }
 
+publishPlugin {
+    channels ["nightly"]
+    token System.getenv('PUBLISH_TOKEN')
+}
+
 task generateFluidLexer(type: GenerateLexer) {
     source = "src/main/grammars/FluidLexer.flex"
     targetDir = "gen/com/cedricziel/idea/fluid/lang/lexer"

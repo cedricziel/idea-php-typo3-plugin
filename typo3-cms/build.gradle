@@ -19,6 +19,11 @@ intellij {
     plugins = requiredPlugins
 }
 
+publishPlugin {
+    channels ["default"]
+    token System.getenv('PUBLISH_TOKEN')
+}
+
 sourceSets {
     main.resources.srcDirs += [ "src/main/java" ]
     test {

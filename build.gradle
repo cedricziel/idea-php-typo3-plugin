@@ -12,11 +12,6 @@ repositories {
 }
 
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
-def getDate() {
-    def date = new Date()
-    def formattedDate = date.format('yyyy-MM-dd')
-    return formattedDate
-}
 
 group pluginGroup
 
@@ -45,8 +40,7 @@ subprojects {
     changelog {
         version = pluginVersion
         path = "${project.rootProject.projectDir}/CHANGELOG.md"
-        header = { "[$version] - ${getDate()}" }
-        headerParserRegex = ~/\d+\.\d+/
+        headerParserRegex = ~/\d+\.\d+\.\d+/
         itemPrefix = "-"
         keepUnreleasedSection = true
         unreleasedTerm = "[Unreleased]"
@@ -64,10 +58,6 @@ subprojects {
         }
     }
 
-    publishPlugin {
-        token System.getenv('IJ_REPO_TOKEN')
-    }
-
     patchPluginXml {
         if (customSinceBuild) {
             sinceBuild customSinceBuild
@@ -76,7 +66,7 @@ subprojects {
             untilBuild customUntilBuild
         }
 
-        changeNotes({ changelog.getUnreleased().toHTML() })
+        changeNotes changelog.getUnreleased().toHTML()
         pluginDescription htmlFixer("${project.projectDir}/src/main/resources/META-INF/description.html")
     }
 

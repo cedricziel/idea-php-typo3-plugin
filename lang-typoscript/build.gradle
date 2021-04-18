@@ -34,6 +34,11 @@ intellij {
     ]
 }
 
+publishPlugin {
+    channels ["nightly"]
+    token System.getenv('PUBLISH_TOKEN')
+}
+
 task generateTypoScriptLexer(type: GenerateLexer) {
     source = "src/main/grammars/TypoScriptLexer.flex"
     targetDir = "gen/com/cedricziel/idea/typoscript/lang/lexer"

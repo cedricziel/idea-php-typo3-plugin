@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+- Improve publishing through GitHub actions
+- Grab version number from changelog correctly
+- Use "nightly" channel for TypoScript and Fluid projects
+- Fix syntax of release task
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.7.0]
+### Added
 - Use GitHub actions to build plugin instead of travis
 - c2b9eca [T3CMS] allowed TCA field can contain CSV string of tables (#351) (Cedric Ziel)
 - f7e3bb4 [T3CMS] Create convenience method to get locale (#350) (Cedric Ziel)
