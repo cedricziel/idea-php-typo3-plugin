@@ -99,7 +99,7 @@ jobs:
 
       # Update Unreleased section with the current version
       - name: Patch Changelog
-        run: ./gradlew patchChangelog
+        run: ./gradlew :typo3-cms:patchChangelog
 
       # Commit patched Changelog
       - name: Commit files
