@@ -302,7 +302,7 @@ jobs:
   releaseDraftUpload:
     name: Release Draft (Upload)
     if: github.event_name != 'pull_request' # && github.ref == 'refs/heads/master'
-    needs: [ releaseDraftUpload ]
+    needs: [ releaseDraft ]
     runs-on: ubuntu-latest
 
     strategy:
