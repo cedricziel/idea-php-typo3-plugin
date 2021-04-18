@@ -65,7 +65,6 @@ subprojects {
     }
 
     publishPlugin {
-        channels 'nightly'
         token System.getenv('IJ_REPO_TOKEN')
     }
 

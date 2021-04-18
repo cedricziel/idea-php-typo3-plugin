@@ -55,17 +55,17 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-     # Set environment variables
-     - name: Export Properties
-       id: properties
-       shell: bash
-       run: |
-         PROPERTIES="$(./gradlew properties --console=plain -q)"
-         VERSION="$(echo "$PROPERTIES" | grep "^pluginVersion:" | cut -f2- -d ' ')"
-         CUSTOM_SINCE_BUILD="$(echo "$PROPERTIES" | grep "^customSinceBuild:" | cut -f2- -d ' ')"
-         PREFIXED_VERSION="$(echo ${CUSTOM_SINCE_BUILD}${VERSION:1})"
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^pluginVersion:" | cut -f2- -d ' ')"
+          CUSTOM_SINCE_BUILD="$(echo "$PROPERTIES" | grep "^customSinceBuild:" | cut -f2- -d ' ')"
+          PREFIXED_VERSION="$(echo ${CUSTOM_SINCE_BUILD}${VERSION:1})"
 
-         echo "::set-output name=prefixed-version::$PREFIXED_VERSION"
+          echo "::set-output name=prefixed-version::$PREFIXED_VERSION"
 
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
