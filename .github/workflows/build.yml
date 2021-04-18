@@ -168,9 +168,9 @@ jobs:
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
-          CMS_ARTIFACT="${CMS_NAME}-${VERSION}.zip"
-          FLUID_ARTIFACT="${FLUID_NAME}-${VERSION}.zip"
-          TYPOSCRIPT_ARTIFACT="${TYPOSCRIPT_NAME}-${VERSION}.zip"
+          CMS_ARTIFACT="${CMS_NAME}-${PREFIXED_VERSION}.zip"
+          FLUID_ARTIFACT="${FLUID_NAME}-${PREFIXED_VERSION}.zip"
+          TYPOSCRIPT_ARTIFACT="${TYPOSCRIPT_NAME}-${PREFIXED_VERSION}.zip"
 
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=prefixed-version::$PREFIXED_VERSION"
