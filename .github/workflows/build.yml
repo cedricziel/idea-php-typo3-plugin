@@ -165,9 +165,9 @@ jobs:
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
-          CMS_ARTIFACT="${NAME}-${VERSION}.zip"
-          FLUID_ARTIFACT="${NAME}-${VERSION}.zip"
-          TYPOSCRIPT_ARTIFACT="${NAME}-${VERSION}.zip"
+          CMS_ARTIFACT="${CMS_NAME}-${VERSION}.zip"
+          FLUID_ARTIFACT="${FLUID_NAME}-${VERSION}.zip"
+          TYPOSCRIPT_ARTIFACT="${TYPOSCRIPT_NAME}-${VERSION}.zip"
 
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=cms-name::$CMS_NAME"
@@ -175,8 +175,8 @@ jobs:
           echo "::set-output name=typoscript-name::$TYPOSCRIPT_NAME"
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=cms-artifact::$CMS_ARTIFACT"
-          echo "::set-output name=fluid-artifact::$CMS_ARTIFACT"
-          echo "::set-output name=typoscript-artifact::$CMS_ARTIFACT"
+          echo "::set-output name=fluid-artifact::$FLUID_ARTIFACT"
+          echo "::set-output name=typoscript-artifact::$TYPOSCRIPT_ARTIFACT"
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
