@@ -122,6 +122,7 @@ jobs:
       fluid-name: ${{ steps.properties.outputs.fluid-name }}
       typoscript-name: ${{ steps.properties.outputs.typoscript-name }}
       version: ${{ steps.properties.outputs.version }}
+      prefixed-version: ${{ steps.properties.outputs.prefixed-version }}
       changelog: ${{ steps.properties.outputs.changelog }}
       cms-artifact: ${{ steps.properties.outputs.cms-artifact }}
       fluid-artifact: ${{ steps.properties.outputs.fluid-artifact }}
@@ -158,9 +159,6 @@ jobs:
           CUSTOM_SINCE_BUILD="$(echo "$PROPERTIES" | grep "^customSinceBuild:" | cut -f2- -d ' ')"
           PREFIXED_VERSION="$(echo ${CUSTOM_SINCE_BUILD}${VERSION:1})"
 
-          # Set the prefixed version as gradle property via environment for followup steps in the same job
-          echo "ORG_GRADLE_PROJECT_pluginVersion=${PREFIXED_VERSION}" >> $GITHUB_ENV
-
           CMS_NAME="$(echo "$PROPERTIES" | grep "^pluginNameCMS:" | cut -f2- -d ' ')"
           FLUID_NAME="$(echo "$PROPERTIES" | grep "^pluginNameFluid:" | cut -f2- -d ' ')"
           TYPOSCRIPT_NAME="$(echo "$PROPERTIES" | grep "^pluginNameTypoScript:" | cut -f2- -d ' ')"
@@ -186,7 +184,12 @@ jobs:
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
-        run: ./gradlew buildPlugin
+        shell: bash
+        run: |
+          # Set output from previous step
+          export "ORG_GRADLE_PROJECT_pluginVersion=${{ steps.properties.outputs.prefixed-version }}"
+
+          ./gradlew buildPlugin
 
       # Upload plugin artifact to make it available in the next jobs
       - name: Upload CMS artifact
