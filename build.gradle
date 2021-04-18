@@ -13,7 +13,7 @@ repositories {
 
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
 
-group 'com.cedricziel.idea'
+group pluginGroup
 
 allprojects {
     apply plugin: 'java'
@@ -50,7 +50,6 @@ subprojects {
 
     intellij {
         version ideaVersion
-        sameSinceUntilBuild Boolean.valueOf(isEAP)
         updateSinceUntilBuild true
 
         tasks {
