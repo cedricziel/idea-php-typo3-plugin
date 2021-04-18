@@ -155,6 +155,11 @@ jobs:
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           VERSION="$(echo "$PROPERTIES" | grep "^pluginVersion:" | cut -f2- -d ' ')"
+          CUSTOM_SINCE_BUILD="$(echo "$PROPERTIES" | grep "^customSinceBuild:" | cut -f2- -d ' ')"
+          PREFIXED_VERSION="$(echo ${CUSTOM_SINCE_BUILD}${VERSION:1})"
+
+          # Set the prefixed version as gradle property via environment for followup steps in the same job
+          echo "ORG_GRADLE_PROJECT_pluginVersion=${PREFIXED_VERSION}" >> $GITHUB_ENV
 
           CMS_NAME="$(echo "$PROPERTIES" | grep "^pluginNameCMS:" | cut -f2- -d ' ')"
           FLUID_NAME="$(echo "$PROPERTIES" | grep "^pluginNameFluid:" | cut -f2- -d ' ')"
@@ -170,6 +175,7 @@ jobs:
           TYPOSCRIPT_ARTIFACT="${TYPOSCRIPT_NAME}-${VERSION}.zip"
 
           echo "::set-output name=version::$VERSION"
+          echo "::set-output name=prefixed-version::$PREFIXED_VERSION"
           echo "::set-output name=cms-name::$CMS_NAME"
           echo "::set-output name=fluid-name::$FLUID_NAME"
           echo "::set-output name=typoscript-name::$TYPOSCRIPT_NAME"
@@ -251,7 +257,7 @@ jobs:
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    if: github.event_name != 'pull_request' # && github.ref == 'refs/heads/master'
     needs: [ build, verify ]
     runs-on: ubuntu-latest
     steps:
