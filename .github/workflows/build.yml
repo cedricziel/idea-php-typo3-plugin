@@ -195,18 +195,21 @@ jobs:
       - name: Upload CMS artifact
         uses: actions/upload-artifact@v2.2.3
         with:
-          name: cms-plugin-artifact
+          name: cms-plugin-artifact-${{ matrix.since_build }}
           path: ./typo3-cms/build/distributions/${{ steps.properties.outputs.cms-artifact }}
+          if-no-files-found: error
       - name: Upload Fluid artifact
         uses: actions/upload-artifact@v2.2.3
         with:
-          name: fluid-plugin-artifact
+          name: fluid-plugin-artifact-${{ matrix.since_build }}
           path: ./lang-fluid/build/distributions/${{ steps.properties.outputs.fluid-artifact }}
+          if-no-files-found: error
       - name: Upload TypoScript artifact
         uses: actions/upload-artifact@v2.2.3
         with:
-          name: typoscript-plugin-artifact
+          name: typoscript-plugin-artifact-${{ matrix.since_build }}
           path: ./lang-typoscript/build/distributions/${{ steps.properties.outputs.typoscript-artifact }}
+          if-no-files-found: error
 
   # Verify built plugin using IntelliJ Plugin Verifier tool
   # Requires build job to be passed
@@ -263,6 +266,10 @@ jobs:
     if: github.event_name != 'pull_request' # && github.ref == 'refs/heads/master'
     needs: [ build, verify ]
     runs-on: ubuntu-latest
+
+    outputs:
+      release-url: ${{ steps.createDraft.outputs.upload_url }}
+
     steps:
 
       # Check out current repository
@@ -292,19 +299,37 @@ jobs:
           body: ${{ needs.build.outputs.changelog }}
           draft: true
 
+  releaseDraftUpload:
+    name: Release Draft (Upload)
+    if: github.event_name != 'pull_request' # && github.ref == 'refs/heads/master'
+    needs: [ releaseDraftUpload ]
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - since_build: "203"
+          - since_build: "211"
+
+    steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2
+
       # Download plugin artifact provided by the previous job
       - name: Download CMS Artifact
         uses: actions/download-artifact@v2
         with:
-          name: cms-plugin-artifact
+          name: cms-plugin-artifact-${{ matrix.since_build }}
       - name: Download Fluid Artifact
         uses: actions/download-artifact@v2
         with:
-          name: fluid-plugin-artifact
+          name: fluid-plugin-artifact-${{ matrix.since_build }}
       - name: Download TypoScript Artifact
         uses: actions/download-artifact@v2
         with:
-          name: typoscript-plugin-artifact
+          name: typoscript-plugin-artifact-${{ matrix.since_build }}
 
       # Upload artifact as a release asset
       - name: Upload CMS Release Asset
@@ -313,7 +338,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          upload_url: ${{ needs.releaseDraft.outputs.release-url }}
           asset_path: ./${{ needs.build.outputs.cms-artifact }}
           asset_name: ${{ needs.build.outputs.cms-artifact }}
           asset_content_type: application/zip
@@ -323,7 +348,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          upload_url: ${{ needs.releaseDraft.outputs.release-url }}
           asset_path: ./${{ needs.build.outputs.fluid-artifact }}
           asset_name: ${{ needs.build.outputs.fluid-artifact }}
           asset_content_type: application/zip
@@ -333,7 +358,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          upload_url: ${{ needs.releaseDraft.outputs.release-url }}
           asset_path: ./${{ needs.build.outputs.typoscript-artifact }}
           asset_name: ${{ needs.build.outputs.typoscript-artifact }}
           asset_content_type: application/zip
