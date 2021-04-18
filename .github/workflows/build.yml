@@ -289,7 +289,7 @@ jobs:
 
       # Upload artifact as a release asset
       - name: Upload CMS Release Asset
-        id: upload-release-asset
+        id: upload-cms-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -300,7 +300,7 @@ jobs:
           asset_content_type: application/zip
       - name: Upload Fluid Release Asset
         id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-fluid-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -309,7 +309,7 @@ jobs:
           asset_name: ${{ needs.build.outputs.fluid-artifact }}
           asset_content_type: application/zip
       - name: Upload TypoScript Release Asset
-        id: upload-release-asset
+        id: upload-typoscript-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
