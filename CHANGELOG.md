@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Use GitHub actions to build plugin instead of travis
 - c2b9eca [T3CMS] allowed TCA field can contain CSV string of tables (#351) (Cedric Ziel)
 - f7e3bb4 [T3CMS] Create convenience method to get locale (#350) (Cedric Ziel)
 - d3499ef [All] Update Platform version to 2021.1 (#349) (Cedric Ziel)
