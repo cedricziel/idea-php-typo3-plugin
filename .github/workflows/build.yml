@@ -154,7 +154,7 @@ jobs:
         shell: bash
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
-          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          VERSION="$(echo "$PROPERTIES" | grep "^pluginVersion:" | cut -f2- -d ' ')"
 
           CMS_NAME="$(echo "$PROPERTIES" | grep "^pluginNameCMS:" | cut -f2- -d ' ')"
           FLUID_NAME="$(echo "$PROPERTIES" | grep "^pluginNameFluid:" | cut -f2- -d ' ')"
