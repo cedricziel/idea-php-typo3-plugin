@@ -41,7 +41,7 @@ jobs:
 
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v1
         with:

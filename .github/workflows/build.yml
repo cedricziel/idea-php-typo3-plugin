@@ -117,6 +117,14 @@ jobs:
             since_build: "211"
             until_build: "211.*"
 
+    outputs:
+      name: ${{ steps.properties.outputs.name }}
+      version: ${{ steps.properties.outputs.version }}
+      changelog: ${{ steps.properties.outputs.changelog }}
+      cms-artifact: ${{ steps.properties.outputs.cms-artifact }}
+      fluid-artifact: ${{ steps.properties.outputs.fluid-artifact }}
+      typoscript-artifact: ${{ steps.properties.outputs.typoscript-artifact }}
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -138,10 +146,48 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ matrix.idea_version }}-${{ matrix.php_plugin_version }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
+          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
+          CHANGELOG="$(./gradlew :getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          CMS_ARTIFACT="${NAME}-${VERSION}.zip"
+          FLUID_ARTIFACT="${NAME}-${VERSION}.zip"
+          TYPOSCRIPT_ARTIFACT="${NAME}-${VERSION}.zip"
+          echo "::set-output name=version::$VERSION"
+          echo "::set-output name=name::$NAME"
+          echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=cms-artifact::$CMS_ARTIFACT"
+          echo "::set-output name=fluid-artifact::$CMS_ARTIFACT"
+          echo "::set-output name=typoscript-artifact::$CMS_ARTIFACT"
+
+      # Build artifact using buildPlugin Gradle task
+      - name: Build Plugin
+        run: ./gradlew buildPlugin
+
+      # Upload plugin artifact to make it available in the next jobs
+      - name: Upload CMS artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: cms-plugin-artifact
+          path: ./typo3-cms/build/distributions/${{ steps.properties.outputs.cms-artifact }}
+      - name: Upload Fluid artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: fluid-plugin-artifact
+          path: ./lang-fluid/build/distributions/${{ steps.properties.outputs.fluid-artifact }}
+      - name: Upload TypoScript artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: typoscript-plugin-artifact
+          path: ./lang-typoscript/build/distributions/${{ steps.properties.outputs.typoscript-artifact }}
 
   # Verify built plugin using IntelliJ Plugin Verifier tool
   # Requires build job to be passed
@@ -228,19 +274,47 @@ jobs:
           draft: true
 
       # Download plugin artifact provided by the previous job
-      - name: Download Artifact
+      - name: Download CMS Artifact
         uses: actions/download-artifact@v2
         with:
-          name: plugin-artifact
+          name: cms-plugin-artifact
+      - name: Download Fluid Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: fluid-plugin-artifact
+      - name: Download TypoScript Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: typoscript-plugin-artifact
 
       # Upload artifact as a release asset
-      - name: Upload Release Asset
+      - name: Upload CMS Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.createDraft.outputs.upload_url }}
-          asset_path: ./${{ needs.build.outputs.artifact }}
-          asset_name: ${{ needs.build.outputs.artifact }}
+          asset_path: ./${{ needs.build.outputs.cms-artifact }}
+          asset_name: ${{ needs.build.outputs.cms-artifact }}
+          asset_content_type: application/zip
+      - name: Upload Fluid Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          asset_path: ./${{ needs.build.outputs.fluid-artifact }}
+          asset_name: ${{ needs.build.outputs.fluid-artifact }}
+          asset_content_type: application/zip
+      - name: Upload TypoScript Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          asset_path: ./${{ needs.build.outputs.typoscript-artifact }}
+          asset_name: ${{ needs.build.outputs.typoscript-artifact }}
           asset_content_type: application/zip
