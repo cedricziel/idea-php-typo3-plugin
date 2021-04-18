@@ -3,7 +3,6 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 plugins {
     id "org.jetbrains.intellij" version "0.7.2" apply false
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}" apply false
-    id 'com.palantir.git-version' version "0.12.3"
     id 'org.jetbrains.changelog' version '1.1.1'
 }
 
@@ -13,7 +12,6 @@ repositories {
 }
 
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
-def details = versionDetails()
 
 group 'com.cedricziel.idea'
 
@@ -25,11 +23,7 @@ allprojects {
     targetCompatibility = javaTargetVersion
     tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
-    if (details.isCleanTag) {
-        version = "$customSinceBuild.${details.lastTag.substring(3)}"
-    } else {
-        version = "$customSinceBuild.${details.lastTag.substring(3)}.${details.gitHash}-SNAPSHOT"
-    }
+    version = pluginVersion
 }
 
 subprojects {
