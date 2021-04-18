@@ -22,7 +22,7 @@ idea {
 
 intellij {
     version ideaVersion
-    pluginName 'TYPO3 Fluid Support'
+    pluginName pluginNameFluid
     plugins = [
         "com.jetbrains.php:${phpPluginVersion}",
         'CSS',

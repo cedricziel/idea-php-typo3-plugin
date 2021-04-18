@@ -15,7 +15,7 @@ def requiredPlugins = [
 
 intellij {
     version ideaVersion
-    pluginName 'TYPO3 CMS Support'
+    pluginName pluginNameCMS
     plugins = requiredPlugins
 }
 

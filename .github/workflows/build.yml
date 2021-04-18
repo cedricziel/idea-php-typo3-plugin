@@ -118,7 +118,9 @@ jobs:
             until_build: "211.*"
 
     outputs:
-      name: ${{ steps.properties.outputs.name }}
+      cms-name: ${{ steps.properties.outputs.cms-name }}
+      fluid-name: ${{ steps.properties.outputs.fluid-name }}
+      typoscript-name: ${{ steps.properties.outputs.typoscript-name }}
       version: ${{ steps.properties.outputs.version }}
       changelog: ${{ steps.properties.outputs.changelog }}
       cms-artifact: ${{ steps.properties.outputs.cms-artifact }}
@@ -153,16 +155,24 @@ jobs:
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
+
+          CMS_NAME="$(echo "$PROPERTIES" | grep "^pluginNameCMS:" | cut -f2- -d ' ')"
+          FLUID_NAME="$(echo "$PROPERTIES" | grep "^pluginNameFluid:" | cut -f2- -d ' ')"
+          TYPOSCRIPT_NAME="$(echo "$PROPERTIES" | grep "^pluginNameTypoScript:" | cut -f2- -d ' ')"
+
           CHANGELOG="$(./gradlew :getChangelog --unreleased --no-header --console=plain -q)"
           CHANGELOG="${CHANGELOG//'%'/'%25'}"
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
           CMS_ARTIFACT="${NAME}-${VERSION}.zip"
           FLUID_ARTIFACT="${NAME}-${VERSION}.zip"
           TYPOSCRIPT_ARTIFACT="${NAME}-${VERSION}.zip"
+
           echo "::set-output name=version::$VERSION"
-          echo "::set-output name=name::$NAME"
+          echo "::set-output name=cms-name::$CMS_NAME"
+          echo "::set-output name=fluid-name::$FLUID_NAME"
+          echo "::set-output name=typoscript-name::$TYPOSCRIPT_NAME"
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=cms-artifact::$CMS_ARTIFACT"
           echo "::set-output name=fluid-artifact::$CMS_ARTIFACT"
