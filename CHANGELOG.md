@@ -4,6 +4,19 @@
 ### Added
 
 ### Changed
+- change main target for changelog patching to master
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.7.1]
+### Added
+
+### Changed
 - Improve publishing through GitHub actions
 - Grab version number from changelog correctly
 - Use "nightly" channel for TypoScript and Fluid projects
