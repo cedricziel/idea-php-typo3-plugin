@@ -34,7 +34,7 @@ intellij {
 }
 
 publishPlugin {
-    channels ["nightly"]
+    channels "nightly"
     token System.getenv('PUBLISH_TOKEN')
 }
 

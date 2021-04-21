@@ -5,6 +5,7 @@
 
 ### Changed
 - change main target for changelog patching to master
+- use nightly channel when publishing Fluid or TypoScript plugins
 
 ### Deprecated
 

@@ -20,7 +20,6 @@ intellij {
 }
 
 publishPlugin {
-    channels ["default"]
     token System.getenv('PUBLISH_TOKEN')
 }
 
