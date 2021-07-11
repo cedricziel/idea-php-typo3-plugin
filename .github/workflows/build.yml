@@ -116,6 +116,13 @@ jobs:
             grammar_kit_plugin_version: "2020.2.1"
             since_build: "211"
             until_build: "211.*"
+          - idea_version: "IU-212.4638.7-EAP-SNAPSHOT"
+            java_version: "1.11"
+            php_plugin_version: "212.4638.20"
+            psi_viewer_plugin_version: "212-SNAPSHOT"
+            grammar_kit_plugin_version: "2020.2.1"
+            since_build: "212"
+            until_build: "212.*"
 
     outputs:
       cms-name: ${{ steps.properties.outputs.cms-name }}
@@ -310,6 +317,7 @@ jobs:
         include:
           - since_build: "203"
           - since_build: "211"
+          - since_build: "212"
 
     steps:
 

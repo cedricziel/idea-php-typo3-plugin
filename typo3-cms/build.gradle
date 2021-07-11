@@ -4,7 +4,6 @@ def requiredPlugins = [
     'coverage',
     "com.jetbrains.php:${phpPluginVersion}",
     'CSS',
-    'JavaScriptLanguage',
     'platform-images',
     'properties',
     'yaml',
@@ -12,6 +11,10 @@ def requiredPlugins = [
     project(':lang-fluid'),
     project(':lang-typoscript'),
 ]
+
+if (Integer.parseInt(customSinceBuild) < 212) {
+    requiredPlugins += "JavaScript"
+}
 
 intellij {
     version ideaVersion
