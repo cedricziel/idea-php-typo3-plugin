@@ -7,23 +7,20 @@ def requiredPlugins = [
     'platform-images',
     'properties',
     'yaml',
+    'JavaScriptLanguage',
     "PsiViewer:${psiViewerPluginVersion}",
     project(':lang-fluid'),
     project(':lang-typoscript'),
 ]
 
-if (Integer.parseInt(customSinceBuild) < 212) {
-    requiredPlugins += "JavaScript"
-}
-
 intellij {
-    version ideaVersion
-    pluginName pluginNameCMS
-    plugins = requiredPlugins
+    version.set(ideaVersion)
+    pluginName.set(pluginNameCMS)
+    plugins.set(requiredPlugins)
 }
 
 publishPlugin {
-    token System.getenv('PUBLISH_TOKEN')
+    token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
 sourceSets {
