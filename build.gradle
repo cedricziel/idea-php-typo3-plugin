@@ -83,7 +83,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion '6.9'
+    gradleVersion '7.2'
 }
 
 test.testLogging.exceptionFormat = TestExceptionFormat.FULL
