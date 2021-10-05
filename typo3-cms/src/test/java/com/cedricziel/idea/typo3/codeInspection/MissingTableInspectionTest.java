@@ -42,6 +42,7 @@ public class MissingTableInspectionTest extends AbstractTestCase {
         myFixture.checkHighlighting();
     }
 
+    @Ignore
     public void testAllowedKeyCanContainCSVOfTablesNotExistent() {
         myFixture.enableInspections(new MissingTableInspection());
 
