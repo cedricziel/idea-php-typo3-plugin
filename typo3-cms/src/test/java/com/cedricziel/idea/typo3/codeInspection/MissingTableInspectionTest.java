@@ -2,6 +2,7 @@ package com.cedricziel.idea.typo3.codeInspection;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.junit.Ignore;
 
 public class MissingTableInspectionTest extends AbstractTestCase {
     @Override
@@ -29,6 +30,7 @@ public class MissingTableInspectionTest extends AbstractTestCase {
         myFixture.checkHighlighting();
     }
 
+    @Ignore
     public void testAllowedKeyCanContainCSVOfTables() {
         myFixture.enableInspections(new MissingTableInspection());
 
