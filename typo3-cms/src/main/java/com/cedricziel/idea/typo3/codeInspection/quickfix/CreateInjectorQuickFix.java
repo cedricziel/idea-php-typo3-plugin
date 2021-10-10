@@ -16,6 +16,7 @@ import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ThrowableRunnable;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
@@ -74,10 +75,10 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
 
         final String methodName = "inject" + StringUtils.capitalize(fieldName);
         Method injectorFunction = PhpPsiElementFactory.createMethod(
-                project,
-                "public function " + methodName + " (" + type + " $" + fieldName + ") {\n" +
-                        "  $this->" + fieldName + " = $" + fieldName + ";\n" +
-                        "}\n"
+            project,
+            "public function " + methodName + " (" + type + " $" + fieldName + ") {\n" +
+                "  $this->" + fieldName + " = $" + fieldName + ";\n" +
+                "}\n"
 
         );
 
@@ -94,35 +95,33 @@ public class CreateInjectorQuickFix implements LocalQuickFix {
             return;
         }
 
-        new WriteCommandAction(project, element.getContainingFile()) {
-            @Override
-            protected void run(@NotNull Result result) {
-                StringBuffer textBuf = new StringBuffer();
-                textBuf.append("\n");
-                textBuf.append(injectorFunction.getText());
+        try {
+            WriteCommandAction.writeCommandAction(project, element.getContainingFile())
+                .withGroupId("Create Injection Method")
+                .run((ThrowableRunnable<Throwable>) () -> {
+                    StringBuffer textBuf = new StringBuffer();
+                    textBuf.append("\n");
+                    textBuf.append(injectorFunction.getText());
 
-                editor.getDocument().insertString(insertPos, textBuf);
-                final int endPos = insertPos + textBuf.length();
+                    editor.getDocument().insertString(insertPos, textBuf);
+                    final int endPos = insertPos + textBuf.length();
 
-                CodeStyleManager.getInstance(project).reformatText(containingClass.getContainingFile(), insertPos, endPos + 1);
-                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+                    CodeStyleManager.getInstance(project).reformatText(containingClass.getContainingFile(), insertPos, endPos + 1);
+                    PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
-                CodeStyleManager.getInstance(project).reformatText(docCommentElement.getContainingFile(), Collections.singletonList(docCommentElement.getTextRange()));
-                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+                    CodeStyleManager.getInstance(project).reformatText(docCommentElement.getContainingFile(), Collections.singletonList(docCommentElement.getTextRange()));
+                    PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
 
-                Method insertedMethod = containingClass.findMethodByName(methodName);
-                if (insertedMethod != null) {
-                    editor.getCaretModel().moveToOffset(insertedMethod.getTextRange().getStartOffset());
-                    editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+                    Method insertedMethod = containingClass.findMethodByName(methodName);
+                    if (insertedMethod != null) {
+                        editor.getCaretModel().moveToOffset(insertedMethod.getTextRange().getStartOffset());
+                        editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
 
-                    element.getElement().delete();
-                }
-            }
-
-            @Override
-            public String getGroupID() {
-                return "Create Injection Method";
-            }
-        }.execute();
+                        element.getElement().delete();
+                    }
+                });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }

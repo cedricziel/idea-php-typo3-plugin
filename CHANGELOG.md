@@ -7,6 +7,7 @@
 - migrate checkHighlight to testHighlight where possible
 - migrate away from using FileTypeIndex.NAME directly
 - register inspections individually and remove InspectionTool
+- migrate `CreateInjectorQuickFix` away from removed API to use writeCommandAction
 ### Deprecated
 
 ### Removed
