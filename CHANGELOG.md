@@ -12,6 +12,7 @@
 
 ### Removed
 - only support 2021.2.2
+- remove MissingTableInspectionTest as it's not compatible
 
 ### Fixed
 
