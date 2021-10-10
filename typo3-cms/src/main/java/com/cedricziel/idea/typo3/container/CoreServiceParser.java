@@ -26,12 +26,8 @@ public class CoreServiceParser {
     }
 
     private void collectServices(Project project) {
-        FileBasedIndex index = FileBasedIndex.getInstance();
-        Collection<VirtualFile> containingFiles = index.getContainingFiles(
-                FileTypeIndex.NAME,
-                PhpFileType.INSTANCE,
-                GlobalSearchScope.allScope(project)
-        );
+        Collection<VirtualFile> containingFiles = FileTypeIndex.getFiles(PhpFileType.INSTANCE, GlobalSearchScope.allScope(project));
+
         containingFiles.removeIf(virtualFile -> !(virtualFile.getName().contains("ext_localconf.php")));
 
         for (VirtualFile projectFile : containingFiles) {

@@ -5,6 +5,7 @@
 
 ### Changed
 - migrate checkHighlight to testHighlight where possible
+- migrate away from using FileTypeIndex.NAME directly
 ### Deprecated
 
 ### Removed
