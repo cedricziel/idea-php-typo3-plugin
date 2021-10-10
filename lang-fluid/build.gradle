@@ -20,22 +20,24 @@ idea {
     }
 }
 
+def loadPlugins = [
+    "com.jetbrains.php:${phpPluginVersion}",
+    'CSS',
+    'java',
+    'java-i18n',
+    'properties',
+    "PsiViewer:${psiViewerPluginVersion}"
+]
 intellij {
-    version ideaVersion
-    pluginName pluginNameFluid
-    plugins = [
-        "com.jetbrains.php:${phpPluginVersion}",
-        'CSS',
-        'java',
-        'java-i18n',
-        'properties',
-        "PsiViewer:${psiViewerPluginVersion}"
-    ]
+    version.set(ideaVersion)
+    pluginName.set(pluginNameFluid)
+    plugins.set(loadPlugins)
 }
 
+def publishChannels = ["nightly"]
 publishPlugin {
-    channels "nightly"
-    token System.getenv('PUBLISH_TOKEN')
+    channels.set(publishChannels)
+    token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
 task generateFluidLexer(type: GenerateLexer) {

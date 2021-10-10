@@ -124,6 +124,8 @@
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingRenderTypeInspection"/>
 
         <localInspection language="PHP" groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
                          shortName="MissingTableInspection" displayName="Missing table definition"
                          groupName="TCA"
                          enabledByDefault="true" level="WARNING"

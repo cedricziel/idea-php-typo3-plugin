@@ -4,23 +4,23 @@ def requiredPlugins = [
     'coverage',
     "com.jetbrains.php:${phpPluginVersion}",
     'CSS',
-    'JavaScriptLanguage',
     'platform-images',
     'properties',
     'yaml',
+    'JavaScriptLanguage',
     "PsiViewer:${psiViewerPluginVersion}",
     project(':lang-fluid'),
     project(':lang-typoscript'),
 ]
 
 intellij {
-    version ideaVersion
-    pluginName pluginNameCMS
-    plugins = requiredPlugins
+    version.set(ideaVersion)
+    pluginName.set(pluginNameCMS)
+    plugins.set(requiredPlugins)
 }
 
 publishPlugin {
-    token System.getenv('PUBLISH_TOKEN')
+    token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
 sourceSets {

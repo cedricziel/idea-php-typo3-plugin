@@ -20,23 +20,25 @@ idea {
     }
 }
 
+def usedPlugins = [
+    "com.jetbrains.php:${phpPluginVersion}",
+    'CSS',
+    'java',
+    'java-i18n',
+    'properties',
+    'yaml',
+    "PsiViewer:${psiViewerPluginVersion}",
+]
 intellij {
-    version ideaVersion
-    pluginName pluginNameTypoScript
-    plugins = [
-        "com.jetbrains.php:${phpPluginVersion}",
-        'CSS',
-        'java',
-        'java-i18n',
-        'properties',
-        'yaml',
-        "PsiViewer:${psiViewerPluginVersion}",
-    ]
+    version.set(ideaVersion)
+    pluginName.set(pluginNameTypoScript)
+    plugins = usedPlugins
 }
 
+def publishChannels = ["nightly"]
 publishPlugin {
-    channels "nightly"
-    token System.getenv('PUBLISH_TOKEN')
+    channels.set(publishChannels)
+    token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
 task generateTypoScriptLexer(type: GenerateLexer) {

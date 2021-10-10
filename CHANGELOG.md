@@ -6,10 +6,13 @@
 ### Changed
 - change main target for changelog patching to master
 - use nightly channel when publishing Fluid or TypoScript plugins
+- upgrade gradle-intellij plugin to 1.1.6
 
 ### Deprecated
 
 ### Removed
+- only support 2021.2.2
+- remove MissingTableInspectionTest as it's not compatible
 
 ### Fixed
 

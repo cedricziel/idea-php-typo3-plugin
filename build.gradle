@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id "org.jetbrains.intellij" version "0.7.2" apply false
+    id "org.jetbrains.intellij" version "1.1.6" apply false
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}" apply false
     id 'org.jetbrains.changelog' version '1.1.1'
 }
@@ -30,11 +30,12 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'org.jetbrains.intellij'
     apply plugin: 'java'
-    apply plugin: "org.jetbrains.grammarkit"
+    apply plugin: 'org.jetbrains.grammarkit'
 
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 
     changelog {
@@ -48,8 +49,8 @@ subprojects {
     }
 
     intellij {
-        version ideaVersion
-        updateSinceUntilBuild true
+        version.set(ideaVersion)
+        updateSinceUntilBuild.set(true)
 
         tasks {
             "buildSearchableOptions" {
@@ -60,14 +61,14 @@ subprojects {
 
     patchPluginXml {
         if (customSinceBuild) {
-            sinceBuild customSinceBuild
+            sinceBuild.set(customSinceBuild)
         }
         if (customUntilBuild) {
-            untilBuild customUntilBuild
+            untilBuild.set(customUntilBuild)
         }
 
-        changeNotes changelog.getUnreleased().toHTML()
-        pluginDescription htmlFixer("${project.projectDir}/src/main/resources/META-INF/description.html")
+        changeNotes.set(provider { changelog.getLatest().toHTML() })
+        pluginDescription.set(htmlFixer("${project.projectDir}/src/main/resources/META-INF/description.html"))
     }
 
     grammarKit {
@@ -75,14 +76,14 @@ subprojects {
     }
 
     runPluginVerifier {
-        ideVersions pluginVerifierIdeVersions
+        ideVersions.set(pluginVerifierIdeVersions.split(',').toList())
     }
 
     test.testLogging.exceptionFormat = TestExceptionFormat.FULL
 }
 
 wrapper {
-    gradleVersion '6.2'
+    gradleVersion '7.2'
 }
 
 test.testLogging.exceptionFormat = TestExceptionFormat.FULL
