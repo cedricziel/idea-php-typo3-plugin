@@ -11,18 +11,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallMatcherInspection extends PluginEnabledPhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Global function removed with TYPO3 9";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

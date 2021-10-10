@@ -19,18 +19,6 @@ import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFro
 import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
 public class InvalidQuantityInspection extends PhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Config key only accepts integer values";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

@@ -20,16 +20,6 @@ import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
 public class MissingTableInspection extends PluginEnabledPhpInspection {
     @NotNull
-    public String getDisplayName() {
-        return "Missing table definition";
-    }
-
-    @NotNull
-    public String getShortName() {
-        return "MissingTableInspection";
-    }
-
-    @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
         return new PhpElementVisitor() {

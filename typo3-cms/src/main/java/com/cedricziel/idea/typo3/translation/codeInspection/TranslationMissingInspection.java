@@ -16,13 +16,6 @@ public class TranslationMissingInspection extends PluginEnabledPhpInspection {
 
     public static final String MESSAGE = "Missing translation key";
 
-    @Nls(capitalization = Nls.Capitalization.Sentence)
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return "Translation missing";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

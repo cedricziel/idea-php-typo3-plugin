@@ -15,23 +15,6 @@ import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFro
 import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
 public class MissingColumnTypeInspection extends PluginEnabledPhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Missing column type definition";
-    }
-
-    @NotNull
-    public String getShortName() {
-        return "MissingColumnTypeInspection";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

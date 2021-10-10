@@ -14,18 +14,6 @@ import java.util.Set;
 import static com.cedricziel.idea.typo3.util.DeprecationUtility.getDeprecatedClassNames;
 
 public class ClassNameMatcherInspection extends PluginEnabledPhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Class removed with TYPO3 9";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

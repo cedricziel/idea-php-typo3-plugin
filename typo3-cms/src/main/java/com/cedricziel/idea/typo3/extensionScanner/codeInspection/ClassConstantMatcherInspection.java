@@ -11,18 +11,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class ClassConstantMatcherInspection extends PluginEnabledPhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Deprecated class constant";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

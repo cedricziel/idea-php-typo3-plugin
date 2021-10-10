@@ -13,26 +13,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class LegacyClassesForIDEInspection extends PluginEnabledPhpInspection {
-    @Nls
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return "Legacy class used";
-    }
-
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    @Override
-    public String getShortName() {
-        return "LegacyClassesForIDEInspection";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildRealVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {
