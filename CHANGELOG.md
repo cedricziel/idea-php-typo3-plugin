@@ -6,6 +6,7 @@
 ### Changed
 - migrate checkHighlight to testHighlight where possible
 - migrate away from using FileTypeIndex.NAME directly
+- register inspections individually and remove InspectionTool
 ### Deprecated
 
 ### Removed

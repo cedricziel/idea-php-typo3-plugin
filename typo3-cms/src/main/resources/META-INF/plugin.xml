@@ -96,10 +96,10 @@
 
         <!-- inspections -->
 
-        <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
-
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="TranslationMissingInspection"  displayName="Translation missing"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         shortName="TranslationMissingInspection"
+                         displayName="Translation missing"
                          groupName="Translation"
                          enabledByDefault="true"                   level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
