@@ -46,8 +46,7 @@ public class RouteIndexTest extends BasePlatformTestCase {
 
         assertRouteExists("ajax_core_requirejs");
 
-        myFixture.configureByFile("ajax_route_usage.php");
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("ajax_route_usage.php");
 
         assertRouteStubEquals("ajax_core_requirejs","/core/requirejs", "\\TYPO3\\CMS\\Core\\Controller\\RequireJsController", "retrieveConfiguration", "public" );
     }

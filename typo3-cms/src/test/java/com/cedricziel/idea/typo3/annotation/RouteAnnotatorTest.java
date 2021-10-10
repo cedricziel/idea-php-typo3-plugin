@@ -14,9 +14,7 @@ public class RouteAnnotatorTest extends AbstractTestCase {
 
         myFixture.copyFileToProject("classes.php");
 
-        myFixture.configureByFile("missing_route_disabled.php");
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("missing_route_disabled.php");
     }
 
     public void testDoesntAnnotateRouteWhenPluginIsEnabledButAnnotatorIsDisabled() {
@@ -24,16 +22,12 @@ public class RouteAnnotatorTest extends AbstractTestCase {
 
         myFixture.copyFileToProject("classes.php");
 
-        myFixture.configureByFile("missing_route_disabled.php");
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("missing_route_disabled.php");
     }
 
     public void testAnnotatesMissingRoutes() {
         myFixture.copyFileToProject("classes.php");
 
-        myFixture.configureByFile("missing_route.php");
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("missing_route.php");
     }
 }
