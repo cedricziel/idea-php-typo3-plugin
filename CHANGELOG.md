@@ -4,6 +4,18 @@
 ### Added
 
 ### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.7.2]
+### Added
+
+### Changed
 - change main target for changelog patching to master
 - use nightly channel when publishing Fluid or TypoScript plugins
 - upgrade gradle-intellij plugin to 1.1.6
