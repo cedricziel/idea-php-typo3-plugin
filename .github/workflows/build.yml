@@ -44,6 +44,13 @@ jobs:
             grammar_kit_plugin_version: "2021.1.3"
             since_build: "212"
             until_build: "212.*"
+          - idea_version: "IU-213.4631.20-EAP-SNAPSHOT"
+            java_version: "11"
+            php_plugin_version: "213.4631.27"
+            psi_viewer_plugin_version: "213-SNAPSHOT"
+            grammar_kit_plugin_version: "2021.1.3"
+            since_build: "213"
+            until_build: "213.*"
 
     steps:
 
@@ -102,6 +109,13 @@ jobs:
             grammar_kit_plugin_version: "2021.1.3"
             since_build: "212"
             until_build: "212.*"
+          - idea_version: "IU-213.4631.20-EAP-SNAPSHOT"
+            java_version: "11"
+            php_plugin_version: "213.4631.27"
+            psi_viewer_plugin_version: "213-SNAPSHOT"
+            grammar_kit_plugin_version: "2021.1.3"
+            since_build: "213"
+            until_build: "213.*"
 
     outputs:
       cms-name: ${{ steps.properties.outputs.cms-name }}
@@ -295,6 +309,7 @@ jobs:
       matrix:
         include:
           - since_build: "212"
+          - since_build: "213"
 
     steps:
 
