@@ -40,17 +40,6 @@ abstract public class AbstractFluidTest extends BasePlatformTestCase {
         fail(String.format("Expected %s bound to %s, but didnt find it.", namespace, prefix));
     }
 
-    protected void assertCompletionInFileContains(String fileName, String content, String... completions) {
-        myFixture.configureByText(fileName, content);
-
-        myFixture.completeBasic();
-
-        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
-        for (String completion : completions) {
-            assertTrue(lookupElementStrings.contains(completion));
-        }
-    }
-
     protected void assertCurrentCompletionContains(String... completions) {
         List<String> lookupElementStrings = myFixture.getLookupElementStrings();
         for (String completion : completions) {
