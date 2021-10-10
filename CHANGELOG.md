@@ -4,7 +4,7 @@
 ### Added
 
 ### Changed
-
+- migrate checkHighlight to testHighlight where possible
 ### Deprecated
 
 ### Removed

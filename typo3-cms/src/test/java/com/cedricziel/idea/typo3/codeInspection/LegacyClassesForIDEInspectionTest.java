@@ -20,9 +20,7 @@ public class LegacyClassesForIDEInspectionTest extends AbstractTestCase {
         myFixture.copyFileToProject("LegacyClassesForIDE_classes.php");
         myFixture.copyFileToProject("LegacyClassesForIDE_index.php", "foo/Migrations/Code/LegacyClassesForIde.php");
 
-        myFixture.configureByFile("LegacyClassesForIDE_highlight_disabled.php");
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("LegacyClassesForIDE_highlight_disabled.php");
     }
 
     public void testLegacyClassUsagesAreMarkedAndCanBeFixed() {
@@ -32,9 +30,7 @@ public class LegacyClassesForIDEInspectionTest extends AbstractTestCase {
         myFixture.copyFileToProject("LegacyClassesForIDE_classes.php");
         myFixture.copyFileToProject("LegacyClassesForIDE_index.php", "foo/Migrations/Code/LegacyClassesForIde.php");
 
-        myFixture.configureByFile("LegacyClassesForIDE_highlight.php");
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("LegacyClassesForIDE_highlight.php");
 
         List<IntentionAction> allQuickFixes = myFixture.getAllQuickFixes();
         for (IntentionAction action : allQuickFixes) {

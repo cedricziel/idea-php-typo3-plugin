@@ -15,10 +15,7 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
     public void testExtbasePropertyInjectionIsMarked() {
         myFixture.enableInspections(new ExtbasePropertyInjectionInspection());
 
-        VirtualFile virtualFile = myFixture.copyFileToProject("ExtbasePropertyInjectionInspectionIsMarked.php", "MyClass.php");
-        myFixture.configureFromExistingVirtualFile(virtualFile);
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("ExtbasePropertyInjectionInspectionIsMarked.php");
     }
 
     public void testExtbasePropertyInjectionIsMarkedAndCanBeFixed() {
@@ -35,9 +32,6 @@ public class ExtbasePropertyInjectionInspectionTest extends AbstractTestCase {
 
         myFixture.enableInspections(new ExtbasePropertyInjectionInspection());
 
-        VirtualFile virtualFile = myFixture.copyFileToProject("ExtbasePropertyInjectionInspectionIsNotMarked.php", "MyClass.php");
-        myFixture.configureFromExistingVirtualFile(virtualFile);
-
-        myFixture.checkHighlighting();
+        myFixture.testHighlighting("ExtbasePropertyInjectionInspectionIsNotMarked.php");
     }
 }

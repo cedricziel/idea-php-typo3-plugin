@@ -12,7 +12,7 @@ public class InvalidQuantityInspectionTest extends AbstractTestCase {
     public void testInvalidQuantitiesAreNotHighlightedWhenPluginIsDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(InvalidQuantityInspection.class);
+        myFixture.enableInspections(new InvalidQuantityInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 
@@ -23,7 +23,7 @@ public class InvalidQuantityInspectionTest extends AbstractTestCase {
     }
 
     public void testInvalidQuantitiesAreHighlighted() {
-        myFixture.enableInspections(InvalidQuantityInspection.class);
+        myFixture.enableInspections(new InvalidQuantityInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 

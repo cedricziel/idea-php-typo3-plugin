@@ -12,7 +12,7 @@ public class InternalTypeFileInspectionTest extends AbstractTestCase {
     public void testInvalidInternalTypeIsNotDisplayedWhenPluginIsDisabled() {
         disablePlugin();
 
-        myFixture.enableInspections(InternalTypeFileInspection.class);
+        myFixture.enableInspections(new InternalTypeFileInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 
@@ -23,7 +23,7 @@ public class InternalTypeFileInspectionTest extends AbstractTestCase {
     }
 
     public void testInvalidInternalTypeIsNotDisplayedOnv8() {
-        myFixture.enableInspections(InternalTypeFileInspection.class);
+        myFixture.enableInspections(new InternalTypeFileInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 
@@ -34,7 +34,7 @@ public class InternalTypeFileInspectionTest extends AbstractTestCase {
     }
 
     public void testInvalidInternalTypeIsDisplayedOnv9() {
-        myFixture.enableInspections(InternalTypeFileInspection.class);
+        myFixture.enableInspections(new InternalTypeFileInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 
@@ -45,7 +45,7 @@ public class InternalTypeFileInspectionTest extends AbstractTestCase {
     }
 
     public void testInvalidInternalTypeIsHighlightedOnv10() {
-        myFixture.enableInspections(InternalTypeFileInspection.class);
+        myFixture.enableInspections(new InternalTypeFileInspection());
 
         myFixture.addFileToProject("foo/ext_emconf.php", "");
 
