@@ -2,7 +2,6 @@ package com.cedricziel.idea.typo3.codeInspection;
 
 import com.cedricziel.idea.typo3.codeInspection.quickfix.LegacyClassesForIdeQuickFix;
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
-import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
