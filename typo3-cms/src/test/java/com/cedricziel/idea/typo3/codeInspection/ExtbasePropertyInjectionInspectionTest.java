@@ -2,7 +2,6 @@ package com.cedricziel.idea.typo3.codeInspection;
 
 import com.cedricziel.idea.typo3.AbstractTestCase;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.List;
 
