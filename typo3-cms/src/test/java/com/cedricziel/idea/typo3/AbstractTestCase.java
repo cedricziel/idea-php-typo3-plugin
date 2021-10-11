@@ -177,7 +177,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         final List<PsiElement> elements = collectPsiElementsRecursive(psiElement);
 
         for (LineMarkerProvider lineMarkerProvider : LineMarkerProviders.getInstance().allForLanguage(psiElement.getLanguage())) {
-            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<LineMarkerInfo>();
+            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<>();
             lineMarkerProvider.collectSlowLineMarkers(elements, lineMarkerInfos);
 
             if (lineMarkerInfos.size() > 0) {

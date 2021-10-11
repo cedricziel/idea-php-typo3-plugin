@@ -78,7 +78,7 @@ public class TranslationIndexTest extends AbstractTranslationTest {
     public void testCanFindMultipleLanguagesPerXMLFile() {
         myFixture.copyFileToProject("multiple_languages.xml", "typo3conf/ext/foo/locallang.xml");
 
-        List<Triple<String, String, String>> triples = new ArrayList<Triple<String, String, String>>() {{
+        List<Triple<String, String, String>> triples = new ArrayList<>() {{
             add(new Triple<>("default", "mylabel", "English"));
             add(new Triple<>("de", "mylabel", "Deutsch"));
             add(new Triple<>("fr", "mylabel", "Français"));

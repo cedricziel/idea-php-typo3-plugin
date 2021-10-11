@@ -46,7 +46,7 @@ public class FluidTypeResolver {
 
         if (psiElement.getParent() instanceof FluidFieldChain) {
             FluidFieldChainExpr fieldExpression = (FluidFieldChainExpr) PsiTreeUtil.findFirstParent(psiElement, e -> e instanceof FluidFieldChainExpr);
-            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, new PairProcessor<PsiElement, PsiElement>() {
+            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, new PairProcessor<>() {
                 @Override
                 public boolean process(PsiElement psiElement, PsiElement psiElement2) {
                     if (psiElement instanceof FluidFieldChainExpr) {

@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FluidCompletionContributor extends CompletionContributor {
     public FluidCompletionContributor() {
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 parameters.getPosition();
@@ -31,19 +31,19 @@ public class FluidCompletionContributor extends CompletionContributor {
          * { <caret> }
          * { fo<caret> }
          */
-        extend(CompletionType.BASIC, FluidPatterns.getFirstIdentifierPattern(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, FluidPatterns.getFirstIdentifierPattern(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement psiElement = parameters.getPosition().getOriginalElement();
 
                 FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> {
                     result.addElement(
-                        LookupElementBuilder
-                            .create(name)
-                            .withTypeText(
-                                FluidTypeResolver.getTypeDisplayName(psiElement.getProject(), var.getTypes()), true
-                            )
-                            .withIcon(PhpIcons.VARIABLE)
+                            LookupElementBuilder
+                                    .create(name)
+                                    .withTypeText(
+                                            FluidTypeResolver.getTypeDisplayName(psiElement.getProject(), var.getTypes()), true
+                                    )
+                                    .withIcon(PhpIcons.VARIABLE)
                     );
                 });
 
@@ -66,21 +66,21 @@ public class FluidCompletionContributor extends CompletionContributor {
         /*
          * {object -> <caret>}
          */
-        extend(CompletionType.BASIC, FluidPatterns.inlineChainPipeTarget(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, FluidPatterns.inlineChainPipeTarget(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 FluidUtil.completeViewHelpers(parameters, result);
             }
         });
 
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidBoundNamespace.class), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidBoundNamespace.class), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 FluidUtil.completeViewHelpers(parameters, result);
             }
         });
 
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidViewHelperReference.class), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(FluidTypes.IDENTIFIER).withParent(FluidViewHelperReference.class), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 FluidUtil.completeViewHelpers(parameters, result);
@@ -92,7 +92,7 @@ public class FluidCompletionContributor extends CompletionContributor {
          * {f:foo(u<caret>)}
          * {f:foo(u<caret>:)}
          */
-        extend(CompletionType.BASIC, FluidPatterns.inlineArgumentNamePattern(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, FluidPatterns.inlineArgumentNamePattern(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 FluidUtil.completeViewHelperArguments(parameters, result);

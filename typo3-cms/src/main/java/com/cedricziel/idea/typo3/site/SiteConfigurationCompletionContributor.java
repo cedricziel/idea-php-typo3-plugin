@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class SiteConfigurationCompletionContributor extends CompletionContributor {
 
-    private static final Map<String, String> TOP_LEVEL_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+    private static final Map<String, String> TOP_LEVEL_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
         put("rootPageId", "");
         put("base", "");
         put("languages", "");
@@ -41,7 +41,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * typo3Language: default
      * flag: gb
      */
-    private static final Map<String, String> LANGUAGE_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+    private static final Map<String, String> LANGUAGE_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
         put("languageId", "");
         put("title", "");
         put("navigationTitle", "");
@@ -61,7 +61,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * errorFluidLayoutsRootPath: 'EXT:my_extension/Resources/Private/Layouts/ErrorPages'
      * errorFluidPartialsRootPath
      */
-    private static final Map<String, String> ERROR_HANDLING_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+    private static final Map<String, String> ERROR_HANDLING_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
         put("errorCode", "");
         put("errorHandler", "");
         // errorHandler: Fluid
@@ -84,7 +84,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * Allow: /
      * Disallow: /forbidden/
      */
-    private static final Map<String, String> ROUTES_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+    private static final Map<String, String> ROUTES_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
         put("route", "");
         put("type", "");
         put("content", "");
@@ -92,7 +92,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
 
     public SiteConfigurationCompletionContributor() {
         // complete top level yaml keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY).withSuperParent(2, YAMLMapping.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY).withSuperParent(2, YAMLMapping.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -108,7 +108,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete new top level yaml keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement().withParent(YAMLScalar.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement().withParent(YAMLScalar.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -124,7 +124,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete 2nd level yaml keys
-        extend(CompletionType.BASIC, yamlKeyChildOfInArray(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, yamlKeyChildOfInArray(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -155,7 +155,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete 2nd level known keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
