@@ -53,6 +53,8 @@
                              nonDefaultProject="true"
                              instance="com.cedricziel.idea.typo3.configuration.TYPO3CMSSettingsForm"/>
 
+        <notificationGroup displayType="BALLOON" id="TYPO3 CMS Plugin"/>
+
         <spellchecker.bundledDictionaryProvider implementation="com.cedricziel.idea.typo3.TYPO3DictionaryProvider"/>
 
         <directoryProjectGenerator implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSClassicLayoutDirectoryProjectGenerator"/>

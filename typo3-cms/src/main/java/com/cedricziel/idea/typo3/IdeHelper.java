@@ -15,24 +15,24 @@ public class IdeHelper {
             "TYPO3 CMS Plugin",
             "TYPO3 CMS Plugin",
             "Enable the TYPO3 CMS Plugin <a href=\"enable\">with auto configuration now</a>, open <a href=\"config\">Project Settings</a> or <a href=\"dismiss\">dismiss</a> further messages",
-            NotificationType.INFORMATION,
-            (notification1, event) -> {
-                // handle html click events
-                if ("config".equals(event.getDescription())) {
-                    // open settings dialog and show panel
-                    TYPO3CMSProjectSettings.showSettings(project);
-                } else if ("enable".equals(event.getDescription())) {
-                    enablePluginAndConfigure(project);
-
-                    Notifications.Bus.notify(new Notification("TYPO3 CMS Plugin", "TYPO3 CMS Plugin", "Plugin enabled", NotificationType.INFORMATION), project);
-                } else if ("dismiss".equals(event.getDescription())) {
-                    // user doesn't want to show notification again
-                    TYPO3CMSProjectSettings.getInstance(project).dismissEnableNotification = true;
-                }
-
-                notification1.expire();
-            }
+            NotificationType.INFORMATION
         );
+        notification.setListener((notification1, event) -> {
+            // handle html click events
+            if ("config".equals(event.getDescription())) {
+                // open settings dialog and show panel
+                TYPO3CMSProjectSettings.showSettings(project);
+            } else if ("enable".equals(event.getDescription())) {
+                enablePluginAndConfigure(project);
+
+                Notifications.Bus.notify(new Notification("TYPO3 CMS Plugin", "TYPO3 CMS Plugin", "Plugin enabled", NotificationType.INFORMATION), project);
+            } else if ("dismiss".equals(event.getDescription())) {
+                // user doesn't want to show notification again
+                TYPO3CMSProjectSettings.getInstance(project).dismissEnableNotification = true;
+            }
+
+            notification1.expire();
+        });
 
         Notifications.Bus.notify(notification, project);
     }
