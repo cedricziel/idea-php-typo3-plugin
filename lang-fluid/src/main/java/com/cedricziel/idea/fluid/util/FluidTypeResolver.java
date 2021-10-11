@@ -46,21 +46,18 @@ public class FluidTypeResolver {
 
         if (psiElement.getParent() instanceof FluidFieldChain) {
             FluidFieldChainExpr fieldExpression = (FluidFieldChainExpr) PsiTreeUtil.findFirstParent(psiElement, e -> e instanceof FluidFieldChainExpr);
-            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, new PairProcessor<>() {
-                @Override
-                public boolean process(PsiElement psiElement, PsiElement psiElement2) {
-                    if (psiElement instanceof FluidFieldChainExpr) {
-                        FluidFieldExpr childOfType = PsiTreeUtil.findChildOfType(psiElement, FluidFieldExpr.class);
-                        if (childOfType != null) {
-                            possibleTypes.add(childOfType.getName());
-                        }
-                        return false;
-                    } else {
-                        possibleTypes.add(((FluidFieldChain) psiElement).getName());
+            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, (psiElement1, psiElement2) -> {
+                if (psiElement1 instanceof FluidFieldChainExpr) {
+                    FluidFieldExpr childOfType = PsiTreeUtil.findChildOfType(psiElement1, FluidFieldExpr.class);
+                    if (childOfType != null) {
+                        possibleTypes.add(childOfType.getName());
                     }
-
-                    return true;
+                    return false;
+                } else {
+                    possibleTypes.add(((FluidFieldChain) psiElement1).getName());
                 }
+
+                return true;
             });
         }
 
