@@ -1,8 +1,6 @@
 package com.cedricziel.idea.fluid.lang;
 
 import com.intellij.lang.Language;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.CharsetToolkit;

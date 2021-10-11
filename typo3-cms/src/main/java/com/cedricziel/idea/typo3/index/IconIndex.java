@@ -120,7 +120,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
                                         CoreIconParserVisitor visitor = new CoreIconParserVisitor();
                                         visitor.visitElement(field.getDefaultValue());
 
-                                        Map<String, IconStub> map1 = visitor.getMap();map1.forEach(map::put);
+                                        map.putAll(visitor.getMap());
                                     }
                                 }
                             }
@@ -133,8 +133,7 @@ public class IconIndex extends FileBasedIndexExtension<String, IconStub> {
                                 method.accept(visitor);
                                 visitor.visitElement(method);
 
-                                Map<String, IconStub> map1 = visitor.getMap();
-                                map1.forEach(map::put);
+                                map.putAll(visitor.getMap());
                             }
                         }
                     }

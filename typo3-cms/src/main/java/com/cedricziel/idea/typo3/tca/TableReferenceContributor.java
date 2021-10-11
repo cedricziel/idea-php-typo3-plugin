@@ -10,8 +10,6 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TableReferenceContributor extends PsiReferenceContributor {
