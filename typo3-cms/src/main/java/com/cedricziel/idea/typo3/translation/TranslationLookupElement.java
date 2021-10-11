@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TranslationLookupElement extends LookupElement {
 
-    private StubTranslation translation;
+    private final StubTranslation translation;
 
     public TranslationLookupElement(StubTranslation translation) {
         this.translation = translation;

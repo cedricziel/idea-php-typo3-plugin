@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class StubTranslation implements TranslationInterface, Serializable {
-    private SmartPsiElementPointer<PsiElement> psiElement;
-    private String id;
+    private final SmartPsiElementPointer<PsiElement> psiElement;
+    private final String id;
     private TextRange textRange;
     private String extension;
     private String index;

@@ -22,7 +22,7 @@ public class MethodArgumentDroppedMatcherInspection extends PluginEnabledPhpInsp
                 PhpExpression classReference = reference.getClassReference();
                 if (classReference != null) {
                     PhpType inferredType = classReference.getInferredType();
-                    String compiledClassMethodKey = inferredType.toString() + "->" + reference.getName();
+                    String compiledClassMethodKey = inferredType + "->" + reference.getName();
                     if (ExtensionScannerUtil.classMethodHasDroppedArguments(reference.getProject(), compiledClassMethodKey)) {
                         int maximumNumberOfArguments = ExtensionScannerUtil.getMaximumNumberOfArguments(reference.getProject(), compiledClassMethodKey);
 

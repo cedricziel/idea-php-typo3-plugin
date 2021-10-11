@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FluidTypeResolver {
-    private static String[] PROPERTY_SHORTCUTS = new String[]{"get", "is", "has"};
+    private static final String[] PROPERTY_SHORTCUTS = new String[]{"get", "is", "has"};
 
     public static Collection<String> formatPsiTypeName(@NotNull PsiElement psiElement) {
         return formatPsiTypeName(psiElement, false);
@@ -90,9 +90,8 @@ public class FluidTypeResolver {
         String rootType = types.iterator().next();
         Collection<FluidVariable> rootVariables = getRootVariableByName(psiElement, rootType);
         if (types.size() == 1) {
-            Collection<FluidTypeContainer> fluidTypeContainers = FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);
 
-            return fluidTypeContainers;
+            return FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);
         }
 
         Collection<FluidTypeContainer> type = FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);

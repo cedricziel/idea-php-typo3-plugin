@@ -225,7 +225,7 @@ public class FluidUtil {
     }
 
     private static class ControllerMethodWalkerVisitor extends PhpRecursiveElementVisitor {
-        private Map<String, FluidVariable> variables = new THashMap<>();
+        private final Map<String, FluidVariable> variables = new THashMap<>();
 
         @Override
         public void visitPhpMethodReference(MethodReference reference) {
