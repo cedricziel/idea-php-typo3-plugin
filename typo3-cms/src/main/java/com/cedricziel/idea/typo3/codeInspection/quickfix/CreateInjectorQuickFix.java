@@ -3,7 +3,6 @@ package com.cedricziel.idea.typo3.codeInspection.quickfix;
 import com.cedricziel.idea.typo3.util.CodeUtil;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
