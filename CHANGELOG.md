@@ -10,6 +10,7 @@
 - migrate `CreateInjectorQuickFix` away from removed API to use writeCommandAction
 - migrate `ExtbaseControllerActionAction` away from removed API to use writeCommandAction
 - migrate `createNotification` usage to distinct NotificationGroup
+- Remove unused, deprecated API usage related to icons
 ### Deprecated
 
 ### Removed
