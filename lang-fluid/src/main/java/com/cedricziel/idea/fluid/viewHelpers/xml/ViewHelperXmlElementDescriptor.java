@@ -79,9 +79,7 @@ public class ViewHelperXmlElementDescriptor implements XmlElementDescriptor {
     public XmlAttributeDescriptor[] getAttributesDescriptors(@Nullable XmlTag context) {
         Collection<XmlAttributeDescriptor> attributeDescriptors = new ArrayList<>();
 
-        viewHelper.arguments.forEach((s, viewHelperArgument) -> {
-            attributeDescriptors.add(new ViewHelperArgumentDescriptor(viewHelper, viewHelperArgument));
-        });
+        viewHelper.arguments.forEach((s, viewHelperArgument) -> attributeDescriptors.add(new ViewHelperArgumentDescriptor(viewHelper, viewHelperArgument)));
 
         final XmlAttributeDescriptor[] commonAttributes = HtmlNSDescriptorImpl.getCommonAttributeDescriptors(context);
 

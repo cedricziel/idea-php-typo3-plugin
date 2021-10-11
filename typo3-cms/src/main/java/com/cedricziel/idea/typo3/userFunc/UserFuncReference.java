@@ -139,13 +139,11 @@ public class UserFuncReference extends PsiPolyVariantReferenceBase<PsiElement> {
         }
 
         if (className != null) {
-            phpIndex.getClassesByFQN(className).forEach(c -> {
-                c.getMethods()
-                        .stream()
-                        .filter(method -> method.getAccess().isPublic())
-                        .map(UserFuncLookupElement::new)
-                        .forEach(list::add);
-            });
+            phpIndex.getClassesByFQN(className).forEach(c -> c.getMethods()
+                    .stream()
+                    .filter(method -> method.getAccess().isPublic())
+                    .map(UserFuncLookupElement::new)
+                    .forEach(list::add));
         }
 
         return list.toArray();

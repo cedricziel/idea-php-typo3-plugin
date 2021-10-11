@@ -18,9 +18,7 @@ public class TranslatorTest extends AbstractTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> {
-            FileTypeManager.getInstance().associateExtension(XmlFileType.INSTANCE, "xlf");
-        });
+        WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> FileTypeManager.getInstance().associateExtension(XmlFileType.INSTANCE, "xlf"));
 
         FileBasedIndex.getInstance().requestRebuild(TranslationIndex.KEY);
 

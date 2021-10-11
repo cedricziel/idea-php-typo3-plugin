@@ -210,9 +210,7 @@ public class FluidUtil {
             return;
         }
 
-        allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> {
-            result.addElement(FluidUtil.viewHelperArgumentLookupElement(psiElement, name, argument));
-        });
+        allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> result.addElement(FluidUtil.viewHelperArgumentLookupElement(psiElement, name, argument)));
     }
 
     private static LookupElement viewHelperArgumentLookupElement(PsiElement psiElement, String name, ViewHelperArgument argument) {

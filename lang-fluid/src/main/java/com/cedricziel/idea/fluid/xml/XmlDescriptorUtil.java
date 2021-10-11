@@ -21,7 +21,7 @@ public class XmlDescriptorUtil {
         XmlDocumentImpl xmlDocument = PsiTreeUtil.getParentOfType(context, XmlDocumentImpl.class);
         if (xmlDocument == null) return EMPTY_ARRAY;
         return ContainerUtil.map2Array(xmlDocument.getRootTagNSDescriptor().getRootElementsDescriptors(xmlDocument),
-            XmlElementDescriptor.class, descriptor -> wrapInDelegating(descriptor));
+            XmlElementDescriptor.class, XmlDescriptorUtil::wrapInDelegating);
     }
 
     public static XmlElementDescriptor getElementDescriptor(XmlTag childTag, XmlTag contextTag) {

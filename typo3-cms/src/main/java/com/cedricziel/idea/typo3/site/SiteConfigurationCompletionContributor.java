@@ -21,13 +21,7 @@ import java.util.Map;
 
 public class SiteConfigurationCompletionContributor extends CompletionContributor {
 
-    private static final Map<String, String> TOP_LEVEL_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
-        put("rootPageId", "");
-        put("base", "");
-        put("languages", "");
-        put("errorHandling", "");
-        put("routes", "");
-    }});
+    private static final Map<String, String> TOP_LEVEL_KEYS = Map.of("rootPageId", "", "base", "", "languages", "", "errorHandling", "", "routes", "");
 
     /**
      * languageId: '0'
@@ -41,17 +35,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * typo3Language: default
      * flag: gb
      */
-    private static final Map<String, String> LANGUAGE_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
-        put("languageId", "");
-        put("title", "");
-        put("navigationTitle", "");
-        put("base", "");
-        put("iso-639-1", "");
-        put("hreflang", "");
-        put("direction", "");
-        put("typo3Language", "");
-        put("flag", "");
-    }});
+    private static final Map<String, String> LANGUAGE_KEYS = Map.of("languageId", "", "title", "", "navigationTitle", "", "base", "", "iso-639-1", "", "hreflang", "", "direction", "", "typo3Language", "", "flag", "");
 
     /**
      * errorCode: '403'
@@ -61,19 +45,13 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * errorFluidLayoutsRootPath: 'EXT:my_extension/Resources/Private/Layouts/ErrorPages'
      * errorFluidPartialsRootPath
      */
-    private static final Map<String, String> ERROR_HANDLING_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
-        put("errorCode", "");
-        put("errorHandler", "");
+    private static final Map<String, String> ERROR_HANDLING_KEYS = Map.of("errorCode", "", "errorHandler", "",
         // errorHandler: Fluid
-        put("errorFluidTemplate", "");
-        put("errorFluidTemplatesRootPath", "");
-        put("errorFluidLayoutsRootPath", "");
-        put("errorFluidPartialsRootPath", "");
+        "errorFluidTemplate", "", "errorFluidTemplatesRootPath", "", "errorFluidLayoutsRootPath", "", "errorFluidPartialsRootPath", "",
         // errorHandler: Page
-        put("errorContentSource", "");
+        "errorContentSource", "",
         // errorHandler: PHP
-        put("errorPhpClassFQCN", "");
-    }});
+        "errorPhpClassFQCN", "");
 
     /**
      * route: robots.txt
@@ -84,11 +62,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * Allow: /
      * Disallow: /forbidden/
      */
-    private static final Map<String, String> ROUTES_KEYS = Collections.unmodifiableMap(new HashMap<>() {{
-        put("route", "");
-        put("type", "");
-        put("content", "");
-    }});
+    private static final Map<String, String> ROUTES_KEYS = Map.of("route", "", "type", "", "content", "");
 
     public SiteConfigurationCompletionContributor() {
         // complete top level yaml keys

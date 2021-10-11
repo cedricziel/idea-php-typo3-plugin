@@ -36,16 +36,14 @@ public class FluidCompletionContributor extends CompletionContributor {
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement psiElement = parameters.getPosition().getOriginalElement();
 
-                FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> {
-                    result.addElement(
-                            LookupElementBuilder
-                                    .create(name)
-                                    .withTypeText(
-                                            FluidTypeResolver.getTypeDisplayName(psiElement.getProject(), var.getTypes()), true
-                                    )
-                                    .withIcon(PhpIcons.VARIABLE)
-                    );
-                });
+                FluidTypeResolver.collectScopeVariables(parameters.getOriginalPosition()).forEach((name, var) -> result.addElement(
+                        LookupElementBuilder
+                                .create(name)
+                                .withTypeText(
+                                        FluidTypeResolver.getTypeDisplayName(psiElement.getProject(), var.getTypes()), true
+                                )
+                                .withIcon(PhpIcons.VARIABLE)
+                ));
 
                 if (!PlatformPatterns.psiElement().withSuperParent(2, FluidArgumentValue.class).accepts(psiElement)) {
                     FluidUtil.completeViewHelpers(parameters, result);

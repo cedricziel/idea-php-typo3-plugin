@@ -60,74 +60,72 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
             String potentialModelClass = ExtbaseUtility.convertRepositoryFQNToEntityFQN(repositoryClass.getFQN());
 
             Collection<PhpClass> classesByFQN = PhpIndex.getInstance(project).getClassesByFQN(potentialModelClass);
-            classesByFQN.forEach(c -> {
-                c.getFields().forEach(f -> {
-                    if (!ExtbaseUtils.fieldHasMagicFinders(f)) {
-                        return;
+            classesByFQN.forEach(c -> c.getFields().forEach(f -> {
+                if (!ExtbaseUtils.fieldHasMagicFinders(f)) {
+                    return;
+                }
+
+                // findBy* matches on single fields only and not on collections
+                result.addElement(new LookupElement() {
+                    @NotNull
+                    @Override
+                    public String getLookupString() {
+                        return "findBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
                     }
 
-                    // findBy* matches on single fields only and not on collections
-                    result.addElement(new LookupElement() {
-                        @NotNull
-                        @Override
-                        public String getLookupString() {
-                            return "findBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                        }
+                    @Override
+                    public void renderElement(LookupElementPresentation presentation) {
+                        super.renderElement(presentation);
 
-                        @Override
-                        public void renderElement(LookupElementPresentation presentation) {
-                            super.renderElement(presentation);
+                        presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setIcon(PhpIcons.METHOD_ICON);
 
-                            presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setIcon(PhpIcons.METHOD_ICON);
-
-                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
-                            presentation.setTypeText(c.getName() + "[]|" + ExtbaseUtils.QUERY_RESULT_INTERFACE);
-                        }
-                    });
-
-                    // countBy* matches on single fields only and not on collections
-                    result.addElement(new LookupElement() {
-                        @NotNull
-                        @Override
-                        public String getLookupString() {
-                            return "countBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                        }
-
-                        @Override
-                        public void renderElement(LookupElementPresentation presentation) {
-                            super.renderElement(presentation);
-
-                            presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setIcon(PhpIcons.METHOD_ICON);
-                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
-                            presentation.setTypeText("int");
-                        }
-                    });
-
-                    // findOneBy* matches on single fields only and not on collections
-                    result.addElement(new LookupElement() {
-                        @NotNull
-                        @Override
-                        public String getLookupString() {
-                            return "findOneBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
-                        }
-
-                        @Override
-                        public void renderElement(LookupElementPresentation presentation) {
-                            super.renderElement(presentation);
-
-                            presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
-                            presentation.setIcon(PhpIcons.METHOD_ICON);
-                            presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
-                            presentation.setTypeText("null|" + c.getName());
-                        }
-                    });
+                        presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
+                        presentation.setTypeText(c.getName() + "[]|" + ExtbaseUtils.QUERY_RESULT_INTERFACE);
+                    }
                 });
-            });
+
+                // countBy* matches on single fields only and not on collections
+                result.addElement(new LookupElement() {
+                    @NotNull
+                    @Override
+                    public String getLookupString() {
+                        return "countBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
+                    }
+
+                    @Override
+                    public void renderElement(LookupElementPresentation presentation) {
+                        super.renderElement(presentation);
+
+                        presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setIcon(PhpIcons.METHOD_ICON);
+                        presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
+                        presentation.setTypeText("int");
+                    }
+                });
+
+                // findOneBy* matches on single fields only and not on collections
+                result.addElement(new LookupElement() {
+                    @NotNull
+                    @Override
+                    public String getLookupString() {
+                        return "findOneBy" + StringUtils.capitalize(f.getName()) + "($" + f.getName() + ")";
+                    }
+
+                    @Override
+                    public void renderElement(LookupElementPresentation presentation) {
+                        super.renderElement(presentation);
+
+                        presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
+                        presentation.setIcon(PhpIcons.METHOD_ICON);
+                        presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
+                        presentation.setTypeText("null|" + c.getName());
+                    }
+                });
+            }));
         }
     }
 }
