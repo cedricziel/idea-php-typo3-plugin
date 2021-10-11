@@ -239,8 +239,7 @@ public class TranslationUtil {
     }
 
     private static String getTranslationFoldingLocale(Project project) {
-        String localeFromSettings = TYPO3CMSProjectSettings.getInstance(project).translationFoldingLocale;
 
-        return (String) localeFromSettings;
+        return TYPO3CMSProjectSettings.getInstance(project).translationFoldingLocale;
     }
 }

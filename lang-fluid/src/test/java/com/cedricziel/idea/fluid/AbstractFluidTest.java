@@ -20,9 +20,6 @@ abstract public class AbstractFluidTest extends BasePlatformTestCase {
         super.setUp();
 
         final boolean pluginInstalled = PluginManager.isPluginInstalled(PluginId.getId("com.jetbrains.php"));
-        if (pluginInstalled) {
-
-        }
     }
 
     @Override
