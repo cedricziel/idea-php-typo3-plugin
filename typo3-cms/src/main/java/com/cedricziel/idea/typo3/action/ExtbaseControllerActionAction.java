@@ -7,7 +7,6 @@ import com.cedricziel.idea.typo3.util.ExtensionUtility;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
@@ -109,47 +108,42 @@ public class ExtbaseControllerActionAction extends AbstractDumbAwareAction {
     }
 
     private void write(@NotNull Project project, PhpClass phpClass, String actionName) {
-        new WriteCommandAction<Method>(project) {
+        WriteCommandAction.writeCommandAction(project).run(() -> {
+            Method actionMethod = PhpPsiElementFactory.createMethod(
+                project,
+                "public function " + actionName + " () { \n" +
+                    "}\n"
 
-            @Override
-            protected void run(@NotNull Result result) {
+            );
 
-                Method actionMethod = PhpPsiElementFactory.createMethod(
-                        project,
-                        "public function " + actionName + " () { \n" +
-                                "}\n"
-
-                );
-
-                final Editor editor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, phpClass.getContainingFile().getVirtualFile()), true);
-                if (editor == null) {
-                    return;
-                }
-
-                PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
-                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-
-                final int insertPos = CodeUtil.getMethodInsertPosition(phpClass, actionName);
-                if (insertPos == -1) {
-                    return;
-                }
-
-                StringBuffer textBuf = new StringBuffer();
-                textBuf.append("\n");
-                textBuf.append(actionMethod.getText());
-
-                editor.getDocument().insertString(insertPos, textBuf);
-                final int endPos = insertPos + textBuf.length();
-
-                CodeStyleManager.getInstance(project).reformatText(phpClass.getContainingFile(), insertPos, endPos);
-                PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-
-                Method insertedMethod = phpClass.findMethodByName(actionName);
-                if (insertedMethod != null) {
-                    editor.getCaretModel().moveToOffset(insertedMethod.getTextRange().getStartOffset());
-                    editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
-                }
+            final Editor editor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, phpClass.getContainingFile().getVirtualFile()), true);
+            if (editor == null) {
+                return;
             }
-        }.execute();
+
+            PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
+            PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+
+            final int insertPos = CodeUtil.getMethodInsertPosition(phpClass, actionName);
+            if (insertPos == -1) {
+                return;
+            }
+
+            StringBuffer textBuf = new StringBuffer();
+            textBuf.append("\n");
+            textBuf.append(actionMethod.getText());
+
+            editor.getDocument().insertString(insertPos, textBuf);
+            final int endPos = insertPos + textBuf.length();
+
+            CodeStyleManager.getInstance(project).reformatText(phpClass.getContainingFile(), insertPos, endPos);
+            PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+
+            Method insertedMethod = phpClass.findMethodByName(actionName);
+            if (insertedMethod != null) {
+                editor.getCaretModel().moveToOffset(insertedMethod.getTextRange().getStartOffset());
+                editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+            }
+        });
     }
 }

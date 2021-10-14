@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class FluidInjector implements MultiHostInjector {
 
-    private static String[] ATTRIBUTES = {
+    private static final String[] ATTRIBUTES = {
         "each", "as"
     };
 

@@ -53,6 +53,8 @@
                              nonDefaultProject="true"
                              instance="com.cedricziel.idea.typo3.configuration.TYPO3CMSSettingsForm"/>
 
+        <notificationGroup displayType="BALLOON" id="TYPO3 CMS Plugin"/>
+
         <spellchecker.bundledDictionaryProvider implementation="com.cedricziel.idea.typo3.TYPO3DictionaryProvider"/>
 
         <directoryProjectGenerator implementation="com.cedricziel.idea.typo3.projectTemplate.TYPO3CMSClassicLayoutDirectoryProjectGenerator"/>
@@ -96,58 +98,143 @@
 
         <!-- inspections -->
 
-        <inspectionToolProvider implementation="com.cedricziel.idea.typo3.codeInspection.TYPO3InspectionToolProvider"/>
-
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="TranslationMissingInspection"  displayName="Translation missing"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         shortName="TranslationMissingInspection"
+                         displayName="Translation missing"
                          groupName="Translation"
-                         enabledByDefault="true"                   level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.translation.codeInspection.TranslationMissingInspection" />
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.performance.issues"
                          shortName="ExtbasePropertyInjectionInspection"
-                         displayName="use method injection instead of field injection"
+                         displayName="Use method injection instead of field injection"
                          groupName="Extbase"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.ExtbasePropertyInjectionInspection"/>
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="MissingColumnTypeInspection" displayName="Missing column type definition"
-                         groupName="TCA"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingColumnTypeInspection"/>
-
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="MissingRenderTypeInspection" displayName="Missing render type definition"
-                         groupName="TCA"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingRenderTypeInspection"/>
-
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
                          groupBundle="messages.InspectionsBundle"
                          groupKey="group.names.probable.bugs"
-                         shortName="MissingTableInspection" displayName="Missing table definition"
+                         shortName="MissingColumnTypeInspection"
+                         displayName="Missing column type definition"
                          groupName="TCA"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingColumnTypeInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="MissingRenderTypeInspection"
+                         displayName="Missing render type definition"
+                         groupName="TCA"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingRenderTypeInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="MissingTableInspection"
+                         displayName="Missing table definition"
+                         groupName="TCA"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.MissingTableInspection"/>
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="InvalidQuantityInspection" displayName="Config key only accepts integer values"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="InvalidQuantityInspection"
+                         displayName="Config key only accepts integer values"
                          groupName="TCA"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.InvalidQuantityInspection"/>
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="InternalTypeFileInspection" displayName="Invalid Internal type"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="InternalTypeFileInspection"
+                         displayName="Invalid Internal type"
                          groupName="TCA"
-                         enabledByDefault="true" level="WARNING"
+                         enabledByDefault="true"
+                         level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.tca.codeInspection.v10.InternalTypeFileInspection"/>
 
-        <localInspection language="PHP" groupPath="TYPO3 CMS"
-                         shortName="LegacyClassesForIDEInspection" displayName="Legacy class used"
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="LegacyClassesForIDEInspection"
+                         displayName="Legacy class used"
                          groupName="Code Migration"
                          enabledByDefault="true" level="WARNING"
                          implementationClass="com.cedricziel.idea.typo3.codeInspection.LegacyClassesForIDEInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="MethodArgumentDroppedMatcherInspection"
+                         displayName="Number of arguments changed with TYPO3 9"
+                         groupName="Code Migration"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.extensionScanner.codeInspection.MethodArgumentDroppedMatcherInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="ClassConstantMatcherInspection"
+                         displayName="Deprecated class constant"
+                         groupName="Code Migration"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.extensionScanner.codeInspection.ClassConstantMatcherInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="ClassNameMatcherInspection"
+                         displayName="Class removed with TYPO3 9"
+                         groupName="Code Migration"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.extensionScanner.codeInspection.ClassNameMatcherInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.probable.bugs"
+                         shortName="ConstantMatcherInspection"
+                         displayName="Constant removed with TYPO3 9"
+                         groupName="Code Migration"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.extensionScanner.codeInspection.ConstantMatcherInspection"/>
+
+        <localInspection language="PHP"
+                         groupPath="TYPO3 CMS"
+                         shortName="FunctionCallMatcherInspection"
+                         displayName="Global function removed with TYPO3 9"
+                         groupName="Code Migration"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.cedricziel.idea.typo3.extensionScanner.codeInspection.FunctionCallMatcherInspection"/>
 
         <lang.inspectionSuppressor language="PHP"
                                    implementationClass="com.cedricziel.idea.typo3.codeInspection.UnusedActionControllerMethodInspectionSuppressor"/>

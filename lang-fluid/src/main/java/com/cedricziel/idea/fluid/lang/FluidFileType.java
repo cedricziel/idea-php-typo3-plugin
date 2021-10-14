@@ -1,8 +1,6 @@
 package com.cedricziel.idea.fluid.lang;
 
 import com.intellij.lang.Language;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.CharsetToolkit;
@@ -21,12 +19,7 @@ public class FluidFileType extends LanguageFileType implements TemplateLanguageF
     protected FluidFileType() {
         super(FluidLanguage.INSTANCE);
 
-        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this, new EditorHighlighterProvider() {
-            public EditorHighlighter getEditorHighlighter(@Nullable Project project, @NotNull FileType fileType, @Nullable VirtualFile virtualFile, @NotNull EditorColorsScheme colors) {
-
-                return new FluidTemplateHighlighter(project, virtualFile, colors);
-            }
-        });
+        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this, (project, fileType, virtualFile, colors) -> new FluidTemplateHighlighter(project, virtualFile, colors));
     }
 
     private static LanguageFileType getAssociatedFileType(VirtualFile file, Project project) {

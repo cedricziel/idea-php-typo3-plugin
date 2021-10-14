@@ -13,7 +13,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.PairProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.Field;
@@ -30,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FluidTypeResolver {
-    private static String[] PROPERTY_SHORTCUTS = new String[]{"get", "is", "has"};
+    private static final String[] PROPERTY_SHORTCUTS = new String[]{"get", "is", "has"};
 
     public static Collection<String> formatPsiTypeName(@NotNull PsiElement psiElement) {
         return formatPsiTypeName(psiElement, false);
@@ -46,21 +45,18 @@ public class FluidTypeResolver {
 
         if (psiElement.getParent() instanceof FluidFieldChain) {
             FluidFieldChainExpr fieldExpression = (FluidFieldChainExpr) PsiTreeUtil.findFirstParent(psiElement, e -> e instanceof FluidFieldChainExpr);
-            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, new PairProcessor<PsiElement, PsiElement>() {
-                @Override
-                public boolean process(PsiElement psiElement, PsiElement psiElement2) {
-                    if (psiElement instanceof FluidFieldChainExpr) {
-                        FluidFieldExpr childOfType = PsiTreeUtil.findChildOfType(psiElement, FluidFieldExpr.class);
-                        if (childOfType != null) {
-                            possibleTypes.add(childOfType.getName());
-                        }
-                        return false;
-                    } else {
-                        possibleTypes.add(((FluidFieldChain) psiElement).getName());
+            PsiTreeUtil.treeWalkUp(psiElement.getParent(), fieldExpression, (psiElement1, psiElement2) -> {
+                if (psiElement1 instanceof FluidFieldChainExpr) {
+                    FluidFieldExpr childOfType = PsiTreeUtil.findChildOfType(psiElement1, FluidFieldExpr.class);
+                    if (childOfType != null) {
+                        possibleTypes.add(childOfType.getName());
                     }
-
-                    return true;
+                    return false;
+                } else {
+                    possibleTypes.add(((FluidFieldChain) psiElement1).getName());
                 }
+
+                return true;
             });
         }
 
@@ -93,9 +89,8 @@ public class FluidTypeResolver {
         String rootType = types.iterator().next();
         Collection<FluidVariable> rootVariables = getRootVariableByName(psiElement, rootType);
         if (types.size() == 1) {
-            Collection<FluidTypeContainer> fluidTypeContainers = FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);
 
-            return fluidTypeContainers;
+            return FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);
         }
 
         Collection<FluidTypeContainer> type = FluidTypeContainer.fromCollection(psiElement.getProject(), rootVariables);

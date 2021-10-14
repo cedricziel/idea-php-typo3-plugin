@@ -14,20 +14,12 @@ import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.YAMLTokenTypes;
 import org.jetbrains.yaml.psi.*;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SiteConfigurationCompletionContributor extends CompletionContributor {
 
-    private static final Map<String, String> TOP_LEVEL_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
-        put("rootPageId", "");
-        put("base", "");
-        put("languages", "");
-        put("errorHandling", "");
-        put("routes", "");
-    }});
+    private static final Map<String, String> TOP_LEVEL_KEYS = Map.of("rootPageId", "", "base", "", "languages", "", "errorHandling", "", "routes", "");
 
     /**
      * languageId: '0'
@@ -41,17 +33,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * typo3Language: default
      * flag: gb
      */
-    private static final Map<String, String> LANGUAGE_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
-        put("languageId", "");
-        put("title", "");
-        put("navigationTitle", "");
-        put("base", "");
-        put("iso-639-1", "");
-        put("hreflang", "");
-        put("direction", "");
-        put("typo3Language", "");
-        put("flag", "");
-    }});
+    private static final Map<String, String> LANGUAGE_KEYS = Map.of("languageId", "", "title", "", "navigationTitle", "", "base", "", "iso-639-1", "", "hreflang", "", "direction", "", "typo3Language", "", "flag", "");
 
     /**
      * errorCode: '403'
@@ -61,19 +43,13 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * errorFluidLayoutsRootPath: 'EXT:my_extension/Resources/Private/Layouts/ErrorPages'
      * errorFluidPartialsRootPath
      */
-    private static final Map<String, String> ERROR_HANDLING_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
-        put("errorCode", "");
-        put("errorHandler", "");
+    private static final Map<String, String> ERROR_HANDLING_KEYS = Map.of("errorCode", "", "errorHandler", "",
         // errorHandler: Fluid
-        put("errorFluidTemplate", "");
-        put("errorFluidTemplatesRootPath", "");
-        put("errorFluidLayoutsRootPath", "");
-        put("errorFluidPartialsRootPath", "");
+        "errorFluidTemplate", "", "errorFluidTemplatesRootPath", "", "errorFluidLayoutsRootPath", "", "errorFluidPartialsRootPath", "",
         // errorHandler: Page
-        put("errorContentSource", "");
+        "errorContentSource", "",
         // errorHandler: PHP
-        put("errorPhpClassFQCN", "");
-    }});
+        "errorPhpClassFQCN", "");
 
     /**
      * route: robots.txt
@@ -84,15 +60,11 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
      * Allow: /
      * Disallow: /forbidden/
      */
-    private static final Map<String, String> ROUTES_KEYS = Collections.unmodifiableMap(new HashMap<String, String>() {{
-        put("route", "");
-        put("type", "");
-        put("content", "");
-    }});
+    private static final Map<String, String> ROUTES_KEYS = Map.of("route", "", "type", "", "content", "");
 
     public SiteConfigurationCompletionContributor() {
         // complete top level yaml keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY).withSuperParent(2, YAMLMapping.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY).withSuperParent(2, YAMLMapping.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -108,7 +80,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete new top level yaml keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement().withParent(YAMLScalar.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement().withParent(YAMLScalar.class).withLanguage(YAMLLanguage.INSTANCE), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -124,7 +96,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete 2nd level yaml keys
-        extend(CompletionType.BASIC, yamlKeyChildOfInArray(), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, yamlKeyChildOfInArray(), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {
@@ -155,7 +127,7 @@ public class SiteConfigurationCompletionContributor extends CompletionContributo
         });
 
         // complete 2nd level known keys
-        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(YAMLTokenTypes.SCALAR_KEY), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 if (!TYPO3CMSProjectSettings.isEnabled(parameters.getPosition().getProject())) {

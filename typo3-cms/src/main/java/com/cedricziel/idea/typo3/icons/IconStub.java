@@ -8,13 +8,13 @@ import java.util.Objects;
 
 public class IconStub implements IconInterface, Serializable {
 
-    private String identifier;
+    private final String identifier;
     private String extension;
     private String filename;
     private String provider;
     private String source;
 
-    private TextRange textRange;
+    private final TextRange textRange;
 
     public IconStub(String identifier, PsiElement element) {
         this.identifier = identifier;

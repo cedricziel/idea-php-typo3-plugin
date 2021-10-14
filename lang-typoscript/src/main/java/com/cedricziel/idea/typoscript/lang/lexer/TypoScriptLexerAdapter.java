@@ -6,6 +6,7 @@ import java.io.Reader;
 
 public class TypoScriptLexerAdapter extends FlexAdapter {
   public TypoScriptLexerAdapter() {
-    super(new _TypoScriptLexer((Reader) null));
+      //noinspection RedundantCast
+      super(new _TypoScriptLexer((Reader) null));
   }
 }

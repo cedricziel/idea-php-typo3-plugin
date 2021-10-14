@@ -1,9 +1,9 @@
 package com.cedricziel.idea.typo3;
 
 public class Triple<T, U, V> {
-    private T left;
-    private U middle;
-    private V right;
+    private final T left;
+    private final U middle;
+    private final V right;
 
     public Triple(T left, U middle, V right) {
         this.left = left;

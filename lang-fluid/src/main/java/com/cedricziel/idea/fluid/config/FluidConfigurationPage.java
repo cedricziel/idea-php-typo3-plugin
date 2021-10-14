@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class FluidConfigurationPage implements SearchableConfigurable {
@@ -99,7 +99,7 @@ public class FluidConfigurationPage implements SearchableConfigurable {
 
         languages.add(FluidLanguage.INSTANCE);
 
-        Collections.sort(languages, (o1, o2) -> o1.getID().compareTo(o2.getID()));
+        languages.sort(Comparator.comparing(Language::getID));
         for (Language language: languages) {
             model.addElement(language);
         }

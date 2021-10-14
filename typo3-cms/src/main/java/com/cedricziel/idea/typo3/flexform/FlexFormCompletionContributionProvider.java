@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class FlexFormCompletionContributionProvider extends CompletionContributor {
     public FlexFormCompletionContributionProvider() {
         // complete table names in flexforms
-        extend(CompletionType.BASIC, parentWithName("config", "table", "foreign_table"), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, parentWithName("config", "table", "foreign_table"), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 final LookupElement[] availableTableNamesLookupElements = TableUtil.createAvailableTableNamesLookupElements(parameters.getPosition().getProject());
@@ -31,7 +31,7 @@ public class FlexFormCompletionContributionProvider extends CompletionContributo
         });
 
         // complete field types
-        extend(CompletionType.BASIC, parentWithName("config", "type"), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, parentWithName("config", "type"), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 for (String columnType : TCAUtil.getAvailableColumnTypes(parameters.getPosition().getProject())) {
@@ -41,7 +41,7 @@ public class FlexFormCompletionContributionProvider extends CompletionContributo
         });
 
         // complete field render types
-        extend(CompletionType.BASIC, parentWithName("config", "renderType"), new CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, parentWithName("config", "renderType"), new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
                 for (String columnType : TCAUtil.getAvailableRenderTypes(parameters.getPosition())) {

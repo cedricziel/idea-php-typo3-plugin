@@ -210,9 +210,7 @@ public class FluidUtil {
             return;
         }
 
-        allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> {
-            result.addElement(FluidUtil.viewHelperArgumentLookupElement(psiElement, name, argument));
-        });
+        allViewHelpersInContextByName.get(viewHelperExprPresentableName).arguments.forEach((name, argument) -> result.addElement(FluidUtil.viewHelperArgumentLookupElement(psiElement, name, argument)));
     }
 
     private static LookupElement viewHelperArgumentLookupElement(PsiElement psiElement, String name, ViewHelperArgument argument) {
@@ -227,7 +225,7 @@ public class FluidUtil {
     }
 
     private static class ControllerMethodWalkerVisitor extends PhpRecursiveElementVisitor {
-        private Map<String, FluidVariable> variables = new THashMap<>();
+        private final Map<String, FluidVariable> variables = new THashMap<>();
 
         @Override
         public void visitPhpMethodReference(MethodReference reference) {

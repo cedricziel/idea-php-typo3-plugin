@@ -15,7 +15,7 @@ import java.util.Collection;
 public class RouteParserVisitor extends PsiRecursiveElementVisitor {
 
     private final String prefix;
-    private Collection<RouteStub> routeStubs;
+    private final Collection<RouteStub> routeStubs;
 
     public RouteParserVisitor() {
         this.prefix = "";

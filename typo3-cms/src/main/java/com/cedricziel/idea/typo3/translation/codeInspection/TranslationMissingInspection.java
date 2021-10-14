@@ -9,19 +9,11 @@ import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.ConcatenationExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class TranslationMissingInspection extends PluginEnabledPhpInspection {
 
     public static final String MESSAGE = "Missing translation key";
-
-    @Nls(capitalization = Nls.Capitalization.Sentence)
-    @NotNull
-    @Override
-    public String getDisplayName() {
-        return "Translation missing";
-    }
 
     @NotNull
     @Override

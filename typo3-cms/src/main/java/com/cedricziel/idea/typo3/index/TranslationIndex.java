@@ -349,7 +349,7 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                     if (result.containsKey(calculatedId)) {
                         result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyTag.getAttributeValue("index"), tag, id));
                     } else {
-                        result.put(calculatedId, new ArrayList<StubTranslation>() {{
+                        result.put(calculatedId, new ArrayList<>() {{
                             add(createStubTranslationFromIndex(file, extensionKeyFromFile, languageKeyTag.getAttributeValue("index"), tag, id));
                         }});
                     }
@@ -357,7 +357,7 @@ public class TranslationIndex extends ScalarIndexExtension<String> {
                     if (result.containsKey(calculatedId)) {
                         result.get(calculatedId).add(createStubTranslationFromIndex(file, extensionKeyFromFile, String.valueOf(this.languageKey), tag, id));
                     } else {
-                        result.put(calculatedId, new ArrayList<StubTranslation>() {{
+                        result.put(calculatedId, new ArrayList<>() {{
                             createStubTranslationFromIndex(file, extensionKeyFromFile, String.valueOf(languageKey), tag, id);
                         }});
                     }

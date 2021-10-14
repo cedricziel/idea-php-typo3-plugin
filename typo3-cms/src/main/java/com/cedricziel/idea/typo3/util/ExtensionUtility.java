@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ExtensionUtility {
 
@@ -176,11 +177,7 @@ public class ExtensionUtility {
         VirtualFile composerJsonFile = extensionRootFolder.findChild("composer.json");
         if (composerJsonFile != null) {
             String extensionKeyFromComposerJson = ComposerUtil.findExtensionKey(composerJsonFile);
-            if (extensionKeyFromComposerJson == null) {
-                extensionKey = extensionRootFolder.getName();
-            } else {
-                extensionKey = extensionKeyFromComposerJson;
-            }
+            extensionKey = Objects.requireNonNullElseGet(extensionKeyFromComposerJson, extensionRootFolder::getName);
         } else {
             extensionKey = extensionRootFolder.getName();
         }

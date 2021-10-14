@@ -37,7 +37,7 @@ public class GenerateFscElementForm extends JDialog {
     private JButton cancelButton;
     private JPanel panel;
 
-    private Slugify slugger;
+    private final Slugify slugger;
 
     public GenerateFscElementForm(@NotNull Project project, TYPO3ExtensionDefinition extensionDefinition) {
         this.project = project;

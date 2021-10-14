@@ -5,6 +5,5 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ArgumentList extends PsiElement {
-    @Nullable
-    public FluidViewHelperArgument getArgument(@NotNull String argumentName);
+    @Nullable FluidViewHelperArgument getArgument(@NotNull String argumentName);
 }

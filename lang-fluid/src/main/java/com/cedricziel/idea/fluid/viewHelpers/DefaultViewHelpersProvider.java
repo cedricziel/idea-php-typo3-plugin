@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.Map;
+import java.util.Objects;
 
 public class DefaultViewHelpersProvider implements ViewHelperProvider {
     private static final Map<String, Map<String, ViewHelper>> myCache = new THashMap<>();
@@ -97,11 +98,7 @@ public class DefaultViewHelpersProvider implements ViewHelperProvider {
                     argument.setDocumentation(extractDocumentation(attributeTag));
 
                     String attributeType = attributeTag.getAttributeValue("php:type");
-                    if (attributeType == null) {
-                        argument.setType("mixed");
-                    } else {
-                        argument.setType(attributeType);
-                    }
+                    argument.setType(Objects.requireNonNullElse(attributeType, "mixed"));
 
                     String requiredAttribute = attributeTag.getAttributeValue("use");
                     if (requiredAttribute != null && requiredAttribute.equals("required")) {

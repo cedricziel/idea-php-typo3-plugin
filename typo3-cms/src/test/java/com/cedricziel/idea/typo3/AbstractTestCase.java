@@ -3,14 +3,9 @@ package com.cedricziel.idea.typo3;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.daemon.LineMarkerProviders;
-import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
-import com.intellij.lang.LanguageAnnotators;
-import com.intellij.lang.annotation.Annotation;
-import com.intellij.lang.annotation.AnnotationSession;
-import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
@@ -42,41 +37,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         TYPO3CMSProjectSettings.getInstance(myFixture.getProject()).pluginEnabled = false;
     }
 
-    public void assertAnnotationContains(String filename, String content, String contains) {
-        List<String> matches = new ArrayList<>();
-        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
-            matches.add(annotation.toString());
-            if (annotation.getMessage().contains(contains)) {
-                return;
-            }
-        }
-
-        fail(String.format("Fail matches '%s' with one of %s", contains, matches));
-    }
-
-    public void assertAnnotationNotContains(String filename, String content, String contains) {
-        for (Annotation annotation : getAnnotationsAtCaret(filename, content)) {
-            if (annotation.getMessage() != null && annotation.getMessage().contains(contains)) {
-                fail(String.format("Fail not matching '%s' with '%s'", contains, annotation));
-            }
-        }
-    }
-
-    @NotNull
-    private AnnotationHolderImpl getAnnotationsAtCaret(String filename, String content) {
-        PsiFile psiFile = myFixture.configureByText(filename, content);
-        PsiElement psiElement = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
-
-        AnnotationHolderImpl annotations = new AnnotationHolderImpl(new AnnotationSession(psiFile));
-
-        for (Annotator annotator : LanguageAnnotators.INSTANCE.allForLanguage(psiFile.getLanguage())) {
-            annotator.annotate(psiElement, annotations);
-        }
-
-        return annotations;
-    }
-
-    protected void assertResolvesTo(String fileName, String content, Class psiReferenceClass, Class expectedClass, String s) {
+    protected void assertResolvesTo(String fileName, String content, Class psiReferenceClass, Class expectedClass) {
         PsiFile file = myFixture.configureByText(fileName, content);
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
@@ -95,7 +56,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         fail(String.format("Reference %s does not resolve to correct element", psiReferenceClass.getName()));
     }
 
-    protected void assertHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass, String message) {
+    protected void assertHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass) {
         PsiFile file = myFixture.configureByText(fileName, content);
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
@@ -119,7 +80,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
     }
 
 
-    protected void assertNotHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass, String message) {
+    protected void assertNotHasVariant(String fileName, String content, String expectedLookupString, Class translationReferenceClass) {
         PsiFile file = myFixture.configureByText(fileName, content);
         PsiElement elementAtCaret = file.findElementAt(myFixture.getCaretOffset()).getParent();
 
@@ -216,7 +177,7 @@ abstract public class AbstractTestCase extends BasePlatformTestCase {
         final List<PsiElement> elements = collectPsiElementsRecursive(psiElement);
 
         for (LineMarkerProvider lineMarkerProvider : LineMarkerProviders.getInstance().allForLanguage(psiElement.getLanguage())) {
-            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<LineMarkerInfo>();
+            Collection<LineMarkerInfo> lineMarkerInfos = new ArrayList<>();
             lineMarkerProvider.collectSlowLineMarkers(elements, lineMarkerInfos);
 
             if (lineMarkerInfos.size() > 0) {

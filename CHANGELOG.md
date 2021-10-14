@@ -5,6 +5,13 @@
 
 ### Changed
 - migrate checkHighlight to testHighlight where possible
+- migrate away from using FileTypeIndex.NAME directly
+- register inspections individually and remove InspectionTool
+- migrate `CreateInjectorQuickFix` away from removed API to use writeCommandAction
+- migrate `ExtbaseControllerActionAction` away from removed API to use writeCommandAction
+- migrate `createNotification` usage to distinct NotificationGroup
+- Remove unused, deprecated API usage related to icons
+- Use diamond operator where applicable
 ### Deprecated
 
 ### Removed

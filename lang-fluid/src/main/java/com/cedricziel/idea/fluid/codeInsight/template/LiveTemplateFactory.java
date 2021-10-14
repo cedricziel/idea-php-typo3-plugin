@@ -33,15 +33,12 @@ public class LiveTemplateFactory {
     }
 
     public static Template createTagModeForLoopTemplate(@NotNull PsiElement wrap) {
-        StringBuilder sb = new StringBuilder();
 
-        sb
-            .append("<f:for each=\"$EACH$\" as=\"$AS$\">\n")
-            .append("  $END$\n")
-            .append("</f:for>\n")
-        ;
+        String sb = "<f:for each=\"$EACH$\" as=\"$AS$\">\n" +
+            "  $END$\n" +
+            "</f:for>\n";
 
-        TemplateImpl template = new TemplateImpl("f:for", sb.toString(), "Fluid");
+        TemplateImpl template = new TemplateImpl("f:for", sb, "Fluid");
         template.setDescription("f:for loop over an expression");
         template.setToReformat(true);
 
@@ -49,15 +46,12 @@ public class LiveTemplateFactory {
     }
 
     public static Template createTagModeAliasTemplate(@NotNull PsiElement wrap) {
-        StringBuilder sb = new StringBuilder();
 
-        sb
-            .append("<f:alias map=\"{$ALIAS$: $EXPR$}\">\n")
-            .append("  $END$\n")
-            .append("</f:alias>\n")
-        ;
+        String sb = "<f:alias map=\"{$ALIAS$: $EXPR$}\">\n" +
+            "  $END$\n" +
+            "</f:alias>\n";
 
-        TemplateImpl template = new TemplateImpl("f:alias", sb.toString(), "Fluid");
+        TemplateImpl template = new TemplateImpl("f:alias", sb, "Fluid");
         template.setDescription("f:alias the current expression");
         template.setToReformat(true);
 
@@ -65,12 +59,8 @@ public class LiveTemplateFactory {
     }
 
     public static Template createInlinePipeToDebugTemplate(@NotNull PsiElement source) {
-        StringBuilder sb = new StringBuilder();
-        sb
-            .append("{ $EXPR$ -> f:debug() }")
-        ;
 
-        TemplateImpl template = new TemplateImpl("f:debug", sb.toString(), "Fluid");
+        TemplateImpl template = new TemplateImpl("f:debug", "{ $EXPR$ -> f:debug() }", "Fluid");
         template.setDescription("f:debug the expression result");
         template.setToReformat(true);
 

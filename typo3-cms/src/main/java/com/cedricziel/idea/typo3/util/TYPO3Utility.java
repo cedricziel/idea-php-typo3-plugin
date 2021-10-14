@@ -18,7 +18,7 @@ public class TYPO3Utility {
 
     public static final String CONTEXT_FQN = "\\TYPO3\\CMS\\Core\\Context\\Context";
 
-    private static final Map<String, String> DEFAULT_ASPECTS = new HashMap<String, String>() {{
+    private static final Map<String, String> DEFAULT_ASPECTS = new HashMap<>() {{
         put("date", "\\TYPO3\\CMS\\Core\\Context\\DateTimeAspect");
         put("visibility", "\\TYPO3\\CMS\\Core\\Context\\VisibilityAspect");
         put("backend.user", "\\TYPO3\\CMS\\Core\\Context\\UserAspect");

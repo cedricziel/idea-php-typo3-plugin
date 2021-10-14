@@ -10,8 +10,6 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TableReferenceContributor extends PsiReferenceContributor {
@@ -98,32 +96,13 @@ public class TableReferenceContributor extends PsiReferenceContributor {
     }
 
     static {
-        Map<String, Integer> posMap = new HashMap<>();
-        posMap.put("\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::makeCategorizable", 2);
 
-        // TYPO3 CMS QueryBuilder
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::delete", 1);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::update", 1);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::insert", 1);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::join", 2);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::innerJoin", 2);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::leftJoin", 2);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::rightJoin", 2);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::quoteIdentifier", 1);
+        POSITIONAL_ARGUMENTS = Map.ofEntries(Map.entry("\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::makeCategorizable", 2),
 
-        // Doctrine DBAL QueryBuilder
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::delete", 1);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::update", 1);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::insert", 1);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::from", 1);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::join", 2);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::innerJoin", 2);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::leftJoin", 2);
-        posMap.put("\\Doctrine\\DBAL\\Query\\QueryBuilder::rightJoin", 2);
+                // TYPO3 CMS QueryBuilder
+                Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::delete", 1), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::update", 1), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::insert", 1), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::join", 2), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::innerJoin", 2), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::leftJoin", 2), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::rightJoin", 2), Map.entry("\\TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::quoteIdentifier", 1),
 
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\ConnectionPool::getConnectionForTable", 1);
-        posMap.put("\\TYPO3\\CMS\\Core\\Database\\ConnectionPool::getQueryBuilderForTable", 1);
-
-        POSITIONAL_ARGUMENTS = Collections.unmodifiableMap(posMap);
+                // Doctrine DBAL QueryBuilder
+                Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::delete", 1), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::update", 1), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::insert", 1), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::from", 1), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::join", 2), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::innerJoin", 2), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::leftJoin", 2), Map.entry("\\Doctrine\\DBAL\\Query\\QueryBuilder::rightJoin", 2), Map.entry("\\TYPO3\\CMS\\Core\\Database\\ConnectionPool::getConnectionForTable", 1), Map.entry("\\TYPO3\\CMS\\Core\\Database\\ConnectionPool::getQueryBuilderForTable", 1));
     }
 }

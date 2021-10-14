@@ -3,7 +3,6 @@ package com.cedricziel.idea.typo3.tca.codeInspection.v10;
 import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.psi.PhpElementsUtil;
 import com.cedricziel.idea.typo3.util.TYPO3Utility;
-import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElementVisitor;
@@ -11,31 +10,12 @@ import com.jetbrains.php.lang.inspections.PhpInspection;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import static com.cedricziel.idea.typo3.psi.PhpElementsUtil.extractArrayIndexFromValue;
 import static com.cedricziel.idea.typo3.util.TCAUtil.insideTCAColumnDefinition;
 
 public class InternalTypeFileInspection extends PhpInspection {
-
-    @Nls
-    @NotNull
-    @Override
-    public String getGroupDisplayName() {
-        return GroupNames.BUGS_GROUP_NAME;
-    }
-
-    @NotNull
-    public String getDisplayName() {
-        return "Invalid Internal type";
-    }
-
-    @NotNull
-    public String getShortName() {
-        return "InternalTypeFileInspection";
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull ProblemsHolder problemsHolder, boolean b) {

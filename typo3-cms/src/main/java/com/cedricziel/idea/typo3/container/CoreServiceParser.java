@@ -8,7 +8,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.PhpFileType;
 
 import java.util.*;
@@ -26,12 +25,8 @@ public class CoreServiceParser {
     }
 
     private void collectServices(Project project) {
-        FileBasedIndex index = FileBasedIndex.getInstance();
-        Collection<VirtualFile> containingFiles = index.getContainingFiles(
-                FileTypeIndex.NAME,
-                PhpFileType.INSTANCE,
-                GlobalSearchScope.allScope(project)
-        );
+        Collection<VirtualFile> containingFiles = FileTypeIndex.getFiles(PhpFileType.INSTANCE, GlobalSearchScope.allScope(project));
+
         containingFiles.removeIf(virtualFile -> !(virtualFile.getName().contains("ext_localconf.php")));
 
         for (VirtualFile projectFile : containingFiles) {

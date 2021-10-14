@@ -55,7 +55,7 @@ public class LegacyClassesForIDEIndex extends FileBasedIndexExtension<String, St
             LegacyClassesRecursiveVisitor visitor = new LegacyClassesRecursiveVisitor();
             visitor.visitElement(inputData.getPsiFile());
 
-            visitor.getMap().forEach(map::put);
+            map.putAll(visitor.getMap());
 
             return map;
         };
