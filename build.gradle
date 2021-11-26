@@ -8,7 +8,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
@@ -34,8 +33,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
-        maven { url 'https://jitpack.io' }
     }
 
     changelog {
