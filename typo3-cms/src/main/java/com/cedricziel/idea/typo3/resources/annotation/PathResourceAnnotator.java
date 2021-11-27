@@ -1,8 +1,10 @@
 package com.cedricziel.idea.typo3.resources.annotation;
 
 import com.cedricziel.idea.typo3.index.ResourcePathIndex;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +62,9 @@ public class PathResourceAnnotator implements Annotator {
     private void createErrorMessage(@NotNull PsiElement element, @NotNull AnnotationHolder holder, String resourceName) {
         String message = "Resource \"%s\" could not be found in your current project.".replace("%s", resourceName);
 
-        holder.createWarningAnnotation(element, message);
+        holder
+            .newAnnotation(HighlightSeverity.WARNING, message)
+            .highlightType(ProblemHighlightType.WARNING)
+            .create();
     }
 }
