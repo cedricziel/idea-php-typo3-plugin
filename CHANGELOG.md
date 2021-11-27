@@ -8,7 +8,7 @@
 ### Deprecated
 
 ### Removed
-
+- Removed travis build indicator
 ### Fixed
 
 ### Security
