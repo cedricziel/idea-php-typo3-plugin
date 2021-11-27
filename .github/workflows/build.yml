@@ -193,19 +193,19 @@ jobs:
 
       # Upload plugin artifact to make it available in the next jobs
       - name: Upload CMS artifact
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: cms-plugin-artifact-${{ matrix.since_build }}
           path: ./typo3-cms/build/distributions/${{ steps.properties.outputs.cms-artifact }}
           if-no-files-found: error
       - name: Upload Fluid artifact
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: fluid-plugin-artifact-${{ matrix.since_build }}
           path: ./lang-fluid/build/distributions/${{ steps.properties.outputs.fluid-artifact }}
           if-no-files-found: error
       - name: Upload TypoScript artifact
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: typoscript-plugin-artifact-${{ matrix.since_build }}
           path: ./lang-typoscript/build/distributions/${{ steps.properties.outputs.typoscript-artifact }}
