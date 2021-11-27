@@ -11,9 +11,11 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 
 import java.util.List;
 
+@Ignore
 abstract public class AbstractFluidTest extends BasePlatformTestCase {
     @Override
     public void setUp() throws Exception {

@@ -3,10 +3,10 @@ package com.cedricziel.idea.typo3.annotation;
 import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
 import com.cedricziel.idea.typo3.index.RouteIndex;
 import com.cedricziel.idea.typo3.routing.RouteReference;
-import com.intellij.lang.annotation.Annotation;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -50,11 +50,18 @@ public class RouteAnnotator implements Annotator {
 
         if (allKeys.contains(value)) {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getEndOffset());
-            Annotation annotation = annotationHolder.createInfoAnnotation(range, null);
-            annotation.setTextAttributes(DefaultLanguageHighlighterColors.STRING);
+            annotationHolder
+                .newAnnotation(HighlightSeverity.INFORMATION, "")
+                .range(range)
+                .highlightType(ProblemHighlightType.INFORMATION)
+                .create();
         } else {
             TextRange range = new TextRange(psiElement.getTextRange().getStartOffset() + 1, psiElement.getTextRange().getEndOffset() - 1);
-            annotationHolder.createWeakWarningAnnotation(range, "Unresolved route");
+            annotationHolder
+                .newAnnotation(HighlightSeverity.WEAK_WARNING, "Unresolved route")
+                .range(range)
+                .highlightType(ProblemHighlightType.WEAK_WARNING)
+                .create();
         }
     }
 }

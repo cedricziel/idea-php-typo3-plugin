@@ -1,14 +1,14 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id "org.jetbrains.intellij" version "1.1.6" apply false
+    id "org.jetbrains.intellij" version "1.3.0" apply false
+    id 'java'
     id "org.jetbrains.grammarkit" version "${grammarKitPluginVersion}" apply false
     id 'org.jetbrains.changelog' version '1.1.1'
 }
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
@@ -16,6 +16,10 @@ def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace(
 group pluginGroup
 
 allprojects {
+    repositories {
+        mavenCentral()
+    }
+
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.changelog'
 
@@ -24,6 +28,11 @@ allprojects {
     tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
     version = pluginVersion
+
+    test {
+        scanForTestClasses false
+        include "**/*Test.class"
+    }
 }
 
 subprojects {
@@ -31,12 +40,6 @@ subprojects {
     apply plugin: 'org.jetbrains.intellij'
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.grammarkit'
-
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
 
     changelog {
         version = pluginVersion
@@ -73,6 +76,7 @@ subprojects {
 
     grammarKit {
         jflexRelease = jFlexRelease
+        grammarKitRelease = grammarKitVersion
     }
 
     runPluginVerifier {
@@ -83,7 +87,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion '7.2'
+    gradleVersion '7.3'
 }
 
 test.testLogging.exceptionFormat = TestExceptionFormat.FULL
