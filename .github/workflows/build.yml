@@ -38,14 +38,12 @@ jobs:
       matrix:
         include:
           - idea_version: "IU-2021.2.2"
-            java_version: "11"
             php_plugin_version: "212.5284.49"
             psi_viewer_plugin_version: "212-SNAPSHOT"
             grammar_kit_plugin_version: "2021.1.3"
             since_build: "212"
             until_build: "212.*"
           - idea_version: "IU-213.5744.202-EAP-SNAPSHOT"
-            java_version: "11"
             php_plugin_version: "213.5744.206"
             psi_viewer_plugin_version: "213-SNAPSHOT"
             grammar_kit_plugin_version: "2021.1.3"
@@ -54,10 +52,13 @@ jobs:
 
     steps:
 
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java_version }}
+          distribution: zulu
+          java-version: 11
+          cache: gradle
 
       # Check out current repository
       - name: Fetch Sources
@@ -103,14 +104,12 @@ jobs:
       matrix:
         include:
           - idea_version: "IU-2021.2.2"
-            java_version: "11"
             php_plugin_version: "212.5284.49"
             psi_viewer_plugin_version: "212-SNAPSHOT"
             grammar_kit_plugin_version: "2021.1.3"
             since_build: "212"
             until_build: "212.*"
           - idea_version: "IU-213.5744.202-EAP-SNAPSHOT"
-            java_version: "11"
             php_plugin_version: "213.5744.206"
             psi_viewer_plugin_version: "213-SNAPSHOT"
             grammar_kit_plugin_version: "2021.1.3"
@@ -130,10 +129,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
+      - name: Setup Java
+        uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java_version }}
+          distribution: zulu
+          java-version: 11
+          cache: gradle
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -219,11 +220,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
+          distribution: zulu
           java-version: 11
+          cache: gradle
 
       # Check out current repository
       - name: Fetch Sources
