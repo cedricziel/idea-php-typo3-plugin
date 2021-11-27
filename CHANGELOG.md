@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.7.3]
+### Added
 - Upgrade to platform 213
 ### Changed
 - migrate checkHighlight to testHighlight where possible
