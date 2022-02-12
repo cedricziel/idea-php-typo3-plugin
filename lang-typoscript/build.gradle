@@ -41,13 +41,13 @@ publishPlugin {
     token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
-task generateTypoScriptLexer(type: GenerateLexer) {
+task generateTypoScriptLexer(type: GenerateLexerTask) {
     source = "src/main/grammars/TypoScriptLexer.flex"
     targetDir = "gen/com/cedricziel/idea/typoscript/lang/lexer"
     targetClass = "_TypoScriptLexer"
 }
 
-task generateTypoScriptParser(type: GenerateParser) {
+task generateTypoScriptParser(type: GenerateParserTask) {
     source = "src/main/grammars/TypoScriptParser.bnf"
     targetRoot = 'gen'
     pathToParser = '/com/cedricziel/idea/typoscript/lang/parser/TypoScriptParserGenerated.java'

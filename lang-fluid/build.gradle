@@ -40,13 +40,13 @@ publishPlugin {
     token.set(System.getenv('PUBLISH_TOKEN'))
 }
 
-task generateFluidLexer(type: GenerateLexer) {
+task generateFluidLexer(type: GenerateLexerTask) {
     source = "src/main/grammars/FluidLexer.flex"
     targetDir = "gen/com/cedricziel/idea/fluid/lang/lexer"
     targetClass = "_FluidLexer"
 }
 
-task generateFluidParser(type: GenerateParser) {
+task generateFluidParser(type: GenerateParserTask) {
     source = "src/main/grammars/FluidParser.bnf"
     targetRoot = 'gen'
     pathToParser = '/com/cedricziel/idea/fluid/lang/parser/FluidParserGenerated.java'
