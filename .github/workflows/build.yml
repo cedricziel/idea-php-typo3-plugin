@@ -14,7 +14,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Validate wrapper
       - name: Gradle Wrapper Validation
@@ -54,7 +54,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -128,7 +128,7 @@ jobs:
       typoscript-artifact: ${{ steps.properties.outputs.typoscript-artifact }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
@@ -222,7 +222,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -277,7 +277,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Remove old release drafts by using the curl request for the available releases with draft flag
       - name: Remove Old Release Drafts
@@ -318,7 +318,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Download plugin artifact provided by the previous job
       - name: Download CMS Artifact
