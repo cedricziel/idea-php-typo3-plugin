@@ -9,6 +9,7 @@
 
 ### Removed
 - Removed travis build indicator
+- Upgrade grammar-kit-plugin to 2021.2.2
 ### Fixed
 
 ### Security
