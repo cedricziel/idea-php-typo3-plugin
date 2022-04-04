@@ -24,8 +24,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-221.4165.146-EAP-SNAPSHOT"
-            php_plugin_version: "221.4165.156"
+          - idea_version: "IU-221.5080.93-EAP-SNAPSHOT"
+            php_plugin_version: "221.5080.93"
             psi_viewer_plugin_version: "221-SNAPSHOT"
             grammar_kit_plugin_version: "2021.2.1"
             since_build: "221"
