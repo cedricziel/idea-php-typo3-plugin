@@ -4,12 +4,12 @@
 ### Added
 
 ### Changed
-
+- Upgrade grammar-kit-plugin to 2021.2.2
+- Use current way to reference html file type
 ### Deprecated
 
 ### Removed
 - Removed travis build indicator
-- Upgrade grammar-kit-plugin to 2021.2.2
 ### Fixed
 
 ### Security
