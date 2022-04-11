@@ -322,15 +322,15 @@ jobs:
 
       # Download plugin artifact provided by the previous job
       - name: Download CMS Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: cms-plugin-artifact-${{ matrix.since_build }}
       - name: Download Fluid Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: fluid-plugin-artifact-${{ matrix.since_build }}
       - name: Download TypoScript Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: typoscript-plugin-artifact-${{ matrix.since_build }}
 
