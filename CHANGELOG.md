@@ -7,6 +7,7 @@
 - Upgrade grammar-kit-plugin to 2021.2.2
 - Use current way to reference html file type
 - Upgrade platform to 221.5080.169
+- Upgrade platform to 2022.1
 ### Deprecated
 
 ### Removed
