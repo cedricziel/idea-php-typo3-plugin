@@ -47,7 +47,6 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-          cache: gradle
 
       # Set environment variables
       - name: Export Properties
@@ -91,7 +90,6 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-          cache: gradle
 
       # Update Unreleased section with the current version
       - name: Patch Changelog
