@@ -2,10 +2,10 @@ package com.cedricziel.idea.fluid.file;
 
 import com.cedricziel.idea.fluid.lang.FluidLanguage;
 import com.cedricziel.idea.fluid.lang.psi.FluidTypes;
+import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.openapi.fileTypes.PlainTextLanguage;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.LanguageSubstitutors;
 import com.intellij.psi.MultiplePsiFilesPerDocumentFileViewProvider;
@@ -37,16 +37,16 @@ public class FluidFileViewProvider extends MultiplePsiFilesPerDocumentFileViewPr
 
         Language dataLang = TemplateDataLanguageMappings.getInstance(manager.getProject()).getMapping(file);
         if (dataLang == null) {
-            dataLang = StdFileTypes.HTML.getLanguage();
+            dataLang = HtmlFileType.INSTANCE.getLanguage();
         }
 
         if (dataLang instanceof TemplateLanguage) {
             myTemplateDataLanguage = PlainTextLanguage.INSTANCE;
         } else {
             // The substitutor signals, that a files content should be substituted
-            Language mySubstitutedLanguage = LanguageSubstitutors.INSTANCE.substituteLanguage(dataLang, file, manager.getProject());
+            Language mySubstitutedLanguage = LanguageSubstitutors.getInstance().substituteLanguage(dataLang, file, manager.getProject());
             if (mySubstitutedLanguage == FluidLanguage.INSTANCE) {
-                this.myTemplateDataLanguage = StdFileTypes.HTML.getLanguage();
+                this.myTemplateDataLanguage = HtmlFileType.INSTANCE.getLanguage();
             } else {
                 this.myTemplateDataLanguage = mySubstitutedLanguage;
             }

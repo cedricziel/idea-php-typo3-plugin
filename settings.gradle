@@ -1,3 +1,12 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'idea-typo3'
 
 include 'lang-fluid', 'lang-typoscript', 'typo3-cms'

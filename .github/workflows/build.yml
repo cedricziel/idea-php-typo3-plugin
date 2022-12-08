@@ -37,18 +37,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-2021.2.2"
-            php_plugin_version: "212.5284.49"
-            psi_viewer_plugin_version: "212-SNAPSHOT"
-            grammar_kit_plugin_version: "2021.1.3"
-            since_build: "212"
-            until_build: "212.*"
-          - idea_version: "IU-213.5744.202-EAP-SNAPSHOT"
-            php_plugin_version: "213.5744.206"
-            psi_viewer_plugin_version: "213-SNAPSHOT"
-            grammar_kit_plugin_version: "2021.1.3"
-            since_build: "213"
-            until_build: "213.*"
+          - idea_version: "IU-2022.2.4"
+            php_plugin_version: "222.4345.15"
+            psi_viewer_plugin_version: "222-SNAPSHOT"
+            grammar_kit_plugin_version: "2021.2.2"
+            since_build: "222"
+            until_build: "222.*"
 
     steps:
 
@@ -61,8 +55,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
-          cache: gradle
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -103,18 +96,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-2021.2.2"
-            php_plugin_version: "212.5284.49"
-            psi_viewer_plugin_version: "212-SNAPSHOT"
-            grammar_kit_plugin_version: "2021.1.3"
-            since_build: "212"
-            until_build: "212.*"
-          - idea_version: "IU-213.5744.202-EAP-SNAPSHOT"
-            php_plugin_version: "213.5744.206"
-            psi_viewer_plugin_version: "213-SNAPSHOT"
-            grammar_kit_plugin_version: "2021.1.3"
-            since_build: "213"
-            until_build: "213.*"
+          - idea_version: "IU-2022.2.4"
+            php_plugin_version: "222.4345.15"
+            psi_viewer_plugin_version: "222-SNAPSHOT"
+            grammar_kit_plugin_version: "2021.2.2"
+            since_build: "222"
+            until_build: "222.*"
 
     outputs:
       cms-name: ${{ steps.properties.outputs.cms-name }}
@@ -133,8 +120,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
-          cache: gradle
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -229,8 +215,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
-          cache: gradle
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -301,45 +286,3 @@ jobs:
           release_name: v${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           draft: true
-
-  releaseDraftUpload:
-    name: Release Draft (Upload)
-    if: github.event_name != 'pull_request' # && github.ref == 'refs/heads/master'
-    needs: [ releaseDraft ]
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        include:
-          - since_build: "212"
-          - since_build: "213"
-
-    steps:
-
-      # Check out current repository
-      - name: Fetch Sources
-        uses: actions/checkout@v3
-
-      # Download plugin artifact provided by the previous job
-      - name: Download CMS Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: cms-plugin-artifact-${{ matrix.since_build }}
-      - name: Download Fluid Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: fluid-plugin-artifact-${{ matrix.since_build }}
-      - name: Download TypoScript Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: typoscript-plugin-artifact-${{ matrix.since_build }}
-
-      # Upload artifact as a release asset
-      - name: Upload Release Assets
-        id: upload-release-asset
-        uses: shogo82148/actions-upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.releaseDraft.outputs.release-url }}
-          asset_path: '*.zip'

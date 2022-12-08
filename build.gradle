@@ -75,8 +75,6 @@ subprojects {
     }
 
     grammarKit {
-        jflexRelease = jFlexRelease
-        grammarKitRelease = grammarKitVersion
     }
 
     runPluginVerifier {
