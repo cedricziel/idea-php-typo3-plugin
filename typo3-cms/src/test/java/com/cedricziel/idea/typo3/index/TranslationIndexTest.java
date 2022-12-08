@@ -67,7 +67,7 @@ public class TranslationIndexTest extends AbstractTranslationTest {
 
         Collection<String> allTranslations = TranslationIndex.findAllKeys(myFixture.getProject());
 
-        assertSize(3, allTranslations);
+        assertSize(9, allTranslations);
         assertContainsElements(
                 allTranslations,
                 "LLL:EXT:foo/de.sample.xlf:sys_language.language_isocode.ab",
