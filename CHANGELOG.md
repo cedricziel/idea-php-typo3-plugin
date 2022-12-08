@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Bump version to 0.8.1
+
 ### Deprecated
 
 ### Removed
