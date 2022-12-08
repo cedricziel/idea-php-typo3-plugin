@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-2022.2.3"
+          - idea_version: "IU-2022.2.4"
             php_plugin_version: "222.4345.15"
             psi_viewer_plugin_version: "222-SNAPSHOT"
             grammar_kit_plugin_version: "2021.2.2"
@@ -96,7 +96,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-2022.2.3"
+          - idea_version: "IU-2022.2.4"
             php_plugin_version: "222.4345.15"
             psi_viewer_plugin_version: "222-SNAPSHOT"
             grammar_kit_plugin_version: "2021.2.2"
