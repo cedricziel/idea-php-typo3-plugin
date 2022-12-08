@@ -9,6 +9,8 @@
 - Upgrade platform to 221.5080.169
 - Upgrade platform to 2022.1
 - Upgrade platform to 2022.2.3
+- Upgrade platform to 2022.2.4
+
 ### Deprecated
 
 ### Removed
