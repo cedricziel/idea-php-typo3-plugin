@@ -7,12 +7,12 @@ class BingBongController extends ActionController {
     {
     }
 
-    public function <warning descr="Unused element: 'stillUnused'">stillUnused</warning>()
+    public function <weak_warning descr="Unused element: 'stillUnused'">stillUnused</weak_warning>()
     {
     }
 }
 
-class <warning descr="Unused element: 'ClassWithSuffixOfController'">ClassWithSuffixOfController</warning> {
-    public function <warning descr="Unused element: 'fooAction'">fooAction</warning>() {
+class <weak_warning descr="Unused element: 'ClassWithSuffixOfController'">ClassWithSuffixOfController</weak_warning> {
+    public function <weak_warning descr="Unused element: 'fooAction'">fooAction</weak_warning>() {
     }
 }
