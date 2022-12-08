@@ -22,7 +22,7 @@ idea {
 
 def loadPlugins = [
     "com.jetbrains.php:${phpPluginVersion}",
-    'CSS',
+    'com.intellij.css',
     'java',
     'java-i18n',
     'properties',

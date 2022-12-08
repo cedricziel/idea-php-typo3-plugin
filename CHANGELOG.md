@@ -8,6 +8,7 @@
 
 - Bump version to 0.8.1
 - Bump platform to 223
+- Update plugin ids for 223
 
 ### Deprecated
 
