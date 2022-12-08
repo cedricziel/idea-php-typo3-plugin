@@ -1,18 +1,20 @@
-package com.cedricziel.idea.typo3.listener;
+package com.cedricziel.idea.typo3.startup;
 
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.notification.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.openapi.startup.StartupActivity;
 import org.jetbrains.annotations.NotNull;
 
-public class XLFFileTypeListener implements ProjectManagerListener {
+public class XLFFFileTypePostStartupActivity implements StartupActivity {
     @Override
-    public void projectOpened(@NotNull Project project) {
+    public void runActivity(@NotNull Project project) {
         if (!(FileTypeManager.getInstance().getFileTypeByExtension("xlf") instanceof XmlFileType)) {
             WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getOpenProjects()[0], () -> {
                 FileTypeManager.getInstance().associateExtension(XmlFileType.INSTANCE, "xlf");

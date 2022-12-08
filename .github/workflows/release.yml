@@ -24,12 +24,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - idea_version: "IU-2022.2.4"
-            php_plugin_version: "222.4345.15"
-            psi_viewer_plugin_version: "222-SNAPSHOT"
+          - idea_version: "IU-2022.3"
+            php_plugin_version: "223.7571.231"
+            psi_viewer_plugin_version: "223-SNAPSHOT"
             grammar_kit_plugin_version: "2021.2.2"
-            since_build: "222"
-            until_build: "222.*"
+            since_build: "223"
+            until_build: "223.*"
     outputs:
       prefixed-version: ${{ steps.properties.outputs.prefixed-version }}
 

@@ -79,7 +79,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
 
                         presentation.setItemText("findBy" + StringUtils.capitalize(f.getName()));
                         presentation.setTypeText("findBy" + StringUtils.capitalize(f.getName()));
-                        presentation.setIcon(PhpIcons.METHOD_ICON);
+                        presentation.setIcon(PhpIcons.METHOD);
 
                         presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                         presentation.setTypeText(c.getName() + "[]|" + ExtbaseUtils.QUERY_RESULT_INTERFACE);
@@ -100,7 +100,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
 
                         presentation.setItemText("countBy" + StringUtils.capitalize(f.getName()));
                         presentation.setTypeText("countBy" + StringUtils.capitalize(f.getName()));
-                        presentation.setIcon(PhpIcons.METHOD_ICON);
+                        presentation.setIcon(PhpIcons.METHOD);
                         presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                         presentation.setTypeText("int");
                     }
@@ -120,7 +120,7 @@ public class RepositoryMagicMethodsCompletionContributor extends CompletionContr
 
                         presentation.setItemText("findOneBy" + StringUtils.capitalize(f.getName()));
                         presentation.setTypeText("findOneBy" + StringUtils.capitalize(f.getName()));
-                        presentation.setIcon(PhpIcons.METHOD_ICON);
+                        presentation.setIcon(PhpIcons.METHOD);
                         presentation.setTailText("(" + f.getName() + " : " + f.getInferredType() + ")", true);
                         presentation.setTypeText("null|" + c.getName());
                     }

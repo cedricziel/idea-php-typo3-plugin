@@ -6,15 +6,12 @@ import com.intellij.lang.javascript.completion.JSLookupPriority;
 import com.intellij.lang.javascript.completion.JSLookupUtilImpl;
 import com.intellij.lang.javascript.frameworks.modules.JSResolvableModuleReferenceContributor;
 import com.intellij.lang.javascript.psi.resolve.JSResolveResult;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     @NotNull
@@ -34,11 +31,10 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
     }
 
     @NotNull
-    @Override
-    protected Object @NotNull [] getVariants(@NotNull PsiElement element) {
-        Set<LookupElement> result = new HashSet<>();
+    public Collection<LookupElement> getLookupElements(@NotNull String unquotedEscapedText, @NotNull PsiElement host) {
+        List<LookupElement> result = new ArrayList<>();
 
-        JavaScriptUtil.getModuleMap(element.getProject()).forEach((name, file) -> {
+        JavaScriptUtil.getModuleMap(host.getProject()).forEach((name, file) -> {
             for (PsiFile psiFile : file) {
                 LookupElement lookupItem = JSLookupUtilImpl.createPrioritizedLookupItem(psiFile, name, JSLookupPriority.MAX_PRIORITY);
                 if (lookupItem != null) {
@@ -47,16 +43,11 @@ public class ModuleProvider extends JSResolvableModuleReferenceContributor {
             }
         });
 
-        return result.toArray();
+        return result;
     }
 
     @Override
     public int getDefaultWeight() {
         return 25;
-    }
-
-    public boolean isApplicable(@NotNull PsiElement host) {
-
-        return !DumbService.isDumb(host.getProject());
     }
 }

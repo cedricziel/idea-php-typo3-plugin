@@ -1,4 +1,4 @@
-package com.cedricziel.idea.typo3.listener;
+package com.cedricziel.idea.typo3.startup;
 
 import com.cedricziel.idea.typo3.IdeHelper;
 import com.cedricziel.idea.typo3.TYPO3CMSProjectSettings;
@@ -10,8 +10,9 @@ import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -19,9 +20,9 @@ import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TYPO3DetectionListener implements ProjectManagerListener {
+public class TYPO3CMSPostStartupActivity implements StartupActivity.Background {
     @Override
-    public void projectOpened(@NotNull Project project) {
+    public void runActivity(@NotNull Project project) {
         this.checkProject(project);
 
         TYPO3CMSSettings instance = TYPO3CMSSettings.getInstance(project);
@@ -35,15 +36,17 @@ public class TYPO3DetectionListener implements ProjectManagerListener {
             instance.setVersion(plugin.getVersion());
 
             FileBasedIndex index = FileBasedIndex.getInstance();
-            index.scheduleRebuild(CoreServiceMapStubIndex.KEY, new Throwable());
-            index.scheduleRebuild(ExtensionNameStubIndex.KEY, new Throwable());
-            index.scheduleRebuild(IconIndex.KEY, new Throwable());
-            index.scheduleRebuild(ResourcePathIndex.KEY, new Throwable());
-            index.scheduleRebuild(RouteIndex.KEY, new Throwable());
-            index.scheduleRebuild(TablenameFileIndex.KEY, new Throwable());
-            index.scheduleRebuild(LegacyClassesForIDEIndex.KEY, new Throwable());
-            index.scheduleRebuild(MethodArgumentDroppedIndex.KEY, new Throwable());
-            index.scheduleRebuild(ControllerActionIndex.KEY, new Throwable());
+            DumbService.getInstance(project).runWhenSmart(() -> {
+                index.scheduleRebuild(CoreServiceMapStubIndex.KEY, new Throwable());
+                index.scheduleRebuild(ExtensionNameStubIndex.KEY, new Throwable());
+                index.scheduleRebuild(IconIndex.KEY, new Throwable());
+                index.scheduleRebuild(ResourcePathIndex.KEY, new Throwable());
+                index.scheduleRebuild(RouteIndex.KEY, new Throwable());
+                index.scheduleRebuild(TablenameFileIndex.KEY, new Throwable());
+                index.scheduleRebuild(LegacyClassesForIDEIndex.KEY, new Throwable());
+                index.scheduleRebuild(MethodArgumentDroppedIndex.KEY, new Throwable());
+                index.scheduleRebuild(ControllerActionIndex.KEY, new Throwable());
+            });
         }
     }
 
@@ -65,6 +68,6 @@ public class TYPO3DetectionListener implements ProjectManagerListener {
 
     private boolean containsPluginRelatedFiles(@NotNull Project project) {
         return (VfsUtil.findRelativeFile(project.getBaseDir(), "vendor", "typo3") != null)
-            || FilenameIndex.getFilesByName(project, "ext_emconf.php", GlobalSearchScope.allScope(project)).length > 0;
+            || FilenameIndex.getVirtualFilesByName("ext_emconf.php", GlobalSearchScope.allScope(project)).size() > 0;
     }
 }

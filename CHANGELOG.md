@@ -7,6 +7,12 @@
 ### Changed
 
 - Bump version to 0.8.1
+- Bump platform to 223
+- Update plugin ids for 223
+- Migrate Icons for 223
+- Update JS ModuleProvider
+- Bump versions in GitHub workflows
+- Migrate to postStartupActivity from project listeners
 
 ### Deprecated
 
