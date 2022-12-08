@@ -7,6 +7,7 @@
 ### Changed
 
 - Bump version to 0.8.1
+- Bump platform to 223
 
 ### Deprecated
 
