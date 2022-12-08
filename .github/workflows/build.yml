@@ -55,7 +55,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -120,7 +120,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
@@ -215,7 +215,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
 
       # Cache Gradle Dependencies
       - name: Setup Gradle Dependencies Cache
