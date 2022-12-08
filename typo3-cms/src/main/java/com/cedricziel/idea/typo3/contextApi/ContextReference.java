@@ -43,7 +43,7 @@ public class ContextReference extends PsiPolyVariantReferenceBase<PsiElement> {
             elements.add(
                 LookupElementBuilder
                     .create(availableAspect)
-                    .withIcon(PhpIcons.CLASS_ICON)
+                    .withIcon(PhpIcons.CLASS)
                     .withTypeText(TYPO3Utility.getFQNByAspectName(availableAspect), true)
             );
         }
