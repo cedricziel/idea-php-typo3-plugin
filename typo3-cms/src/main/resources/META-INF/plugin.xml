@@ -37,12 +37,9 @@
         <typeProvider4 implementation="com.cedricziel.idea.typo3.contextApi.ContextTypeProvider"/>
     </extensions>
 
-    <projectListeners>
-        <listener class="com.cedricziel.idea.typo3.listener.TYPO3DetectionListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
-        <listener class="com.cedricziel.idea.typo3.listener.XLFFileTypeListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </projectListeners>
-
     <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="com.cedricziel.idea.typo3.startup.TYPO3CMSPostStartupActivity"/>
+        <postStartupActivity implementation="com.cedricziel.idea.typo3.startup.XLFFFileTypePostStartupActivity"/>
 
         <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSSettings"/>
         <projectService serviceImplementation="com.cedricziel.idea.typo3.TYPO3CMSProjectSettings"/>

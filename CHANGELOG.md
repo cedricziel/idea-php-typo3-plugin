@@ -12,6 +12,7 @@
 - Migrate Icons for 223
 - Update JS ModuleProvider
 - Bump versions in GitHub workflows
+- Migrate to postStartupActivity from project listeners
 
 ### Deprecated
 
