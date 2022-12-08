@@ -1,7 +1,20 @@
 # Changelog
 
 ## [Unreleased]
+
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## 0.8.0 - 2022-12-08
 
 ### Changed
 - Upgrade grammar-kit-plugin to 2021.2.2
@@ -11,16 +24,14 @@
 - Upgrade platform to 2022.2.3
 - Upgrade platform to 2022.2.4
 
-### Deprecated
-
 ### Removed
 - Removed travis build indicator
-### Fixed
 
-### Security
-## [0.7.3]
+## 0.7.3
+
 ### Added
 - Upgrade to platform 213
+
 ### Changed
 - migrate checkHighlight to testHighlight where possible
 - migrate away from using FileTypeIndex.NAME directly
@@ -30,32 +41,19 @@
 - migrate `createNotification` usage to distinct NotificationGroup
 - Remove unused, deprecated API usage related to icons
 - Use diamond operator where applicable
-### Deprecated
 
-### Removed
-
-### Fixed
-
-### Security
-## [0.7.2]
-### Added
+## 0.7.2
 
 ### Changed
 - change main target for changelog patching to master
 - use nightly channel when publishing Fluid or TypoScript plugins
 - upgrade gradle-intellij plugin to 1.1.6
 
-### Deprecated
-
 ### Removed
 - only support 2021.2.2
 - remove MissingTableInspectionTest as it's not compatible
 
-### Fixed
-
-### Security
-## [0.7.1]
-### Added
+## 0.7.1
 
 ### Changed
 - Improve publishing through GitHub actions
@@ -63,14 +61,8 @@
 - Use "nightly" channel for TypoScript and Fluid projects
 - Fix syntax of release task
 
-### Deprecated
+## 0.7.0
 
-### Removed
-
-### Fixed
-
-### Security
-## [0.7.0]
 ### Added
 - Use GitHub actions to build plugin instead of travis
 - c2b9eca [T3CMS] allowed TCA field can contain CSV string of tables (#351) (Cedric Ziel)
@@ -79,13 +71,3 @@
 - 95a22b1 Update issue templates (Cedric Ziel)
 - 8b4849f [T3CMS] Rename settings property for translation folding (#344) (Cedric Ziel)
 - 66d717b Prepare v0.6.1 (Cedric Ziel)
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
