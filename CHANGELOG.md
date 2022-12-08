@@ -10,6 +10,7 @@
 - Bump platform to 223
 - Update plugin ids for 223
 - Migrate Icons for 223
+- Update JS ModuleProvider
 
 ### Deprecated
 
