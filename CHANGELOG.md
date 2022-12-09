@@ -20,6 +20,8 @@
 
 ### Fixed
 
+- Move Project detection into read-action, Fixes #403
+
 ### Security
 
 ## 0.8.0 - 2022-12-08
