@@ -12,9 +12,12 @@
 
 ### Fixed
 
-- Move Project detection into read-action, Fixes #403
-
 ### Security
+
+## 0.9.1 - 2022-12-09
+
+### Fixed
+- Move Project detection into read-action, Fixes #403
 
 ## 0.9.0 - 2022-12-08
 
