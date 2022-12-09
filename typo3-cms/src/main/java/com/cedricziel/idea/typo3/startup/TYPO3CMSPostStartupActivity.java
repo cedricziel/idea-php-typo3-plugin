@@ -9,6 +9,7 @@ import com.cedricziel.idea.typo3.index.extensionScanner.MethodArgumentDroppedInd
 import com.cedricziel.idea.typo3.index.php.LegacyClassesForIDEIndex;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -23,6 +24,12 @@ import org.jetbrains.annotations.Nullable;
 public class TYPO3CMSPostStartupActivity implements StartupActivity.Background {
     @Override
     public void runActivity(@NotNull Project project) {
+        ApplicationManager.getApplication().runReadAction(() -> {
+            doRunActivity(project);
+        });
+    }
+
+    protected void doRunActivity(@NotNull Project project) {
         this.checkProject(project);
 
         TYPO3CMSSettings instance = TYPO3CMSSettings.getInstance(project);
