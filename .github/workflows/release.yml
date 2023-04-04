@@ -30,6 +30,12 @@ jobs:
             grammar_kit_plugin_version: "2021.2.2"
             since_build: "223"
             until_build: "223.*"
+          - idea_version: "IU-2023.1"
+            php_plugin_version: "231.8109.199"
+            psi_viewer_plugin_version: "231-SNAPSHOT"
+            grammar_kit_plugin_version: "2021.2.2"
+            since_build: "231"
+            until_build: "231.*"
     outputs:
       prefixed-version: ${{ steps.properties.outputs.prefixed-version }}
 
