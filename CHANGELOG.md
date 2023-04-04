@@ -4,6 +4,8 @@
 
 ### Added
 
+* Add support for IntelliJ 2023.1
+
 ### Changed
 
 ### Deprecated
