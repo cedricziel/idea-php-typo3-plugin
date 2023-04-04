@@ -4,8 +4,6 @@
 
 ### Added
 
-* Add support for IntelliJ 2023.1
-
 ### Changed
 
 ### Deprecated
@@ -15,6 +13,11 @@
 ### Fixed
 
 ### Security
+
+## 0.9.2 - 2023-04-04
+
+### Added
+- Add support for IntelliJ 2023.1
 
 ## 0.9.1 - 2022-12-09
 
